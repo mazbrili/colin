@@ -66,7 +66,7 @@ void wgv_tw::CommandRemoveNode(const int &k)
             }
             else if(load(i).at()>k)
             {
-                loads[i].setBeam(load(i).at());
+                loads[i].setBeam(load(i).at()-1);
             }
         }
         i++;
