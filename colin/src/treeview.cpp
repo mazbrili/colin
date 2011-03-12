@@ -66,6 +66,9 @@ treeView::treeView(QWidget *parent) :
 
     setContextMenuPolicy(Qt::CustomContextMenu);
 
+    connect(&unitSettings::instance(),          SIGNAL(settingschanged()),
+            this,                               SLOT(actualEH()));
+
     connect(&filelist::instance(),              SIGNAL(currentChanged(wgv_tw*)),
             this,                               SLOT(setTw(wgv_tw*)));
 
