@@ -67,8 +67,8 @@ echo " $WSDIR/nsis/colin-${APPVERSION}*setup*.exe"
 echo "scp \\"
 echo " $WSDIR/nsis/colin-${APPVERSION}*setup*.exe \\"
 echo " doc/LICENSE.txt \\"
-echo " root@www.clazzes.org:/var/www/htdocs/download.clazzes.org/colin/testing/"
-echo "ssh www.clazzes.org ls -ltrR /var/www/htdocs/download.clazzes.org/colin"
+echo " colin@www.clazzes.org:/var/www/htdocs/download.clazzes.org/colin/testing/"
+echo "ssh colin@www.clazzes.org ls -ltrR /var/www/htdocs/download.clazzes.org/colin"
 echo "# (let the server care for file ownership)"
 
 # exit 0
