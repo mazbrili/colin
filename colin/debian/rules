@@ -1,0 +1,45 @@
+#!/usr/bin/make -f
+#
+# $Id$
+#
+# rules file for creating debian packages for Colin
+#
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+
+srcname = colin
+srcdir = src
+
+package = colin
+dbgpackage = colin-dbg
+target = colin
+prefix=/usr
+docdir = debian/$(package)/usr/share/doc/$(package)
+builddir = Release
+
+PKGROOT=$(shell pwd)/debian
+#DESTDIR = $(shell /bin/pwd)/debian/$(package)
+
+DEB_INSTALL_DOCS_ALL := doc/LICENSE.txt 
+
+DEB_DH_ALWAYS_EXCLUDE := testing
+
+INSTALL_PROGRAM = install
+
+
+common-build-arch::
+	cd $(builddir) && $(MAKE)
+	touch common-build-arch
+
+
+clean::
+	rm -f common-install-arch common-build-arch
+	rm -rf *~ debian/tmp debian/$(package) debian/*~ debian/files* debian/*.log debian/*substvars debian/compat
+	#cd $(builddir) && make clean
+
+
+common-install-arch::
+	rm -rf debian/$(package) debian/$(dbgpackage)
+	cd $(builddir) &&  $(MAKE) install-bin DESTDIR=$(PKGROOT)/$(package)
+	touch common-install-arch
+

@@ -1,0 +1,17 @@
+Source: colin
+Section: utils
+Priority: extra
+Maintainer: Matthias Rauter <matthias.rauter@student.uibk.ac.at>
+Build-Depends: build-essential, debhelper (>= 5), cdbs, libqt4-dev (>= 4.5), pkg-config, pba-cbs
+Homepage: 
+XBCS-PBA-Category: colin
+XBCS-PBA-Generation: 1
+XBCS-PBA-Distributions: lucid squeeze
+XBCS-PBA-Repositories: deb.clazzes.org
+
+Package: colin
+Architecture: any
+Priority: extra
+Depends: libqtgui4
+Description: Colin is Mattis ...
+

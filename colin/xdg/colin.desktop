@@ -1,0 +1,32 @@
+#!/usr/bin/env xdg-open
+
+# specs are at
+# http://standards.freedesktop.org/desktop-entry-spec/latest/index.html
+[Desktop Entry]
+
+Comment=Clazzes.org Colin
+#Comment[de]=
+
+Name=Colin
+#Name[de]=
+
+GenericName=Colin
+
+Categories=Education;Graphics;
+# list see http://standards.freedesktop.org/menu-spec/menu-spec-1.0.html#category-registry
+
+Exec=Colin -graphicssystem raster %F
+
+Icon=colin
+
+MimeType=application/xcs
+
+Terminal=false
+
+TryExec=Colin
+
+Type=Application
+
+X-AppInstall-Package=colin
+X-AppInstall-Section=util
+

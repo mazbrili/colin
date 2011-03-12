@@ -1,0 +1,18 @@
+colin (0.1.2-0) any; urgency=low
+
+  * Some Windows Fixes
+
+ -- Matthias Rauter <matthias.rauter@uibk.ac.at>  Tue, 08 Mar 2011 19:38:00 +0100
+
+colin (0.1.1-0) any; urgency=low
+
+  * Adding menu entry, translations
+
+ -- Matthias Rauter <matthias.rauter@uibk.ac.at>  Tue, 08 Mar 2011 15:03:00 +0100
+
+colin (0.1.0-0) any; urgency=low
+
+  * First debianization of Colin
+
+ -- Matthias Rauter <matthias.rauter@uibk.ac.at>  Tue, 08 Mar 2011 10:07:00 +0100
+
