@@ -498,7 +498,7 @@ void viewport::drawCursorAxes(QPainter *p)
 	    if(local.x()<0)
 		M=-M;
 	    tooltip->set(colinIcons::instance().icon(vS->toDraw(), true),
-			 QString::number(sqrt(pow(local.x(), 2)+pow(local.y(),2))*MPREFIX, 'f', PRECISON) + eh,
+                         QString::number(M*MPREFIX, 'f', PRECISON) + eh,
                          tr("press Shift to draw moments!"));
 	}
 	else
