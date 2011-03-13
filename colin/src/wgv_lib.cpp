@@ -16,7 +16,7 @@ wgv_lib::wgv_lib()
     for(int i=0; i<matCount; i++)
     {
         QString name = settings.value("lib/mat"+QString::number(i)+"_name", QVariant(QString("IDontCare"))).toString();
-        double E = settings.value("lib/mat"+QString::number(i)+"_E", QVariant(double(2e+08))).toDouble(&ok);
+        double E = settings.value("lib/mat"+QString::number(i)+"_E", QVariant(double(2e+11))).toDouble(&ok);
         if(!ok)
             break;
         double alphaT = settings.value("lib/mat"+QString::number(i)+"_alphaT", QVariant(double(1e-05))).toDouble(&ok);
@@ -112,5 +112,5 @@ void wgv_lib::setUp()
     if(profiles_n()<1)
 	addProfile(wgv_profile(1e-02, 1e-04, 1e-01, "IDontCare"));
     if(mats_n()<1)
-	addMat(wgv_mat(2e+08, 1e-05, "IDontCare"));
+	addMat(wgv_mat(2e+11, 1e-05, "IDontCare"));
 }
