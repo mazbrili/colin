@@ -1076,6 +1076,7 @@ void MainWindow::aboutMe()
 {
     QMessageBox::about(this, tr("about Colin"),
         QString( tr("Colin %1"
+                    "\n"
 
                     "named after Colin from \"mostly harmless\" by Douglas Adams.\n\n\n"
 
@@ -1092,14 +1093,7 @@ void MainWindow::aboutMe()
                     "The icons are licensed under a Creative Commons Attribution-Noncommercial-Share Alike 3.0 License.\n\n"
                     "See http://creativecommons.org/ for more information.\n\n"
 
-		    "Thanks to Pongo, Ben, Anouck, Neo and ibcl."
-
-/*              "if you like it, send me a postcard to:\n\n"
-              "Matthias Rauter\n"
-              "Via Pumes 2\n"
-              "39038 San Candido\n"
-              "Italy - BZ"*/
-
+                    "Thanks to Pongo, Ben, Anouck, Neo and ibcl."
 
               )).arg(ColinVersion()));
 }
