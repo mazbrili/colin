@@ -172,8 +172,8 @@ void unitSettings::loadSettings()
 {
     QSettings settings("clazzes.org", "Colin", this);
     EUnit = static_cast<EEH>(settings.value("EH/EUnit", 1).toInt());
-    ProfUnit = static_cast<ProfEH>(settings.value("EH/ProfEH", 1).toInt());
-    PMUnit = static_cast<PMEH >(settings.value("EH/PMEH", 1).toInt());
+    ProfUnit = static_cast<ProfEH>(settings.value("EH/ProfUnit", 1).toInt());
+    PMUnit = static_cast<PMEH >(settings.value("EH/PMUnit", 1).toInt());
     prec = settings.value("EH/precison", 3).toInt();
 }
 
