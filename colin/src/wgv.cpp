@@ -1054,7 +1054,7 @@ void wgv::make_p()
             if(node(load(n).at()).hasbearing())
             {
                 p[k_index[3*load(n).at()]] += load(n).Px()*cos(node(load(n).at()).angle())+load(n).Pz()*sin(node(load(n).at()).angle());
-                p[k_index[3*load(n).at()+1]] += load(n).Px()*sin(node(load(n).at()).angle())+load(n).Pz()*cos(node(load(n).at()).angle());
+                p[k_index[3*load(n).at()+1]] += -load(n).Px()*sin(node(load(n).at()).angle())+load(n).Pz()*cos(node(load(n).at()).angle());
                 p[k_index[3*load(n).at()+2]] += load(n).M();
             }
             else
