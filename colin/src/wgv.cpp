@@ -219,7 +219,7 @@ void wgv::writeResultsNodes()
 	    }
 	    else if(nodes[i].bearing().xf())
 	    {
-		phi = (nodes[i].u()*cos(nodes[i].angle())+nodes[i].w()*sin(nodes[i].angle()))*nodes[i].bearing().c_x();
+		phi = -(nodes[i].u()*cos(nodes[i].angle())+nodes[i].w()*sin(nodes[i].angle()))*nodes[i].bearing().c_x();
 	    }
             else
                 phi = 0;
@@ -231,7 +231,7 @@ void wgv::writeResultsNodes()
 	    }
 	    else if(nodes[i].bearing().zf())
 	    {
-		w = (nodes[i].w()*cos(nodes[i].angle())-nodes[i].u()*sin(nodes[i].angle()))*nodes[i].bearing().c_z();
+		w = -(nodes[i].w()*cos(nodes[i].angle())-nodes[i].u()*sin(nodes[i].angle()))*nodes[i].bearing().c_z();
 	    }
             else
             {
@@ -249,7 +249,7 @@ void wgv::writeResultsNodes()
 	    }
 	    else if(nodes[i].bearing().phif())
 	    {
-		phi = nodes[i].phi()*nodes[i].bearing().c_phi();
+		phi = -nodes[i].phi()*nodes[i].bearing().c_phi();
 	    }
             else
             {
