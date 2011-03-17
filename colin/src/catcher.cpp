@@ -154,32 +154,6 @@ int catcher::doYourWork(QPointF *mouse, CatchCases *c,
 	}
     }
 
-    //beams and middle of beams
-    if((*c & CatchedBeam) == CatchedBeam     ||
-       (*c & CatchedMiddle) == CatchedMiddle )
-    {
-        QPointF n;
-        i = tw.nearestBeam(t.inverted().map(*mouse), catchRange_/t.m11(), &n);
-        if(i>-1)
-        {
-            if((*c & CatchedMiddle) == CatchedMiddle)
-            {
-                QPointF middle = t.map((tw.beam(i).leftNode().toQPointF()+tw.beam(i).rightNode().toQPointF())/2);
-                if((middle-*mouse).manhattanLength()<catchRange_)
-                {
-                    *mouse = middle;
-                    *c = CatchedMiddle;
-                    return i;
-                }
-            }
-            if((*c & CatchedBeam) == CatchedBeam)
-            {
-                *mouse = t.map(n);
-                *c = CatchedBeam;
-                return i;
-            }
-        }
-    }
 
     //end of beams (for joints)
     if((*c & CatchedBeamEnd) == CatchedBeamEnd)
@@ -228,6 +202,34 @@ int catcher::doYourWork(QPointF *mouse, CatchCases *c,
             }
         }
     }
+
+    //beams and middle of beams
+    if((*c & CatchedBeam) == CatchedBeam     ||
+       (*c & CatchedMiddle) == CatchedMiddle )
+    {
+        QPointF n;
+        i = tw.nearestBeam(t.inverted().map(*mouse), catchRange_/t.m11(), &n);
+        if(i>-1)
+        {
+            if((*c & CatchedMiddle) == CatchedMiddle)
+            {
+                QPointF middle = t.map((tw.beam(i).leftNode().toQPointF()+tw.beam(i).rightNode().toQPointF())/2);
+                if((middle-*mouse).manhattanLength()<catchRange_)
+                {
+                    *mouse = middle;
+                    *c = CatchedMiddle;
+                    return i;
+                }
+            }
+            if((*c & CatchedBeam) == CatchedBeam)
+            {
+                *mouse = t.map(n);
+                *c = CatchedBeam;
+                return i;
+            }
+        }
+    }
+
 
     //grid
     if((*c & CatchedGrid) == CatchedGrid)

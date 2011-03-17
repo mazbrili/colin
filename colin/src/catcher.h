@@ -60,7 +60,9 @@ public:
                                   CatchedOrthoGlob+
                                   CatchedOrthoLokal,
 
-        CatchStdJoint           = CatchedBeamEnd,
+        CatchStdJoint           = CatchedBeamEnd+
+                                  CatchedMiddle +
+                                  CatchedBeam,
 
         CatchStdDLoad           = CatchedBeamEnd,
 

@@ -1819,6 +1819,14 @@ void viewport::addNLoad(QPointF p)
             wgv_beam s(tw->beam(nextObject));
             tw->setRight(nextObject, newNode);
             s.setLeftNode(newNode);
+
+            tw->setJoint(nextObject, 3, false);                        //Script
+            tw->setJoint(nextObject, 4, false);                        //Script
+            tw->setJoint(nextObject, 5, false);                        //Script
+            s.setJoint(0, false);                                   //Script
+            s.setJoint(1, false);                                   //Script
+            s.setJoint(2, false);                                   //Script
+
             tw->addBeam(s);
             tw->setlastObjectNode(newNode);
             tw->setlastObjectClick(tw->node(tw->lastObjectNode()).toQPointF());
@@ -1918,6 +1926,34 @@ void viewport::addJoint(QPointF p)
         if(vS->toDraw() == Colin::drawJointM)
             position+=2;
         tw->setJoint(beamnr, position, true);
+    }
+    else if( cC == catcher::CatchedMiddle || cC == catcher::CatchedBeam)
+    {
+        p = globalMatrix().inverted().map(p);
+        tw->beginScript(tr("added hinge on beam"));                         //Script BEGIN
+        int newNode = tw->addNode(wgv_node(p.x(), p.y()));
+        wgv_beam s(tw->beam(beamnr));
+        tw->setRight(beamnr, newNode);
+        s.setLeftNode(newNode);
+
+        tw->setJoint(beamnr, 3, false);                        //Script
+        tw->setJoint(beamnr, 4, false);                        //Script
+        tw->setJoint(beamnr, 5, false);                        //Script
+        if(vS->toDraw() != Colin::drawJointN)
+            s.setJoint(0, false);                                   //Script
+        else
+            s.setJoint(0, true);
+        if(vS->toDraw() != Colin::drawJointQ)
+            s.setJoint(1, false);                                   //Script
+        else
+            s.setJoint(1, true);
+        if(vS->toDraw() != Colin::drawJointM)
+            s.setJoint(2, false);                                   //Script
+        else
+            s.setJoint(2, true);
+        tw->addBeam(s);
+        tw->endScript();
+
     }
 }
 
