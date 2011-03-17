@@ -1,4 +1,5 @@
 #include "beammenu.h"
+#include "unitsettings.h"
 
 
 #include <QtGui/QApplication>
@@ -160,7 +161,7 @@ void beamMenu::set(const int &i)
     for(int j=0; j<6; j++)
     {
         if(b.hasSpring(j))
-            springs[j]->setEditText(QString::number(b.spring(j)));
+            springs[j]->setEditText(QString::number(b.spring(j)*FPREFIX));
         else if(b.joint(j))
             springs[j]->setCurrentIndex(0);
         else
@@ -249,7 +250,7 @@ void beamMenu::someJointChanged()
     }
     else if(ok)
     {
-        filelist::instance().currentFile()->setSpring(cBeam, position, val);
+        filelist::instance().currentFile()->setSpring(cBeam, position, val/FPREFIX);
     }
 }
 
