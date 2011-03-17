@@ -54,12 +54,14 @@ tempMenu::tempMenu() :
     addWidgetForAction(act, multi);
 
     addSeparator();
-    addAction(colinIcons::instance().icon(Colin::Copy), tr("copy"), this, SLOT(actionTriggered()));
-    addAction(colinIcons::instance().icon(Colin::Cut), tr("cut"), this, SLOT(actionTriggered()));
+    
+    act = addAction(colinIcons::instance().icon(Colin::Copy), tr("copy"), this, SLOT(actionTriggered()));
+    act->setData(QVariant(Colin::Copy));
+    act = addAction(colinIcons::instance().icon(Colin::Cut), tr("cut"), this, SLOT(actionTriggered()));
+    act->setData(QVariant(Colin::Cut));
     addSeparator();
-    addAction(tr("delete"), this, SLOT(actionTriggered()));
-
-
+    act = addAction(tr("delete"), this, SLOT(actionTriggered()));
+    act->setData(QVariant(Colin::Delete));
 
 
 
