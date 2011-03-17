@@ -1,3 +1,11 @@
+colin (0.1.5-0) any; urgency=low
+
+  * Reaction forces of springs are now correct
+  * the right click menu for beams now shows the correct unit for spring constants
+  * the actions for copy, cut and delete in the right click menu for temperatures should work now
+
+ -- Matthias Rauter <matthias.rauter@student.uibk.ac.at>  Thu, 17 Mar 2011 11:22:00 +0100
+
 colin (0.1.4-0) any; urgency=low
 
   * Fixed a bug with nodal forces on rotated nodes
