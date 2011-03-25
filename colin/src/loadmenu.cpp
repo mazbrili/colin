@@ -1,4 +1,5 @@
 #include "loadmenu.h"
+#include "unitsettings.h"
 
 
 #include <QtGui/QApplication>
@@ -97,8 +98,8 @@ void loadMenu::set(const int &i)
 
     const wgv_load &l = filelist::instance().currentFile()->load(i);
 
-    x->setText(QString::number(l.Px()));
-    z->setText(QString::number(l.Pz()));
+    x->setText(QString::number(l.Px()*PPREFIX));
+    z->setText(QString::number(l.Pz()*PPREFIX));
     pos->setText(QString::number(l.at()));
 
     foreach(QAbstractButton *b, g->buttons())
@@ -119,9 +120,9 @@ void loadMenu::xChanged()
     double val;
     val = x->text().toDouble(&ok);
     if(ok)
-        filelist::instance().currentFile()->setPx(cLoad, val);
+        filelist::instance().currentFile()->setPx(cLoad, val/PPREFIX);
     else
-        x->setText(QString::number(filelist::instance().currentFile()->load(cLoad).Px()));
+        x->setText(QString::number(filelist::instance().currentFile()->load(cLoad).Px()*PPREFIX));
 }
 
 void loadMenu::zChanged()
@@ -130,9 +131,9 @@ void loadMenu::zChanged()
     double val;
     val = z->text().toDouble(&ok);
     if(ok)
-        filelist::instance().currentFile()->setPz(cLoad, val);
+        filelist::instance().currentFile()->setPz(cLoad, val/PPREFIX);
     else
-        z->setText(QString::number(filelist::instance().currentFile()->load(cLoad).Pz()));
+        z->setText(QString::number(filelist::instance().currentFile()->load(cLoad).Pz()*PPREFIX));
 }
 
 void loadMenu::posChanged()
@@ -182,3 +183,4 @@ void loadMenu::actionTriggered()
         return;
     }
 }
+
