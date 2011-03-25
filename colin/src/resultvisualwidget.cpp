@@ -243,7 +243,7 @@ void resultVisualWidget::paintDetails(QPainter *p)
         if(n.hasbearing())
         {
             text.append(QChar(0x03B1));
-            text.append(QString(" = %1\n").arg(n.angle()));
+            text.append(QString(" = %1\n").arg(n.angle()*ANGLEPREFIX));
             text.append(QString("H = "));
             if(n.bearing().form().testFlag(wgv_bearing::fx))
                 text.append(QString(tr("spring")+", c = %1 ").arg(n.bearing().c_x()) + FPREFIX + "\n");
