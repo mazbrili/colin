@@ -203,7 +203,7 @@ void structPrinter::writeNodes(QPainter *p)
     p->drawText(QRect(530, dx, 200, 100), Qt::AlignTop | Qt::AlignHCenter, QString(QChar(0x03B1))+"[grad]");
     p->drawText(QRect(730, dx, 200, 100), Qt::AlignTop | Qt::AlignHCenter, "c_x["+unitSettings::instance().Feh()+"]");
     p->drawText(QRect(930, dx, 200, 100), Qt::AlignTop | Qt::AlignHCenter, "c_y["+unitSettings::instance().Feh()+"]");
-    p->drawText(QRect(1130, dx, 200, 100), Qt::AlignTop | Qt::AlignHCenter, QString("c_")+QChar(0x03C6)+"["+unitSettings::instance().Feh()+"]");
+    p->drawText(QRect(1130, dx, 200, 100), Qt::AlignTop | Qt::AlignHCenter, QString("c_")+QChar(0x03C6)+"["+unitSettings::instance().FMeh()+"]");
     p->drawLine(130, br.bottom()+4, 1330, br.bottom()+4);
     usedSpace(br.height()+5, p);
     for(int i=0; i<tw->node_n(); i++)
@@ -234,7 +234,7 @@ void structPrinter::writeNodes(QPainter *p)
             if(tw->node(i).bearing().phi())
                 p->drawText(QRect(1130, dx, 200, 100), Qt::AlignTop | Qt::AlignRight, tr("locked"));
             else if(tw->node(i).bearing().c_phi() != 0)
-                p->drawText(QRect(1130, dx, 200, 100), Qt::AlignTop | Qt::AlignRight, QString::number(tw->node(i).bearing().c_phi()*FPREFIX, 'f', PRECISON));
+                p->drawText(QRect(1130, dx, 200, 100), Qt::AlignTop | Qt::AlignRight, QString::number(tw->node(i).bearing().c_phi()*FMPREFIX, 'f', PRECISON));
             else
                 p->drawText(QRect(1130, dx, 200, 100), Qt::AlignTop | Qt::AlignRight, tr("free"));
         }
@@ -256,7 +256,7 @@ void structPrinter::writeBeams(QPainter *p)
     p->setFont(f);
     p->drawText(QRect(130, dx, 400, 100), Qt::AlignTop | Qt::AlignLeft, tr("nodes"));
     p->drawText(QRect(350, dx, 400, 100), Qt::AlignTop | Qt::AlignLeft, tr("parameters"));
-    p->drawText(QRect(750, dx, 400, 100), Qt::AlignTop | Qt::AlignLeft, tr("hinches")+" & " +tr("springs")+" ["+ unitSettings::instance().Feh() +"]", &br);
+    p->drawText(QRect(750, dx, 450, 100), Qt::AlignTop | Qt::AlignLeft, tr("hinches")+" & " +tr("springs")+" ["+ unitSettings::instance().Feh() +"] & [" + unitSettings::instance().FMeh() +"]", &br);
     usedSpace(br.height()+5, p);
     p->drawLine(130, br.bottom()+2, 330, br.bottom()+2);
     p->drawLine(350, br.bottom()+2, 730, br.bottom()+2);
@@ -289,7 +289,10 @@ void structPrinter::writeBeams(QPainter *p)
             {
                 if(tw->beam(i).spring(j) != 0)
                 {
-                    p->drawText(QRect(730+j*120, dx, 100, 100), Qt::AlignTop | Qt::AlignRight, QString::number(tw->beam(i).spring(j)*FPREFIX, 'f', PRECISON));
+                    if(j == 2 || j == 5) //moment
+                        p->drawText(QRect(730+j*120, dx, 100, 100), Qt::AlignTop | Qt::AlignRight, QString::number(tw->beam(i).spring(j)*FMPREFIX, 'f', PRECISON));
+                    else
+                        p->drawText(QRect(730+j*120, dx, 100, 100), Qt::AlignTop | Qt::AlignRight, QString::number(tw->beam(i).spring(j)*FPREFIX, 'f', PRECISON));
                 }
                 else
                 {

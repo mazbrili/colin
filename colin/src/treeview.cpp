@@ -299,7 +299,7 @@ void treeView::setNode(const int &i, const wgv_node &n)
         }
         else if(n.bearing().phif())
         {
-            bear->setText(4, QString("c = %1").arg(n.bearing().c_phi()*FPREFIX));
+            bear->setText(4, QString("c = %1").arg(n.bearing().c_phi()*FMPREFIX));
         }
         else
         {
@@ -340,7 +340,10 @@ void treeView::setBeam(const int &i, const wgv_beam &b)
             }
             else
             {
-                beam->child(j)->setText(1, QString("c = %1").arg(b.spring(j)*FPREFIX));
+                if(j == 2 || j == 5) //momentMenu
+                    beam->child(j)->setText(1, QString("c = %1").arg(b.spring(j)*FMPREFIX));
+                else
+                    beam->child(j)->setText(1, QString("c = %1").arg(b.spring(j)*FPREFIX));
                 beam->child(j)->setIcon(0, colinIcons::instance().icon(Colin::Spring));
             }
         }
@@ -456,8 +459,8 @@ void treeView::setTw(wgv_tw *t)
 	tw->disconnect(this,            SLOT(setBeam(int)));
 	tw->disconnect(this,            SLOT(setLoad(int)));
 	tw->disconnect(this,            SLOT(setNode(int)));
-	tw->disconnect(this,		SLOT(disableSelection()));
-	tw->disconnect(this,		SLOT(enableSelection()));
+	tw->disconnect(this,            SLOT(disableSelection()));
+	tw->disconnect(this,            SLOT(enableSelection()));
 
     }
     tw = t;
@@ -947,7 +950,10 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
         }
         else if(ok)
         {
-            tw->setSpring(indexFromItem(item->parent()).row(), item->parent()->indexOfChild(item), item->text(column).toDouble()/FPREFIX);
+            if(item->parent()->indexOfChild(item) == 2 || item->parent()->indexOfChild(item) == 5) //moment
+                tw->setSpring(indexFromItem(item->parent()).row(), item->parent()->indexOfChild(item), item->text(column).toDouble()/FMPREFIX);
+            else
+                tw->setSpring(indexFromItem(item->parent()).row(), item->parent()->indexOfChild(item), item->text(column).toDouble()/FPREFIX);
 #ifndef QT_NO_DEBUG
         debugS << "treeView: handled: " << item->data(column, 32).toInt()
                <<  (ok ? " value accepted" : " value not accepted") << endl;
@@ -1044,7 +1050,7 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
         }
         else if(ok)
         {
-            tw->setCm(indexFromItem(item->parent()).row(), item->text(column).toDouble()/FPREFIX);
+            tw->setCm(indexFromItem(item->parent()).row(), item->text(column).toDouble()/FMPREFIX);
 //            item->setText(column, "c = "+ QString::number(tw->node(indexFromItem(item->parent()).row()).bearing().phif()*FPREFIX));
 #ifndef QT_NO_DEBUG
         debugS << "treeView: handled: " << item->data(column, 32).toInt()

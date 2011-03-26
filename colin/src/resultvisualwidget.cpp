@@ -246,21 +246,21 @@ void resultVisualWidget::paintDetails(QPainter *p)
             text.append(QString(" = %1\n").arg(n.angle()*ANGLEPREFIX));
             text.append(QString("H = "));
             if(n.bearing().form().testFlag(wgv_bearing::fx))
-                text.append(QString(tr("spring")+", c = %1 ").arg(n.bearing().c_x()) + FPREFIX + "\n");
+                text.append(QString(tr("spring")+", c = %1 ").arg(n.bearing().c_x()*FPREFIX) + unitSettings::instance().Feh() + "\n");
             else if(n.bearing().form().testFlag(wgv_bearing::X))
                 text.append(tr("locked\n"));
             else
                 text.append(tr("free"));
             text.append(QString("V = "));
             if(n.bearing().form().testFlag(wgv_bearing::fz))
-                text.append(QString(tr("spring")+", c = %1 ").arg(n.bearing().c_z()) + FPREFIX + "\n");
+                text.append(QString(tr("spring")+", c = %1 ").arg(n.bearing().c_z()*FPREFIX) + unitSettings::instance().Feh() + "\n");
             else if(n.bearing().form().testFlag(wgv_bearing::Z))
                 text.append(tr("locked\n"));
             else
                 text.append(tr("free"));
             text.append(QString("Phi = "));
             if(n.bearing().form().testFlag(wgv_bearing::fphi))
-                text.append(QString(tr("spring")+", c = %1 ").arg(n.bearing().c_phi()) + FPREFIX + "\n");
+                text.append(QString(tr("spring")+", c = %1 ").arg(n.bearing().c_phi()*FMPREFIX) + unitSettings::instance().FMeh() + "\n");
             else if(n.bearing().form().testFlag(wgv_bearing::Phi))
                 text.append(tr("locked\n"));
             else

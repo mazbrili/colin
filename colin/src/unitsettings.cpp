@@ -39,6 +39,23 @@ QString unitSettings::Feh() const
     }
 }
 
+QString unitSettings::FMeh() const
+{
+    switch(EUnit)
+    {
+    case N_m2:
+        return QString("N/rad");
+    case kN_m2:
+        return QString("kN/rad");
+    case kN_cm2:
+        return QString("kN/rad");
+    case N_cm2:
+        return QString("N/rad");
+    default:
+        return QString();
+    }
+}
+
 QString unitSettings::Peh() const
 {
     switch(PMUnit)
@@ -115,6 +132,23 @@ double unitSettings::Fprefix() const
         return 0.1;
     case N_cm2:
         return 100;
+    default:
+        return 1;
+    }
+}
+
+double unitSettings::FMprefix() const
+{
+    switch(EUnit)
+    {
+    case N_m2:
+        return 1;
+    case kN_m2:
+        return 0.001;
+    case kN_cm2:
+        return 0.001;
+    case N_cm2:
+        return 1;
     default:
         return 1;
     }

@@ -70,13 +70,13 @@ beamMenu::beamMenu() :
     QAction *a[6];
     int c = 0;
     jointMenu = new ColinMenu(tr("more joints"));
-    a[c++] = jointMenu->addAction(colinIcons::instance().icon(Colin::drawJointN), tr("u left"));
-    a[c++] = jointMenu->addAction(colinIcons::instance().icon(Colin::drawJointQ), tr("w left"));
-    a[c++] = jointMenu->addAction(colinIcons::instance().icon(Colin::drawJointM), QString("%1 ").arg(QChar(0x03C6))+tr("left"));
+    a[c++] = jointMenu->addAction(colinIcons::instance().icon(Colin::drawJointN), tr("u left")+"["+unitSettings::instance().Feh()+"]");
+    a[c++] = jointMenu->addAction(colinIcons::instance().icon(Colin::drawJointQ), tr("w left")+"["+unitSettings::instance().Feh()+"]");
+    a[c++] = jointMenu->addAction(colinIcons::instance().icon(Colin::drawJointM), QString("%1 ").arg(QChar(0x03C6))+tr("left")+"["+unitSettings::instance().FMeh()+"]");
     jointMenu->addSeparator();
-    a[c++] = jointMenu->addAction(colinIcons::instance().icon(Colin::drawJointN), tr("u right"));
-    a[c++] = jointMenu->addAction(colinIcons::instance().icon(Colin::drawJointQ), tr("w right"));
-    a[c++] = jointMenu->addAction(colinIcons::instance().icon(Colin::drawJointM), QString("%1 ").arg(QChar(0x03C6))+tr("right"));
+    a[c++] = jointMenu->addAction(colinIcons::instance().icon(Colin::drawJointN), tr("u right")+"["+unitSettings::instance().Feh()+"]");
+    a[c++] = jointMenu->addAction(colinIcons::instance().icon(Colin::drawJointQ), tr("w right")+"["+unitSettings::instance().Feh()+"]");
+    a[c++] = jointMenu->addAction(colinIcons::instance().icon(Colin::drawJointM), QString("%1 ").arg(QChar(0x03C6))+tr("right")+"["+unitSettings::instance().FMeh()+"]");
     addMenu(jointMenu);
     addSeparator();
 
@@ -161,7 +161,12 @@ void beamMenu::set(const int &i)
     for(int j=0; j<6; j++)
     {
         if(b.hasSpring(j))
-            springs[j]->setEditText(QString::number(b.spring(j)*FPREFIX));
+        {
+            if(j == 2 || j==5) //moment
+                springs[j]->setEditText(QString::number(b.spring(j)*FMPREFIX));
+            else
+                springs[j]->setEditText(QString::number(b.spring(j)*FPREFIX));
+        }
         else if(b.joint(j))
             springs[j]->setCurrentIndex(0);
         else
@@ -250,7 +255,10 @@ void beamMenu::someJointChanged()
     }
     else if(ok)
     {
-        filelist::instance().currentFile()->setSpring(cBeam, position, val/FPREFIX);
+        if(position == 2 || position == 5) //moment
+            filelist::instance().currentFile()->setSpring(cBeam, position, val/FMPREFIX);
+        else
+            filelist::instance().currentFile()->setSpring(cBeam, position, val/FPREFIX);
     }
 }
 

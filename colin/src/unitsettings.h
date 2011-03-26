@@ -7,6 +7,7 @@
 
 #define EPREFIX unitSettings::instance().Eprefix()
 #define FPREFIX unitSettings::instance().Fprefix()
+#define FMPREFIX unitSettings::instance().FMprefix()
 #define APREFIX unitSettings::instance().Aprefix()
 #define IPREFIX unitSettings::instance().Iprefix()
 #define HPREFIX unitSettings::instance().hprefix()
@@ -55,6 +56,7 @@ public:
 
     QString Eeh() const;
     QString Feh() const;
+    QString FMeh() const;
     QString Peh() const;
     QString Meh() const;
     inline QString Aeh() const {return Profeh()+QChar(0x00B2);}
@@ -64,6 +66,7 @@ public:
 
     double Eprefix() const;
     double Fprefix() const;
+    double FMprefix() const;
     double Pprefix() const;
     double Mprefix() const;
     inline double Aprefix() const {return pow(Profprefix(),2);}
