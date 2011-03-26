@@ -243,7 +243,7 @@ void resultVisualWidget::paintDetails(QPainter *p)
         if(n.hasbearing())
         {
             text.append(QChar(0x03B1));
-            text.append(QString(" = %1\n").arg(n.angle()*ANGLEPREFIX));
+            text.append(QString(" = %1\n").arg(-n.angle()*ANGLEPREFIX));
             text.append(QString("H = "));
             if(n.bearing().form().testFlag(wgv_bearing::fx))
                 text.append(QString(tr("spring")+", c = %1 ").arg(n.bearing().c_x()*FPREFIX) + unitSettings::instance().Feh() + "\n");
@@ -281,7 +281,7 @@ void resultVisualWidget::paintDetails(QPainter *p)
         text.append(QString(tr("left Node")+": #%1 (%2 m, %3 m)\n").arg(b.leftNodeI()).arg(b.leftNode().x()).arg(b.leftNode().z()));
         text.append(QString(tr("right Node")+": #%1 (%2 m, %3 m)\n").arg(b.rightNodeI()).arg(b.rightNode().x()).arg(b.rightNode().z()));
         text.append(QString(tr("lenght")+" = %1 m\n").arg(b.l()));
-        text.append(QString("%1 = %2\n").arg(QChar(0x03B1)).arg(b.angle()*ANGLEPREFIX));
+        text.append(QString("%1 = %2\n").arg(QChar(0x03B1)).arg(-b.angle()*ANGLEPREFIX));
         text.append(QString(tr("material")+" = %1\n").arg(b.Mat().name()));
         text.append(QString(tr("cross section")+" = %1\n").arg(b.Profile().name()));
         p->drawPixmap(iconRect, QPixmap(colinIcons::icondir_ +"tooltip/beam_64.png"));

@@ -265,7 +265,7 @@ void treeView::setNode(const int &i, const wgv_node &n)
         else
             bear = node->child(0);
 
-        bear->setText(1, QString("%1").arg(n.angle()*ANGLEPREFIX));
+        bear->setText(1, QString("%1").arg(-n.angle()*ANGLEPREFIX));
 
         if(n.bearing().x())
         {
@@ -869,7 +869,7 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
     case wgv_tw::alpha_k:
         item->text(column).toDouble(&ok);
         if(ok)
-            tw->setAngle(indexFromItem(item->parent()).row(), item->data(column, 0).toDouble()/ANGLEPREFIX);
+            tw->setAngle(indexFromItem(item->parent()).row(), -item->data(column, 0).toDouble()/ANGLEPREFIX);
         else
             item->setText(column, QString::number(tw->node(item->parent()->indexOfChild(item)).angle()*ANGLEPREFIX));
 #ifndef QT_NO_DEBUG

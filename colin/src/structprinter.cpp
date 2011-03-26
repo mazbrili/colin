@@ -215,7 +215,7 @@ void structPrinter::writeNodes(QPainter *p)
         p->drawText(QRect(330, dx, 200, 100), Qt::AlignTop | Qt::AlignRight, QString::number(tw->node(i).z(), 'f', PRECISON));
         if(tw->node(i).hasbearing())
         {
-            p->drawText(QRect(530, dx, 200, 100), Qt::AlignTop | Qt::AlignRight, QString::number(tw->node(i).bearing().angle()*ANGLEPREFIX, 'f', PRECISON));
+            p->drawText(QRect(530, dx, 200, 100), Qt::AlignTop | Qt::AlignRight, QString::number(-tw->node(i).bearing().angle()*ANGLEPREFIX, 'f', PRECISON));
 
             if(tw->node(i).bearing().x())
                 p->drawText(QRect(730, dx, 200, 100), Qt::AlignTop | Qt::AlignRight, tr("locked"));
