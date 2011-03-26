@@ -1,3 +1,12 @@
+colin (0.1.7-0) any; urgency=low
+
+  * all anticlockwise angles are now positiv
+  * added [N/rad] for rotation springs. implemented in tree, menu, printer and resultwidget.
+  * the right click menu for loads now shows the correct units
+  * detailwidget now shows the angle of supports in grad instead of rad
+
+ -- Matthias Rauter <matthias.rauter@student.uibk.ac.at>  Sat, 26 Mar 2011 01:40:00 +0100
+
 colin (0.1.6-0) any; urgency=low
 
   * Fixed a bug with nodal forces on beams (Colin addes some hinges while drawing). Should work now...
