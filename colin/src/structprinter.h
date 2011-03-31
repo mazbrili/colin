@@ -21,6 +21,7 @@ private:
     void addHeader(QPainter *p);
     void addPage(QPainter *p);
 
+    void drawElementInfo(QPainter *p, const Colin::Elements &e, const QPointF &dp_);
     void writeMats(QPainter *p);
     void writeNodes(QPainter *p);
     void writeBeams(QPainter *p);

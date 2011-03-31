@@ -40,24 +40,28 @@ void structPrinter::print()
     p.setPen(QPen(QColor(0, 0, 0), 1));
     p.setBrush(Qt::NoBrush);
     p.drawRect(2, 2, width()/2-4, height()/2-headerSize-4);
+    drawElementInfo(&p, viewPortSettings::instance().elements(0), QPointF(2, 2));
     sP.drawStruct(*tw, &p, &t, viewPortSettings::instance().elements(0));
 
     t.translate((width()/2+2*marging)/scale, 0);
     p.setPen(QPen(QColor(0, 0, 0), 1));
     p.setBrush(Qt::NoBrush);
     p.drawRect(width()/2+2, 2, width()/2-4, height()/2-headerSize-4);
+    drawElementInfo(&p, viewPortSettings::instance().elements(1), QPointF(width()/2+2, 2));
     sP.drawStruct(*tw, &p, &t, viewPortSettings::instance().elements(1));
 
     t.translate(-(width()/2+2*marging)/scale, (height()/2-headerSize+2*marging)/scale);
     p.setPen(QPen(QColor(0, 0, 0), 1));
     p.setBrush(Qt::NoBrush);
     p.drawRect(2, height()/2-headerSize+2, width()/2-4, height()/2-headerSize-4);
+    drawElementInfo(&p, viewPortSettings::instance().elements(2), QPointF(2, height()/2-headerSize+2));
     sP.drawStruct(*tw, &p, &t, viewPortSettings::instance().elements(2));
 
     t.translate((width()/2+2*marging)/scale, 0);
     p.setPen(QPen(QColor(0, 0, 0), 1));
     p.setBrush(Qt::NoBrush);
     p.drawRect(width()/2+2, height()/2-headerSize+2, width()/2-4, height()/2-headerSize-4);
+    drawElementInfo(&p, viewPortSettings::instance().elements(3), QPointF(width()/2+2, height()/2-headerSize+2));
     sP.drawStruct(*tw, &p, &t, viewPortSettings::instance().elements(3));
 
     p.setPen(QPen(QColor(0, 0, 0), 1));
@@ -567,3 +571,41 @@ void structPrinter::usedSpace(int h, QPainter *p)
         dx+=h+5;
 }
 
+void structPrinter::drawElementInfo(QPainter *p, const Colin::Elements &e, const QPointF &dp_)
+{
+    p->save();
+    p->translate(dp_);
+    QFont f = p->font();
+    f.setPointSizeF(2*f.pointSizeF());
+    QPointF dp(10, 10);
+    QSizeF s(p->font().pointSizeF()*2.5, p->font().pointSizeF()*4);
+    if(e.testFlag(Colin::u))
+    {
+        p->setPen(viewPortSettings::instance().color(Colin::C_Beam));
+        p->drawRect(QRectF(dp, s));
+        p->drawText(QRectF(dp, s), "u", Qt::AlignHCenter | Qt::AlignVCenter);
+        p->translate(s.width()+5, 0);
+    }
+    if(e.testFlag(Colin::N))
+    {
+        p->setPen(viewPortSettings::instance().color(Colin::C_Np));
+        p->drawRect(QRectF(dp, s));
+        p->drawText(QRectF(dp, s), "N", Qt::AlignHCenter | Qt::AlignVCenter);
+        p->translate(s.width()+5, 0);
+    }
+    if(e.testFlag(Colin::Q))
+    {
+        p->setPen(viewPortSettings::instance().color(Colin::C_Qp));
+        p->drawRect(QRectF(dp, s));
+        p->drawText(QRectF(dp, s), "Q", Qt::AlignHCenter | Qt::AlignVCenter);
+        p->translate(s.width()+5, 0);
+    }
+    if(e.testFlag(Colin::M))
+    {
+        p->setPen(viewPortSettings::instance().color(Colin::C_Mp));
+        p->drawRect(QRectF(dp, s));
+        p->drawText(QRectF(dp, s), "M", Qt::AlignHCenter | Qt::AlignVCenter);
+        p->translate(s.width()+5, 0);
+    }
+    p->restore();
+}
