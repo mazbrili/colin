@@ -1289,9 +1289,13 @@ void resultVisualWidget::setElement(const catcher::CatchCases &cc, const int &in
              (cc == catcher::CatchedLoad && index>-1 && index<filelist::instance().currentFile()->load_n()) ||
              (cc == catcher::CatchedTemp && index>-1 && index<filelist::instance().currentFile()->load_n()) ||
              (cc == catcher::CatchedNothing));
+
+    bool repaintAfterwards(objectType != cc || object != index || x!=x_);
     objectType = cc;
     object = index;
     this->x = x_;
+    if(repaintAfterwards)
+        update();
 }
 
 QSize resultVisualWidget::bSize()

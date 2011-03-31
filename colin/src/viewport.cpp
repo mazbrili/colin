@@ -729,7 +729,7 @@ void viewport::drawCursorAxes(QPainter *p)
                 resultVisualWidget::instance().setElement(catcher::CatchedNothing, -1);
                 break;
             }
-            resultVisualWidget::instance().update();
+            //resultVisualWidget::instance().update();
         }
     }
     /*
