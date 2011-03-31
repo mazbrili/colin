@@ -1121,7 +1121,6 @@ void viewport::resizeEvent(QResizeEvent *)
 
 void viewport::mousePressEvent(QMouseEvent *e)
 {
-
     QPointF p = e->posF();
     if(vS->toClip() == Colin::pasteRequest)
     {
@@ -1333,7 +1332,8 @@ void viewport::mouseReleaseEvent(QMouseEvent *e)
 
 void viewport::mouseMoveEvent(QMouseEvent *e)
 {
-
+    if(!hasFocus())
+        setFocus(Qt::MouseFocusReason);
 
     if(lastMouseButtons == Qt::LeftButton)
     {

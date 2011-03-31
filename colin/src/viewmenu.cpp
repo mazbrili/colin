@@ -50,9 +50,6 @@ void viewMenu::init()
     pScale->slider->setTracking(false);
     mScale->slider->setTracking(false);
 
-    connect(&filelist::instance(),		    SIGNAL(currentChanged(int)),
-	    this,				    SLOT(dumpTw(int)));
-
     connect(&filelist::instance(),                  SIGNAL(currentChanged(wgv_tw*)),
             this,                                   SLOT(setTw(wgv_tw*)));
 

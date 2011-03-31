@@ -555,48 +555,52 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
         return;
     }
 
-    if(viewPortSettings::instance().toClip() == Colin::pasteRequest)
-    {
-        viewport::removeToPaste();
-        return;
-    }
-    if(viewPortSettings::instance().toClip() == Colin::copybasePointRequest ||
-       viewPortSettings::instance().toClip() == Colin::cutbasePointRequest  )
-    {
-        viewPortSettings::instance().setClipBoard(Colin::noRequest);
-        return;
-    }
-    const Colin::Actions toD = viewPortSettings::instance().toDraw();
 
     if(e->key()==Qt::Key_Escape)
     {
+
+        if(viewPortSettings::instance().toClip() == Colin::pasteRequest)
+        {
+            viewport::removeToPaste();
+            return;
+        }
+        if(viewPortSettings::instance().toClip() == Colin::copybasePointRequest ||
+           viewPortSettings::instance().toClip() == Colin::cutbasePointRequest  )
+        {
+            viewPortSettings::instance().setClipBoard(Colin::noRequest);
+            return;
+        }
+
+        const Colin::Actions toD = viewPortSettings::instance().toDraw();
+
+
         if(!filelist::instance().currentFile()->isSelectionEmpty())
         {
             filelist::instance().currentFile()->deselectAll();
             return;
         }
-	if(toD == Colin::drawMove)
-	    return;
+        if(toD == Colin::drawMove)
+            return;
         if( toD == Colin::drawBeam  ||   //everything
             toD == Colin::drawNLoad ||   //drawable with
             toD == Colin::drawMoment)    //two clicks
         {
             if(filelist::instance().currentFile()->lastObjectNode()!=-1)
             {
-		filelist::instance().currentFile()->setlastObjectNode(-1);
+                filelist::instance().currentFile()->setlastObjectNode(-1);
                 centralWidget->repaintyourChildren();
                 //restores the first drawing step
             }
             else
             {
-		stdA->trigger();    //Escape + Escape triggers the standardaction
+                stdA->trigger();    //Escape + Escape triggers the standardaction
             }
-	    return;
+            return;
         }
         else if( toD == Colin::drawULoad ||  //everything
                  toD == Colin::drawDLoad ||  //drawable with
-		 toD == Colin::drawILoad ||  //two clicks
-		 toD == Colin::drawTemp  )   //on a beam
+                 toD == Colin::drawILoad ||  //two clicks
+                 toD == Colin::drawTemp  )   //on a beam
         {
             if(filelist::instance().currentFile()->lastObjectBeam()!=-1)
             {
@@ -606,24 +610,24 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
             }
             else
             {
-		stdA->trigger();
+                stdA->trigger();
             }
-	    return;
+            return;
         }
-	else if( toD == Colin::drawDoubleLoad)
-	{
-	    if(filelist::instance().currentFile()->lastObjectBeam()!=-1)
-	    {
-		filelist::instance().currentFile()->setlastObjectBeam(-1);
-		filelist::instance().currentFile()->setlastObjectNode(-1);
+        else if( toD == Colin::drawDoubleLoad)
+        {
+            if(filelist::instance().currentFile()->lastObjectBeam()!=-1)
+            {
+                filelist::instance().currentFile()->setlastObjectBeam(-1);
+                filelist::instance().currentFile()->setlastObjectNode(-1);
                 centralWidget->repaintyourChildren();
-	    }
-	    else
-	    {
-		stdA->trigger();
-	    }
-	    return;
-	}
+            }
+            else
+            {
+                stdA->trigger();
+            }
+            return;
+        }
         else
         {
             stdA->trigger();
