@@ -12,6 +12,9 @@ cTabBar::cTabBar(QWidget *parent) :
     connect(&filelist::instance(),  SIGNAL(currentChanged(int)),
             this,                   SLOT(repaint()));
 
+    connect(&filelist::instance(),  SIGNAL(recUsedCanged()),
+            this,                   SLOT(repaint()));
+
     connect(&filelist::instance(),  SIGNAL(fileClosed()),
             this,                   SLOT(repaint()));
 }

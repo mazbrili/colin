@@ -258,6 +258,7 @@ bool filelist::saveCurrent()
 bool filelist::saveCurrent(const QString &url)
 {
     files[current_].filepath = url;
+    files[current_].filename = QFileInfo(url).fileName();
     return saveCurrent();
 }
 
@@ -280,6 +281,7 @@ bool filelist::saveAs(const int &i, const QString &url)
 {
     files[i].filepath = url;
     files[i].filename = QFileInfo(url).fileName();
+    emit recUsedCanged();
     return save(i);
 }
 
