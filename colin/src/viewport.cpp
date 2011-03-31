@@ -429,6 +429,17 @@ void viewport::drawCursorAxes(QPainter *p)
         cC = cC & ~catcher::CatchedLoad;
         cC = cC & ~catcher::CatchedLoadHotSpot;
     }
+
+    if((vS->toDraw() & (Colin::drawNLoad | Colin::drawMoment)) != Colin::drawMove)
+    {
+        if(tw->lastObjectNode()>0)
+            cC = cC & ~(catcher::CatchedNode | catcher::CatchedBeam | catcher::CatchedMiddle);
+    }
+    if((vS->toDraw() & (Colin::drawULoad | Colin::drawILoad | Colin::drawDLoad | Colin::drawDoubleLoad)) != Colin::drawMove)
+    {
+        if(tw->lastObjectBeam()>0)
+            cC = cC & ~(catcher::CatchedBeam | catcher::CatchedBeamEnd);
+    }
     //snap!
     int first = catcher::instance().doYourWork(&cursorpos, &cC, globalMatrix(), &aditional, unignoreableSnap);
 
