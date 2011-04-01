@@ -36,8 +36,11 @@ void cTabBar::paintEvent(QPaintEvent *)
     p.setPen(QColor(100, 100, 100));
     p.setRenderHint(QPainter::Antialiasing, true);
     QLinearGradient grad(0, 0, 0, height()-2);
+    QLinearGradient mousegrad(0, 0, 0, height()-2);
     grad.setColorAt(0, static_cast<QWidget*>(parent())->palette().color(QPalette::Background));
     grad.setColorAt(1, static_cast<QWidget*>(parent())->palette().color(QPalette::Mid));
+    mousegrad.setColorAt(0, static_cast<QWidget*>(parent())->palette().color(QPalette::Background).light(120));
+    mousegrad.setColorAt(1, static_cast<QWidget*>(parent())->palette().color(QPalette::Mid).light(120));
     p.setBrush(QBrush(grad));
 
     //background
@@ -87,6 +90,10 @@ void cTabBar::paintEvent(QPaintEvent *)
     {
         if(i!=files.currentIndex())
         {
+            if(tab.contains(p.transform().inverted().map(mapFromGlobal(QCursor::pos()))))
+                p.setBrush(mousegrad);
+            else
+                p.setBrush(grad);
             p.drawPath(tab);
         }
 
@@ -99,7 +106,13 @@ void cTabBar::paintEvent(QPaintEvent *)
     if(files.settingsVisible())
     {
         if(files.currentIndex()!=-2)
+        {
+            if(tab.contains(p.transform().inverted().map(mapFromGlobal(QCursor::pos()))))
+                p.setBrush(mousegrad);
+            else
+                p.setBrush(grad);
             p.drawPath(tab);
+        }
         p.translate(dwtab(), 0);
     }
 

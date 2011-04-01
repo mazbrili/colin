@@ -634,7 +634,7 @@ void treeView::keyPressEvent(QKeyEvent *e)
 	e->accept();
 	return;
     }
-
+    QTreeWidget::keyPressEvent(e);
 }
 
 /*

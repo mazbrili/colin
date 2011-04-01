@@ -1343,8 +1343,8 @@ void viewport::mouseReleaseEvent(QMouseEvent *e)
 
 void viewport::mouseMoveEvent(QMouseEvent *e)
 {
-    if(!hasFocus())
-        setFocus(Qt::MouseFocusReason);
+    //if(!hasFocus())
+    //    setFocus(Qt::MouseFocusReason);
 
     if(lastMouseButtons == Qt::LeftButton)
     {
