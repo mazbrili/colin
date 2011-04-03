@@ -1079,11 +1079,13 @@ void MainWindow::launchToolTip()
 void MainWindow::aboutMe()
 {
     QMessageBox::about(this, tr("about Colin"),
-        QString( tr("Colin %1"
-                    "\n"
+        QString( tr("Colin %1\n"
 
-                    "named after Colin from \"mostly harmless\" by Douglas Adams.\n\n\n"
-
+                    "named after Colin from \"mostly harmless\" by Douglas Adams.\n\n"
+                    "Build on %2.\n\n"
+#ifndef QT_NO_DEBUG
+                    "WARNING: this is the DEBUG build!\n\n"
+#endif
                     "Copyright (C) 2011 Matthias Rauter(matthias.rauter@student.uibk.ac.at)\n\n"
 
                     "This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License "
@@ -1099,7 +1101,7 @@ void MainWindow::aboutMe()
 
                     "Thanks to Pongo, Ben, Anouck, Neo and ibcl."
 
-              )).arg(ColinVersion()));
+              )).arg(ColinVersion()).arg(BuildDate()));
 }
 
 void MainWindow::aboutQt()
