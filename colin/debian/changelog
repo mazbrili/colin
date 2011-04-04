@@ -1,3 +1,13 @@
+colin (0.1.8-0) any; urgency=low
+
+  * added symbols in the pdf document
+  * fixed a recursive paintevent
+  * the snap (and tooltips) work now correct while drawing loads
+  * the file tab now shows the right name
+  * fixed a problem with the escape-key
+
+ -- Matthias Rauter <matthias.rauter@student.uibk.ac.at>  Mon, 04 Apr 2011 18:20:00 +0100
+
 colin (0.1.7-0) any; urgency=low
 
   * all anticlockwise angles are now positiv
