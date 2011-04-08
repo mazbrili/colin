@@ -17,7 +17,8 @@ Categories=Education;
 
 Exec=Colin -graphicssystem raster %F
 
-Icon=/usr/share/colin/pixmaps/colin
+
+Icon=/usr/share/colin/pixmaps/colin.png
 
 MimeType=application/xcs
 
