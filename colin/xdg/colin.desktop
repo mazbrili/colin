@@ -12,12 +12,12 @@ Name=Colin
 
 GenericName=Colin
 
-Categories=Education;Graphics;
+Categories=Education;
 # list see http://standards.freedesktop.org/menu-spec/menu-spec-1.0.html#category-registry
 
 Exec=Colin -graphicssystem raster %F
 
-Icon=colin
+Icon=/usr/share/colin/pixmaps/colin
 
 MimeType=application/xcs
 
