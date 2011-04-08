@@ -1,3 +1,9 @@
+colin (0.1.8-2) any; urgency=low
+
+  * fixed the application icon in the system menu, try nr. 2
+
+ -- Matthias Rauter <matthias.rauter@student.uibk.ac.at>  Fre, 08 Apr 2011 23:32:00 +0100
+
 colin (0.1.8-1) any; urgency=low
 
   * fixed the application icon in the system menu
