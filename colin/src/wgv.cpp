@@ -65,6 +65,8 @@ wgv::wgv(wgv_tw *parent) :
     globalMMax = 0;
     globalPMax = 0;
     globalUMax = 0;
+
+    success = true;
 }
 
 wgv::~wgv()
@@ -114,11 +116,15 @@ void wgv::run()
 #endif
 
 
-
-    u = p/K;
-
-    if(!K.solved())
+    try
+    {
+        u = p/K;
+    }
+    catch(SingularMatrixException& e)
+    {
+        success = false;
         return;
+    }
     pa = u*Ka;
 
 
@@ -164,7 +170,7 @@ void wgv::writeBack()
         deleteLater();
         return;
     }
-    if(!K.solved())
+    if(!success)
     {
         emit calcFinished();
         deleteLater();

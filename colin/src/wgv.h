@@ -106,6 +106,8 @@ private:
     int node_n;
     int beam_n;
     int load_n;
+
+    bool success;
 };
 
 #endif // WGV_H

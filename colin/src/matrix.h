@@ -29,6 +29,16 @@
 
 #include <cmath>
 #include <QtCore/QTextStream>
+#include <exception>
+
+
+class SingularMatrixException : public std::exception
+{
+    virtual const char* what() const throw()
+    {
+      return "My exception happened";
+    }
+};
 
 
 template <class T>
@@ -39,7 +49,6 @@ protected:
 
     int rowcount;
     int cutedAt_;
-    bool solved_;
 
     void init__()
     {
@@ -49,7 +58,6 @@ protected:
             array[i] = new T[rowcount];
             for(int j=0; j<rowcount; j++)
                 array[i][j] = 0;
-            solved_ = false;
         }
         cutedAt_=rowcount;
     }
@@ -99,16 +107,6 @@ public:
     void cutAt(int before)
     {
         cutedAt_ = before;
-    }
-
-    bool solved()const
-    {
-        return solved_;
-    }
-
-    void setSolved()
-    {
-        solved_=true;
     }
 
     void swap(int a, int b)
@@ -248,7 +246,7 @@ public:
                     swap(m, n);
                 }
                 if(m==a.size()-1 && fabs(a[n][n])<1e-05)
-                    return temp;
+                    throw SingularMatrixException();
             }
             for(int m=n+1; m<a.size(); m++)
             {
@@ -265,15 +263,13 @@ public:
         {
             if(fabs(a[n][n])<1e-05)
             {
-                temp = vector<T>(0);
-                return temp;
+                throw SingularMatrixException();
             }
             fak=0;
             for(int m=a.size()-1; m>n; m--)
                 fak+=temp[m]*a[n][m];
             temp[n]=((*this)[n]-fak)/a[n][n];
         }
-        a.setSolved();
         return temp;
     }
 
