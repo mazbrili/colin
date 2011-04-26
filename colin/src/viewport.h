@@ -54,7 +54,6 @@ class viewport : public QWidget
 public:
     explicit viewport(QWidget *parent = 0);
     ~viewport();
-    //void keyPressEvent(QKeyEvent *e);
     void paintEvent(QPaintEvent *);
     void wheelEvent(QWheelEvent *e);
     void resizeEvent(QResizeEvent *);

@@ -146,4 +146,5 @@ SOURCES += src/beammenu.cpp \
     src/xmlreader.cpp \
     src/xmlwriter.cpp \
     src/zmenu.cpp
-TRANSLATIONS += src/colin_de.ts
+TRANSLATIONS += src/colin_de.ts \
+    src/colin_it.ts

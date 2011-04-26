@@ -1060,28 +1060,7 @@ void viewport::zoomClick(const QPointF &p)
 
         wheelEvent(&e);
 }
-/*
-void viewport::keyPressEvent(QKeyEvent *e)
-{
-    if(e->key() == Qt::Key_Left)
-    {
 
-    }
-    if(e->key() == Qt::Key_Right)
-    {
-
-    }
-    if(e->key() == Qt::Key_Up)
-    {
-
-    }
-    if(e->key() == Qt::Key_Down)
-    {
-
-    }
-
-    QWidget::keyPressEvent(e);
-}*/
 
 void viewport::wheelEvent(QWheelEvent *e)
 {
