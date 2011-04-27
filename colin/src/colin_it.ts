@@ -1,4 +1,6 @@
-<!DOCTYPE TS><TS>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.0" language="it_IT">
 <context>
     <name>MainWindow</name>
     <message>
@@ -40,11 +42,11 @@
     </message>
     <message>
         <source>new</source>
-        <translation type="unfinished">Neu</translation>
+        <translation>nuovo</translation>
     </message>
     <message>
         <source>open</source>
-        <translation type="unfinished">Öffnen</translation>
+        <translation>apri</translation>
     </message>
     <message>
         <source>print</source>
@@ -56,7 +58,7 @@
     </message>
     <message>
         <source>save as</source>
-        <translation type="unfinished">salva unter</translation>
+        <translation>salva con nome</translation>
     </message>
     <message>
         <source>close tab</source>
@@ -104,7 +106,7 @@
     </message>
     <message>
         <source>paste</source>
-        <translation type="unfinished">Einfügen</translation>
+        <translation>incolla</translation>
     </message>
     <message>
         <source>select all</source>
@@ -130,16 +132,16 @@
     </message>
     <message>
         <source>delete</source>
-        <translation type="unfinished">Löschen</translation>
+        <translation>cancella</translation>
     </message>
     <message>
         <source>settings</source>
-        <translation type="unfinished">Einstellungen</translation>
+        <translation>impostazioni</translation>
     </message>
     <message>
         <source>Ctrl+Space</source>
         <comment>(Ctrl+Space) action | Settings</comment>
-        <translation type="unfinished">Ctrl+Leertaste</translation>
+        <translation>Ctrl+spazio</translation>
     </message>
     <message>
         <source>&amp;windows</source>
@@ -149,11 +151,11 @@
     <message>
         <source>&amp;about</source>
         <comment>menu | aboutmenu(don&apos;t remve the &quot;&amp;&quot;</comment>
-        <translation type="unfinished">&amp;about</translation>
+        <translation>&amp;about</translation>
     </message>
     <message>
         <source>toolbar</source>
-        <translation type="unfinished">toolbar</translation>
+        <translation>toolbar</translation>
     </message>
     <message>
         <source>Ctrl+K</source>
@@ -200,7 +202,7 @@
     </message>
     <message>
         <source>zoom</source>
-        <translation type="unfinished">Zoom</translation>
+        <translation>zoom</translation>
     </message>
     <message>
         <source>calculate</source>
@@ -230,7 +232,7 @@
     </message>
     <message>
         <source>Do you want to save your changes?</source>
-        <translation type="unfinished"></translation>
+        <translation>salvare modifiche?</translation>
     </message>
     <message>
         <source>open file</source>
@@ -242,11 +244,11 @@
     </message>
     <message>
         <source>save file</source>
-        <translation type="unfinished"></translation>
+        <translation>salva file</translation>
     </message>
     <message>
         <source>colin structs</source>
-        <translation type="unfinished"></translation>
+        <translation>colin structs</translation>
     </message>
     <message>
         <source>undo</source>
@@ -298,15 +300,15 @@
     </message>
     <message>
         <source>viewports</source>
-        <translation type="unfinished">visualizzazionesfenster</translation>
+        <translation>visualizzazione</translation>
     </message>
     <message>
         <source>adjust viewports.</source>
-        <translation type="unfinished">visualizzazione</translation>
+        <translation>adatta visualizzazione.</translation>
     </message>
     <message>
         <source>nodes</source>
-        <translation type="unfinished"></translation>
+        <translation>nodi</translation>
     </message>
     <message>
         <source>Create new nodes by clicking on the designated position. Furthermore you might use this action to split a beam or to unite two crossing beams.</source>
@@ -314,7 +316,7 @@
     </message>
     <message>
         <source>beams</source>
-        <translation type="unfinished"></translation>
+        <translation>travi</translation>
     </message>
     <message>
         <source>Connect nodes with beams or simply create new beams.</source>
@@ -334,11 +336,11 @@
     </message>
     <message>
         <source>Add supports to existing nodes. For more options keep mouse button pressed. </source>
-        <translation type="unfinished"></translation>
+        <translation>aggiungi  appoggi a nodi. Per ulteriori opzioni tenere premuto il pulsante del mouse.</translation>
     </message>
     <message>
         <source>loads</source>
-        <translation type="unfinished"></translation>
+        <translation>carichi</translation>
     </message>
     <message>
         <source>Add loads to existing beams and nodes. For more options keep mouse button pressed.</source>
@@ -350,7 +352,7 @@
     </message>
     <message>
         <source>selection</source>
-        <translation type="unfinished">Auswahl</translation>
+        <translation>selezione</translation>
     </message>
     <message>
         <source>select single objects or create a selection area. Keep Ctrl pressed to add an object to the selection.</source>
@@ -366,11 +368,11 @@
     </message>
     <message>
         <source>Zoom in, zoom out, and specify visible area.</source>
-        <translation type="unfinished">comprimi, ingrandisci oder sichtbaren Bereich wählen.</translation>
+        <translation>comprimi, ingrandisci o seleziona area visibile.</translation>
     </message>
     <message>
         <source>about Colin</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>successfully calculated!</source>
@@ -378,26 +380,26 @@
     </message>
     <message>
         <source>calculation failed!</source>
-        <translation type="unfinished"></translation>
+        <translation>calcolazione fallita!</translation>
     </message>
     <message>
         <source>calculation finished</source>
-        <translation type="unfinished"></translation>
+        <translation>calcolazione terminata!</translation>
     </message>
     <message>
         <source>Colin - 42</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>nodes</source>
-        <translation type="unfinished"></translation>
+        <translation>nodi</translation>
     </message>
     <message>
         <source>beams</source>
-        <translation type="unfinished">Stäbe</translation>
+        <translation>travi</translation>
     </message>
     <message>
         <source>support</source>
@@ -405,167 +407,167 @@
     </message>
     <message>
         <source>loads</source>
-        <translation type="unfinished">Lasten</translation>
+        <translation>carichi</translation>
     </message>
     <message>
         <source>loads hotspot</source>
-        <translation type="unfinished">Lasten Endpunkt</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>reactions</source>
-        <translation>Reaktionen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>background</source>
-        <translation>Hintergrund</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>selection</source>
-        <translation>Auswahl</translation>
+        <translation>selezione</translation>
     </message>
     <message>
         <source>nodes referececonfiguration</source>
-        <translation>Knoten Referenzkonfiguration</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>beams referececonfiguration</source>
-        <translation>Stäbe Referenzkonfiguration</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>support referececonfiguration</source>
-        <translation> appoggi Referenzkonfiguration</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>grid</source>
-        <translation>Raster</translation>
+        <translation>griglia</translation>
     </message>
     <message>
         <source>normal force</source>
-        <translation>Normalkraft</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>shear force</source>
-        <translation>Querkraft</translation>
+        <translation type="unfinished">Querkraft</translation>
     </message>
     <message>
         <source>moment</source>
-        <translation>Moment</translation>
+        <translation type="unfinished">Moment</translation>
     </message>
     <message>
         <source>Ctrl</source>
         <comment>shortcuts | Control-Key</comment>
-        <translation>Strg</translation>
+        <translation type="unfinished">Strg</translation>
     </message>
     <message>
         <source>Tab</source>
         <comment>shortcuts | Tab-Key</comment>
-        <translation>Tab</translation>
+        <translation type="unfinished">Tab</translation>
     </message>
     <message>
         <source>Backtab</source>
         <comment>shortcuts | Backtab(Shift-Key+Tab-Key)</comment>
-        <translation>Backtab</translation>
+        <translation type="unfinished">Backtab</translation>
     </message>
     <message>
         <source>Shift</source>
         <comment>shortcuts | Shift-Key</comment>
-        <translation>Umschalt</translation>
+        <translation type="unfinished">Umschalt</translation>
     </message>
     <message>
         <source>Space</source>
         <comment>shortcuts | Space-Key</comment>
-        <translation>Leertaste</translation>
+        <translation type="unfinished">Leertaste</translation>
     </message>
     <message>
         <source>can&apos;t read file!</source>
-        <translation>kann Datei nicht lesen!</translation>
+        <translation type="unfinished">kann Datei nicht lesen!</translation>
     </message>
     <message>
         <source>%1
 Line %2, column %3</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>beamMenu</name>
     <message>
         <source>beam</source>
-        <translation type="unfinished">Stab</translation>
+        <translation>trave</translation>
     </message>
     <message>
         <source>left node</source>
-        <translation>linker Knoten</translation>
+        <translation type="unfinished">linker Knoten</translation>
     </message>
     <message>
         <source>right node</source>
-        <translation>rechter Knoten</translation>
+        <translation type="unfinished">rechter Knoten</translation>
     </message>
     <message>
         <source>cross section</source>
-        <translation>Querschnitt</translation>
+        <translation type="unfinished">Querschnitt</translation>
     </message>
     <message>
         <source>material</source>
-        <translation>Material</translation>
+        <translation type="unfinished">Material</translation>
     </message>
     <message>
         <source>hinge</source>
-        <translation>Gelenk</translation>
+        <translation type="unfinished">Gelenk</translation>
     </message>
     <message>
         <source>more joints</source>
-        <translation>mehr giunti</translation>
+        <translation type="unfinished">mehr giunti</translation>
     </message>
     <message>
         <source>u left</source>
-        <translation>u links</translation>
+        <translation type="unfinished">u links</translation>
     </message>
     <message>
         <source>w left</source>
-        <translation>w links</translation>
+        <translation type="unfinished">w links</translation>
     </message>
     <message>
         <source>left</source>
-        <translation>links</translation>
+        <translation type="unfinished">links</translation>
     </message>
     <message>
         <source>u right</source>
-        <translation>u rechts</translation>
+        <translation type="unfinished">u rechts</translation>
     </message>
     <message>
         <source>w right</source>
-        <translation>w rechts</translation>
+        <translation type="unfinished">w rechts</translation>
     </message>
     <message>
         <source>right</source>
-        <translation>rechts</translation>
+        <translation type="unfinished">rechts</translation>
     </message>
     <message>
         <source>copy</source>
-        <translation>Kopieren</translation>
+        <translation type="unfinished">Kopieren</translation>
     </message>
     <message>
         <source>cut</source>
-        <translation>Ausschneiden</translation>
+        <translation type="unfinished">Ausschneiden</translation>
     </message>
     <message>
         <source>delete</source>
-        <translation>löschen</translation>
+        <translation type="unfinished">cancella</translation>
     </message>
     <message>
         <source>free</source>
-        <translation>frei</translation>
+        <translation type="unfinished">frei</translation>
     </message>
     <message>
         <source>locked</source>
-        <translation>gesperrt</translation>
+        <translation type="unfinished">gesperrt</translation>
     </message>
 </context>
 <context>
     <name>cMenu</name>
     <message>
         <source>range</source>
-        <translation type="unfinished">Reichweite</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
