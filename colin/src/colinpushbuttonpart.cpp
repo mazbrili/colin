@@ -29,30 +29,7 @@
 void ColinPushButtonPart::paintEvent(QPaintEvent *)
 {
     QStyleOptionButton option;
-    option.initFrom(this);
-
-
-
-    if(isDefault())
-        option.features |= QStyleOptionButton::DefaultButton;
-
-    if(isDown())
-        option.state = QStyle::State_Sunken;
-    else
-        option.state = QStyle::State_Raised;
-    
-    if(hasFocus())
-        option.state |= QStyle::State_HasFocus;
-
-    if(isEnabled())
-        option.state |= QStyle::State_Enabled;
-
-    if(option.rect.contains(mapFromGlobal(cursor().pos())))
-        option.state |= QStyle::State_MouseOver;
-
-    if(isChecked())
-        option.state |= QStyle::State_On;
-
+    initStyleOption(&option);
 
     if((pos & ColinPushButtonPart::Left) == ColinPushButtonPart::Left)
     {
@@ -78,10 +55,11 @@ void ColinPushButtonPart::paintEvent(QPaintEvent *)
 
     QPainter painter(this);
     style()->drawControl(QStyle::CE_PushButton, &option, &painter, this);
+
 /*
     style()->drawItemText(&painter, QRect(2, 2, width()-4, height()-4),
                           Qt::AlignCenter, palette(), isEnabled(), text(), QPalette::Text);
-*/
+
     QRect r = rect();
 
     r.setLeft(r.x()+2);
@@ -93,7 +71,7 @@ void ColinPushButtonPart::paintEvent(QPaintEvent *)
                              : QIcon::Disabled,
                  isChecked() || isDown() ? QIcon::On
                                          : QIcon::Off);
-
+*/
 }
 
 void ColinPushButtonPart::setCutted(ColinPushButtonPart::Position pos_, bool cuted)
