@@ -823,11 +823,11 @@ int wgv_tw::bestimmt(int *aa, int *ss, int *kk, int *gg, int *ff)
     for(int u=0; u<node_n(); u++)
     {
         if(node(u).bearing().x() || node(u).bearing().c_x()!=0)
-            *aa++;
+            (*aa)++;
         if(node(u).bearing().z() || node(u).bearing().c_z()!=0)
-            *aa++;
+            (*aa)++;
         if(node(u).bearing().phi() || node(u).bearing().c_phi()!=0)
-            *aa++;
+            (*aa)++;
     }
     for(int u=0; u<beam_n()*6; u++)
     {

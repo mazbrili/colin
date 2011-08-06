@@ -178,22 +178,22 @@ private:
 
 
 template <class T>
-class vector
+class quadvector
 {
 public:
-    vector()
+    quadvector()
     {
         rowcount = 0;
         init__();
     }
 
-    explicit vector(int n)
+    explicit quadvector(int n)
     {
         rowcount = n;
         init__();
     }
 
-    vector(vector &o)
+    quadvector(quadvector &o)
     {
         rowcount = o.rowcount;
         array = new T[rowcount];
@@ -201,7 +201,7 @@ public:
             array[i]=o[i];
     }
 
-    vector &operator=(const vector &o)
+    quadvector &operator=(const quadvector &o)
     {
         delete[] array;
         rowcount = o.rowcount;
@@ -211,7 +211,7 @@ public:
         return *this;
     }
 
-    ~vector()
+    ~quadvector()
     {
         delete[] array;
     }
@@ -221,9 +221,9 @@ public:
         return array[i];
     }
 
-    vector<T> operator+(vector &v)
+    quadvector<T> operator+(quadvector &v)
     {
-        vector<T> sum((size()>v.size()) ? size() : v.size());
+        quadvector<T> sum((size()>v.size()) ? size() : v.size());
         for(int i=0; i<size(); i++)
             sum[i]=array[i];
         for(int i=0; i<v.size(); i++)
@@ -231,10 +231,10 @@ public:
         return sum;
     }
 
-    vector<T> operator/(quadmatrix<T> &a)
+    quadvector<T> operator/(quadmatrix<T> &a)
     {
         T fak;
-        vector<T> temp(0);
+        quadvector<T> temp(0);
 
         for(int n=0; n<a.size()-1; n++)
         {
@@ -256,7 +256,7 @@ public:
                 (*this)[m]-=fak*(*this)[n];
             }
         }
-        temp = vector<T>(a.size());
+        temp = quadvector<T>(a.size());
         for(int n=0; n<a.size(); n++)
             temp[n]=0;
         for(int n=a.size()-1; n>-1; n--)
@@ -288,9 +288,9 @@ public:
         array = temp;
     }
 
-    vector<T> operator*(quadmatrix<T> &a)
+    quadvector<T> operator*(quadmatrix<T> &a)
     {
-        vector<T> temp(a.size());
+        quadvector<T> temp(a.size());
         for(int i=0; i<a.size(); i++)
             temp[i]=0;
         for(int i=0; i<a.size(); i++)
@@ -301,10 +301,10 @@ public:
         return temp;
     }
 
-    vector<T> operator*(submatrix<T> &a)
+    quadvector<T> operator*(submatrix<T> &a)
     {
         Q_ASSERT(a.columnSize() == size());
-        vector<T> temp(a.rowSize());
+        quadvector<T> temp(a.rowSize());
         for(int j=0; j<a.rowSize(); j++)
         {
             for(int i=0; i<a.columnSize(); i++)
@@ -334,7 +334,7 @@ public:
         array[b] = t;
     }
 
-    friend QTextStream& operator<< (QTextStream &os, vector &v)
+    friend QTextStream& operator<< (QTextStream &os, quadvector &v)
     {
         for(int i=0; i<v.size(); i++)
             os << v[i] << ";";
@@ -355,8 +355,8 @@ private:
 };
 
 
-typedef vector<double> lfvector;
-typedef vector<int> devector;
+typedef quadvector<double> lfvector;
+typedef quadvector<int> devector;
 
 
 typedef quadmatrix<double> lfquadmatrix;

@@ -79,14 +79,14 @@ private:
     int f_n;
     int a_n;
 
-    vector<double> s0;
-    vector<double> p;
-    vector<double> u;
-    vector<double> ua;
-    vector<double> pa;
+    quadvector<double> s0;
+    quadvector<double> p;
+    quadvector<double> u;
+    quadvector<double> ua;
+    quadvector<double> pa;
 
-    vector<int> u_indexed;
-    vector<int> k_index;
+    quadvector<int> u_indexed;
+    quadvector<int> k_index;
 
     quadmatrix<double> K;
 

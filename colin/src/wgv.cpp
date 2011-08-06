@@ -94,7 +94,7 @@ void wgv::run()
     make_s0();
     make_p();
 
-    ua = vector<double>(a_n);       //for now...
+    ua = quadvector<double>(a_n);       //for now...
 
     submatrix<double> Ka(K, 1, 0);
 
@@ -103,7 +103,7 @@ void wgv::run()
 
 
 #ifndef QT_NO_DEBUG
-    vector<double> pcopy = p;
+    quadvector<double> pcopy = p;
     quadmatrix<double> Kcopy(K.fullSize());
     for(int i=0; i<K.fullSize(); i++)
     {
@@ -140,7 +140,7 @@ void wgv::run()
 
 
 #ifndef QT_NO_DEBUG
-    vector<double> pc = u;
+    quadvector<double> pc = u;
     pc*=Kcopy;
     debugS << endl << "p;" << "pc;"<< "p-pc;"<< endl;
 
@@ -487,7 +487,7 @@ void wgv::u_formal()
         }
     }
 
-    u_indexed = vector<int>(beam_n*6);                  //position of joints in K-matrix
+    u_indexed = quadvector<int>(beam_n*6);                  //position of joints in K-matrix
 
     for(int j=0; j<beam_n; j++)
     {
@@ -495,7 +495,7 @@ void wgv::u_formal()
             u_indexed[6*j+n]=(beam(j).joint(n) ? f_n++ : 0);    //position of aditional DOFs from joints.
     }                                                           //0 if it doesn't exist
 
-    k_index = vector<int>(f_n);                          //a formal u-vector.
+    k_index = quadvector<int>(f_n);                          //a formal u-vector.
                                                          //element i contains the position of the DOF #i in K-matrix
 
 
@@ -917,7 +917,7 @@ void wgv::make_k()
 
 void wgv::make_s0()
 {
-    s0 = vector<double>(beam_n*6);
+    s0 = quadvector<double>(beam_n*6);
 
     px = new polynom<1>[beam_n];
     pz = new polynom<1>[beam_n];
@@ -1071,7 +1071,7 @@ void wgv::make_s0()
 void wgv::make_p()
 {
     int n;
-    p = vector<double>(f_n);
+    p = quadvector<double>(f_n);
 
 
 
