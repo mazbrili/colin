@@ -150,6 +150,8 @@ OTHER_FILES += src/include.mk\
 	src/include-minx.mk\
 	Mingw32/Makefile\
 	Mingw64/Makefile\
-	nsis/Makefile
+	nsis/Makefile\
+	valgrind/colin.log\
+	valgrind/libs_amd64.supp
 TRANSLATIONS += src/colin_de.ts \
     src/colin_it.ts
