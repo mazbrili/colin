@@ -146,5 +146,10 @@ SOURCES += src/beammenu.cpp \
     src/xmlreader.cpp \
     src/xmlwriter.cpp \
     src/zmenu.cpp
+OTHER_FILES += src/include.mk\
+	src/include-minx.mk\
+	Mingw32/Makefile\
+	Mingw64/Makefile\
+	nsis/Makefile
 TRANSLATIONS += src/colin_de.ts \
     src/colin_it.ts

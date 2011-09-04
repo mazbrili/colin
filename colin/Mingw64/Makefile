@@ -1,6 +1,6 @@
 srcdir=../src
 
-arch=x86_64-pc-mingw32
+arch=x86_64-w64-mingw32
 
 CXXOPTFLAGS=-O2
 LDOPTFLAGS=-s
