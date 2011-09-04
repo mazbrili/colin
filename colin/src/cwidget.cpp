@@ -33,13 +33,14 @@ cWidget::cWidget(QWidget *parent) :
     layout = new QHBoxLayout(this);
     layout->setSpacing(0);
     layout->setContentsMargins(QMargins(0, 0, 0, 0));
+	hasFullArea = 0;
+	shown = 1;
     setViewCount(4);
     views.at(1)->hide();
     views.at(2)->hide();
-    views.at(3)->hide();
-    views.at(0)->setFullyArea(true);
-    hasFullArea = 0;
-    shown = 1;
+	views.at(3)->hide();
+	views.at(0)->setFullyArea(true);
+
 
 }
 

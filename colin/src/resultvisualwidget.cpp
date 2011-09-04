@@ -107,6 +107,8 @@ resultVisualWidget::resultVisualWidget(QWidget *parent)
     action->setData(Hide);
     aGroup->addAction(action);
 
+	this->mouseIsOver = false;
+
     foreach(action, aGroup->actions())
     {
         sCs.addAction(action, true);

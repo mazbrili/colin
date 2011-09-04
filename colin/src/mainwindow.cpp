@@ -890,7 +890,8 @@ void MainWindow::closeEvent(QCloseEvent *e)
     shortcutSettings::instance().saveSettings();
     colinIcons::instance().saveSettings();
 
-    fullScreen(false);
+	if(this->isFullScreen())
+		fullScreen(false);
     QSettings settings("clazzes.org", "Colin");
     settings.setValue("MainWindow/geometry", saveGeometry());
     settings.setValue("MainWindow/windowState", saveState());
