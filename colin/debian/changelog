@@ -1,3 +1,14 @@
+colin (0.1.9-0) any; urgency=low
+
+  * edit material dialog now uses the right prefix
+  * changed compiler infracstructure for windows
+  * some fixes on the multibutton
+  * using exception in calculation
+  * fixed some valgrind warnings 
+  * fixed memory leaks
+
+ -- Matthias Rauter <matthias.rauter@student.uibk.ac.at>  Son, 04 Sep 2011 09:14:00 +0100
+
 colin (0.1.8-2) any; urgency=low
 
   * fixed the application icon in the system menu, try nr. 2

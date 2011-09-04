@@ -66,6 +66,10 @@ wgv::wgv(wgv_tw *parent) :
     globalPMax = 0;
     globalUMax = 0;
 
+	dT = 0;
+	dTz = 0;
+	px = 0;
+	pz = 0;
     success = true;
 }
 
@@ -75,8 +79,14 @@ wgv::~wgv()
     delete[] nodes;         //clean up
     delete[] beams;
     delete[] loads;
-    delete[] dT;
-    delete[] dTz;
+	if(dT)
+		delete[] dT;
+	if(dTz)
+		delete[] dTz;
+	if(px)
+		delete[] px;
+	if(pz)
+		delete[] pz;
 }
 
 void wgv::run()

@@ -18,7 +18,7 @@
    <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">Qt4ProjectManager.Target.DesktopTarget</value>
    <value key="ProjectExplorer.Target.ActiveBuildConfiguration" type="int">0</value>
    <value key="ProjectExplorer.Target.ActiveDeployConfiguration" type="int">0</value>
-   <value key="ProjectExplorer.Target.ActiveRunConfiguration" type="int">0</value>
+   <value key="ProjectExplorer.Target.ActiveRunConfiguration" type="int">1</value>
    <valuemap key="ProjectExplorer.Target.BuildConfiguration.0" type="QVariantMap">
     <valuemap key="ProjectExplorer.BuildConfiguration.BuildStepList.0" type="QVariantMap">
      <valuemap key="ProjectExplorer.BuildStepList.Step.0" type="QVariantMap">
@@ -79,7 +79,7 @@
     <value key="ProjectExplorer.CustomExecutableRunConfiguration.Executable" type="QString">/home/matti/colin/trunk/colin/Debug/Colin</value>
     <value key="ProjectExplorer.CustomExecutableRunConfiguration.UseTerminal" type="bool">false</value>
     <valuelist key="ProjectExplorer.CustomExecutableRunConfiguration.UserEnvironmentChanges" type="QVariantList"/>
-    <value key="ProjectExplorer.CustomExecutableRunConfiguration.WorkingDirectory" type="QString">/home/matti/colin/Debug/Colin</value>
+    <value key="ProjectExplorer.CustomExecutableRunConfiguration.WorkingDirectory" type="QString">/home/matti/colin/trunk/colin/Debug</value>
     <value key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName" type="QString">Colin</value>
     <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString">Colin</value>
     <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">ProjectExplorer.CustomExecutableRunConfiguration</value>
@@ -87,7 +87,29 @@
     <value key="RunConfiguration.UseCppDebugger" type="bool">true</value>
     <value key="RunConfiguration.UseQmlDebugger" type="bool">false</value>
    </valuemap>
-   <value key="ProjectExplorer.Target.RunConfigurationCount" type="int">1</value>
+   <valuemap key="ProjectExplorer.Target.RunConfiguration.1" type="QVariantMap">
+    <valuelist key="ProjectExplorer.CustomExecutableRunConfiguration.Arguments" type="QVariantList">
+     <value type="QString">--leak-check=yes</value>
+     <value type="QString">--suppressions=../valgrind/gnome.org_gtk.supp</value>
+     <value type="QString">--suppressions=../valgrind/libs_amd64.supp</value>
+     <value type="QString">--log-file=../valgrind/colin.log</value>
+     <value type="QString">--gen-suppressions=all</value>
+     <value type="QString">./Colin</value>
+     <value type="QString">2>&amp;1</value>
+    </valuelist>
+    <value key="ProjectExplorer.CustomExecutableRunConfiguration.BaseEnvironmentBase" type="int">2</value>
+    <value key="ProjectExplorer.CustomExecutableRunConfiguration.Executable" type="QString">valgrind</value>
+    <value key="ProjectExplorer.CustomExecutableRunConfiguration.UseTerminal" type="bool">false</value>
+    <valuelist key="ProjectExplorer.CustomExecutableRunConfiguration.UserEnvironmentChanges" type="QVariantList"/>
+    <value key="ProjectExplorer.CustomExecutableRunConfiguration.WorkingDirectory" type="QString">/home/matti/colin/trunk/colin/Debug</value>
+    <value key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName" type="QString">Run valgrind</value>
+    <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString">valgrind</value>
+    <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">ProjectExplorer.CustomExecutableRunConfiguration</value>
+    <value key="RunConfiguration.QmlDebugServerPort" type="uint">3768</value>
+    <value key="RunConfiguration.UseCppDebugger" type="bool">true</value>
+    <value key="RunConfiguration.UseQmlDebugger" type="bool">false</value>
+   </valuemap>
+   <value key="ProjectExplorer.Target.RunConfigurationCount" type="int">2</value>
   </valuemap>
  </data>
  <data>
