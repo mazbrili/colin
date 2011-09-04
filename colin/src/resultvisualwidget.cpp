@@ -77,6 +77,8 @@ resultVisualWidget::resultVisualWidget(QWidget *parent)
         delete instance_;
     instance_ = this;
     objectType = catcher::CatchedNothing;
+	object = -1;
+	x = 0;
     setAttribute(Qt::WA_TransparentForMouseEvents, true);
     setAttribute(Qt::WA_TranslucentBackground, true);
     setForegroundRole(QPalette::ToolTipText);

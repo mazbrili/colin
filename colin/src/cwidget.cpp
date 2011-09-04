@@ -40,6 +40,9 @@ cWidget::cWidget(QWidget *parent) :
     views.at(2)->hide();
 	views.at(3)->hide();
 	views.at(0)->setFullyArea(true);
+	hasFullArea = 0;
+	shown = 1;
+
 
 
 }
