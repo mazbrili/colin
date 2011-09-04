@@ -22,7 +22,10 @@
    <valuemap key="ProjectExplorer.Target.BuildConfiguration.0" type="QVariantMap">
     <valuemap key="ProjectExplorer.BuildConfiguration.BuildStepList.0" type="QVariantMap">
      <valuemap key="ProjectExplorer.BuildStepList.Step.0" type="QVariantMap">
-      <valuelist key="ProjectExplorer.ProcessStep.Arguments" type="QVariantList"/>
+      <valuelist key="ProjectExplorer.ProcessStep.Arguments" type="QVariantList">
+       <value type="QString">-j</value>
+       <value type="QString">16</value>
+      </valuelist>
       <value key="ProjectExplorer.ProcessStep.Command" type="QString">make</value>
       <value key="ProjectExplorer.ProcessStep.Enabled" type="bool">true</value>
       <value key="ProjectExplorer.ProcessStep.WorkingDirectory" type="QString">/home/matti/colin/trunk/colin/Debug</value>
@@ -57,7 +60,7 @@
    <valuemap key="ProjectExplorer.Target.DeployConfiguration.0" type="QVariantMap">
     <valuemap key="ProjectExplorer.BuildConfiguration.BuildStepList.0" type="QVariantMap">
      <value key="ProjectExplorer.BuildStepList.StepsCount" type="int">0</value>
-     <value key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName" type="QString">Deployment</value>
+     <value key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName" type="QString">Deploy</value>
      <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString">Deploy</value>
      <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">ProjectExplorer.BuildSteps.Deploy</value>
     </valuemap>
@@ -93,7 +96,7 @@
  </data>
  <data>
   <variable>ProjectExplorer.Project.Updater.EnvironmentId</variable>
-  <value type="QString">{1ebb5acc-40ab-46b8-b997-aa4273462a5f}</value>
+  <value type="QString">{d0e7ca71-58ef-4e04-9f39-0549b608e507}</value>
  </data>
  <data>
   <variable>ProjectExplorer.Project.Updater.FileVersion</variable>

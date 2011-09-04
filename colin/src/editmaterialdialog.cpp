@@ -52,7 +52,7 @@ editMaterialDialog::editMaterialDialog(const int &i, QWidget *parent) :
 
     NLine = new QLineEdit(LIB.mat(i).name(), this);
     NLine->setReadOnly(true);
-    ELine = new QLineEdit(QString::number(LIB.mat(i).E()), this);
+	ELine = new QLineEdit(QString::number(LIB.mat(i).E()*unitSettings::instance().Eprefix()), this);
     aLine = new QLineEdit(QString::number(LIB.mat(i).alphaT()), this);
 
     ELine->setAlignment(Qt::AlignRight);
