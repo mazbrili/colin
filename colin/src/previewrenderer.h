@@ -28,6 +28,8 @@
 #define PREVIEWRENDERER_H
 
 #include <QtCore/QThread>
+#include <QtCore/QMutex>
+#include <QtCore/QWaitCondition>
 #include "wgv_tw.h"
 #include "xmlreader.h"
 #include "structpainter.h"

@@ -26,6 +26,9 @@
 
 #include "filelist.h"
 
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
+
 filelist* filelist::instance_ = NULL;
 
 wgv_tw *filelist::currentFile()

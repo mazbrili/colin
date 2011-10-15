@@ -29,6 +29,7 @@
 #include "closedialog.h"
 #include "colinversion.h"
 
+#include <QtCore/QTimer>
 #include <QtGui/QPrintDialog>
 #include <QtGui/QPrinter>
 
@@ -1100,6 +1101,7 @@ void MainWindow::launchToolTip()
 
 }
 
+
 void MainWindow::aboutMe()
 {
     QMessageBox::about(this, tr("about Colin"),
@@ -1124,8 +1126,11 @@ void MainWindow::aboutMe()
                     "See http://creativecommons.org/ for more information.\n\n"
 
                     "Thanks to Pongo, Ben, Anouck, Neo and ibcl."
-
-              )).arg(ColinVersion()).arg(BuildDate()));
+#ifdef WINDOWS_IS_BUILD_SYS
+			  )).arg("COLINVERSION").arg("BUILDDATE"));
+#else
+			  )).arg(ColinVersion()).arg(BuildDate()));
+#endif
 }
 
 void MainWindow::aboutQt()

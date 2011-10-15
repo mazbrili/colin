@@ -27,7 +27,6 @@
 #ifndef COLIN_NAMESPACE_H
 #define COLIN_NAMESPACE_H
 
-#include <Qt/QtCore>
 #include <QtGui/QIcon>
 #include <QtCore/QObject>
 

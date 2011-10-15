@@ -26,6 +26,8 @@
 
 #include "previewrenderer.h"
 
+#include <QtCore/QFile>
+
 previewRenderer::previewRenderer(const QSize &s, QObject *parent) :
     QThread(parent)
 {

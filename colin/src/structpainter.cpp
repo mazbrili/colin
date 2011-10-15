@@ -29,6 +29,9 @@
 #include "unitsettings.h"
 #include "colinicons.h"
 
+#ifndef QT_NO_DEBUG
+#include <QtCore/QDebug>
+#endif //QT_NO_DEBUG
 
 const int loadBubblerad = 3;
 
@@ -405,7 +408,7 @@ void structPainter::drawBeam(const wgv_beam &s, const int &i)
         }
     }
 
-    const int dh = 20;
+	const int dh = 20;
     const int alphaC = 100;
 
     QPainterPath uline;
@@ -612,7 +615,7 @@ void structPainter::drawBeam(const wgv_beam &s, const int &i)
     if(len>80)
     {
         QPen pen(p->pen());
-        pen.setStyle(Qt::DashLine);
+		//pen.setStyle(Qt::DashLine);
         p->setPen(pen);
         p->drawLine(len*0.2, 3, len*0.8, 3);
 
@@ -661,6 +664,13 @@ void structPainter::drawStLoad(const wgv_load &l)
     loadT.rotate(atan2(l.Pz(), l.Px())*180.0/M_PI-90);
 
     QPolygonF points = trm->map(l.shape());
+
+#ifndef QT_NO_DEBUG
+	qDebug() << "painting load. the points are:";
+	for(int i=0; i<points.size(); i++){
+		qDebug() << QString("p%1(%2,%3)").arg(i).arg(points.at(i).x()).arg(points.at(i).y());
+	}
+#endif
 
     p->drawPolygon(points);
 

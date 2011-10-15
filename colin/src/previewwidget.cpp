@@ -26,6 +26,9 @@
 
 #include "previewwidget.h"
 
+#include <QtCore/QFileInfo>
+
+
 int previewWidget::count = 0;
 previewRenderer *previewWidget::renderer = 0;
 

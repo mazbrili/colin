@@ -2,7 +2,7 @@
 prefix=/usr/$(arch)
 
 CXX=$(arch)-g++
-CXXFLAGS=$(CXXOPTFLAGS) -DQT_DLL -DQT_FATAL_ASSERT -DQT_NO_DEBUG
+CXXFLAGS=$(CXXOPTFLAGS) -DQT_DLL -DQT_FATAL_ASSERT
 
 PKGCONFIG=$(arch)-pkg-config
 WINDRES=$(arch)-windres

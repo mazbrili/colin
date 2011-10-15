@@ -33,6 +33,8 @@
 
 #include <QtGui/QApplication>
 #include <QtCore/QDir>
+#include <QtCore/QTranslator>
+#include <QtCore/QLibraryInfo>
 
 int main(int argc, char *argv[])
 {
