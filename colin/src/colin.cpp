@@ -46,9 +46,9 @@ int main(int argc, char *argv[])
 #ifdef WIN32
     colinIcons::icondir_ = a.applicationDirPath() + "/../share/icons/";
 #else
-    QDir iconDir("./icons");
-    if (iconDir.exists("./icons"))
-      colinIcons::icondir_ = "./icons/";
+	QDir iconDir(".");
+	if (iconDir.exists("../icons"))
+	  colinIcons::icondir_ = "../icons/";
     else
       colinIcons::icondir_ = "/usr/share/colin/icons/";
 #endif

@@ -31,11 +31,11 @@ scaleWidget::scaleWidget(QWidget *parent) :
 {
     slider = new QSlider(Qt::Horizontal, this);
 
-    down = new ColinPushButtonPart("-", this);
+	down = new ColinPushButtonPart("", this);
     down->setIcon(colinIcons::instance().icon(Colin::drawZoomOut));
     down->setCutted(ColinPushButtonPart::Right, true);
 
-    up = new ColinPushButtonPart("+", this);
+	up = new ColinPushButtonPart("", this);
     up->setIcon(colinIcons::instance().icon(Colin::drawZoomIn));
     up->setCutted(ColinPushButtonPart::Left, true);
 
