@@ -1,5 +1,6 @@
 colin (0.1.9-0) any; urgency=low
 
+  * fixed a bug with dashed lines
   * edit material dialog now uses the right prefix
   * changed compiler infracstructure for windows
   * some fixes on the multibutton
