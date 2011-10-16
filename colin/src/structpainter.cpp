@@ -666,10 +666,10 @@ void structPainter::drawStLoad(const wgv_load &l)
     QPolygonF points = trm->map(l.shape());
 
 #ifndef QT_NO_DEBUG
-	qDebug() << "painting load. the points are:";
-	for(int i=0; i<points.size(); i++){
-		qDebug() << QString("p%1(%2,%3)").arg(i).arg(points.at(i).x()).arg(points.at(i).y());
-	}
+	//qDebug() << "painting load. the points are:";
+	//for(int i=0; i<points.size(); i++){
+	//	qDebug() << QString("p%1(%2,%3)").arg(i).arg(points.at(i).x()).arg(points.at(i).y());
+	//}
 #endif
 
     p->drawPolygon(points);

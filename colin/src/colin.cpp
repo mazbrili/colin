@@ -35,6 +35,7 @@
 #include <QtCore/QDir>
 #include <QtCore/QTranslator>
 #include <QtCore/QLibraryInfo>
+#include <QtCore/QDebug>
 
 int main(int argc, char *argv[])
 {
@@ -44,13 +45,23 @@ int main(int argc, char *argv[])
     a.setAttribute(Qt::AA_DontShowIconsInMenus, false); //enable icons
 
 #ifdef WIN32
-    colinIcons::icondir_ = a.applicationDirPath() + "/../share/icons/";
+	colinIcons::icondir_ = a.applicationDirPath() + "/../share/icons/";
+	qDebug() << "using ../share/icons as icon directory";
+
 #else
-	QDir iconDir(".");
-	if (iconDir.exists("../icons"))
-	  colinIcons::icondir_ = "../icons/";
-    else
-      colinIcons::icondir_ = "/usr/share/colin/icons/";
+	QDir iconDir("..");
+	if (iconDir.exists("./icons")){
+		colinIcons::icondir_ = "../icons/";
+		qDebug() << "using ../icons as icon directory";
+	}
+		else{
+		colinIcons::icondir_ = "/usr/share/colin/icons/";
+#ifndef QT_NO_DEBUG
+		qDebug() << "unable to find icon directory in " << iconDir.absolutePath();
+		qDebug() << "using /usr/share/colin/icons as icon directory!";
+#endif
+	}
+
 #endif
 
     QSettings settings("clazzes.org", "Colin");
