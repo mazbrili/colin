@@ -1112,14 +1112,14 @@ void wgv::make_p()
 	{
 	    if(beam(load(n).at()).joint(0) && load(n).Px()!=0)
 	    {
-		p[k_index[3*beam(load(n).at()).leftNodeI()]] += cos(d_alpha_l(n))*load(n).Px();
-		p[k_index[3*beam(load(n).at()).leftNodeI()+1]] += sin(d_alpha_l(n))*load(n).Px();
+		p[k_index[3*beam(load(n).at()).leftNodeI()]] += cos(d_alpha_l(load(n).at()))*load(n).Px();
+		p[k_index[3*beam(load(n).at()).leftNodeI()+1]] += sin(d_alpha_l(load(n).at()))*load(n).Px();
 		p[k_index[u_indexed[6*load(n).at()]]] +=-load(n).Px();
 	    }
 	    if(beam(load(n).at()).joint(1) && load(n).Pz()!=0)
 	    {
-		p[k_index[3*beam(load(n).at()).leftNodeI()]] += -sin(d_alpha_l(n))*load(n).Pz();
-		p[k_index[3*beam(load(n).at()).leftNodeI()+1]] += cos(d_alpha_l(n))*load(n).Pz();
+		p[k_index[3*beam(load(n).at()).leftNodeI()]] += -sin(d_alpha_l(load(n).at()))*load(n).Pz();
+		p[k_index[3*beam(load(n).at()).leftNodeI()+1]] += cos(d_alpha_l(load(n).at()))*load(n).Pz();
 		p[k_index[u_indexed[6*load(n).at()+1]]] +=-load(n).Pz();
 	    }
 	    if(beam(load(n).at()).joint(2) && load(n).M()!=0)
@@ -1132,14 +1132,14 @@ void wgv::make_p()
 	{
 	    if(beam(load(n).at()).joint(3) && load(n).Px()!=0)
 	    {
-                p[k_index[3*beam(load(n).at()).rightNodeI()]] += -cos(d_alpha_r(n))*load(n).Px();
-                p[k_index[3*beam(load(n).at()).rightNodeI()+1]] += -sin(d_alpha_r(n))*load(n).Px();
+				p[k_index[3*beam(load(n).at()).rightNodeI()]] += -cos(d_alpha_r(load(n).at()))*load(n).Px();
+				p[k_index[3*beam(load(n).at()).rightNodeI()+1]] += -sin(d_alpha_r(load(n).at()))*load(n).Px();
                 p[k_index[u_indexed[6*load(n).at()+3]]] += load(n).Px();
 	    }
 	    if(beam(load(n).at()).joint(4) && load(n).Pz()!=0)
 	    {
-                p[k_index[3*beam(load(n).at()).rightNodeI()]] += sin(d_alpha_r(n))*load(n).Pz();
-                p[k_index[3*beam(load(n).at()).rightNodeI()+1]] += -cos(d_alpha_r(n))*load(n).Pz();
+				p[k_index[3*beam(load(n).at()).rightNodeI()]] += sin(d_alpha_r(load(n).at()))*load(n).Pz();
+				p[k_index[3*beam(load(n).at()).rightNodeI()+1]] += -cos(d_alpha_r(load(n).at()))*load(n).Pz();
                 p[k_index[u_indexed[6*load(n).at()+4]]] += load(n).Pz();
 	    }
 	    if(beam(load(n).at()).joint(5) && load(n).M()!=0)
