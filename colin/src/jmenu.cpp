@@ -34,6 +34,7 @@ jMenu::jMenu(QAction *a, QWidget *parent) :
     const int is = colinIcons::iconSize().width()+8;   //iconsize
 
     this->setAttribute(Qt::WA_TranslucentBackground, true);
+	this->setWindowFlags(this->windowFlags() | Qt::FramelessWindowHint);
 
     QPushButton *n = new QPushButton(colinIcons::instance().icon(Colin::drawJointN), "", this);
     QPushButton *q = new QPushButton(colinIcons::instance().icon(Colin::drawJointQ), "", this);

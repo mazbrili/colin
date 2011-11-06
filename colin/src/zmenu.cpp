@@ -34,6 +34,8 @@ zMenu::zMenu(QAction *a, QWidget *parent) :
     const int is = colinIcons::iconSize().width()+8;   //iconsize
 
     this->setAttribute(Qt::WA_TranslucentBackground, true);
+	this->setWindowFlags(this->windowFlags() | Qt::FramelessWindowHint);
+
 
     QPushButton *in = new QPushButton(colinIcons::instance().icon(Colin::drawZoomIn)
                                       , "", this);

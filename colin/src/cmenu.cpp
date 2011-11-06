@@ -34,6 +34,7 @@ cMenu::cMenu(QAction *a, QWidget *parent) :
     const int is = colinIcons::iconSize().width()+8;   //iconsize
 
     this->setAttribute(Qt::WA_TranslucentBackground, true);
+	this->setWindowFlags(this->windowFlags() | Qt::FramelessWindowHint);
 
     range = new QSlider(Qt::Vertical, this);
     range->setMinimum(10);

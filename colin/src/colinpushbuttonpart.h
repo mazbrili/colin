@@ -56,7 +56,7 @@ public:
     ColinPushButtonPart(const QString &text, QWidget *parent = 0):QPushButton(text, parent){pos = ColinPushButtonPart::Alone;}
     ColinPushButtonPart(const QIcon &icon, const QString &text, QWidget *parent = 0):QPushButton(icon, text, parent){pos = ColinPushButtonPart::Alone;}
 
-    void paintEvent(QPaintEvent *);
+	void paintEvent(QPaintEvent *);
 
     void setCutted(ColinPushButtonPart::Position pos_, bool free = true);
 

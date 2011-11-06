@@ -31,10 +31,13 @@ void ColinPushButtonPart::paintEvent(QPaintEvent *)
     QStyleOptionButton option;
     initStyleOption(&option);
 
+	QPainter painter(this);
+
+	option.rect=QRect(QPoint(0,0), this->size());
     if((pos & ColinPushButtonPart::Left) == ColinPushButtonPart::Left)
-    {
-        option.rect.moveLeft(-4);
-        option.rect.setWidth(option.rect.width()+4);
+	{
+		painter.translate(-4, 0);
+		option.rect.setWidth(option.rect.width()+4);
     }
 
     if((pos & ColinPushButtonPart::Right) == ColinPushButtonPart::Right)
@@ -44,16 +47,15 @@ void ColinPushButtonPart::paintEvent(QPaintEvent *)
 
     if((pos & ColinPushButtonPart::Up) == ColinPushButtonPart::Up)
     {
-        option.rect.moveTop(-4);
-        option.rect.setHeight(option.rect.width()+4);
+		painter.translate(0,-4);
+		option.rect.setHeight(option.rect.height()+4);
     }
 
     if((pos & ColinPushButtonPart::Bottom) == ColinPushButtonPart::Bottom)
     {
-        option.rect.setHeight(option.rect.width()+4);
+		option.rect.setHeight(option.rect.height()+4);
     }
 
-    QPainter painter(this);
     style()->drawControl(QStyle::CE_PushButton, &option, &painter, this);
 
 /*

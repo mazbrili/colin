@@ -35,7 +35,9 @@ lMenu::lMenu(QAction *a, QWidget *parent) :
 
 
 
-    setAttribute(Qt::WA_TranslucentBackground, true);
+	this->setAttribute(Qt::WA_TranslucentBackground, true);
+	this->setWindowFlags(this->windowFlags() | Qt::FramelessWindowHint);
+
 
     //init Button
     QPushButton *nLoad = new QPushButton(this);

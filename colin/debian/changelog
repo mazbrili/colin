@@ -7,6 +7,7 @@ colin (0.1.9-0) any; urgency=low
   * using exception in calculation
   * fixed some valgrind warnings 
   * fixed memory leaks
+  * hideing tooltip while drawing temperature loads
 
  -- Matthias Rauter <matthias.rauter@student.uibk.ac.at>  Sat, 15 Okt 2011 10:54:00 +0100
 

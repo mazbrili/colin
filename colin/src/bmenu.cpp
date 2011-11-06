@@ -34,6 +34,8 @@ bMenu::bMenu(QAction *a, QWidget *parent) :
     const int is = colinIcons::iconSize().width()+8;   //iconsize
 
     this->setAttribute(Qt::WA_TranslucentBackground, true);
+	this->setWindowFlags(this->windowFlags() | Qt::FramelessWindowHint);
+
 
     QPushButton *h = new QPushButton(colinIcons::instance().icon(Colin::drawBearingH), "", this);
     QPushButton *v = new QPushButton(colinIcons::instance().icon(Colin::drawBearingV), "", this);
