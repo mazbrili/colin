@@ -59,6 +59,8 @@ void viewPortToolTip::set(const QIcon &i, const QString &s, const QString &more)
     }
     text_->setText(s);
     setGeometry(QRect(pos(), sizeHint()));
+	if(this->isHidden())
+		this->show();
 }
 
 

@@ -507,6 +507,10 @@ void viewport::drawCursorAxes(QPainter *p)
 					 QString::number(globalMatrix().inverted().map(cursorpos).y(), 'f', 2),
 					 tr("enter base object to paste a load from clipboard!"));
 	}
+	else if(vS->toDraw() == Colin::drawTemp && termoValueWidget::hasInstance())
+	{
+		tooltip->hide();
+	}
 	else if(vS->toDraw() == Colin::drawMove && movingObject == catcher::CatchedLoadHotSpot && cC!=catcher::CatchedOrthoLokal) //show local koords in tooltip
 	{
 		QPointF local = tw->lastObjectClick()-globalMatrix().inverted().map(cursorpos);
@@ -666,70 +670,71 @@ void viewport::drawCursorAxes(QPainter *p)
 		tooltip->set(colinIcons::instance().icon(cC, true),
 			 tr("beam # ")+ QString::number(first),
 						 "");
-			break;
-		case catcher::CatchedTemp:
-			tooltip->set(colinIcons::instance().icon(cC, true),
-						 tr("temperature # ")+ QString::number(first),
-						 extend);
-			break;
-		case catcher::CatchedOrthoGlob:
-			if(vS->toDraw() == Colin::drawBeam)
-			{
-				tooltip->set(colinIcons::instance().icon(cC, true),
-							 tr("orthogonal! lenght = ") +
-							 QString::number(sqrt(pow(globalMatrix().inverted().map(cursorpos).x()-tw->node(tw->lastObjectNode()).x(), 2) +
-												  pow(globalMatrix().inverted().map(cursorpos).y()-tw->node(tw->lastObjectNode()).z(), 2)), 'f', 2),
-							 "");
-			}
-			else
-			{
-				tooltip->set(colinIcons::instance().icon(cC, true),
-							 tr("orthogonal! ") +
-							 QString::number(sqrt(pow(globalMatrix().inverted().map(cursorpos).x()-tw->lastObjectClick().x(), 2) +
-												  pow(globalMatrix().inverted().map(cursorpos).y()-tw->lastObjectClick().y(), 2))*PPREFIX/tw->scaleP(), 'f', 2)+unitSettings::instance().Peh(),
-							 "");
-			}
-			break;
-		case catcher::CatchedOrthoLokal:
-			if(vS->toDraw() == Colin::drawBeam)
-			{
-		tooltip->set(colinIcons::instance().icon(cC, true),
-				 tr("orthogonal! ") +
-				 QString::number(sqrt(pow(globalMatrix().inverted().map(cursorpos).x()-tw->lastObjectClick().x(), 2)+
-						  pow(globalMatrix().inverted().map(cursorpos).y()-tw->lastObjectClick().y(), 2)), 'f', 2) + "m",
-				 "");
-			}
-			else
-			{
-				tooltip->set(colinIcons::instance().icon(cC, true),
-							 tr("orthogonal! ") +
-							 QString::number(sqrt(pow(globalMatrix().inverted().map(cursorpos).x()-tw->lastObjectClick().x(), 2)+
-												  pow(globalMatrix().inverted().map(cursorpos).y()-tw->lastObjectClick().y(), 2))/tw->scaleP()*PPREFIX, 'f', 2) + " " + unitSettings::instance().Peh()+"/m )",
-							 "");
-			}
 		break;
-		case catcher::CatchedBeamEnd:
-			if(vS->toDraw().testFlag(Colin::drawJoint))
-			{
-				tooltip->set(colinIcons::instance().icon(vS->toDraw(), true),
-							 tr("add joint @ ") +
-							 ((aditional == 0)? tr("left") : tr("right"))+
-							 tr("side of beam #")+
-							 QString::number(first),
-							 "");
-			}
-			else
-			{
-				tooltip->set(colinIcons::instance().icon(vS->toDraw(), true),
-							 tr("add double load @ ") +
-							 ((aditional == 0)? tr("left") : tr("right"))+
-							 tr("side of beam #")+
-							 QString::number(first),
-							 tr("press Shift to draw moments!"));
-			}
-			break;
+	case catcher::CatchedTemp:
+		tooltip->set(colinIcons::instance().icon(cC, true),
+					 tr("temperature # ")+ QString::number(first),
+					 extend);
+		break;
+	case catcher::CatchedOrthoGlob:
+		if(vS->toDraw() == Colin::drawBeam)
+		{
+			tooltip->set(colinIcons::instance().icon(cC, true),
+						 tr("orthogonal! lenght = ") +
+						 QString::number(sqrt(pow(globalMatrix().inverted().map(cursorpos).x()-tw->node(tw->lastObjectNode()).x(), 2) +
+											  pow(globalMatrix().inverted().map(cursorpos).y()-tw->node(tw->lastObjectNode()).z(), 2)), 'f', 2),
+						 "");
+		}
+		else
+		{
+			tooltip->set(colinIcons::instance().icon(cC, true),
+						 tr("orthogonal! ") +
+						 QString::number(sqrt(pow(globalMatrix().inverted().map(cursorpos).x()-tw->lastObjectClick().x(), 2) +
+											  pow(globalMatrix().inverted().map(cursorpos).y()-tw->lastObjectClick().y(), 2))*PPREFIX/tw->scaleP(), 'f', 2)+unitSettings::instance().Peh(),
+						 "");
+		}
+		break;
+	case catcher::CatchedOrthoLokal:
+		if(vS->toDraw() == Colin::drawBeam)
+		{
+	tooltip->set(colinIcons::instance().icon(cC, true),
+			 tr("orthogonal! ") +
+			 QString::number(sqrt(pow(globalMatrix().inverted().map(cursorpos).x()-tw->lastObjectClick().x(), 2)+
+					  pow(globalMatrix().inverted().map(cursorpos).y()-tw->lastObjectClick().y(), 2)), 'f', 2) + "m",
+			 "");
+		}
+		else
+		{
+			tooltip->set(colinIcons::instance().icon(cC, true),
+						 tr("orthogonal! ") +
+						 QString::number(sqrt(pow(globalMatrix().inverted().map(cursorpos).x()-tw->lastObjectClick().x(), 2)+
+											  pow(globalMatrix().inverted().map(cursorpos).y()-tw->lastObjectClick().y(), 2))/tw->scaleP()*PPREFIX, 'f', 2) + " " + unitSettings::instance().Peh()+"/m )",
+						 "");
+		}
+	break;
+	case catcher::CatchedBeamEnd:
+		if(vS->toDraw().testFlag(Colin::drawJoint))
+		{
+			tooltip->set(colinIcons::instance().icon(vS->toDraw(), true),
+						 tr("add joint @ ") +
+						 ((aditional == 0)? tr("left") : tr("right"))+
+						 tr("side of beam #")+
+						 QString::number(first),
+						 "");
+		}
+		else
+		{
+			tooltip->set(colinIcons::instance().icon(vS->toDraw(), true),
+						 tr("add double load @ ") +
+						 ((aditional == 0)? tr("left") : tr("right"))+
+						 tr("side of beam #")+
+						 QString::number(first),
+						 tr("press Shift to draw moments!"));
+		}
+		break;
 	}
 		//set resultVisualWidget
+
 
 		if(lastMousePosition != mapFromGlobal(QCursor::pos()))
 		{

@@ -46,8 +46,9 @@ public:
     explicit termoValueWidget(QWidget *parent = 0);
     ~termoValueWidget();
 
-    const static termoValueWidget &instance(){if(!instance_) instance_ = new termoValueWidget(); return *instance_;}
-    static void deleteInstance(){if (instance_) delete instance_;}
+	const static termoValueWidget &instance(){if(!instance_) instance_ = new termoValueWidget(); return *instance_;}
+	static void deleteInstance(){if (instance_) delete instance_;}
+	static bool hasInstance(){return(instance_?true:false);}
 
     void paintEvent(QPaintEvent *);
     void mousePressEvent(QMouseEvent *e);
