@@ -35,6 +35,8 @@ jMenu::jMenu(QAction *a, QWidget *parent) :
 
     this->setAttribute(Qt::WA_TranslucentBackground, true);
 	this->setWindowFlags(this->windowFlags() | Qt::FramelessWindowHint);
+	this->setWindowFlags(this->windowFlags() | Qt::ToolTip);
+
 
     QPushButton *n = new QPushButton(colinIcons::instance().icon(Colin::drawJointN), "", this);
     QPushButton *q = new QPushButton(colinIcons::instance().icon(Colin::drawJointQ), "", this);

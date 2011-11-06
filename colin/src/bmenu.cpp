@@ -35,6 +35,8 @@ bMenu::bMenu(QAction *a, QWidget *parent) :
 
     this->setAttribute(Qt::WA_TranslucentBackground, true);
 	this->setWindowFlags(this->windowFlags() | Qt::FramelessWindowHint);
+	this->setWindowFlags(this->windowFlags() | Qt::ToolTip);
+
 
 
     QPushButton *h = new QPushButton(colinIcons::instance().icon(Colin::drawBearingH), "", this);
