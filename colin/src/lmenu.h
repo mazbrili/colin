@@ -41,6 +41,7 @@ public:
     explicit lMenu(QAction *a, QWidget *parent = 0);
 
     void paintEvent(QPaintEvent *){}
+
 signals:
 
 public slots:

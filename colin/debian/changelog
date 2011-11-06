@@ -1,6 +1,7 @@
 colin (0.1.10-0) any; urgency=low
 
   * cosmetical fixes for windows 7
+  * fixed a bug in the calculation of double loads
 
  -- Matthias Rauter <matthias.rauter@student.uibk.ac.at>  Son, 6 Nov 2011 19:55:00 +0100
 

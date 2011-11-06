@@ -35,9 +35,6 @@ bMenu::bMenu(QAction *a, QWidget *parent) :
 
     this->setAttribute(Qt::WA_TranslucentBackground, true);
 	this->setWindowFlags(this->windowFlags() | Qt::FramelessWindowHint);
-	this->setWindowFlags(this->windowFlags() | Qt::ToolTip);
-
-
 
     QPushButton *h = new QPushButton(colinIcons::instance().icon(Colin::drawBearingH), "", this);
     QPushButton *v = new QPushButton(colinIcons::instance().icon(Colin::drawBearingV), "", this);
@@ -63,7 +60,6 @@ bMenu::bMenu(QAction *a, QWidget *parent) :
     v->setChecked(true);
 
     this->setFixedSize(bs, bs*3+as*3);
-
     theAction = a;
     a->setMenu(this);
     a->setIcon(colinIcons::instance().icon(Colin::drawBearingHV));

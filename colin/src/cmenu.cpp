@@ -35,7 +35,6 @@ cMenu::cMenu(QAction *a, QWidget *parent) :
 
     this->setAttribute(Qt::WA_TranslucentBackground, true);
 	this->setWindowFlags(this->windowFlags() | Qt::FramelessWindowHint);
-	this->setWindowFlags(this->windowFlags() | Qt::ToolTip);
 
 
     range = new QSlider(Qt::Vertical, this);

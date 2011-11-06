@@ -42,6 +42,7 @@ public:
     explicit cMenu(QAction *a, QWidget *parent = 0);
 
     void paintEvent(QPaintEvent *);
+
 signals:
 
 private slots:

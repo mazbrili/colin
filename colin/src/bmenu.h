@@ -40,7 +40,8 @@ class bMenu : public QMenu
 public:
     explicit bMenu(QAction *a, QWidget *parent = 0);
 
-    void paintEvent(QPaintEvent *){}
+	void paintEvent(QPaintEvent *){}
+
 signals:
 
 public slots:

@@ -37,9 +37,9 @@ closeDialog::closeDialog(QWidget *parent) :
 {
     QGridLayout *layout = new QGridLayout(this);
     QPushButton *ok = new QPushButton(colinIcons::instance().icon(Colin::Ok), tr("save selected"), this);
-    QPushButton *sA = new QPushButton(colinIcons::instance().icon(Colin::Save), tr("save all"), this);
-    QPushButton *escape = new QPushButton(colinIcons::instance().icon(Colin::Close), tr("don't exit"), this);
+	QPushButton *sA = new QPushButton(colinIcons::instance().icon(Colin::Save), tr("save all"), this);
     QPushButton *wS = new QPushButton(QIcon(colinIcons::instance().icon(Colin::Close).pixmap(32, QIcon::Normal, QIcon::On)), tr("exit without saving"), this);
+	QPushButton *escape = new QPushButton(colinIcons::instance().icon(Colin::Close), tr("don't exit"), this);
     QScrollArea *scrollArea = new QScrollArea(this);
     QWidget *area = new QWidget(this);
     layout->addWidget(scrollArea, 0, 0, 1, 4);
