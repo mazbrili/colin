@@ -684,7 +684,7 @@ void MainWindow::setTw(wgv_tw *tw)
             if(libSideBar->isHidden())
                 libShown = false;
             else
-                libShown = false;
+				libShown = true;
 
 
 
