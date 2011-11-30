@@ -1,0 +1,114 @@
+colin (0.2.0-0) any; urgency=low
+
+  * added Basic Load Sets
+  * added Combined Load Sets
+  * elements can now be created in the treeview
+  * fixed some problems with the tooltips
+  * using native selection rectangles
+  * added a dialog for printing of the protocol
+  * renewed the sidebar
+  * added javscript engine
+  * added a console
+
+ -- Matthias Rauter <matthias.rauter@student.uibk.ac.at>  Mon, 28 Nov 2011 11:01:00 +0100
+
+colin (0.1.10-0) any; urgency=low
+
+  * cosmetical fixes for windows 7
+  * fixed a bug in the calculation of double loads
+
+ -- Matthias Rauter <matthias.rauter@student.uibk.ac.at>  Son, 6 Nov 2011 19:55:00 +0100
+
+colin (0.1.9-0) any; urgency=low
+
+  * edit material dialog now uses the right prefix
+  * changed compiler infracstructure for windows
+  * some fixes on the multibutton
+  * using exception in calculation
+  * fixed some valgrind warnings 
+  * fixed memory leaks
+
+ -- Matthias Rauter <matthias.rauter@student.uibk.ac.at>  Sat, 15 Okt 2011 10:54:00 +0100
+
+colin (0.1.8-2) any; urgency=low
+
+  * fixed the application icon in the system menu, try nr. 2
+
+ -- Matthias Rauter <matthias.rauter@student.uibk.ac.at>  Fre, 08 Apr 2011 23:32:00 +0100
+
+colin (0.1.8-1) any; urgency=low
+
+  * fixed the application icon in the system menu
+
+ -- Matthias Rauter <matthias.rauter@student.uibk.ac.at>  Fre, 08 Apr 2011 09:13:00 +0100
+
+colin (0.1.8-0) any; urgency=low
+
+  * added symbols in the pdf document
+  * fixed a recursive paintevent
+  * the snap (and tooltips) work now correct while drawing loads
+  * the file tab now shows the right name
+  * fixed a problem with the escape-key
+
+ -- Matthias Rauter <matthias.rauter@student.uibk.ac.at>  Mon, 04 Apr 2011 18:20:00 +0100
+
+colin (0.1.7-0) any; urgency=low
+
+  * all anticlockwise angles are now positiv
+  * added [N/rad] for rotation springs. implemented in tree, menu, printer and resultwidget.
+  * the right click menu for loads now shows the correct units
+  * detailwidget now shows the angle of supports in grad instead of rad
+
+ -- Matthias Rauter <matthias.rauter@student.uibk.ac.at>  Sat, 26 Mar 2011 01:40:00 +0100
+
+colin (0.1.6-0) any; urgency=low
+
+  * Fixed a bug with nodal forces on beams (Colin addes some hinges while drawing). Should work now...
+  * Added the possibility to add hinges to beams, not only to the beamends
+
+ -- Matthias Rauter <matthias.rauter@student.uibk.ac.at>  Thu, 17 Mar 2011 22:02:00 +0100
+
+colin (0.1.5-0) any; urgency=low
+
+  * Reaction forces of springs are now correct
+  * the right click menu for beams now shows the correct unit for spring constants
+  * the actions for copy, cut and delete in the right click menu for temperatures should work now
+
+ -- Matthias Rauter <matthias.rauter@student.uibk.ac.at>  Thu, 17 Mar 2011 11:22:00 +0100
+
+colin (0.1.4-0) any; urgency=low
+
+  * Fixed a bug with nodal forces on rotated nodes
+
+ -- Matthias Rauter <matthias.rauter@student.uibk.ac.at>  Tue, 15 Mar 2011 11:25:00 +0100
+
+colin (0.1.3-0) any; urgency=low
+
+  * Some bug fixes
+
+ -- Matthias Rauter <matthias.rauter@student.uibk.ac.at>  Sun, 13 Mar 2011 16:22:00 +0100
+
+colin (0.1.2-1) any; urgency=low
+
+  * Correcting the mail-address
+
+ -- Matthias Rauter <matthias.rauter@student.uibk.ac.at>  Sat, 12 Mar 2011 16:27:00 +0100
+
+colin (0.1.2-0) any; urgency=low
+
+  * Some Windows Fixes
+
+ -- Matthias Rauter <matthias.rauter@uibk.ac.at>  Tue, 08 Mar 2011 19:38:00 +0100
+
+colin (0.1.1-0) any; urgency=low
+
+  * Adding menu entry, translations
+
+ -- Matthias Rauter <matthias.rauter@uibk.ac.at>  Tue, 08 Mar 2011 15:03:00 +0100
+
+colin (0.1.0-0) any; urgency=low
+
+  * First debianization of Colin
+
+ -- Matthias Rauter <matthias.rauter@uibk.ac.at>  Tue, 08 Mar 2011 10:07:00 +0100
+
