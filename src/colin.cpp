@@ -28,6 +28,12 @@
 //I can't even begin to express how sorry I am.
 
 
+#warning this is the working branch for Colin 0.2.
+#warning please use Colin 0.1.10 from trunk
+#warning contains unfinshed features
+#warning contains untestes features
+
+
 #include "mainwindow.h"
 #include "toolTipEater.h"
 
