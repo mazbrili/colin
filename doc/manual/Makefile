@@ -62,7 +62,7 @@ PICS = 	./pictures/280px-CreativeCommond_logo_trademark.png \
 	./pictures/zoom_opt.png
 
 
-colin.pdf: colin.tex debversion.tex debchange.tex script.tex\
+colin.pdf: colin.tex debversion.tex debchange.tex script.tex calculation.tex\
 	$(PICS)	
 	i=1; while (pdflatex $(PDFLATEXFLAGS) $< || echo "******* Warning: pdflatex pass $$i failed.") && grep -q 'Rerun' colin.log; do i=`expr $$i + 1`; echo "******* Recompiling (pass $$i)..."; done; echo "******* Finished after $$i pdflatex passes."
 
