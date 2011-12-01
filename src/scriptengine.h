@@ -9,7 +9,7 @@ class scriptEngine : public QScriptEngine
 {
     Q_OBJECT
 public:
-	explicit scriptEngine(ColinStruct *tw, QObject *parent = 0);
+	explicit scriptEngine(QObject *parent = 0);
 
 	void eval(QString code);
 

@@ -39,13 +39,6 @@ ColinStruct *filelist::currentFile()
     return files.at(current_).tw;
 }
 
-scriptEngine *filelist::Engine()
-{
-	if(current_<0)
-		return NULL;
-	return files.at(current_).scriptengine;
-}
-
 const int &filelist::currentIndex() const
 {
     return current_;
@@ -69,7 +62,7 @@ void filelist::append(ColinStruct *f, QString name, QString path)
 
 	f->QObject::setObjectName(name);
 
-	cfile c = {f, name, path, new scriptEngine(f,f)};
+	cfile c = {f, name, path};
     files.append(c);
     QUndoStack *us = new QUndoStack(g);
     stacks.append(us);
@@ -129,6 +122,8 @@ void filelist::changeCurrentTo(ColinStruct* f)
 
 void filelist::changeCurrentTo(int i)
 {
+	if(i<-2 || i>=files.size())
+		return;
     current_= i;
 
 

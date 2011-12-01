@@ -3,6 +3,7 @@
 #include <QtCore/QDebug>
 
 #include "javascriptwraper.h"
+#include "filelist.h"
 
 
 QScriptValue ScriptPrintFunction(QScriptContext *ctxt, QScriptEngine *engine)
@@ -12,7 +13,7 @@ QScriptValue ScriptPrintFunction(QScriptContext *ctxt, QScriptEngine *engine)
 	return QScriptValue(engine, 0);
 }
 
-scriptEngine::scriptEngine(ColinStruct *tw, QObject *parent) :
+scriptEngine::scriptEngine(QObject *parent) :
     QScriptEngine(parent)
 {
 	qRegisterMetaType<ColinLoad::form>("ColinLoad::form");
@@ -32,9 +33,51 @@ scriptEngine::scriptEngine(ColinStruct *tw, QObject *parent) :
 	globalObject().setProperty("ColinBLS", newFunction(BLSCtor));
 	globalObject().setProperty("ColinCLS", newFunction(CLSCtor));
 
+
+	QScriptValue file = newQObject(&filelist::instance());
+	globalObject().setProperty("files", file);
+
 	globalObject().setProperty("print", newFunction(ScriptPrintFunction));
 
-	setTw(tw);
+
+
+	this->evaluate(QString("function evalN(n, x){if(typeof(x)=='undefined'){x=n; n=0;} return ")+
+				   "x*x*this.Narg[n][2]+"+
+				   "x*this.Narg[n][1]+"+
+				   "this.Narg[n][0];}");
+	this->evaluate(QString("function evalQ(n, x){if(typeof(x)=='undefined'){x=n; n=0;} return ")+
+				   "x*x*this.Qarg[n][2]+"+
+				   "x*this.Qarg[n][1]+"+
+				   "this.Qarg[n][0];}");
+	this->evaluate(QString("function evalM(n, x){if(typeof(x)=='undefined'){x=n; n=0;} return ")+
+				   "x*x*x*this.Marg[n][3]+"+
+				   "x*x*this.Marg[n][2]+"+
+				   "x*this.Marg[n][1]+"+
+				   "this.Marg[n][0];}");
+
+	this->evaluate(QString("function evalu(n, x){if(typeof(x)=='undefined'){x=n; n=0;} return ")+
+				   "x*x*x*this.uarg[n][3]+"+
+				   "x*x*this.uarg[n][2]+"+
+				   "x*this.uarg[n][1]+"+
+				   "this.uarg[n][0];}");
+	this->evaluate(QString("function evalp(n, x){if(typeof(x)=='undefined'){x=n; n=0;} return ")+
+				   "x*x*x*x*this.parg[n][4]+"+
+				   "x*x*x*this.parg[n][3]+"+
+				   "x*x*this.parg[n][2]+"+
+				   "x*this.parg[n][1]+"+
+				   "this.parg[n][0];}");
+	this->evaluate(QString("function evalw(n, x){if(typeof(x)=='undefined'){x=n; n=0;} return ")+
+				   "x*x*x*x*this.warg[n][4]+"+
+				   "x*x*x*this.warg[n][3]+"+
+				   "x*x*this.warg[n][2]+"+
+				   "x*this.warg[n][1]+"+
+				   "this.warg[n][0];}");
+
+
+
+	connect(&filelist::instance(),					SIGNAL(currentChanged(ColinStruct*)),
+			this,									SLOT(setTw(ColinStruct*)));
+
 }
 
 void scriptEngine::eval(QString code)

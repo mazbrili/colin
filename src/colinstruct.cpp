@@ -383,7 +383,7 @@ void ColinStruct::removeBeam(const int &o)
 
 ColinLoad ColinStruct::Load(const int &i)
 {
-	if(i<0 || i<load_n())
+	if(i<0 || i>=load_n())
 		return ColinLoad();
 	return loads.at(i);
 }

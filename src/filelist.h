@@ -47,8 +47,7 @@ struct cfile
 {
 	ColinStruct *tw;
     QString filename;
-    QString filepath;
-	scriptEngine *scriptengine;
+	QString filepath;
 };
 
 class filelist : public QObject
@@ -65,7 +64,6 @@ public:
     }
 
 	ColinStruct *currentFile();
-	scriptEngine *Engine();
 	ColinStruct *file(const int &i) const {return files.at(i).tw;}
     const int &currentIndex() const;
     QString filename(const int &i) const;

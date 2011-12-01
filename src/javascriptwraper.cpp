@@ -7,7 +7,6 @@
 QScriptValue NodetoScriptValue(QScriptEngine *engine, const ColinNode &n)
 {
 	qDebug() << "node -> script";
-	qDebug() << "node->parent = " << n.getStruct();
 	QScriptValue obj = engine->newObject();
 	obj.setProperty("x", n.x());
 	obj.setProperty("z", n.z());
@@ -85,6 +84,27 @@ QScriptValue SupporttoScriptValue(QScriptEngine *engine, const ColinSupport &s)
 	obj.setProperty("cx", s.c_x());
 	obj.setProperty("cz", s.c_z());
 	obj.setProperty("cphi", s.c_phi());
+	if(s.getStruct())
+	{
+		if(s.getStruct()->property("calculated").toBool())
+		{
+			QScriptValue x = engine->newArray(s.getStruct()->cls_n());
+			QScriptValue z = engine->newArray(s.getStruct()->cls_n());
+			QScriptValue phi = engine->newArray(s.getStruct()->cls_n());
+			for(int i=0; i<s.getStruct()->cls_n(); i++){
+				x.setProperty(i, s.a_x(i));
+				z.setProperty(i, s.a_z(i));
+				phi.setProperty(i, s.a_m(i));
+			}
+			obj.setProperty("X", x);
+			obj.setProperty("Z", z);
+			obj.setProperty("Phi", phi);
+
+			obj.setProperty("u", s.a_x(0));
+			obj.setProperty("w", s.a_z(0));
+			obj.setProperty("phi", s.a_m(0));
+		}
+	}
 	return obj;
 }
 
@@ -140,6 +160,73 @@ QScriptValue BeamtoScriptValue(QScriptEngine *engine, const ColinBeam &b)
 	{
 		if(b.getStruct()->isCalculated())
 		{
+			QScriptValue args;
+			//N
+			args = engine->newArray(b.getStruct()->cls_n());
+			for(int j=0; j<b.getStruct()->cls_n(); j++)
+			{
+				QScriptValue N = engine->newArray(3);
+				for(int i=0; i<3; i++) N.setProperty(i, b.Nconst(j).a[i]);
+				args.setProperty(j, N);
+			}
+			obj.setProperty("Narg", args);
+			obj.setProperty("N", engine->globalObject().property("evalN"));
+
+			//Q
+			args = engine->newArray(b.getStruct()->cls_n());
+			for(int j=0; j<b.getStruct()->cls_n(); j++)
+			{
+				QScriptValue Q = engine->newArray(3);
+				for(int i=0; i<3; i++) Q.setProperty(i, b.Qconst(j).a[i]);
+				args.setProperty(j, Q);
+			}
+			obj.setProperty("Qarg", args);
+			obj.setProperty("Q", engine->globalObject().property("evalQ"));
+
+			//M
+			args = engine->newArray(b.getStruct()->cls_n());
+			for(int j=0; j<b.getStruct()->cls_n(); j++)
+			{
+				QScriptValue M = engine->newArray(4);
+				for(int i=0; i<4; i++) M.setProperty(i, b.Mconst(j).a[i]);
+				args.setProperty(j, M);
+			}
+			obj.setProperty("Marg", args);
+			obj.setProperty("M", engine->globalObject().property("evalM"));
+
+			//u
+			args = engine->newArray(b.getStruct()->cls_n());
+			for(int j=0; j<b.getStruct()->cls_n(); j++)
+			{
+				QScriptValue u = engine->newArray(4);
+				for(int i=0; i<4; i++) u.setProperty(i, b.uconst(j).a[i]);
+				args.setProperty(j, u);
+			}
+			obj.setProperty("uarg", args);
+			obj.setProperty("u", engine->globalObject().property("evalu"));
+
+			//phi
+			args = engine->newArray(b.getStruct()->cls_n());
+			for(int j=0; j<b.getStruct()->cls_n(); j++)
+			{
+				QScriptValue phi = engine->newArray(4);
+				for(int i=0; i<5; i++) phi.setProperty(i, b.phiconst(j).a[i]);
+				args.setProperty(j, phi);
+			}
+			obj.setProperty("parg", args);
+			obj.setProperty("phi", engine->globalObject().property("evalp"));
+
+			//w
+			args = engine->newArray(b.getStruct()->cls_n());
+			for(int j=0; j<b.getStruct()->cls_n(); j++)
+			{
+				QScriptValue w = engine->newArray(4);
+				for(int i=0; i<6; i++) w.setProperty(i, b.wconst(j).a[i]);
+				args.setProperty(j, w);
+			}
+			obj.setProperty("warg", args);
+			obj.setProperty("w", engine->globalObject().property("evalw"));
+
 		}
 	}
 	return obj;
@@ -189,45 +276,121 @@ QScriptValue LoadtoScriptValue(QScriptEngine *engine, const ColinLoad &l)
 	else
 		obj.setProperty("node", l.at());
 	obj.setProperty("type", l.typ());
+	obj.setProperty("set", l.set());
 	return obj;
 }
 
 void LoadfromScriptValue(const QScriptValue &obj, ColinLoad &l)
 {
-
+	qDebug() << "script -> load";
+	l.setPx(obj.property("x").toBool());
+	l.setPz(obj.property("z").toBool());
+	l.setM(obj.property("m").toBool());
+	l.setTyp(static_cast<ColinLoad::form>(obj.property("type").toInt32()));
+	l.setSet(obj.property("set").toInt32());
+	if(l.isOnBeam())
+		l.setBeam(obj.property("beam").toInt32());
+	else
+		l.setBeam(obj.property("node").toInt32());
 }
 
 QScriptValue LoadCtor(QScriptContext *ctxt, QScriptEngine *eng)
 {
+	QScriptValue obj;
+	if(ctxt->isCalledAsConstructor()){
+		obj = ctxt->thisObject();
+	}
+	else {
+		obj = eng->newObject();
 
-}
+		if(ctxt->argumentCount() == 5)
+			obj = LoadtoScriptValue(eng, ColinLoad(static_cast<ColinLoad::form>(ctxt->argument(0).toInt32()),
+												   ctxt->argument(1).toInt32(),
+												   ctxt->argument(2).toNumber(),
+												   ctxt->argument(3).toNumber(),
+												   ctxt->argument(4).toNumber(),
+												   ctxt->argument(5).toInt32()));
+		else
+			obj = LoadtoScriptValue(eng, ColinLoad());
+		obj.setPrototype(ctxt->callee().property("prototype"));
+	}
+	return obj;}
 
 QScriptValue BLStoScriptValue(QScriptEngine *engine, const ColinBLS &bls)
 {
-
+	qDebug() << "bls -> script";
+	QScriptValue obj = engine->newObject();
+	obj.setProperty("name", bls.name());
+	return obj;
 }
 
 void BLSfromScriptValue(const QScriptValue &obj, ColinBLS &bls)
 {
-
+	qDebug() << "script -> bls";
+	bls.setName(obj.property("name").toString());
 }
 
 QScriptValue BLSCtor(QScriptContext *ctxt, QScriptEngine *eng)
 {
+	QScriptValue obj;
+	if(ctxt->isCalledAsConstructor()){
+		obj = ctxt->thisObject();
+	}
+	else {
+		obj = eng->newObject();
 
+		if(ctxt->argumentCount() == 1)
+			obj = BLStoScriptValue(eng, ColinBLS(ctxt->argument(0).toString()));
+		else
+			obj = BLStoScriptValue(eng, ColinBLS());
+		obj.setPrototype(ctxt->callee().property("prototype"));
+	}
+	return obj;
 }
 
 QScriptValue CLStoScriptValue(QScriptEngine *engine, const ColinCLS &cls)
 {
-
+	qDebug() << "cls -> script";
+	QScriptValue obj = engine->newObject();
+	obj.setProperty("name", cls.name());
+	QScriptValue bls = engine->newArray(cls.count());
+	for(int i=0; i<cls.count(); i++)
+	{
+		QScriptValue item = engine->newObject();
+		item.setProperty("bls", cls.bls(i));
+		item.setProperty("factor", cls.fac(i));
+		bls.setProperty(i, item);
+	}
+	obj.setProperty("child", bls);
+	return obj;
 }
 
 void CLSfromScriptValue(const QScriptValue &obj, ColinCLS &cls)
 {
+	qDebug() << "script -> cls";
+	cls.setName(obj.property("name").toString());
+	QScriptValue array = obj.property("child");
+	if(!array.isArray())
+		return;
+	int length = array.property("length").toInt32();
 
+	for(int i = 0; i<length; i++){
+		cls.addBLS(array.property(i).property("bls").toInt32(),
+				   array.property(i).property("factor").toNumber());
+	}
 }
 
 QScriptValue CLSCtor(QScriptContext *ctxt, QScriptEngine *eng)
 {
+	QScriptValue obj;
+	if(ctxt->isCalledAsConstructor()){
+		obj = ctxt->thisObject();
+	}
+	else {
+		obj = eng->newObject();
 
+		obj = CLStoScriptValue(eng, ColinCLS());
+		obj.setPrototype(ctxt->callee().property("prototype"));
+	}
+	return obj;
 }
