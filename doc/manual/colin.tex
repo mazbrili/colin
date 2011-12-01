@@ -120,6 +120,9 @@ Besides, \Colin offers the following additional features for an easy handling:
 	\item JavaScript Engine including a console
 \end{itemize}
 
+I started coding Colin with the aim to create an application which can be used imeadetly after installation. Some advanced features as meterials and cross sections (unused when calculating statically determinated structrues as done a long period at our university), springs as supports or rotated supports, load sets, etc. can be ignored completly and should not disturb.\\
+Of course this means also Colin does not contain any stupid, crapy, bullshit-register-here-activate-there-digital-rights-managment\footnote{\url{http://www.defectivebydesign.org/}}. 
+
 \section{getting started on Linux}
 \label{sec:startLinux}
 
@@ -477,14 +480,14 @@ You can also move/manipulate the most objects in GraphicView by click them and m
 \end{minipage}
 \begin{minipage}[h]{\textwidth-4cm}
 When activated you can select objects in the GraphicsView by clicking on them. The previous selection is unselected. To keep the previous selection, press \textit{Shift} while clicking.\\
-You can also span a rectangle by clicking on a position in the GraphicView and keep the mouse pressed. Release the mouse button when the rectangle contains all object you want to select. See figure~\ref{pic:selectionrect} to get an idea. You can also select objects in the tree representation in the sidebar, independent form the active tool (see section~\ref{ssec:tree}).
+You can also span a rectangle by clicking on a position in the GraphicView and keep the mouse pressed. Release the mouse button when the rectangle contains all object you want to select. See figure~\ref{pic:graphicalselectionrect} to get an idea. You can also select objects in the tree representation in the sidebar, independent form the active tool (see section~\ref{ssec:tree}).
 \end{minipage}
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{./pictures/selectionrect.png}
 \caption{Selecting a Rect}
-\label{pic:selectionrect}
+\label{pic:graphicalselectionrect}
 \end{center}
 \end{figure}
 
@@ -504,11 +507,94 @@ A short click on this button activates the auto zoom. The GraphicViews are adjus
 Keep the mouse button pressed to get access to the menu shown in figure~\ref{pic:scaletoolbar}. You see a slider for the scaling of the deformation, a slider for forces and a slider for moments. The slider can be used to adjust the scaling of these in the GraphicsViews. The magnifying glasses left and right from the slider can be pressed to adjust the scaling too. The buttons on the right side of the menu active the autozoom for the corresponding physical values. You can also adjust zoom with the mouse wheel and the mouse wheel in combination with some modifiers. See section~\ref{sec:graphical} and section~\ref{ssec:miscsettings} for more information about the zooming with the mousewheel.
 \end{minipage}
 
+\subsection{Zoom}
+
+\begin{minipage}[h]{4cm}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.6]{./pictures/zoom_opt.png}
+\caption{Options}
+\label{pic:zoom_opt}
+\end{center}
+\end{figure}
+\end{minipage}
+\begin{minipage}[h]{\textwidth-4cm}
+The zoom tool can be used to adjust the general scaling of the GraphicViews. Keep the mouse button pressed to get access to more zooming tools:
+\begin{trivlist}
+	\item[] \includegraphics[scale = 0.5]{../../icons/zoom_rect.png} Zoom Rectange: When this tool is selected you can specify a rectangle in the GraphicsView as in figure~\ref{pic:graphicalselectionrect}. The scale will be adjusted so that the selected rectangle fits into the view.
+	\item[] \includegraphics[scale = 0.5]{../../icons/zoom_in.png} Zoom in: Click on the Graphicsview to zoom in.
+	\item[] \includegraphics[scale = 0.5]{../../icons/zoom_out.png} Zoom out: Click on the Graphicsview to zoom out.
+\end{trivlist}
+\end{minipage}
+
 \subsection{Calculate}
+
+\begin{minipage}[h]{4cm}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.6]{./pictures/calctoolbar.png}
+\caption{Calculate}
+\label{pic:calctoolbar}
+\end{center}
+\end{figure}
+\end{minipage}
+\begin{minipage}[h]{\textwidth-4cm}
+Press to calculate the forces in the structure. When the calation has failed or finished successfully, a widget appears under this button. It contains informations about the calculation.
+\end{minipage}
 
 \subsection{Snap}
 
+\begin{minipage}[h]{4cm}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.6]{./pictures/snap_opt.png}
+\caption{Options}
+\label{pic:snap_opt}
+\end{center}
+\end{figure}
+\end{minipage}
+\begin{minipage}[h]{\textwidth-4cm}
+This button offers some options for the snap function of the GraphicsView (see section~\ref{sec:graphical}). You should know snap from other CAD applications. The snap tool can be enabled or disabled with a short click. For some actions, for which the snap function is required as adding supports or loads to the structure, the snap is always active. Keep the mouse button pressed to get access to more options. You can enable and disable specific snap functions by clicking on the related button.
+\begin{trivlist}
+	\item[] \includegraphics[scale = 0.5]{../../icons/grid.png} Grid: If near the grid, the mouse gets snaped an moved to the grid. Also, when drawing a load or a beam with actived grid snap, the snap helps to enter beams with rounded lengths and rounded loads.
+	\item[] \includegraphics[scale = 0.5]{../../icons/node.png} Node: Snap nodes while drawing beams. This option must be on to connect existing nodes. When turned of, a click near a node will create a new node.
+	\item[] \includegraphics[scale = 0.5]{../../icons/crossing.png}Intersecting beams: When active, you will be able to snap the intersection of two beams. This allows to draw nodes in the position where the beams are intersecting. The intersecting beams will be connected to the new node when you do so.
+	\item[] \includegraphics[scale = 0.5]{../../icons/middle.png} Middle of beams: When active, the snap helps you to split beams in two sections with the same length while drawing nodes or beams. Also node loads can be put on beams (a new node is created automatically). With this option the middle of a beam is prefered.
+	\item[] \includegraphics[scale = 0.5]{../../icons/beam.png} Beams: While drawing nodes or beams, positions on beams are prefered. The beam snaped is connected to created nodes.
+	\item[] \includegraphics[scale = 0.5]{../../icons/ortho_g.png} Global orthogonal: When enabled, the snap helps you to draw horizontal and vertical beams and loads.
+	\item[] \includegraphics[scale = 0.5]{../../icons/ortho_l.png} Local orthogonal: When activated, the snap helps you to draw beams normal or parallel to existing beams. While drawing loads, the snap helps you to draw loads normal or parallel to the beam where the load is put on.
+	\item[] \textbf{[range]}: The slider on the right side of the buttons can be used to adjust the range which the snap interprets as "near".
+\end{trivlist}
+\end{minipage}
+
+
 \subsection{Windows}
+
+\begin{minipage}[h]{7cm}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.6]{./pictures/windowtoolbar.png}
+\caption{Window menu}
+\label{pic:windowtoolbar}
+\end{center}
+\end{figure}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.6]{./pictures/windowtoolbar2.png}
+\caption{Select GraphicViews}
+\label{pic:windowtoolbar2}
+\end{center}
+\end{figure}
+\end{minipage}
+\begin{minipage}[h]{\textwidth-7cm}
+After a click on the window tool button the menu in figure~\ref{pic:windowtoolbar} appears. You can see three menu entrys:
+\begin{itemize}
+	\item \textit{fullscreen}: Switch fullscreen mode on and off.
+	\item \textit{show all}: Show all GraphicViews.
+	\item \textit{show sidebar}: Hide and show the sidebar.
+\end{itemize}
+The four rectangles in this menu can be used to chose the visilbe GraphicViews. The GraphicViews are explaned in depth in section~\ref{sec:graphical}. You can click on a single rectangle to show the related GraphicsView. The currently visilbe GraphicViews are highlighted as the GraphicsView on the button left in figure~\ref{pic:windowtoolbar2}. The notations whitin the rectangles shows the data visulized in the related GraphicsView. You can also select more of them as shown in figure~\ref{pic:windowtoolbar2}. To do so, click on a Point in the area. A rectangle appears. Keep the mouse pressed and move the mouse until the rectanlge covers all GraphicViews you want to be shown. After releasing the mousebutton, a selection as in figure~\ref{pic:windowtoolbar2} would show the two GraphicsViews on the top. 
+\end{minipage}
 
 \section{GraphicView}
 \label{sec:graphical}
