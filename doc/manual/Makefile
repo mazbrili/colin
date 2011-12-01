@@ -27,4 +27,4 @@ colin.pdf: colin.tex debversion.tex debchange.tex\
 
 
 clean:
-	rm -f colin.pdf colin.toc colin.log colin.aux colin.out
+	rm -f colin.pdf colin.toc colin.log colin.aux colin.out debchange.tex debversion.tex
