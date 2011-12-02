@@ -33,66 +33,66 @@ endif
 LD=$(CXX)
 
 MOCHEADERS= abstractcolintooltip.h \
-    beammenu.h \
-    bmenu.h \
-    closedialog.h \
-    cmenu.h \
-    colinboolslider.h \
-    colinhmultibutton.h \
-    colinmenu.h \
-    colinpushbuttonpart.h \
-    colintooltip.h \
-    colorsettingswidget.h \
-    ctabbar.h \
-    ctoolbar.h \
-    cwidget.h \
-    dloadmenu.h \
-    abstractdrawselectionwidget.h \
-    drawselectionwidget.h \
-    drawselectionwidget2.h \
-    editmaterialdialog.h \
-    editprofiledialog.h \
-    filelist.h \
-    grid.h \
-    jmenu.h \
-    libsidebar.h \
-    lmenu.h \
-    loadmenu.h \
-    mainwindow.h \
-    miscsettingswidget.h \
-    momentmenu.h \
-    newmaterialdialog.h \
-    newprofiledialog.h \
-    nloadmenu.h \
-    nodemenu.h \
-    nwidget.h \
-    previewrenderer.h \
-    previewwidget.h \
-    resultvisualwidget.h \
-    scalewidget.h \
-    shortcutsettings.h \
-    shortcutsettingswidget.h \
-    structpainter.h \
-    structprinter.h \
-    swidget.h \
-    tempmenu.h \
-    termovaluewidget.h \
-    toolTipEater.h \
-    treedelegate.h \
-    treeview.h \
-    undocommandmaker.h \
-    unitsettings.h \
-    viewmenu.h \
-    viewmenu2.h \
-    viewport.h \
-    viewportpresenter.h \
-    viewportsettings.h \
-    viewporttooltip.h \
+	beammenu.h \
+	bmenu.h \
+	closedialog.h \
+	cmenu.h \
+	colinboolslider.h \
+	colinhmultibutton.h \
+	colinmenu.h \
+	colinpushbuttonpart.h \
+	colintooltip.h \
+	colorsettingswidget.h \
+	ctabbar.h \
+	ctoolbar.h \
+	cwidget.h \
+	dloadmenu.h \
+	abstractdrawselectionwidget.h \
+	drawselectionwidget.h \
+	drawselectionwidget2.h \
+	editmaterialdialog.h \
+	editprofiledialog.h \
+	filelist.h \
+	grid.h \
+	jmenu.h \
+	libsidebar.h \
+	lmenu.h \
+	loadmenu.h \
+	mainwindow.h \
+	miscsettingswidget.h \
+	momentmenu.h \
+	newmaterialdialog.h \
+	newprofiledialog.h \
+	nloadmenu.h \
+	nodemenu.h \
+	nwidget.h \
+	previewrenderer.h \
+	previewwidget.h \
+	resultvisualwidget.h \
+	scalewidget.h \
+	shortcutsettings.h \
+	shortcutsettingswidget.h \
+	structpainter.h \
+	structprinter.h \
+	swidget.h \
+	tempmenu.h \
+	termovaluewidget.h \
+	toolTipEater.h \
+	treedelegate.h \
+	treeview.h \
+	undocommandmaker.h \
+	unitsettings.h \
+	viewmenu.h \
+	viewmenu2.h \
+	viewport.h \
+	viewportpresenter.h \
+	viewportsettings.h \
+	viewporttooltip.h \
 	wgv.h \
 	colinlib.h \
 	colinload.h \
 	colinstruct.h \
-    zmenu.h \
+	zmenu.h \
 	printoverlaywidget.h \
 	slidingstackedwidget.h \
 	colinsidebar.h \
@@ -102,78 +102,79 @@ MOCHEADERS= abstractcolintooltip.h \
 	consolewidget.h \
 	scriptengine.h \
 	javascriptwraper.h \
-	viewportlayout.h
+	viewportlayout.h \
+	printpreview.h
 
 
 BUILDDATESOURCES=colinversion.cpp
 
 SOURCES= beammenu.cpp \
-    bmenu.cpp \
-    catcher.cpp \
-    closedialog.cpp \
-    cmenu.cpp \
-    colinboolslider.cpp \
-    colin.cpp \
-    colinhmultibutton.cpp \
-    colinicons.cpp \
-    colinmenu.cpp \
-    colinpushbuttonpart.cpp \
-    colintooltip.cpp \
-    colorsettingswidget.cpp \
-    ctabbar.cpp \
-    cwidget.cpp \
-    dloadmenu.cpp \
-    abstractdrawselectionwidget.cpp \
-    drawselectionwidget.cpp \
-    drawselectionwidget2.cpp \
-    editmaterialdialog.cpp \
-    editprofiledialog.cpp \
-    filelist.cpp \
-    grid.cpp \
-    jmenu.cpp \
-    libsidebar.cpp \
-    lmenu.cpp \
-    loadmenu.cpp \
-    mainwindow.cpp \
-    miscsettingswidget.cpp \
-    momentmenu.cpp \
-    newmaterialdialog.cpp \
-    newprofiledialog.cpp \
-    nloadmenu.cpp \
-    nodemenu.cpp \
-    nwidget.cpp \
-    previewrenderer.cpp \
-    previewwidget.cpp \
-    resultvisualwidget.cpp \
-    scalewidget.cpp \
-    shortcutsettings.cpp \
-    shortcutsettingswidget.cpp \
-    structpainter.cpp \
-    structprinter.cpp \
-    swidget.cpp \
-    tempmenu.cpp \
-    termovaluewidget.cpp \
-    treedelegate.cpp \
-    treeview.cpp \
-    undo_commands.cpp \
-    undocommandmaker.cpp \
-    unitsettings.cpp \
-    viewmenu.cpp \
-    viewmenu2.cpp \
-    viewport.cpp \
-    viewportpresenter.cpp \
-    viewportsettings.cpp \
-    viewporttooltip.cpp \
-    wgv.cpp \
+	bmenu.cpp \
+	catcher.cpp \
+	closedialog.cpp \
+	cmenu.cpp \
+	colinboolslider.cpp \
+	colin.cpp \
+	colinhmultibutton.cpp \
+	colinicons.cpp \
+	colinmenu.cpp \
+	colinpushbuttonpart.cpp \
+	colintooltip.cpp \
+	colorsettingswidget.cpp \
+	ctabbar.cpp \
+	cwidget.cpp \
+	dloadmenu.cpp \
+	abstractdrawselectionwidget.cpp \
+	drawselectionwidget.cpp \
+	drawselectionwidget2.cpp \
+	editmaterialdialog.cpp \
+	editprofiledialog.cpp \
+	filelist.cpp \
+	grid.cpp \
+	jmenu.cpp \
+	libsidebar.cpp \
+	lmenu.cpp \
+	loadmenu.cpp \
+	mainwindow.cpp \
+	miscsettingswidget.cpp \
+	momentmenu.cpp \
+	newmaterialdialog.cpp \
+	newprofiledialog.cpp \
+	nloadmenu.cpp \
+	nodemenu.cpp \
+	nwidget.cpp \
+	previewrenderer.cpp \
+	previewwidget.cpp \
+	resultvisualwidget.cpp \
+	scalewidget.cpp \
+	shortcutsettings.cpp \
+	shortcutsettingswidget.cpp \
+	structpainter.cpp \
+	structprinter.cpp \
+	swidget.cpp \
+	tempmenu.cpp \
+	termovaluewidget.cpp \
+	treedelegate.cpp \
+	treeview.cpp \
+	undo_commands.cpp \
+	undocommandmaker.cpp \
+	unitsettings.cpp \
+	viewmenu.cpp \
+	viewmenu2.cpp \
+	viewport.cpp \
+	viewportpresenter.cpp \
+	viewportsettings.cpp \
+	viewporttooltip.cpp \
+	wgv.cpp \
 	colinbeam.cpp \
 	colinsupport.cpp \
 	colinlib.cpp \
 	colinload.cpp \
 	colinnode.cpp \
 	colinstruct.cpp \
-    xmlreader.cpp \
-    xmlwriter.cpp \
-    zmenu.cpp \
+	xmlreader.cpp \
+	xmlwriter.cpp \
+	zmenu.cpp \
 	printoverlaywidget.cpp \
 	slidingstackedwidget.cpp \
 	colinsidebar.cpp \
@@ -183,7 +184,8 @@ SOURCES= beammenu.cpp \
 	consolewidget.cpp \
 	scriptengine.cpp \
 	javascriptwraper.cpp \
-	viewportlayout.cpp
+	viewportlayout.cpp \
+	printpreview.cpp
 
 
 

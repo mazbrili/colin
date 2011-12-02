@@ -23,7 +23,7 @@
  * Author: Matthias Rauter
  *
  ***********************************************************/
-/*
+
 #ifndef STRUCTPRINTER_H
 #define STRUCTPRINTER_H
 
@@ -32,31 +32,80 @@
 #include "viewportsettings.h"
 #include "polynom.h"
 
-class structPrinter: public QPrinter
+
+class painterContent
+{
+public:
+	enum section{
+		bls_in = 0x1,
+		node_in = 0x2,
+		beam_in = 0x4,
+		load_in = 0x8,
+		cls_all = 0x10,
+		cls_single = 0x20,
+		node_res = 0x40,
+		beam_f = 0x80,
+		beam_val = 0x100,
+		fourPerPage = 0x200,
+		landscape = 0x400,
+	};
+	Q_DECLARE_FLAGS(sections, section)
+
+
+	painterContent(sections s_, QFont f, int index_){s=s_; index_=index; font=f;}
+	sections s;
+	int index;
+	QFont font;
+};
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(painterContent::sections)
+
+
+class structPrinter
 {
     Q_DECLARE_TR_FUNCTIONS(structPrinter)
 public:
-    structPrinter(wgv_tw *t);
-    void print();
+	structPrinter(ColinStruct *t);
+	void print(QPrinter *printer, painterContent content, QPaintDevice *target=0, int pageNr=-1);
 
+	painterContent getContentOfPage(QPrinter *printer, painterContent content, int pageNr);
+	int getPageOfContent(QPrinter *printer, painterContent all, painterContent content);
+	int requiredPages(QPrinter *printer, painterContent content);
+
+	void tableContent();
+	void blsPlot();
+	void blsPlot(const int &i, const QRect &rect);
+
+	void clsPlot();
+	void clsPlotall(const QRect &rect);
+	void clsPlot(const int &i, const QRect &rect);
+
+	void nodeIn();
+	void nodeIn(const int &i);
+
+	void beamIn();
+	void beamIn(const int &i);
+
+	void loadIn();
+	void loadIn(const int &i);
+
+	void nodeRes();
+	void nodeRes(const int &i);
+
+	void beamResF();
+	void beamResF(const int &i);
+
+	void beamResVal();
+	void beamResVal(const int &i);
 private:
-    wgv_tw *tw;
+	ColinStruct *tw;
     int pageCount;
     int dx;
 
-    void addHeader(QPainter *p);
-    void addPage(QPainter *p);
 
-    void drawElementInfo(QPainter *p, const Colin::Elements &e, const QPointF &dp_);
-    void writeMats(QPainter *p);
-    void writeNodes(QPainter *p);
-    void writeBeams(QPainter *p);
-    void writeLoads(QPainter *p);
-    void writeResultsNodes(QPainter *p);
-    void writeResultsBeams(QPainter *p);
-    void usedSpace(int h, QPainter *p);
+
 
 };
 
 #endif // STRUCTPRINTER_H
-*/
+

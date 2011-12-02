@@ -63,13 +63,13 @@ class ColinBeam : public ColinElement
 friend class wgv;
 public:
 
-    enum position{
-        Nl = 0,
-        Ql = 1,
-        Ml = 2,
-        Nr = 3,
-        Qr = 4,
-        Mr = 5};
+	enum position{
+		Nl = 0,
+		Ql = 1,
+		Ml = 2,
+		Nr = 3,
+		Qr = 4,
+		Mr = 5};
 
 
 	ColinBeam(){par = 0; res=0; dirty = true;}
@@ -79,57 +79,57 @@ public:
 	ColinBeam(const ColinBeam &other);
 	ColinBeam &operator=(const ColinBeam &other);
 
-    QTransform transform()const;
-    inline QPointF middleP() const {return leftNode().toQPointF()/2+rightNode().toQPointF()/2;}
-    const inline int &leftNodeI() const {return node_l;}
-    const inline int &rightNodeI() const {return node_r;}
+	QTransform transform()const;
+	inline QPointF middleP() const {return leftNode().toQPointF()/2+rightNode().toQPointF()/2;}
+	const inline int &leftNodeI() const {return node_l;}
+	const inline int &rightNodeI() const {return node_r;}
 	const ColinNode &leftNode() const;
 	const ColinNode &rightNode() const;
 
 	QRectF boundingRect() const;
 	QLineF toQLineF() const;
 
-    const inline ColinMaterial &Mat() const {return LIB.mat(mt);}
-    const inline ColinCrossSection &Profile() const {return LIB.Profile(qs);}
-    const inline int &MatI() const {return mt;}
-    const inline int &ProfileI() const {return qs;}
+	const inline ColinMaterial &Mat() const {return LIB.mat(mt);}
+	const inline ColinCrossSection &Profile() const {return LIB.Profile(qs);}
+	const inline int &MatI() const {return mt;}
+	const inline int &ProfileI() const {return qs;}
 
-    const inline double &E() const {return LIB.mat(mt).E();}
-    //const inline double &v() const {return LIB.mat(mt).v();}
-    //const inline double &roh() const {return LIB.mat(mt).roh();}
-    const inline double &aT() const {return LIB.mat(mt).alphaT();}
-    const inline double &I() const {return LIB.Profile(qs).I();}
-    const inline double &A() const {return LIB.Profile(qs).A();}
-    //const inline double &Aq() const {return LIB.Profile(qs).Aq();}
+	const inline double &E() const {return LIB.mat(mt).E();}
+	//const inline double &v() const {return LIB.mat(mt).v();}
+	//const inline double &roh() const {return LIB.mat(mt).roh();}
+	const inline double &aT() const {return LIB.mat(mt).alphaT();}
+	const inline double &I() const {return LIB.Profile(qs).I();}
+	const inline double &A() const {return LIB.Profile(qs).A();}
+	//const inline double &Aq() const {return LIB.Profile(qs).Aq();}
 
-    const double &angle() const;
-    const double &l() const;
+	const double &angle() const;
+	const double &l() const;
 
-    const inline bool &joint(const position& pos) const{return gel[pos];}
-    const inline bool &joint(const int& pos) const{return gel[pos];}
-    void joints(bool *bool_array_6);
-    const inline double &spring(const position& pos) const {return spr[pos];}
-    const inline double &spring(const int& pos) const {return spr[pos];}
-    inline bool hasSpring(const int &pos) const {return spr[pos]!=0?true:false;}
-    void springs(double *double_array_6);
+	const inline bool &joint(const position& pos) const{return gel[pos];}
+	const inline bool &joint(const int& pos) const{return gel[pos];}
+	void joints(bool *bool_array_6);
+	const inline double &spring(const position& pos) const {return spr[pos];}
+	const inline double &spring(const int& pos) const {return spr[pos];}
+	inline bool hasSpring(const int &pos) const {return spr[pos]!=0?true:false;}
+	void springs(double *double_array_6);
 
 	double s(const int &i, const int& pos) const;
 	double v(const int &i, const int& pos) const;
 
-    bool wLinear() const;
+	bool wLinear() const;
 
-    void setLeftNode(const int& ln) {node_l=ln; setDirty();}
-    void setRightNode(const int& rn) {node_r=rn; setDirty();}
-    void setQs(const int& nr) {qs=nr;}
-    void setMat(const int& nr) {mt=nr;}
+	void setLeftNode(const int& ln) {node_l=ln; setDirty();}
+	void setRightNode(const int& rn) {node_r=rn; setDirty();}
+	void setQs(const int& nr) {qs=nr;}
+	void setMat(const int& nr) {mt=nr;}
 
-    inline bool hasJoints() const {return true;}
+	inline bool hasJoints() const {return true;}
 
-    void setJoints(const bool *array);
-    void setSprings(const double *array);
-    void setJointsandSprings(const bool *barray, const double *darray);
-    void setJoint(const int& pos, const bool& thereIsAJoint);
-    void setSpring(const int& pos, const double& c_f);
+	void setJoints(const bool *array);
+	void setSprings(const double *array);
+	void setJointsandSprings(const bool *barray, const double *darray);
+	void setJoint(const int& pos, const bool& thereIsAJoint);
+	void setSpring(const int& pos, const double& c_f);
 
 	inline double N(const int &i, const double &x) const {return res[i].N(x);}
 	inline double Q(const int &i, const double &x) const {return res[i].Q(x);}
@@ -162,29 +162,29 @@ public:
 	beam_result *results(){return res;}
 
 
-    double k11() const {return(E()*A()/l()); }
-    double k22() const {return(12*E()*I()/(l()*l()*l())); }
-    double k23() const {return(6*E()*I()/(l()*l())); }
-    double k33() const {return(4*E()*I()/l()); }
-    double k36() const {return(2*E()*I()/l()); }
+	double k11() const {return(E()*A()/l()); }
+	double k22() const {return(12*E()*I()/(l()*l()*l())); }
+	double k23() const {return(6*E()*I()/(l()*l())); }
+	double k33() const {return(4*E()*I()/l()); }
+	double k36() const {return(2*E()*I()/l()); }
 
 	void inline setDirty() const {dirty = true;}
 
 private:
 
-    void calcLen() const;
+	void calcLen() const;
 
-    int node_l;
-    int node_r;
-    int mt;
-    int qs;
-    bool gel[6];
-    double spr[6];
+	int node_l;
+	int node_r;
+	int mt;
+	int qs;
+	bool gel[6];
+	double spr[6];
 
-    mutable double len;
-    mutable double alp;
+	mutable double len;
+	mutable double alp;
 
-    mutable bool dirty;
+	mutable bool dirty;
 
 	beam_result *res;
 };

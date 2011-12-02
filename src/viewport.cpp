@@ -689,21 +689,25 @@ void viewport::findHighLightedObject()
 		tooltip->set(colinIcons::instance().icon(cC, true),
 			 tr("node # ")+ QString::number(first),
 			 extend);
+		structPainter::setHighlightedObject(cC, first);
 		break;
 	case catcher::CatchedBeam:
 		tooltip->set(colinIcons::instance().icon(cC, true),
 			 tr("beam # ")+ QString::number(first),
 			 extend);
+		structPainter::setHighlightedObject(cC, first);
 		break;
 	case catcher::CatchedLoadHotSpot:
 		tooltip->set(colinIcons::instance().icon(tw->load(first).typ(), true),
 			 tr("load # ")+ QString::number(first),
 			 extend);
+		structPainter::setHighlightedObject(cC, first);
 		break;
 	case catcher::CatchedLoad:
 		tooltip->set(colinIcons::instance().icon(tw->load(first).typ(), true),
 			 tr("load # ")+ QString::number(first),
 			 extend);
+		structPainter::setHighlightedObject(cC, first);
 		break;
 	case catcher::CatchedCrossing:
 		tooltip->set(colinIcons::instance().icon(cC, true),
@@ -715,11 +719,13 @@ void viewport::findHighLightedObject()
 		tooltip->set(colinIcons::instance().icon(cC, true),
 			 tr("beam # ")+ QString::number(first),
 						 "");
+		structPainter::setHighlightedObject(catcher::CatchedBeam, first);
 		break;
 	case catcher::CatchedTemp:
 		tooltip->set(colinIcons::instance().icon(cC, true),
 					 tr("temperature # ")+ QString::number(first),
 					 extend);
+		structPainter::setHighlightedObject(cC, first);
 		break;
 	case catcher::CatchedOrthoGlob:
 		if(vS->toDraw() == Colin::drawBeam)
@@ -776,6 +782,7 @@ void viewport::findHighLightedObject()
 						 QString::number(first),
 						 tr("press Shift to draw moments!"));
 		}
+		structPainter::setHighlightedObject(catcher::CatchedBeam, first);
 		break;
 	case catcher::CatchedNLine:
 		extend.clear();
@@ -2389,7 +2396,7 @@ void viewport::requestResize(int target)
 	animation.setStartValue(strech());
 	animation.setEndValue(target);
 	animation.start();
-	qDebug() << "view " << id() << "strech = " << strech() << " -> " << target;
+	//qDebug() << "view " << id() << "strech = " << strech() << " -> " << target;
 }
 
 void viewport::setStrech(int val)
@@ -2406,7 +2413,7 @@ void viewport::setStrech(int val)
 	setSizePolicy(sp);
 
 
-	qDebug() << "view " << id() << " strech= " << val;
+	//qDebug() << "view " << id() << " strech= " << val;
 }
 
 int viewport::strech()

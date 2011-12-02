@@ -962,7 +962,7 @@ void treeView::popupEditor(const QModelIndex &index)
 {
     if(index.data(32).toInt() == ColinStruct::uneditable)
         return;
-    if(index.column() == 0)
+	if(index.column() == 0)
         return;
     if(openitem)
     {
@@ -1061,9 +1061,6 @@ void treeView::previousItem()
 
 void treeView::writeData(QTreeWidgetItem *item, int column)
 {
-#ifndef QT_NO_DEBUG
-    QTextStream debugS(stdout);
-#endif
 
     //if(isChanging)
     //    return;
@@ -1113,6 +1110,14 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
 	}
 	switch(toChange)
     {
+	case ColinStruct::uneditable:
+	case ColinStruct::ID_node:
+	case ColinStruct::ID_beam:
+	case ColinStruct::ID_bearing:
+	case ColinStruct::ID_bls:
+	case ColinStruct::ID_cls:
+	case ColinStruct::ID_load:
+		break;
 /****************
  *   X-KOORD    *
  ****************/
@@ -1123,8 +1128,8 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
         else
             item->setText(column, QString("%1").arg(tw->node(item->parent()->indexOfChild(item)).x()));
 #ifndef QT_NO_DEBUG
-        debugS << "treeView: handled: " << item->data(column, 32).toInt()
-               <<  (ok ? " value accepted" : " value not accepted") << endl;
+		qDebug() << "treeView: handled: " << item->data(column, 32).toInt()
+			   <<  (ok ? " value accepted" : " value not accepted");
 #endif
         break;
 /****************
@@ -1137,8 +1142,8 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
         else
             item->setText(column, QString("%1").arg(tw->node(item->parent()->indexOfChild(item)).z()));
 #ifndef QT_NO_DEBUG
-        debugS << "treeView: handled: " << item->data(column, 32).toInt()
-               <<  (ok ? " value accepted" : " value not accepted") << endl;
+		qDebug() << "treeView: handled: " << item->data(column, 32).toInt()
+			   <<  (ok ? " value accepted" : " value not accepted");
 #endif
         break;
 /****************
@@ -1151,8 +1156,8 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
         else
             item->setText(column, QString::number(tw->node(item->parent()->indexOfChild(item)).angle()*ANGLEPREFIX));
 #ifndef QT_NO_DEBUG
-        debugS << "treeView: handled: " << item->data(column, 32).toInt()
-               <<  (ok ? " value accepted" : " value not accepted") << endl;
+		qDebug() << "treeView: handled: " << item->data(column, 32).toInt()
+			   <<  (ok ? " value accepted" : " value not accepted");
 #endif
         break;
 /****************
@@ -1166,8 +1171,8 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
         else
             item->setText(column, QString("%1").arg(tw->beam(item->parent()->indexOfChild(item)).leftNodeI()));
 #ifndef QT_NO_DEBUG
-        debugS << "treeView: handled: " << item->data(column, 32).toInt()
-               <<  (ok ? " value accepted" : " value not accepted") << endl;
+		qDebug() << "treeView: handled: " << item->data(column, 32).toInt()
+			   <<  (ok ? " value accepted" : " value not accepted");
 #endif
         break;
 /****************
@@ -1181,8 +1186,8 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
         else
             item->setText(column, QString("%1").arg(tw->beam(item->parent()->indexOfChild(item)).leftNodeI()));
 #ifndef QT_NO_DEBUG
-        debugS << "treeView: handled: " << item->data(column, 32).toInt()
-               <<  (ok ? " value accepted" : " value not accepted") << endl;
+		qDebug() << "treeView: handled: " << item->data(column, 32).toInt()
+			   <<  (ok ? " value accepted" : " value not accepted");
 #endif
         break;
 /*******************
@@ -1192,7 +1197,7 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
         if(item->text(column)!="")
             tw->setMat(item->parent()->indexOfChild(item), item->text(column));
 #ifndef QT_NO_DEBUG
-        debugS << "treeView: handled: " << item->data(column, 32).toInt() << endl;
+		qDebug() << "treeView: handled: " << item->data(column, 32).toInt();
 #endif
         break;
 /*******************
@@ -1202,7 +1207,7 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
         if(item->text(column)!="")
             tw->setProfile(item->parent()->indexOfChild(item), item->text(column));
 #ifndef QT_NO_DEBUG
-        debugS << "treeView: handled: " << item->data(column, 32).toInt() << endl;
+		qDebug() << "treeView: handled: " << item->data(column, 32).toInt();
 #endif
         break;
 /*******************
@@ -1214,16 +1219,16 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
         {
             tw->setJoint(indexFromItem(item->parent()).row(), item->parent()->indexOfChild(item), true);
 #ifndef QT_NO_DEBUG
-        debugS << "treeView: handled: " << item->data(column, 32).toInt()
-               <<  " value accepted ( free )" << endl;
+		qDebug() << "treeView: handled: " << item->data(column, 32).toInt()
+			   <<  " value accepted ( free )";
 #endif
         }
         else if(item->text(column) == tr("locked"))
         {
             tw->setJoint(indexFromItem(item->parent()).row(), item->parent()->indexOfChild(item), false);
 #ifndef QT_NO_DEBUG
-        debugS << "treeView: handled: " << item->data(column, 32).toInt()
-               <<  " value accepted ( locked )" << endl;
+		qDebug() << "treeView: handled: " << item->data(column, 32).toInt()
+			   <<  " value accepted ( locked )";
 #endif
         }
         else if(ok)
@@ -1233,8 +1238,8 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
             else
                 tw->setSpring(indexFromItem(item->parent()).row(), item->parent()->indexOfChild(item), item->text(column).toDouble()/FPREFIX);
 #ifndef QT_NO_DEBUG
-        debugS << "treeView: handled: " << item->data(column, 32).toInt()
-               <<  (ok ? " value accepted" : " value not accepted") << endl;
+		qDebug() << "treeView: handled: " << item->data(column, 32).toInt()
+			   <<  (ok ? " value accepted" : " value not accepted");
 #endif
         }
         break;
@@ -1247,16 +1252,16 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
         {
             tw->setBx(indexFromItem(item->parent()).row(), false);
 //#ifndef QT_NO_DEBUG
-//        debugS << "treeView: handled: " << item->data(column, 32).toInt()
-//               <<  " value accepted ( free )" << endl;
+//        qDebug() << "treeView: handled: " << item->data(column, 32).toInt()
+//               <<  " value accepted ( free )";
 //#endif
         }
         else if(item->text(column) == tr("locked"))
         {
             tw->setBx(indexFromItem(item->parent()).row(), true);
 #ifndef QT_NO_DEBUG
-        debugS << "treeView: handled: " << item->data(column, 32).toInt()
-               <<  " value accepted ( locked )" << endl;
+		qDebug() << "treeView: handled: " << item->data(column, 32).toInt()
+			   <<  " value accepted ( locked )";
 #endif
         }
         else if(ok)
@@ -1264,8 +1269,8 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
             tw->setCx(indexFromItem(item->parent()).row(), item->text(column).toDouble()/FPREFIX);
 //            item->setText(column, "c = "+ QString::number(tw->node(indexFromItem(item->parent()).row()).bearing().xf()*FPREFIX));
 #ifndef QT_NO_DEBUG
-        debugS << "treeView: handled: " << item->data(column, 32).toInt()
-               <<  (ok ? " value accepted" : " value not accepted") << endl;
+		qDebug() << "treeView: handled: " << item->data(column, 32).toInt()
+			   <<  (ok ? " value accepted" : " value not accepted");
 #endif
         }
         break;
@@ -1278,16 +1283,16 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
         {
             tw->setBz(indexFromItem(item->parent()).row(), false);
 //#ifndef QT_NO_DEBUG
-//        debugS << "treeView: handled: " << item->data(column, 32).toInt()
-//               <<  " value accepted ( free )" << endl;
+//        qDebug() << "treeView: handled: " << item->data(column, 32).toInt()
+//               <<  " value accepted ( free )";
 //#endif
         }
         else if(item->text(column) == tr("locked"))
         {
             tw->setBz(indexFromItem(item->parent()).row(), true);
 #ifndef QT_NO_DEBUG
-        debugS << "treeView: handled: " << item->data(column, 32).toInt()
-               <<  " value accepted ( locked )" << endl;
+		qDebug() << "treeView: handled: " << item->data(column, 32).toInt()
+			   <<  " value accepted ( locked )";
 #endif
         }
         else if(ok)
@@ -1295,8 +1300,8 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
             tw->setCz(indexFromItem(item->parent()).row(), item->text(column).toDouble()/FPREFIX);
 //          item->setText(column, "c = "+ QString::number(tw->node(indexFromItem(item->parent()).row()).bearing().zf()*FPREFIX));
 #ifndef QT_NO_DEBUG
-        debugS << "treeView: handled: " << item->data(column, 32).toInt()
-               <<  (ok ? " value accepted" : " value not accepted") << endl;
+		qDebug() << "treeView: handled: " << item->data(column, 32).toInt()
+			   <<  (ok ? " value accepted" : " value not accepted");
 #endif
         }/*
         if(!tw->node(indexFromItem(item->parent()).row()).hasbearing())
@@ -1314,16 +1319,16 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
         {
             tw->setBm(indexFromItem(item->parent()).row(), false);
 //#ifndef QT_NO_DEBUG
-//        debugS << "treeView: handled: " << item->data(column, 32).toInt()
-//               <<  " value accepted ( free )" << endl;
+//        qDebug() << "treeView: handled: " << item->data(column, 32).toInt()
+//               <<  " value accepted ( free )";
 //#endif
         }
         else if(item->text(column) == tr("locked"))
         {
             tw->setBm(indexFromItem(item->parent()).row(), true);
 #ifndef QT_NO_DEBUG
-        debugS << "treeView: handled: " << item->data(column, 32).toInt()
-               <<  " value accepted ( locked )" << endl;
+		qDebug() << "treeView: handled: " << item->data(column, 32).toInt()
+			   <<  " value accepted ( locked )";
 #endif
         }
         else if(ok)
@@ -1331,8 +1336,8 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
             tw->setCm(indexFromItem(item->parent()).row(), item->text(column).toDouble()/FMPREFIX);
 //            item->setText(column, "c = "+ QString::number(tw->node(indexFromItem(item->parent()).row()).bearing().phif()*FPREFIX));
 #ifndef QT_NO_DEBUG
-        debugS << "treeView: handled: " << item->data(column, 32).toInt()
-               <<  (ok ? " value accepted" : " value not accepted") << endl;
+		qDebug() << "treeView: handled: " << item->data(column, 32).toInt()
+			   <<  (ok ? " value accepted" : " value not accepted");
 #endif
         }
         break;
@@ -1351,8 +1356,8 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
         else
 	    item->setText(column, QString::number(tw->load(item->parent()->indexOfChild(item)).at()));
 #ifndef QT_NO_DEBUG
-        debugS << "treeView: handled: " << item->data(column, 32).toInt()
-               <<  (ok ? " value accepted" : " value not accepted") << endl;
+		qDebug() << "treeView: handled: " << item->data(column, 32).toInt()
+			   <<  (ok ? " value accepted" : " value not accepted");
 #endif
         break;
 /****************
@@ -1365,8 +1370,8 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
         else
             item->setText(column, QString::number(tw->load(item->parent()->indexOfChild(item)).Px()*PPREFIX));
 #ifndef QT_NO_DEBUG
-        debugS << "treeView: handled: " << item->data(column, 32).toInt()
-               <<  (ok ? " value accepted" : " value not accepted") << endl;
+		qDebug() << "treeView: handled: " << item->data(column, 32).toInt()
+			   <<  (ok ? " value accepted" : " value not accepted");
 #endif
         break;
 /****************
@@ -1379,8 +1384,8 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
         else
             item->setText(column, QString::number(tw->load(item->parent()->indexOfChild(item)).Pz()*PPREFIX));
 #ifndef QT_NO_DEBUG
-        debugS << "treeView: handled: " << item->data(column, 32).toInt()
-               <<  (ok ? " value accepted" : " value not accepted") << endl;
+		qDebug() << "treeView: handled: " << item->data(column, 32).toInt()
+			   <<  (ok ? " value accepted" : " value not accepted");
 #endif
 		break;
 /****************
@@ -1393,8 +1398,8 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
 		else
 			item->setText(column, QString::number(tw->load(item->parent()->indexOfChild(item)).M()*MPREFIX));
 #ifndef QT_NO_DEBUG
-		debugS << "treeView: handled: " << item->data(column, 32).toInt()
-			   <<  (ok ? " value accepted" : " value not accepted") << endl;
+		qDebug() << "treeView: handled: " << item->data(column, 32).toInt()
+			   <<  (ok ? " value accepted" : " value not accepted");
 #endif
 		break;
 /****************
@@ -1405,8 +1410,8 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
 
 		tw->setLoadSet(item->parent()->indexOfChild(item), tw->getBLSIDbyName(item->text(column)));
 #ifndef QT_NO_DEBUG
-		debugS << "treeView: handled: " << item->data(column, 32).toInt()
-			   <<  (ok ? " value accepted" : " value not accepted") << endl;
+		qDebug() << "treeView: handled: " << item->data(column, 32).toInt()
+			   <<  (ok ? " value accepted" : " value not accepted");
 #endif
 		break;
 /*****************
@@ -1418,8 +1423,8 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
 		else
 			item->setText(column, tw->bls(item->parent()->indexOfChild(item)).name());
 #ifndef QT_NO_DEBUG
-		debugS << "treeView: handled: " << item->data(column, 32).toInt()
-			   <<  (ok ? " value accepted" : " value not accepted") << endl;
+		qDebug() << "treeView: handled: " << item->data(column, 32).toInt()
+			   <<  (ok ? " value accepted" : " value not accepted");
 #endif
 		break;
 /*****************
@@ -1429,8 +1434,8 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
 		ok=true;
 		tw->setBLSColor(item->parent()->indexOfChild(item), QColor(item->text(column)));
 #ifndef QT_NO_DEBUG
-		debugS << "treeView: handled: " << item->data(column, 32).toInt()
-			   <<  (ok ? " value accepted" : " value not accepted") << endl;
+		qDebug() << "treeView: handled: " << item->data(column, 32).toInt()
+			   <<  (ok ? " value accepted" : " value not accepted");
 #endif
 		break;
 /*****************
@@ -1442,8 +1447,8 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
 		else
 			item->setText(column, tw->cls(item->parent()->indexOfChild(item)).name());
 #ifndef QT_NO_DEBUG
-		debugS << "treeView: handled: " << item->data(column, 32).toInt()
-			   <<  (ok ? " value accepted" : " value not accepted") << endl;
+		qDebug() << "treeView: handled: " << item->data(column, 32).toInt()
+			   <<  (ok ? " value accepted" : " value not accepted");
 #endif
 		break;
 /*****************
@@ -1454,8 +1459,8 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
 #warning unhandled
 		//tw->addBLStoCLS(item->parent()->parent()->indexOfChild(item->parent()),tw->getCLSIDbyName(item->text(column)), 1);
 #ifndef QT_NO_DEBUG
-		debugS << "treeView: handled: " << item->data(column, 32).toInt()
-			   <<  (ok ? " value accepted" : " value not accepted") << endl;
+		qDebug() << "treeView: handled: " << item->data(column, 32).toInt()
+			   <<  (ok ? " value accepted" : " value not accepted");
 #endif
 		break;
 /*****************
@@ -1468,13 +1473,13 @@ void treeView::writeData(QTreeWidgetItem *item, int column)
 		else
 			item->setText(column, QString::number(tw->cls(item->parent()->parent()->indexOfChild(item->parent())).fac(item->parent()->indexOfChild(item))));
 #ifndef QT_NO_DEBUG
-		debugS << "treeView: handled: " << item->data(column, 32).toInt()
-			   <<  (ok ? " value accepted" : " value not accepted") << endl;
+		qDebug() << "treeView: handled: " << item->data(column, 32).toInt()
+			   <<  (ok ? " value accepted" : " value not accepted");
 #endif
 		break;
     default:
 #ifndef QT_NO_DEBUG
-        debugS << "treeView: not handled:" << item->data(column, 32).toInt() << endl;
+		qDebug() << "treeView: not handled:" << item->data(column, 32).toInt();
 #endif
         break;
     }

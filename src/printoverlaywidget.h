@@ -12,14 +12,16 @@
 #include "colinicons.h"
 #include "colinhmultibutton.h"
 #include "colinboolslider.h"
+#include "printpreview.h"
 
 class printoverlayWidget : public QWidget
 {
     Q_OBJECT
 public:
     explicit printoverlayWidget(QWidget *parent = 0);
+	~printoverlayWidget();
 
-	void addSlider(QLabel *label, ColinBoolSlider *slider, QString labelName, QGridLayout *layout);
+	void addSlider(QLabel *label, ColinBoolSlider *slider, QString labelName, QGridLayout *vlayout);
 	void showEvent(QShowEvent *e);
 	void paintEvent(QPaintEvent *e);
 	void keyPressEvent(QKeyEvent *e);
@@ -27,12 +29,20 @@ public:
 	void mousePressEvent(QMouseEvent *e);
 	void mouseReleaseEvent(QMouseEvent *e);
 	void resizeEvent(QResizeEvent *e);
+
+private:
+
+	void setFontTooltip();
+	void setPrinterToolTip();
 signals:
 
 public slots:
-
+	void fontDialog();
+	void printDialog();
+	void savePdfDialog();
 private:
-	QVBoxLayout *layout;
+	QHBoxLayout *mainlayout;
+	QVBoxLayout *vlayout;
 	ColinPushButtonPart *save, *print;
 	QRectF clipRect;
 
@@ -43,7 +53,7 @@ private:
 		   *addBLSLabel,
 		   *onePerCLSLabel,
 		   *allCLSLabel,
-		   *onePerFunctionLabel,
+		   *fourPerPageLabel,
 		   *nodes_inputLabel,
 		   *beams_inputLabel,
 		   *loads_inputLabel,
@@ -56,21 +66,29 @@ private:
 		   *results,
 		   *plots;
 
-	QPushButton *morePrinter;
-	QComboBox *printer,
+	ColinPushButtonPart *morePrinter,
+						*fontSetter;
+	QComboBox *printerSelection,
 			  *format;
 
 	ColinBoolSlider *orientation,
 					*addBLS,
 					*onePerCLS,
 					*allCLS,
-					*onePerFunction,
+					*forPerPage,
 					*nodes_input,
 					*beams_input,
 					*loads_input,
 					*nodes_res,
 					*beam_fun,
 					*beam_val;
+
+
+	QFont printerFont;
+	QPrinter *printer;
+
+
+	printPreview *preview;
 
 
 };

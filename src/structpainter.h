@@ -39,15 +39,15 @@ class structPainter
 public:
     structPainter();
     void drawStruct(const ColinStruct &t, QPainter *painter, QTransform *trans, const Colin::Elements &toDraw_);
-    void drawNode(const ColinNode &n, const int &i);
+	void drawNode(const ColinNode &n, const int &i, bool highlighted = false);
     void drawBearing(const ColinSupport &b, const QPointF &po, bool refconf = false);
-	void drawBeam(const ColinBeam &s, const int &i, const ColinStruct &tw);
-    void drawStLoad(const ColinLoad &l);
-    void drawStLoad(const ColinLoad &l, QLineF *line);
-    void drawLoad(const ColinLoad &l, const QPointF &po);
-    void drawMoment(const ColinLoad &l, const QPointF &po);
-    void drawTemp(const ColinLoad &l, const QLineF &line);
-    void drawDoubleLoad(const ColinLoad &l, const QLineF &line);
+	void drawBeam(const ColinBeam &s, const int &i, const ColinStruct &tw, bool highlighted = false);
+	void drawStLoad(const ColinLoad &l, bool highlighted = false);
+	void drawStLoad(const ColinLoad &l, QLineF *line, bool highlighted = false);
+	void drawLoad(const ColinLoad &l, const QPointF &po, bool highlighted = false);
+	void drawMoment(const ColinLoad &l, const QPointF &po, bool highlighted = false);
+	void drawTemp(const ColinLoad &l, const QLineF &line, bool highlighted = false);
+	void drawDoubleLoad(const ColinLoad &l, const QLineF &line, bool highlighted = false);
 
     static void drawThermometer(QPainter *p, const QRect &boundingRect, const double &value, const bool &hasFocus = false, double *max = 0, double *min = 0);
 
@@ -81,7 +81,10 @@ public:
     void ignoreSelection(const bool &ignore);
 
 	void setFunctionGradient(QPainter *p, QColor c1, QColor c2);
-	void setColor(QPainter *p, const ColinLoad &l, bool hotspot = false);
+	void setColor(QPainter *p, const ColinLoad &l,  bool highlighted, bool hotspot = false);
+
+	void drawLoadHotSpot(const QPointF &po, bool highlighted);
+
 
 
 private:

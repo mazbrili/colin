@@ -305,12 +305,12 @@ newBLSUndoCommand::newBLSUndoCommand(ColinStruct *tw,  ColinBLS n, QUndoCommand 
 
 void newBLSUndoCommand::undo()
 {
-	t->CommandRemoveBLS(t->cls_n()-1);
+	t->CommandRemoveBLS(t->bls_n()-1);
 }
 
 void newBLSUndoCommand::redo()
 {
-	t->CommandInsertBLS(t->cls_n(), e);
+	t->CommandInsertBLS(t->bls_n(), e);
 }
 
 //-------------------------------------------------------------------------------------------------------------------------

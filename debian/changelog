@@ -9,6 +9,7 @@ colin (0.2.0-0) any; urgency=low
   * renewed the sidebar
   * added javscript engine
   * added a console
+  * added some animations to the GUI
 
  -- Matthias Rauter <matthias.rauter@student.uibk.ac.at>  Mon, 28 Nov 2011 11:01:00 +0100
 

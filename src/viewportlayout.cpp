@@ -78,8 +78,8 @@ QSize ViewPortLayout::minimumSize() const
 
 void ViewPortLayout::doLayout(const QRect &rect) const
 {
-	qDebug() << "----------------";
-	qDebug() << "doing Layout";
+//	qDebug() << "----------------";
+//	qDebug() << "doing Layout";
 	int left, top, right, bottom;
 	getContentsMargins(&left, &top, &right, &bottom);
 	QRect effectiveRect = rect.adjusted(+left, +top, -right, -bottom);
@@ -103,6 +103,7 @@ void ViewPortLayout::doLayout(const QRect &rect) const
 
 	int verticalPxlWish[rowCount];
 	int horizontalPxlWish[rowCount];
+	int verticalPxlWishHelper[rowCount];
 	for(int i=0; i<rowCount; i++)
 	{
 		verticalPxlWish[i]=0;
@@ -125,6 +126,7 @@ void ViewPortLayout::doLayout(const QRect &rect) const
 				if(!itemList.at(m+i*rowCount)->isEmpty())
 					vpw=qMax(vpw, itemList.at(m+i*rowCount)->widget()->sizePolicy().verticalStretch());
 			}
+			verticalPxlWishHelper[i] = vpw;
 			verticalPxlWish[j]+=vpw;
 			//}
 		}
@@ -144,15 +146,15 @@ void ViewPortLayout::doLayout(const QRect &rect) const
 	}
 
 
-	for(int j=0; j<rowCount; j++)
-	{
-		qDebug( )<< "row " << j << ")vertical stretch " << verticalPxlWish[j] << "    vertical pxl per strech " << verticalPxlPerWish[j];
-	}
-
-	for(int j=0; j<rowCount; j++)
-	{
-		qDebug() << "line " << j << ")horizontal stretch " << horizontalPxlWish[j] << "    horizontal pxl per strech " << horizontalPxlPerWish[j];
-	}
+//	for(int j=0; j<rowCount; j++)
+//	{
+//		qDebug( )<< "row " << j << ")vertical stretch " << verticalPxlWish[j] << "    vertical pxl per strech " << verticalPxlPerWish[j];
+//	}
+//
+//	for(int j=0; j<rowCount; j++)
+//	{
+//		qDebug() << "line " << j << ")horizontal stretch " << horizontalPxlWish[j] << "    horizontal pxl per strech " << horizontalPxlPerWish[j];
+//	}
 
 
 	/*
@@ -183,20 +185,20 @@ void ViewPortLayout::doLayout(const QRect &rect) const
 				if(i==rowCount-1)
 					h = effectiveRect.height()-y[j];
 				else
-					h = double(itemList.at(j+i*rowCount)->widget()->sizePolicy().verticalStretch())*verticalPxlPerWish[j];
+					h = double(verticalPxlWishHelper[i])*verticalPxlPerWish[j];
 				if(j==rowCount-1)
 					w = effectiveRect.width()-x;
 				else
 					w = double(itemList.at(j+i*rowCount)->widget()->sizePolicy().horizontalStretch())*horizontalPxlPerWish[i];
 				childRect = QRect(x, y[j], w, h);
 				itemList[j+i*rowCount]->setGeometry(childRect.adjusted(j?1:0, i?1:0, 0, 0));
-				qDebug() << "rect(row " << i << "/line" << j << ") = " << childRect;
+//				qDebug() << "rect(row " << i << "/line" << j << ") = " << childRect;
 				x=childRect.right();
 				y[j]=childRect.bottom();
 			}
 			else{
 				y[j]=-1;
-				qDebug() << "rect(row " << i << "/line" << j << ") = hidden";
+//				qDebug() << "rect(row " << i << "/line" << j << ") = hidden";
 			}
 		}
 		int y_max = 0;
