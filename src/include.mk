@@ -101,7 +101,8 @@ MOCHEADERS= abstractcolintooltip.h \
 	scriptwidget.h \
 	consolewidget.h \
 	scriptengine.h \
-	javascriptwraper.h
+	javascriptwraper.h \
+	viewportlayout.h
 
 
 BUILDDATESOURCES=colinversion.cpp
@@ -181,7 +182,8 @@ SOURCES= beammenu.cpp \
 	scriptwidget.cpp \
 	consolewidget.cpp \
 	scriptengine.cpp \
-	javascriptwraper.cpp
+	javascriptwraper.cpp \
+	viewportlayout.cpp
 
 
 

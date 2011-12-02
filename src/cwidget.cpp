@@ -25,6 +25,7 @@
  ***********************************************************/
 
 #include "cwidget.h"
+#include <limits>
 
 
 cWidget::cWidget(QWidget *parent) :
@@ -35,9 +36,9 @@ cWidget::cWidget(QWidget *parent) :
 	this->setHandleWidth(0);
 
 	viewContainer = new QWidget(this);
-	layout = new QHBoxLayout(viewContainer);
-    layout->setSpacing(0);
-    layout->setContentsMargins(QMargins(0, 0, 0, 0));
+	hlayout = new ViewPortLayout(viewContainer);
+	hlayout->setSpacing(0);
+	hlayout->setContentsMargins(QMargins(0, 0, 0, 0));
 	hasFullArea = 0;
 	shown = 1;
     setViewCount(4);
@@ -55,8 +56,10 @@ cWidget::cWidget(QWidget *parent) :
 	//setPalette(pal);
 	//setAutoFillBackground(true);
 
-
-	viewportAnimations = new QParallelAnimationGroup(this);
+	views.at(1)->setStrech(0);
+	views.at(2)->setStrech(0);
+	views.at(3)->setStrech(0);
+	views.at(0)->setStrech(std::numeric_limits<unsigned char>::max());
 }
 
 void cWidget::idrequest(int* id)
@@ -78,6 +81,7 @@ void cWidget::setViewCount(int i)
         {
             viewport* v = new viewport(this);
             views.append(v);
+			v->setStrech(0);
             connect(v,          SIGNAL(idrequest(int*)),
                     this,       SLOT(idrequest(int*)));
 
@@ -108,19 +112,12 @@ void cWidget::setViewCount(int i)
     rowmax_ = sqrt(views.size());
     if(rowmax_*rowmax_ != views.size())
         rowmax_++;
-    QList<QVBoxLayout*> hlayouts;
-    for(int j=0; j<rowmax_; j++)
-    {
-        hlayouts.append(new QVBoxLayout());
-        layout->addLayout(hlayouts.at(j));
-    }
     for(int j=0; j<views.size(); j++)
     {
-        hlayouts.at(j%rowmax_)->addWidget(views.at(j));
-    }
-    showAll();
+		//hlayout->addWidget(views.at(j), j/rowmax_, j%rowmax_, 1, 1);
+		hlayout->addWidget(views.at(j));
+	}
 }
-
 
 void cWidget::setTw(ColinStruct* tw)
 {
@@ -133,20 +130,24 @@ void cWidget::setTw(ColinStruct* tw)
     }
 }
 
-
 void cWidget::setVisibleViews(const QByteArray &vis)
 {
     if(vis.size()<views.size())
-        return;
-    if(vis == QByteArray(12, false))
-        return;
+		return;
 
     if(hasFullArea != -1)
         views.at(hasFullArea)->setFullyArea(false);
     int j=0;
     for(int i=0; i<views.size(); i++)
 	{
-		views.at(i)->setVisible(vis.at(i));
+		if(vis.at(i))
+		{
+			views.at(i)->requestResize(std::numeric_limits<unsigned char>::max());
+			views.at(i)->setVisible(true);
+		}
+		else
+			views.at(i)->requestResize(0);
+		//views.at(i)->setVisible(vis.at(i));
         if(vis.at(i))
         {
             j++;
@@ -160,56 +161,37 @@ void cWidget::setVisibleViews(const QByteArray &vis)
 		views.at(hasFullArea)->setFullyArea(true);
 }
 
-
 void cWidget::maximizeView()
 {
+	QByteArray vis(12, false);
     for(int i=0; i<views.size(); i++)
     {
-        if(views.at(i)!=sender())
-        {
-            views.at(i)->hide();
-        }
-        else
-        {
-            hasFullArea = i;
-            views.at(i)->setFullyArea(true);
-        }
-    }
-    static_cast<QWidget*>(sender())->show();
-    shown = 1;
-    emit viewChanged();
+		if(views.at(i)==sender())
+		{
+			vis[i]=true;
+		}
+	}
+	setVisibleViews(vis);
 }
 
 void cWidget::hideView()
 {
-    static_cast<QWidget*>(sender())->hide();
-    shown--;
-    if(shown==1)
-    {
-        for(int i=0; i<views.size(); i++)
-        {
-            if(!views.at(i)->isHidden())
-            {
-                hasFullArea = i;
-                views.at(i)->setFullyArea(true);
-                break;
-            }
-        }
-    }
-    emit viewChanged();
+	QByteArray vis(12, false);
+	for(int i=0; i<views.size(); i++)
+	{
+		vis[i]=views.at(i)->isVisible();
+		if(views.at(i)==sender())
+		{
+			vis[i]=false;
+		}
+	}
+	setVisibleViews(vis);
 }
 
 void cWidget::showAll()
 {
-    foreach(viewport *v, views)
-    {
-        v->show();
-    }
-    shown = views.size();
-    if(hasFullArea>-1 && hasFullArea<views.size())      //valgrind warning... i dont get it...
-        views.at(hasFullArea)->setFullyArea(false);
-    hasFullArea = -1;
-    emit viewChanged();
+	QByteArray vis(12, true);
+	setVisibleViews(vis);
 }
 
 void cWidget::repaintyourChildren()

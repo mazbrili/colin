@@ -28,15 +28,12 @@
 #define CWIDGET_H
 
 #include <QtGui/QSplitter>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QVBoxLayout>
+#include <QtGui/QGridLayout>
 #include <QtCore/QByteArray>
-#include <QtCore/QStateMachine>
-#include <QtCore/QPropertyAnimation>
-#include <QtCore/QParallelAnimationGroup>
 
 #include "colinsidebar.h"
 #include "viewport.h"
+#include "viewportlayout.h"
 
 class cWidget : public QSplitter
 {
@@ -72,10 +69,9 @@ public slots:
 
 private:
 	QWidget *viewContainer;
-	QHBoxLayout *layout;
+	ViewPortLayout *hlayout;
 	ColinSidebar *sidebar;
 	QList<viewport*> views;
-	QParallelAnimationGroup *viewportAnimations;
     int rowmax_;
     int hasFullArea;
     int shown;

@@ -33,6 +33,7 @@
 #include <QtCore/QTime>
 #include <QtGui/QBitmap>
 #include <QtGui/QApplication>
+#include <QtCore/QPropertyAnimation>
 
 
 
@@ -59,7 +60,10 @@ struct highlight
 
 class viewport : public QWidget
 {
-    Q_OBJECT
+	Q_OBJECT
+
+	Q_PROPERTY(int strech READ strech WRITE setStrech)
+
 public:
     explicit viewport(QWidget *parent = 0);
     ~viewport();
@@ -75,10 +79,16 @@ public:
 	void focusOutEvent(QFocusEvent *e);
 	void keyPressEvent(QKeyEvent *e);
 
+	void requestResize(int target);
+	void setStrech(int val);
+	int strech();
+	QSize sizeHint(){return QSize(100, 100);}
+
 	void hideToolTip();
     void zoomRect(const QRectF &r, bool keepSpace = false);
     static void setToPaste(ColinStruct *tw){toPaste_ = tw;}
 	static void removeToPaste(){delete toPaste_; toPaste_ = 0; viewPortSettings::instance().setClipBoard(Colin::noRequest);}
+
 
 signals:
     void idrequest(int*);
@@ -154,7 +164,11 @@ private:
         if(qFuzzyIsNull(p->x())) p->setX(0);
         if(qFuzzyIsNull(p->y())) p->setY(0);}
 
+	QTransform globalMatrix_exact;
 	QSize lastKnownSize;
+
+	QPropertyAnimation animation;
+
 };
 
 #endif // VIEWPORT_H

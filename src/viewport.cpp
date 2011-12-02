@@ -56,7 +56,6 @@ const double minZoomfactor = 0.1;
 viewport::viewport(QWidget *parent) :
 		QWidget (parent)
 {
-	lastKnownSize = QSize(1000, 800);
 
 	mouseIsOverChild = false;
 	id_ = viewCounter++;
@@ -99,6 +98,14 @@ viewport::viewport(QWidget *parent) :
 	tooltip = new viewPortToolTip(this);
 	tooltip->hide();
 
+
+	lastKnownSize = QSize(800, 400);
+
+	animation.setTargetObject(this);
+	animation.setPropertyName("strech");
+	animation.setDuration(300);
+	animation.setEasingCurve(QEasingCurve::Linear);
+
 	installEventFilter(tooltip);
 	maximizer->installEventFilter(tooltip);
 	hider->installEventFilter(tooltip);
@@ -127,7 +134,6 @@ viewport::viewport(QWidget *parent) :
 			this,                               SLOT(setClipCursor(Colin::clipboardAction)));
 
 	allshower->hide();
-
 
 }
 
@@ -164,6 +170,7 @@ void viewport::setTw(ColinStruct* t)
 		connect(tw,             SIGNAL(changedMScale(double)),
 				this,           SLOT(update()));
 
+		globalMatrix_exact = globalMatrix();
 		update();
 
 	}
@@ -198,6 +205,8 @@ void viewport::paintEvent(QPaintEvent *)
 	p.setRenderHint(QPainter::Antialiasing, viewPortSettings::instance().antialiasing());
 
 	QTransform &globM = globalMatrix();
+
+	globalMatrix_exact = globM;
 
 
 	//background && grid!
@@ -1228,7 +1237,6 @@ void viewport::wheelEvent(QWheelEvent *e)
 void viewport::resizeEvent(QResizeEvent *e)
 {
 
-
 	const int s = 20;
 	maximizer->setGeometry(width()-s*2-4, 2, s, s);
 	hider->setGeometry(width()-s-2, 2, s, s);
@@ -1237,28 +1245,45 @@ void viewport::resizeEvent(QResizeEvent *e)
 		selec2->allowToShow(true);
 	else
 		selec2->allowToShow(false);
+/*
+	QSizeF oldSize = lastKnownSize;
+	QSizeF newSize = e->size();
 
-	QSize oldSize = lastKnownSize;
-	QSize newSize = e->size();
 
-
+	globalMatrix() = globalMatrix_exact;
 
 	if(oldSize.height()>50 && oldSize.width()>50 &&
 	   newSize.height()>50 && newSize.width()>50)
 	{
-		double scaleW = double(newSize.width())/double(oldSize.width());//(double)newSize.height()/(double)oldSize.height()/2. + (double)newSize.width()/(double)oldSize.width()/2.;
+		lastKnownSize= newSize.toSize();
+
+		double scaleW = newSize.width()/oldSize.width()/2.+newSize.height()/oldSize.height()/2.;
+		if(scaleW==1)
+			return;
 		QPointF po = globalMatrix().inverted().map(QPointF(oldSize.width()/2., oldSize.height()/2.));
-		qDebug() << "scale viewport with " << scaleW;
+
+		//qDebug() << "Matrix before" << globalMatrix();
+
+		//qDebug() << "scale viewport with " << scaleW;
+
 		globalMatrix().scale(scaleW, scaleW);
 
+		//qDebug() << "MPoint " << po << " -> " << globalMatrix().inverted().map(QPointF(newSize.width()/2., newSize.height()/2.));
 
-		po = globalMatrix().map(po) - QPointF(width()/2., height()/2.);
-		globalMatrix().translate(-po.x()/globalMatrix().m11(), -po.y()/globalMatrix().m11());
+		po -= globalMatrix().inverted().map(QPointF(newSize.width()/2., newSize.height()/2.));
 
-		lastKnownSize = e->size();
+		//qDebug() << "translate veiwport by" << po;
+
+		globalMatrix().translate(-po.x(), -po.y());
+
+		//qDebug() << "Matrix after" << globalMatrix();
+		//qDebug() << "MPoint after" << globalMatrix().inverted().map(QPointF(newSize.width()/2., newSize.height()/2.));
+
+
+		globalMatrix_exact = globalMatrix();
+		}
+*/
 	}
-
-}
 
 void viewport::mousePressEvent(QMouseEvent *e)
 {
@@ -2357,4 +2382,34 @@ void viewport::newTemp(double val, int type)
 	temp.setBeam(tw->lastObjectBeam());
 	tw->addLoad(temp);
 	tw->setlastObjectBeam(-1);
+}
+
+void viewport::requestResize(int target)
+{
+	animation.setStartValue(strech());
+	animation.setEndValue(target);
+	animation.start();
+	qDebug() << "view " << id() << "strech = " << strech() << " -> " << target;
+}
+
+void viewport::setStrech(int val)
+{
+	if(val<=1)
+		hide();
+	else
+		show();
+	QSizePolicy sp = sizePolicy();
+	sp.setHorizontalStretch(val);
+	sp.setVerticalStretch(val);
+	sp.setHorizontalPolicy(QSizePolicy::Preferred);
+	sp.setVerticalPolicy(QSizePolicy::Preferred);
+	setSizePolicy(sp);
+
+
+	qDebug() << "view " << id() << " strech= " << val;
+}
+
+int viewport::strech()
+{
+	return sizePolicy().horizontalStretch()/2+sizePolicy().verticalPolicy()/2;
 }
