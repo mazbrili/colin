@@ -88,6 +88,8 @@ void structPainter::drawStruct(const ColinStruct &t, QPainter *painter, QTransfo
 	{
 		for(int i=0; i<t.load_n(); i++)
 		{
+			if(!bls.isEmpty() && !bls.contains(t.load(i).set()))
+				continue;
 			bool highlighted = ((highlightMode == catcher::CatchedLoadHotSpot || highlightMode == catcher::CatchedLoad) && highlight ==i);
 			if(t.load(i).typ() != ColinLoad::nodeLoad			&&
 			   t.load(i).typ() != ColinLoad::doubleLoadLeft		&&
@@ -458,10 +460,15 @@ void structPainter::drawBeam(const ColinBeam &s, const int &i, const ColinStruct
 	QPolygonF forces;
 	if(drawResults)
 	{
-
-		QList<int> activeCLS = tw.activeCLS().values();
-		if(tw.cls_n()==0)
-			activeCLS << 0;
+		QList<int> activeCLS;
+		if(cls.isEmpty()){
+			activeCLS = tw.activeCLS().values();
+			if(tw.cls_n()==0)
+				activeCLS << 0;
+		}
+		else{
+			activeCLS = cls;
+		}
 		//u/w
 		p->setBrush(Qt::NoBrush);
 		p->setPen(v->color(Colin::C_Beam));
@@ -1259,6 +1266,7 @@ void structPainter::drawGround(QPainter *p, const QLineF &l)
 	ground.cubicTo(l.p1()/2+l.p2()/2+QPointF(-5, 12),
 				   l.p1()+QPointF(5, 4),
 				   l.p1());
+	p->save();
 	p->setClipPath(ground);
 	const int linecount = 9;
 	for(int i=0; i<linecount+1; i++)
@@ -1266,7 +1274,7 @@ void structPainter::drawGround(QPainter *p, const QLineF &l)
 		p->drawLine(l.p1()/linecount*(linecount-i)+l.p2()/linecount*i,
 					l.p1()/linecount*(linecount-i)+l.p2()/linecount*i+QPointF(-30, 30));
 	}
-	p->setClipping(false);
+	p->restore();
 	p->drawLine(l);
 }
 
@@ -1322,4 +1330,14 @@ void structPainter::drawLoadHotSpot(const QPointF &po, bool highlighted)
 	else
 		r= loadBubblerad;
 	p->drawEllipse(po, r, r);
+}
+
+void structPainter::setCLS(const QList<int> &clslist)
+{
+	this->cls=clslist;
+}
+
+void structPainter::setBLS(const QList<int> &blslist)
+{
+	this->bls=blslist;
 }

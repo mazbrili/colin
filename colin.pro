@@ -97,7 +97,8 @@ HEADERS += src/abstractcolintooltip.h \
     src/scriptengine.h \
     src/javascriptwraper.h \
     src/viewportlayout.h \
-    src/printpreview.h
+    src/printpreview.h \
+    src/costumizedprintpreviewdialog.h
 SOURCES += src/abstractdrawselectionwidget.cpp \
            src/beammenu.cpp \
            src/bmenu.cpp \
@@ -178,7 +179,8 @@ SOURCES += src/abstractdrawselectionwidget.cpp \
     src/scriptinterface.cpp \
     src/javascriptwraper.cpp \
     src/viewportlayout.cpp \
-    src/printpreview.cpp
+    src/printpreview.cpp \
+    src/costumizedprintpreviewdialog.cpp
 TRANSLATIONS += src/colin_de.ts src/colin_it.ts
 
 OTHER_FILES += \

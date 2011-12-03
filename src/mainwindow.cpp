@@ -32,6 +32,7 @@
 #include <QtCore/QTimer>
 #include <QtGui/QPrintDialog>
 #include <QtGui/QPrinter>
+#include <QtGui/QToolButton>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -565,20 +566,24 @@ void MainWindow::initToolBar()
    }
 
 
-   connect(toolbar,             SIGNAL(actionTriggered(QAction*)),
-           toolBarTip,          SLOT(hide()));
+   connect(toolbar,							SIGNAL(actionTriggered(QAction*)),
+		   toolBarTip,						SLOT(hide()));
 
-   connect(toolbar,             SIGNAL(mouseLeft()),
-           toolBarTip,          SLOT(hide()));
+   connect(toolbar,							SIGNAL(mouseLeft()),
+		   toolBarTip,						SLOT(hide()));
 
-   connect(aGroup,              SIGNAL(selected(QAction*)),
-           this,                SLOT(actionSelected(QAction*)));
+   connect(aGroup,							SIGNAL(selected(QAction*)),
+		   this,							SLOT(actionSelected(QAction*)));
 
-   connect(viewm2,		SIGNAL(fullScreenRequested(bool)),
-	   this,		SLOT(fullScreen(bool)));
+   connect(viewm2,							SIGNAL(fullScreenRequested(bool)),
+	   this,								SLOT(fullScreen(bool)));
+
+   connect(&shortcutSettings::instance(),	SIGNAL(menusBesideChanged(bool)),
+		   this,							SLOT(setActionMenus(bool)));
 
    stdA->toggle();
 
+   this->setActionMenus(shortcutSettings::instance().menuBeside());
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e)
@@ -1474,3 +1479,16 @@ void MainWindow::loadset()
 	widget.exec();
 }
 */
+
+void MainWindow::setActionMenus(bool beside)
+{
+	foreach(QToolButton *b, toolbar->findChildren<QToolButton *>())
+	{
+		if(!b->actions().isEmpty()){
+			if(b->actions().at(0)->menu())
+				b->setPopupMode(beside?QToolButton::MenuButtonPopup:QToolButton::DelayedPopup);
+			b->actions().at(0)->setEnabled(!b->actions().at(0)->isEnabled());
+			b->actions().at(0)->setEnabled(!b->actions().at(0)->isEnabled());
+		}
+	}
+}

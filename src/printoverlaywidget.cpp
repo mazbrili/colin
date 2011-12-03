@@ -8,6 +8,8 @@
 #include <QtGui/QPrintDialog>
 #include <QtGui/QPrinterInfo>
 #include <QtGui/QFontDialog>
+#include <QtGui/QFileDialog>
+#include <QtGui/QPageSetupDialog>
 
 
 printoverlayWidget::printoverlayWidget(QWidget *parent) :
@@ -19,7 +21,6 @@ printoverlayWidget::printoverlayWidget(QWidget *parent) :
 	vlayout = new QVBoxLayout();
 
 	mainlayout->addLayout(vlayout);
-	vlayout->addSpacing(10);
 
 
 	preview = new printPreview(this);
@@ -27,10 +28,9 @@ printoverlayWidget::printoverlayWidget(QWidget *parent) :
 	mainlayout->addWidget(preview);
 
 	save = new ColinPushButtonPart(tr("save as pdf"), this);
-	print = new ColinPushButtonPart(tr("print"), this);
+	print = new ColinPushButtonPart(tr("print quick"), this);
+	printDia = new ColinPushButtonPart(tr("print"), this);
 
-	save->setCutted(ColinPushButtonPart::Right);
-	print->setCutted(ColinPushButtonPart::Left);
 
 
 
@@ -40,6 +40,7 @@ printoverlayWidget::printoverlayWidget(QWidget *parent) :
 
 	hbutton->addButton(save);
 	hbutton->addButton(print);
+	hbutton->addButton(printDia);
 
 	vlayout->addWidget(hbutton);
 
@@ -64,6 +65,7 @@ printoverlayWidget::printoverlayWidget(QWidget *parent) :
 
 	QGridLayout *sliderBox = new QGridLayout();
 	vlayout->addLayout(sliderBox);
+	vlayout->setMargin(0);
 
 	sliderBox->addWidget(printing, sliderBox->rowCount(), 0, 1, 2);
 
@@ -81,21 +83,11 @@ printoverlayWidget::printoverlayWidget(QWidget *parent) :
 			printerSelection->setCurrentIndex(printerSelection->count()-1);
 	}
 
-	formatLabel = new QLabel(tr("format"), this);
-
-	format = new QComboBox(this);
-	format->addItem("A4");
-	format->addItem("A3");
-	format->addItem("US-Letter");
-	format->addItem("other");
-
-	sliderBox->addWidget(formatLabel, sliderBox->rowCount(), 0, 1, 1);
-	sliderBox->addWidget(format, sliderBox->rowCount()-1, 1, 1, 1);
 
 
 	morePrinterLabel = new QLabel(tr("more"), this);
 
-	morePrinter = new ColinPushButtonPart(tr("printer"), this);
+	morePrinter = new ColinPushButtonPart(tr("layout"), this);
 	fontSetter = new ColinPushButtonPart(tr("font"), this);
 
 	hbutton = new ColinHMultiButton(this);
@@ -170,23 +162,43 @@ printoverlayWidget::printoverlayWidget(QWidget *parent) :
 	addSlider(beam_valLabel, beam_val, tr("beams(values)"), sliderBox);
 
 
+	vlayout->addStretch(1000);
 
 
+	buttonGroup = new QButtonGroup(this);
+	buttonGroup->setExclusive(false);
+	buttonGroup->addButton(orientation, painterContent::landscape);
+	buttonGroup->addButton(addBLS, painterContent::bls_in);
+	buttonGroup->addButton(onePerCLS, painterContent::cls_single);
+	buttonGroup->addButton(allCLS, painterContent::cls_all);
+	buttonGroup->addButton(forPerPage, painterContent::fourPerPage);
+	buttonGroup->addButton(nodes_input, painterContent::node_in);
+	buttonGroup->addButton(beams_input, painterContent::beam_in);
+	buttonGroup->addButton(loads_input, painterContent::load_in);
+	buttonGroup->addButton(nodes_res, painterContent::node_res);
+	buttonGroup->addButton(beam_fun, painterContent::beam_f);
+	buttonGroup->addButton(beam_val, painterContent::beam_val);
 
+	connect(save,						SIGNAL(clicked()),
+			this,						SLOT(savePdfDialog()));
 
-	connect(fontSetter,				SIGNAL(clicked()),
-			this,					SLOT(fontDialog()));
+	connect(fontSetter,					SIGNAL(clicked()),
+			this,						SLOT(fontDialog()));
 
-	connect(morePrinter,			SIGNAL(clicked()),
-			this,					SLOT(printDialog()));
+	connect(morePrinter,				SIGNAL(clicked()),
+			this,						SLOT(printDialog()));
 
+	connect(buttonGroup,				SIGNAL(buttonClicked(int)),
+			this,						SLOT(setContent()));
 
+	connect(&filelist::instance(),		SIGNAL(currentChanged(ColinStruct*)),
+			this,						SLOT(setContent()));
 
 	/******************************************/
 
 	QSettings settings("clazzes.org", "Colin", this);
 
-	printerFont.fromString(settings.value("printing/font", this->font().toString()).toString());
+	pContent.font.fromString(settings.value("printing/font", this->font().toString()).toString());
 
 	orientation->setChecked(settings.value("printing/orientation", false).toBool());
 	addBLS->setChecked(settings.value("printing/bls", false).toBool());
@@ -212,7 +224,7 @@ printoverlayWidget::~printoverlayWidget()
 {
 	QSettings settings("clazzes.org", "Colin", this);
 
-	settings.setValue("printing/font", printerFont.toString());
+	settings.setValue("printing/font", pContent.font.toString());
 
 	settings.setValue("printing/orientation", orientation->isChecked());
 	settings.setValue("printing/bls", addBLS->isChecked());
@@ -298,9 +310,9 @@ void printoverlayWidget::resizeEvent(QResizeEvent *e)
 
 void printoverlayWidget::fontDialog()
 {
-	QFontDialog dia(printerFont, this);
+	QFontDialog dia(pContent.font, this);
 	dia.exec();
-	printerFont = dia.selectedFont();
+	pContent.font = dia.selectedFont();
 
 
 	setFontTooltip();
@@ -308,7 +320,9 @@ void printoverlayWidget::fontDialog()
 
 void printoverlayWidget::printDialog()
 {
-	QPrintDialog dia(printer, this);
+
+	QPageSetupDialog dia(printer, this);
+
 	dia.exec();
 
 	if(printer->orientation() == QPrinter::Landscape)
@@ -325,17 +339,44 @@ void printoverlayWidget::printDialog()
 
 void printoverlayWidget::savePdfDialog()
 {
+	QString pdfFile = QFileDialog::getSaveFileName(this, tr("save as pdf"),
+												   QDir::homePath(),
+												   tr("portable file format (*.pdf)"));
 
+	printer->setOutputFormat(QPrinter::PdfFormat);
+	printer->setOutputFileName(pdfFile);
+	structPrinter sP(filelist::instance().currentFile(), printer, pContent);
+	sP.print(printer);
 }
 
 
 void printoverlayWidget::setFontTooltip()
 {
-	fontSetter->setToolTip(printerFont.toString());
-	fontSetter->setFont(printerFont);
+	fontSetter->setToolTip(pContent.font.toString());
+	fontSetter->setFont(pContent.font);
+
+	preview->update(printer, pContent);
 }
 
 void printoverlayWidget::setPrinterToolTip()
 {
+	preview->update(printer, pContent);
+}
 
+void printoverlayWidget::setContent()
+{
+	pContent.s = 0x0;
+	foreach(QAbstractButton *b, buttonGroup->buttons())
+	{
+		if(b->isChecked())
+			pContent.s |= static_cast<painterContent::section>(buttonGroup->id(b));
+	}
+
+	preview->update(printer, pContent);
+}
+
+void printoverlayWidget::paintRequest(QPrinter *printer)
+{
+	structPrinter sP(filelist::instance().currentFile(), printer, pContent);
+	sP.print(printer);
 }

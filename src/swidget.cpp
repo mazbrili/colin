@@ -43,7 +43,7 @@ sWidget::sWidget(QWidget *parent) :
     group->addButton(colorB, central->addWidget(scrollArea));
 
     shortcuts = new shortcutSettingsWidget(this);
-    QPushButton *shortcutB = new QPushButton(tr("shortcuts"), this);
+	QPushButton *shortcutB = new QPushButton(tr("tools"), this);
     scrollArea = new QScrollArea(this);
     scrollArea->setWidget(shortcuts);
     group->addButton(shortcutB, central->addWidget(scrollArea));

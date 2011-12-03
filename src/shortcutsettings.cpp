@@ -56,7 +56,12 @@ void shortcutSettings::loadSettings()
 {
     for(int i=0; i<actions_.size(); i++)
         restore(i);
+	QSettings settings("clazzes.org", "Colin");
+
+	menusBesideActions = settings.value("tools/menusbeside", false).toBool();
+
 }
+
 
 QAction *shortcutSettings::actionWithData(const Colin::otherAction &a)const
 {
@@ -88,4 +93,15 @@ void shortcutSettings::hasFile(const bool &t)
         if(a.reqFile)
             a.a->setDisabled(!t);
     }
+}
+
+void shortcutSettings::setMenuBeside(bool beside)
+{
+	menusBesideActions=beside;
+	emit menusBesideChanged(beside);
+}
+
+bool shortcutSettings::menuBeside() const
+{
+	return menusBesideActions;
 }

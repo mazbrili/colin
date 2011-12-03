@@ -34,16 +34,16 @@
 class toolTipEater : public QObject
 {
 
-    Q_OBJECT
+	Q_OBJECT
 
 protected:
-    bool eventFilter(QObject *obj, QEvent *event){
+	bool eventFilter(QObject *obj, QEvent *event){
 		if(event->type() == QEvent::ToolTip && obj->inherits("QToolButton")){
-            return true;
+			return true;
 		}
-        else
-            return QObject::eventFilter(obj, event);
-    }
+		else
+			return QObject::eventFilter(obj, event);
+	}
 };
 
 #endif // TOOLTIPEATER_H

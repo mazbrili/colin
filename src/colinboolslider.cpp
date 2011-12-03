@@ -6,9 +6,10 @@
 ColinBoolSlider::ColinBoolSlider(QWidget *parent) :
     QAbstractButton(parent)
 {
-	setFixedWidth(80);
 	this->setCheckable(true);
 	animationstate = 0.0;
+
+	this->setMinimumSize(80, 27);
 
 
 	animation.setTargetObject(this);

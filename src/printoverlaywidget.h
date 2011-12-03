@@ -8,6 +8,7 @@
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QComboBox>
+#include <QtGui/QButtonGroup>
 
 #include "colinicons.h"
 #include "colinhmultibutton.h"
@@ -30,6 +31,7 @@ public:
 	void mouseReleaseEvent(QMouseEvent *e);
 	void resizeEvent(QResizeEvent *e);
 
+
 private:
 
 	void setFontTooltip();
@@ -40,14 +42,15 @@ public slots:
 	void fontDialog();
 	void printDialog();
 	void savePdfDialog();
+	void setContent();
+	void paintRequest(QPrinter *printer);
 private:
 	QHBoxLayout *mainlayout;
 	QVBoxLayout *vlayout;
-	ColinPushButtonPart *save, *print;
+	ColinPushButtonPart *save, *print, *printDia;
 	QRectF clipRect;
 
 	QLabel *printerLabel,
-		   *formatLabel,
 		   *orientationLabel,
 		   *morePrinterLabel,
 		   *addBLSLabel,
@@ -68,8 +71,8 @@ private:
 
 	ColinPushButtonPart *morePrinter,
 						*fontSetter;
-	QComboBox *printerSelection,
-			  *format;
+
+	QComboBox *printerSelection;
 
 	ColinBoolSlider *orientation,
 					*addBLS,
@@ -83,9 +86,10 @@ private:
 					*beam_fun,
 					*beam_val;
 
+	QButtonGroup *buttonGroup;
 
-	QFont printerFont;
 	QPrinter *printer;
+	painterContent pContent;
 
 
 	printPreview *preview;

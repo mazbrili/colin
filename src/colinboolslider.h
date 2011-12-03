@@ -15,7 +15,6 @@ public:
 	void setText(const QString &text, bool on);
 	double sliderPos();
 	void setSliderPos(double p);
-
 signals:
 
 public slots:

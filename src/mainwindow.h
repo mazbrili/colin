@@ -134,6 +134,8 @@ public slots:
     void zoomIn();
     void zoomOut();
 
+	void setActionMenus(bool beside);
+
 //	void loadset();
 
 private:

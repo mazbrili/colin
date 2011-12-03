@@ -31,7 +31,7 @@
 #include "structpainter.h"
 #include "viewportsettings.h"
 #include "polynom.h"
-
+#include "colin_namespace.h"
 
 class painterContent
 {
@@ -52,6 +52,7 @@ public:
 	Q_DECLARE_FLAGS(sections, section)
 
 
+	painterContent(){};
 	painterContent(sections s_, QFont f, int index_){s=s_; index_=index; font=f;}
 	sections s;
 	int index;
@@ -65,41 +66,56 @@ class structPrinter
 {
     Q_DECLARE_TR_FUNCTIONS(structPrinter)
 public:
-	structPrinter(ColinStruct *t);
-	void print(QPrinter *printer, painterContent content, QPaintDevice *target=0, int pageNr=-1);
+	structPrinter(ColinStruct *t,QPrinter *printer, const painterContent &content);
+	void print(QPaintDevice *target=0, int pageNr=-1);
 
 	painterContent getContentOfPage(QPrinter *printer, painterContent content, int pageNr);
 	int getPageOfContent(QPrinter *printer, painterContent all, painterContent content);
-	int requiredPages(QPrinter *printer, painterContent content);
+	int requiredPages(QPrinter *printer, painterContent content, int* indizes = 0);
 
-	void tableContent();
-	void blsPlot();
-	void blsPlot(const int &i, const QRect &rect);
+	void tableContent(int *indizes);
+	void decoratePage();
+	int blsPlot(int *pages, bool test = false);
+	int blsPlot(const int &i, const QRect &rect, bool test = false);
 
-	void clsPlot();
-	void clsPlotall(const QRect &rect);
-	void clsPlot(const int &i, const QRect &rect);
+	int clsPlot(int *pages, bool test = false);
+	int clsPlotall(int *pages, bool test = false);
+	int clsPlot(const int &i, const QRect &rect, bool test = false);
 
-	void nodeIn();
-	void nodeIn(const int &i);
+	int nodeIn(int *pages, bool test = false);
+	int nodeIn(const int &i, bool test = false);
 
-	void beamIn();
-	void beamIn(const int &i);
+	int beamIn(int *pages, bool test = false);
+	int beamIn(const int &i, bool test = false);
 
-	void loadIn();
-	void loadIn(const int &i);
+	int loadIn(int *pages, bool test = false);
+	int loadIn(const int &i, bool test = false);
 
-	void nodeRes();
-	void nodeRes(const int &i);
+	int nodeRes(int *pages, bool test = false);
+	int nodeRes(const int &i, bool test = false);
 
-	void beamResF();
-	void beamResF(const int &i);
+	int beamResF(int *pages, bool test = false);
+	int beamResF(const int &i, bool test = false);
 
-	void beamResVal();
-	void beamResVal(const int &i);
+	int beamResVal(int *pages, bool test = false);
+	int beamResVal(const int &i, bool test = false);
+
+	int usablePageHeight();
+	int lineHeight();
+	int needLine(int i);
+
+	void printStruct(const QRect &rect, Colin::Elements, QList<int> cls);
+	void printStructBLS(const QRect &rect, Colin::Elements, QList<int> bls);
+	void printStruct(const QRect &rect, const QRectF &tRect, Colin::Elements, QList<int> cls);
+	void printStructBLS(const QRect &rect, const QRectF &tRect, Colin::Elements, QList<int> bls);
+	QTransform getScale(const QRectF &rect, const QRectF &tRect);
 private:
 	ColinStruct *tw;
+	QPrinter *p;
+	painterContent c;
+	QPainter *painter;
     int pageCount;
+	int totalPageCount;
     int dx;
 
 

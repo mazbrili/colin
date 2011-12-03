@@ -41,8 +41,9 @@ public:
     bool reqFile;
 };
 
-class shortcutSettings
+class shortcutSettings : public QObject
 {
+	Q_OBJECT
 public:
     static shortcutSettings &instance()
     {
@@ -60,17 +61,20 @@ public:
     QAction *actionWithData(const Colin::otherAction &a)const;
     int Count() const {return actions_.size();}
     const QList<act> &actions() const {return actions_;}
-    void hasFile(const bool &t);
+	void hasFile(const bool &t);
+	bool menuBeside() const;
 
 signals:
-
+	void menusBesideChanged(bool);
 public slots:
+	void setMenuBeside(bool beside);
 
 private:
     shortcutSettings(){}
 
     QList<act> actions_;
     static shortcutSettings *instance_;
+	bool menusBesideActions;
 };
 
 #endif // SHORTCUTSETTINGS_H

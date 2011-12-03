@@ -44,9 +44,20 @@ shortcutSettingsWidget::shortcutSettingsWidget(QWidget *parent) :
     QLabel *name = NULL;
     QLabel *shortcut = NULL;
 
+
+	tools = new ColinBoolSlider(this);
+	toolLabel = new QLabel(tr("menus beside action"));
+
+	tools->setCheckable(true);
+	tools->setChecked(shortcutSettings::instance().menuBeside());
+
+
+	layout->addWidget(toolLabel, 0, 3, 1, 1);
+	layout->addWidget(tools, 0, 4, 1, 1);
+
     editor = new QLineEdit(this);
     editor->hide();
-    int i = 0;
+	int i = 1;
     foreach(act a, scS.actions())
     {
         setB = new QPushButton(tr("change"), this);
@@ -79,21 +90,24 @@ shortcutSettingsWidget::shortcutSettingsWidget(QWidget *parent) :
 
     QLabel *explain = new QLabel(this);
 
-    explain->setText(tr("Use the appelations like \"Ctrl\", \"Alt\"and \"Space\" or simply characters divided with  \"+\" to change the shortcuts:\n\n"));
+	explain->setText(tr("Use the appelations like \"Ctrl\", \"Alt\"and \"Space\" \nor simply characters divided with  \"+\" to change the shortcuts:\n\n"));
 
     layout->addWidget(explain, 1, 6, i, 1, Qt::AlignTop);
 
     layout->setColumnMinimumWidth(5, 50);
 
 
-    connect(setter,             SIGNAL(buttonClicked(int)),
-            this,               SLOT(buttonClicked(int)));
+	connect(setter,							SIGNAL(buttonClicked(int)),
+			this,							SLOT(buttonClicked(int)));
 
-    connect(editor,             SIGNAL(returnPressed()),
-            this,               SLOT(setShortCut()));
+	connect(editor,							SIGNAL(returnPressed()),
+			this,							SLOT(setShortCut()));
 
-    connect(restorer,           SIGNAL(buttonClicked(int)),
-            this,               SLOT(restoreShortCut(int)));
+	connect(restorer,						SIGNAL(buttonClicked(int)),
+			this,							SLOT(restoreShortCut(int)));
+
+	connect(tools,							SIGNAL(clicked(bool)),
+			&shortcutSettings::instance(),	SLOT(setMenuBeside(bool)));
 }
 
 void shortcutSettingsWidget::buttonClicked(const int &i)

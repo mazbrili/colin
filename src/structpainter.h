@@ -85,7 +85,8 @@ public:
 
 	void drawLoadHotSpot(const QPointF &po, bool highlighted);
 
-
+	void setCLS(const QList<int> &clslist);
+	void setBLS(const QList<int> &blslist);
 
 private:
     QPainter *p;
@@ -100,6 +101,9 @@ private:
     bool ignoreSelection_;
     bool ignoreHotSpots_;
     Colin::Elements toDraw;
+
+	QList<int> cls;
+	QList<int> bls;
 
 	QPolygonF* cache;
 	const ColinStruct *t;

@@ -38,6 +38,7 @@
 
 #include "colinicons.h"
 #include "shortcutsettings.h"
+#include "colinboolslider.h"
 
 class shortcutSettingsWidget : public QWidget
 {
@@ -60,6 +61,8 @@ private:
     QList<QLabel*> shortcuts;
     int old;
 
+	ColinBoolSlider *tools;
+	QLabel *toolLabel;
 };
 
 #endif // SHORTCUTSETTINGSWIDGET_H
