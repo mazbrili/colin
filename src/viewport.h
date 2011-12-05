@@ -86,7 +86,8 @@ public:
 
 	void hideToolTip();
     void zoomRect(const QRectF &r, bool keepSpace = false);
-    static void setToPaste(ColinStruct *tw){toPaste_ = tw;}
+	void translateView(const QPoint &p);
+	static void setToPaste(ColinStruct *tw){toPaste_ = tw;}
 	static void removeToPaste(){delete toPaste_; toPaste_ = 0; viewPortSettings::instance().setClipBoard(Colin::noRequest);}
 
 

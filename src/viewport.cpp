@@ -33,6 +33,7 @@
 #include "momentmenu.h"
 #include "unitsettings.h"
 
+#include <QtCore/QTimer>
 
 //QPoint viewport::lastClick = QPoint(-1, -1);
 //int drawingSteps = -1;
@@ -61,17 +62,21 @@ viewport::viewport(QWidget *parent) :
 	id_ = viewCounter++;
 	maximizer = new QPushButton("", this);
 	maximizer->setIcon(colinIcons::instance().icon(Colin::drawZoomIn));
-	//maximizer->setFlat(true);
+	maximizer->setFocusPolicy(Qt::NoFocus);
+	maximizer->setFlat(true);
 
 	hider = new QPushButton("", this);
 	hider->setIcon(colinIcons::instance().icon(Colin::Close));
-	//hider->setFlat(true);
+	hider->setFocusPolicy(Qt::NoFocus);
+	hider->setFlat(true);
 
 	allshower = new QPushButton("", this);
 	allshower->setIcon(colinIcons::instance().icon(Colin::Windows));
-	//allshower->setFlat(true);
+	allshower->setFocusPolicy(Qt::NoFocus);
+	allshower->setFlat(true);
 
 	setMouseTracking(true);
+	setFocusPolicy(Qt::WheelFocus);
 	lastMouseButtons = Qt::NoButton;
 	lastMousePosition = QPoint(-100, 100);
 
@@ -1184,6 +1189,11 @@ void viewport::zoomClick(const QPointF &p)
 		wheelEvent(&e);
 }
 
+void viewport::translateView(const QPoint &p)
+{
+	globalMatrix().translate(p.x()/globalMatrix().m11(), p.y()/globalMatrix().m11());
+	update();
+}
 
 void viewport::wheelEvent(QWheelEvent *e)
 {
@@ -1669,12 +1679,33 @@ void viewport::focusOutEvent(QFocusEvent *e)
 
 void viewport::keyPressEvent(QKeyEvent *e)
 {
-	if(e->key() == Qt::Key_Space)
+	if(e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return)
+	{
+		foreach(viewport *vp, parent()->findChildren<viewport*>())
+			vp->zoomRect(tw->view(vp->id()).mapRect(tw->boundingRect()), true);
+	}
+	else if(e->key() == Qt::Key_Space)
 	{
 		if(maximizer->isHidden())
 			emit showAll();
 		else
 			emit maximizeMe();
+	}
+	else if(e->key() == Qt::Key_Up)
+	{
+		translateView(QPoint(0, -25));
+	}
+	else if(e->key() == Qt::Key_Down)
+	{
+		translateView(QPoint(0, 25));
+	}
+	else if(e->key() == Qt::Key_Left)
+	{
+		translateView(QPoint(-25, 0));
+	}
+	else if(e->key() == Qt::Key_Right)
+	{
+		translateView(QPoint(25, 0));
 	}
 	QWidget::keyPressEvent(e);
 }
@@ -1921,6 +1952,7 @@ void viewport::addNode(QPointF p)
 
 void viewport::addBeam(QPointF p)
 {
+
 	int aditional;
 	catcher::CatchCases cC = catcher::CatchStdBeam;
 	int nextObject = catcher::instance().doYourWork(&p, &cC, globalMatrix(), &aditional);
