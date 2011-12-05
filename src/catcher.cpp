@@ -560,7 +560,7 @@ int catcher::orthoCatch(const QTransform &t, const QPointF &oldPos, QPointF *new
         else if(viewPortSettings::instance().toDraw() == Colin::drawBeam)
         {
 
-#ifndef CATCHERVERBOSE
+#ifdef CATCHERVERBOSE
 			qDebug() << "/////////////////////////////////////////////" ;
 			qDebug() << "local ortho snap!" ;
 #endif
@@ -574,7 +574,7 @@ int catcher::orthoCatch(const QTransform &t, const QPointF &oldPos, QPointF *new
                     angle += M_PI*2.;//[0, 2Pi[
 
 
-#ifndef CATCHERVERBOSE
+#ifdef CATCHERVERBOSE
 				qDebug() << "lenght = " << length ;
 				qDebug() << "angleRange = " << angleRange ;
 				qDebug() << "angle = " << angle ;
@@ -583,7 +583,7 @@ int catcher::orthoCatch(const QTransform &t, const QPointF &oldPos, QPointF *new
                 for(int i =0 ; i<tw.beam_n(); i++)
                 {
 
-#ifndef CATCHERVERBOSE
+#ifdef CATCHERVERBOSE
 						qDebug() << "beam nr = " << i ;
 #endif
 
@@ -593,7 +593,7 @@ int catcher::orthoCatch(const QTransform &t, const QPointF &oldPos, QPointF *new
                     {
 
 
-#ifndef CATCHERVERBOSE
+#ifdef CATCHERVERBOSE
 						qDebug() << "beam nr = " << i ;
 						qDebug() << "beamangle = " << tw.beam(i).angle() ;
 #endif
@@ -608,21 +608,21 @@ int catcher::orthoCatch(const QTransform &t, const QPointF &oldPos, QPointF *new
                             else                            break; }        //[0, Pi/2[
 
 
-#ifndef CATCHERVERBOSE
+#ifdef CATCHERVERBOSE
 						qDebug() << "pos. beamangle = " << beamangle ;
 #endif
 
                         for(int m = 0; m < 4; m++)
                         {
 
-#ifndef CATCHERVERBOSE
+#ifdef CATCHERVERBOSE
 							qDebug() << "angle = " << angle ;
 #endif
 
                             if(fabs(beamangle - angle) < angleRange)
                             {
 
-#ifndef CATCHERVERBOSE
+#ifdef CATCHERVERBOSE
 								qDebug() << "using beam nr " << i ;
 								qDebug() << "oldPosition = P(" << newPos->x() << " / " << newPos->y() << " )" ;
 
@@ -634,14 +634,14 @@ int catcher::orthoCatch(const QTransform &t, const QPointF &oldPos, QPointF *new
 
 
 
-#ifndef CATCHERVERBOSE
+#ifdef CATCHERVERBOSE
 								qDebug() << "newPosition = P(" << newPos->x() << " / " << newPos->y() << " )" ;                                qDebug() << "newPosition = P(" << newPos->x() << " / " << newPos->y() << " )" ;
 #endif
 
                                 *c = catcher::CatchedOrthoLokal;
                                 return i;
                             }
-#ifndef CATCHERVERBOSE
+#ifdef CATCHERVERBOSE
                             else
                             {
 								qDebug() << "ignored" ;
