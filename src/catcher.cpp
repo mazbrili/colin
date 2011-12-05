@@ -380,13 +380,17 @@ int catcher::doYourWork(QPointF *mouse, CatchCases *c,
 				{
 					QPointF linePoint = t.map(local_t.map(QPointF(x, tw.beam(i).M(ls, x)*tw.scaleM())));
 					if((linePoint-*mouse).manhattanLength()<catchRange_){
+#ifdef CATCHERVERBOSE
 						qDebug() << "found MLine";
+#endif
 						*c = CatchedMLine;
 						return ls;
 					}
-					//qDebug() << "M: loacal function Point = " << QPointF(x, tw.beam(i).M(ls, x)*tw.scaleM());
-					//qDebug() << "M: global function Point = " << linePoint;
-					//qDebug() << "M: global mouse Point =    " << *mouse;
+#ifdef CATCHERVERBOSE
+					qDebug() << "M: loacal function Point = " << QPointF(x, tw.beam(i).M(ls, x)*tw.scaleM());
+					qDebug() << "M: global function Point = " << linePoint;
+					qDebug() << "M: global mouse Point =    " << *mouse;
+#endif
 				}
 			}
 			if((*c & CatchedQLine) == CatchedQLine)
@@ -395,13 +399,17 @@ int catcher::doYourWork(QPointF *mouse, CatchCases *c,
 				{
 					QPointF linePoint = t.map(local_t.map(QPointF(x, tw.beam(i).Q(ls, x)*tw.scaleP())));
 					if((linePoint-*mouse).manhattanLength()<catchRange_){
+#ifdef CATCHERVERBOSE
 						qDebug() << "found QLine";
+#endif
 						*c = CatchedQLine;
 						return ls;
 					}
-					//qDebug() << "Q: loacal function Point = " << QPointF(x, tw.beam(i).Q(ls, x)*tw.scaleP());
-					//qDebug() << "Q: global function Point = " << linePoint;
-					//qDebug() << "Q: global mouse Point =    " << *mouse;
+#ifdef CATCHERVERBOSE
+					qDebug() << "Q: loacal function Point = " << QPointF(x, tw.beam(i).Q(ls, x)*tw.scaleP());
+					qDebug() << "Q: global function Point = " << linePoint;
+					qDebug() << "Q: global mouse Point =    " << *mouse;
+#endif
 				}
 			}
 			if((*c & CatchedNLine) == CatchedNLine)
@@ -410,13 +418,17 @@ int catcher::doYourWork(QPointF *mouse, CatchCases *c,
 				{
 					QPointF linePoint = t.map(local_t.map(QPointF(x, tw.beam(i).N(ls, x)*tw.scaleP())));
 					if((linePoint-*mouse).manhattanLength()<catchRange_){
+#ifdef CATCHERVERBOSE
 						qDebug() << "found MLine";
+#endif
 						*c = CatchedNLine;
 						return ls;
 					}
-					//qDebug() << "N: loacal function Point = " << QPointF(x, tw.beam(i).N(ls, x)*tw.scaleP());
-					//qDebug() << "N: global function Point = " << linePoint;
-					//qDebug() << "N: global mouse Point =    " << *mouse;
+#ifdef CATCHERVERBOSE
+					qDebug() << "N: loacal function Point = " << QPointF(x, tw.beam(i).N(ls, x)*tw.scaleP());
+					qDebug() << "N: global function Point = " << linePoint;
+					qDebug() << "N: global mouse Point =    " << *mouse;
+#endif
 				}
 			}
 			if((*c & CatchedULine) == CatchedULine)
@@ -430,14 +442,18 @@ int catcher::doYourWork(QPointF *mouse, CatchCases *c,
 					}while(x_wa-x_w>0.01);
 					QPointF linePoint = t.map(local_t.map(QPointF(x, tw.beam(i).w(ls, x_w)*tw.scaleU())));
 					if((linePoint-*mouse).manhattanLength()<catchRange_){
+#ifdef CATCHERVERBOSE
 						qDebug() << "found ULine";
+#endif
 						*c = CatchedULine;
 						return ls;
 					}
-					//qDebug() << "U: x = " << x<< ", x_w = " << x_w;
-					//qDebug() << "U: loacal function Point = " << QPointF(x, tw.beam(i).w(ls, x_w)*tw.scaleU());
-					//qDebug() << "U: global function Point = " << linePoint;
-					//qDebug() << "U: global mouse Point =    " << *mouse;
+#ifdef CATCHERVERBOSE
+					qDebug() << "U: x = " << x<< ", x_w = " << x_w;
+					qDebug() << "U: loacal function Point = " << QPointF(x, tw.beam(i).w(ls, x_w)*tw.scaleU());
+					qDebug() << "U: global function Point = " << linePoint;
+					qDebug() << "U: global mouse Point =    " << *mouse;
+#endif
 				}
 			}
 		}
@@ -453,10 +469,7 @@ int catcher::orthoCatch(const QTransform &t, const QPointF &oldPos, QPointF *new
 {
 
     if(allOff)
-        return -1;
-#ifndef QT_NO_DEBUG
-	QTextStream debugS(stdout);
-#endif
+		return -1;
 
     bool testForGrid(c->testFlag(CatchedGrid));
     const ColinStruct &tw = *filelist::instance().currentFile();
@@ -547,9 +560,9 @@ int catcher::orthoCatch(const QTransform &t, const QPointF &oldPos, QPointF *new
         else if(viewPortSettings::instance().toDraw() == Colin::drawBeam)
         {
 
-#ifndef QT_NO_DEBUG
-            debugS << "/////////////////////////////////////////////" << endl;
-            debugS << "local ortho snap!" << endl;
+#ifndef CATCHERVERBOSE
+			qDebug() << "/////////////////////////////////////////////" ;
+			qDebug() << "local ortho snap!" ;
 #endif
 
             if(tw.lastObjectNode() > 0)
@@ -561,17 +574,17 @@ int catcher::orthoCatch(const QTransform &t, const QPointF &oldPos, QPointF *new
                     angle += M_PI*2.;//[0, 2Pi[
 
 
-#ifndef QT_NO_DEBUG
-                debugS << "lenght = " << length << endl;
-                debugS << "angleRange = " << angleRange << endl;
-                debugS << "angle = " << angle << endl;
+#ifndef CATCHERVERBOSE
+				qDebug() << "lenght = " << length ;
+				qDebug() << "angleRange = " << angleRange ;
+				qDebug() << "angle = " << angle ;
 #endif
 
                 for(int i =0 ; i<tw.beam_n(); i++)
                 {
 
-#ifndef QT_NO_DEBUG
-                        debugS << "beam nr = " << i << endl;
+#ifndef CATCHERVERBOSE
+						qDebug() << "beam nr = " << i ;
 #endif
 
 
@@ -580,9 +593,9 @@ int catcher::orthoCatch(const QTransform &t, const QPointF &oldPos, QPointF *new
                     {
 
 
-#ifndef QT_NO_DEBUG
-                        debugS << "beam nr = " << i << endl;
-                        debugS << "beamangle = " << tw.beam(i).angle() << endl;
+#ifndef CATCHERVERBOSE
+						qDebug() << "beam nr = " << i ;
+						qDebug() << "beamangle = " << tw.beam(i).angle() ;
 #endif
 
 
@@ -595,23 +608,23 @@ int catcher::orthoCatch(const QTransform &t, const QPointF &oldPos, QPointF *new
                             else                            break; }        //[0, Pi/2[
 
 
-#ifndef QT_NO_DEBUG
-                        debugS << "pos. beamangle = " << beamangle << endl;
+#ifndef CATCHERVERBOSE
+						qDebug() << "pos. beamangle = " << beamangle ;
 #endif
 
                         for(int m = 0; m < 4; m++)
                         {
 
-#ifndef QT_NO_DEBUG
-                            debugS << "angle = " << angle << endl;
+#ifndef CATCHERVERBOSE
+							qDebug() << "angle = " << angle ;
 #endif
 
                             if(fabs(beamangle - angle) < angleRange)
                             {
 
-#ifndef QT_NO_DEBUG
-                                debugS << "using beam nr " << i << endl;
-                                debugS << "oldPosition = P(" << newPos->x() << " / " << newPos->y() << " )" << endl;
+#ifndef CATCHERVERBOSE
+								qDebug() << "using beam nr " << i ;
+								qDebug() << "oldPosition = P(" << newPos->x() << " / " << newPos->y() << " )" ;
 
 #endif
                                 if(testForGrid)
@@ -621,17 +634,17 @@ int catcher::orthoCatch(const QTransform &t, const QPointF &oldPos, QPointF *new
 
 
 
-#ifndef QT_NO_DEBUG
-                                debugS << "newPosition = P(" << newPos->x() << " / " << newPos->y() << " )" << endl;                                debugS << "newPosition = P(" << newPos->x() << " / " << newPos->y() << " )" << endl;
+#ifndef CATCHERVERBOSE
+								qDebug() << "newPosition = P(" << newPos->x() << " / " << newPos->y() << " )" ;                                qDebug() << "newPosition = P(" << newPos->x() << " / " << newPos->y() << " )" ;
 #endif
 
                                 *c = catcher::CatchedOrthoLokal;
                                 return i;
                             }
-#ifndef QT_NO_DEBUG
+#ifndef CATCHERVERBOSE
                             else
                             {
-                                debugS << "ignored" << endl;
+								qDebug() << "ignored" ;
                             }
 #endif
                             beamangle += M_PI/2.;
