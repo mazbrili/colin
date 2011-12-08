@@ -32,6 +32,7 @@
 #include <QtGui/QKeyEvent>
 #include <QtGui/QColorDialog>
 #include <QtCore/QCoreApplication>
+#include <QtCore/QDebug>
 
 
 #include "filelist.h"
@@ -48,57 +49,72 @@ public:
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event){
+		if(event->type() == QEvent::FocusOut)
+		{
+			if(commitOnFocusLoss){
+				commitData(static_cast<QWidget*>(obj));
+				obj->deleteLater();
+				return true;
+			}
+		}
         if(event->type() == QEvent::KeyPress)
         {
             if(static_cast<QKeyEvent*>(event)->key() == Qt::Key_Tab )
             {
-                commitData(static_cast<QWidget*>(obj));
-                obj->deleteLater();
-                emit openNext();
+				commitOnFocusLoss = false;
+				commitData(static_cast<QWidget*>(obj));
+				emit openNext(lastIndex);
                 return true;
             }
             else if(static_cast<QKeyEvent*>(event)->key() == Qt::Key_Backtab)
             {
-                commitData(static_cast<QWidget*>(obj));
-                obj->deleteLater();
-                emit openPrevious();
+				commitOnFocusLoss = false;
+				commitData(static_cast<QWidget*>(obj));
+				emit openPrevious(lastIndex);
                 return true;
             }
             else if(static_cast<QKeyEvent*>(event)->key() == Qt::Key_Down)
             {
-                commitData(static_cast<QWidget*>(obj));
-                obj->deleteLater();
-                emit openNextItem();
+				commitOnFocusLoss = false;
+				commitData(static_cast<QWidget*>(obj));
+				emit openNextItem(lastIndex);
                 return true;
             }
             else if(static_cast<QKeyEvent*>(event)->key() == Qt::Key_Up)
             {
-                commitData(static_cast<QWidget*>(obj));
-                obj->deleteLater();
-                emit openPreviousItem();
+				commitOnFocusLoss = false;
+				commitData(static_cast<QWidget*>(obj));
+				emit openPreviousItem(lastIndex);
                 return true;
             }
             else if(static_cast<QKeyEvent*>(event)->key() == Qt::Key_Return)
-            {
-                commitData(static_cast<QWidget*>(obj));
-                obj->deleteLater();
+			{
+				commitOnFocusLoss = false;
+				commitData(static_cast<QWidget*>(obj));
+				emit openFirstColumn(lastIndex);
                 return true;
             }
 	    else if(static_cast<QKeyEvent*>(event)->key() == Qt::Key_Escape)
-            {
+			{
+				commitOnFocusLoss = false;
 //#warning restore in treeView
-                obj->deleteLater();
-                return true;
+				obj->deleteLater();
+				return true;
             }
         }
         return QItemDelegate::eventFilter(obj, event);
     }
 
+	mutable QModelIndex lastIndex;
+	mutable bool commitOnFocusLoss;
+
 signals:
-    void openPrevious();
-    void openNext();
-    void openPreviousItem();
-    void openNextItem();
+	void openPrevious(const QModelIndex&);
+	void openNext(const QModelIndex&);
+	void openPreviousItem(const QModelIndex&);
+	void openNextItem(const QModelIndex&);
+	void openFirstColumn(const QModelIndex&);
+
 
 public slots:
 

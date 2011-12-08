@@ -146,20 +146,22 @@ public:
 		Pz = 0x132, //load(i).Pz()
 		M = 0x134, //load(i).M()
 		LoadTyp = 0x136, //load(i).typ()
-		LoadSet = 0x138, //load(i).set()
-		Pos = 0x140, //load(i).at()
-		TempTyp = 0x144, //temp(i).typ()
-		Temp = 0x146, //temp(i).T()
-		alpha_T = 0x148, //temp(i).alpT()
-		leftNode = 0x150, //beam(i).leftNodeI()
-		rightNode = 0x152, //beam(i).leftNodeI()
-		Mat = 0x154, //beam(i).mat()
-		CrossSection = 0x156, //beam(i).qs
-		BLSname = 0x158, //bls(i).name
-		BLScolor = 0x160, //bls(i).color
-		CLSname = 0x162, //cls(i).name
-		CLSBLS = 0x164, //cls(i).bls(j)
-		CLSBLSfac = 0x166 //cls(i).fac(j)
+		NodalLoadTyp = 0x138, //load(i).typ()
+		BeamLoadTyp = 0x140, //temp(i).typ()
+		TempLoadTyp = 0x142, //temp(i).T()
+		DoubleLoadTyp = 0x144, //load(i).set()
+		LoadSet = 0x146, //load(i).at()
+		Pos = 0x148, //load(i).at()
+		alpha_T = 0x150, //temp(i).alpT()
+		leftNode = 0x152, //beam(i).leftNodeI()
+		rightNode = 0x154, //beam(i).leftNodeI()
+		Mat = 0x156, //beam(i).mat()
+		CrossSection = 0x158, //beam(i).qs
+		BLSname = 0x160, //bls(i).name
+		BLScolor = 0x162, //bls(i).color
+		CLSname = 0x164, //cls(i).name
+		CLSBLS = 0x166, //cls(i).bls(j)
+		CLSBLSfac = 0x168 //cls(i).fac(j)
     };
 	Q_DECLARE_FLAGS(VarNames, VarName);
 
@@ -438,7 +440,7 @@ signals:
 
     //signals for undocommander
 	void edited(const int&, const ColinBeam&);
-	void edited(const int&, ColinNode);
+	void edited(const int&, const ColinNode&);
 	void edited(const int&, const ColinLoad&);
 	void edited(const int&, const ColinBLS&);
 	void edited(const int&, const ColinCLS&);

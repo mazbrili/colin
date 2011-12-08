@@ -59,7 +59,7 @@ public:
     const QIcon &icon(const Colin::otherAction &a, bool tooltip = false) const;
     const QIcon &icon(const ColinLoad::form &f, bool tooltip = false) const;
     const QIcon &icon(const ColinSupport::bearings &b) const;
-	//const QIcon &icon(const Colin::otherAction &c, const int &best) const;
+	const QIcon &newIcon(const Colin::otherAction &a, int formhint);
 	QIcon icon(const Colin::Color &c) const;
 	QIcon icon(const QColor &c) const;
 	QIcon smallIcon(const QColor &c) const;
@@ -165,6 +165,13 @@ private:
 		  node_plus,
 		  beam_plus,
 		  load_plus,
+		  dstload_plus,
+		  istload_plus,
+		  ustload_plus,
+		  doubleload_plus,
+		  moment_plus,
+		  tempDiff_plus,
+		  tempChange_plus,
 		  bls,
 		  cls,
 		  bls_plus,

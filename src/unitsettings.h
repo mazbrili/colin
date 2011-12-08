@@ -41,6 +41,7 @@
 #define MPREFIX unitSettings::instance().Mprefix()
 #define ANGLEPREFIX (180/M_PI)
 #define PRECISON unitSettings::instance().precison()
+#define UNIT unitSettings::instance()
 
 
 class unitSettings : public QObject

@@ -104,6 +104,13 @@ void colinIcons::load()
 	node_plus.addFile(icondir+"node_plus_on.png");
 	beam_plus.addFile(icondir+"beam_plus_on.png");
 	load_plus.addFile(icondir+"load_plus_on.png");
+	dstload_plus.addFile(icondir+"dstload_plus_on.png");
+	istload_plus.addFile(icondir+"istload_plus_on.png");
+	ustload_plus.addFile(icondir+"ustload_plus_on.png");
+	doubleload_plus.addFile(icondir+"doubleL_plus_on.png");
+	moment_plus.addFile(icondir+"moment_plus_on.png");
+	tempDiff_plus.addFile(icondir+"tempDiff_plus_on.png");
+	tempChange_plus.addFile(icondir+"tempChange_plus_on.png");
 	bls.addFile(icondir+"bls.png");
 	cls.addFile(icondir+"cls.png");
 	bls_plus.addFile(icondir+"bls_plus_on.png");
@@ -360,6 +367,48 @@ const QIcon &colinIcons::icon(const Colin::otherAction &a, bool tooltip) const
     }
 }
 
+
+const QIcon &colinIcons::newIcon(const Colin::otherAction &a, int formhint)
+{
+	using namespace Colin;
+
+	switch(a)
+	{
+	case addNode:
+		return node_plus;
+	case addBeam:
+		return beam_plus;
+	case addLoad:
+		switch(formhint)
+		{
+		case ColinLoad::nodeLoad:
+			return load_plus;
+		case ColinLoad::uniformlyDistibutedLoad:
+			return ustload_plus;
+		case ColinLoad::increasingLinearLoad:
+			return istload_plus;
+		case ColinLoad::decreasingLinearLoad:
+			return dstload_plus;
+		case ColinLoad::moment:
+			return moment_plus;
+		case ColinLoad::doubleLoadLeft:
+		case ColinLoad::doubleLoadRight:
+			return doubleload_plus;
+		case ColinLoad::tempChange:
+			return tempChange_plus;
+		case ColinLoad::tempDiffrence:
+			return tempDiff_plus;
+		default:
+			return placeholder;
+		}
+	case addBLS:
+		return bls_plus;
+	case addCLS:
+		return cls_plus;
+	default:
+		return placeholder;
+	}
+}
 
 const QIcon &colinIcons::icon(const catcher::CatchCases &c, bool tooltip) const
 {

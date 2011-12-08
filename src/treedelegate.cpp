@@ -28,78 +28,145 @@
 
 #include "viewportsettings.h"
 #include "colinicons.h"
+#include "unitsettings.h"
 
 treeDelegate::treeDelegate(QObject *parent) :
-    QItemDelegate(parent)
+	QItemDelegate(parent)
 {
+	lastIndex = QModelIndex();
+	commitOnFocusLoss = false;
 }
 
 QWidget *treeDelegate::createEditor( QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
+	lastIndex = index;
+	commitOnFocusLoss = true;
+	if(index.data(Qt::UserRole).toInt() == ColinStruct::NodalLoadTyp)
+	{
+		QComboBox *combo = new QComboBox(parent);
+		combo->addItem(colinIcons::instance().icon(ColinLoad::nodeLoad), tr("nodal load"));
+		combo->addItem(colinIcons::instance().icon(ColinLoad::moment), tr("moment"));
+
+		connect(combo,              SIGNAL(activated(int)),
+				this,               SLOT(emitCommitData()));
+
+		combo->setFocus(Qt::PopupFocusReason);
+		return combo;
+	}
+	if(index.data(Qt::UserRole).toInt() == ColinStruct::BeamLoadTyp)
+	{
+		QComboBox *combo = new QComboBox(parent);
+		combo->addItem(colinIcons::instance().icon(ColinLoad::uniformlyDistibutedLoad), tr("uniform beam load"));
+		combo->addItem(colinIcons::instance().icon(ColinLoad::decreasingLinearLoad), tr("decreasing beam load"));
+		combo->addItem(colinIcons::instance().icon(ColinLoad::increasingLinearLoad), tr("increasing beam load"));
+
+		connect(combo,              SIGNAL(activated(int)),
+				this,               SLOT(emitCommitData()));
+
+		combo->setFocus(Qt::PopupFocusReason);
+		return combo;
+	}
+	if(index.data(Qt::UserRole).toInt() == ColinStruct::TempLoadTyp)
+	{
+		QComboBox *combo = new QComboBox(parent);
+		combo->addItem(colinIcons::instance().icon(ColinLoad::tempChange), tr("temperature change"));
+		combo->addItem(colinIcons::instance().icon(ColinLoad::tempDiffrence), tr("temperature difference"));
+
+		connect(combo,              SIGNAL(activated(int)),
+				this,               SLOT(emitCommitData()));
+
+		combo->setFocus(Qt::PopupFocusReason);
+		return combo;
+	}
+	if(index.data(Qt::UserRole).toInt() == ColinStruct::LoadTyp)
+	{
+		QComboBox *combo = new QComboBox(parent);
+		combo->addItem(colinIcons::instance().icon(ColinLoad::nodeLoad), tr("nodal load"));
+		combo->addItem(colinIcons::instance().icon(ColinLoad::moment), tr("moment"));
+		combo->addItem(colinIcons::instance().icon(ColinLoad::uniformlyDistibutedLoad), tr("uniform beam load"));
+		combo->addItem(colinIcons::instance().icon(ColinLoad::decreasingLinearLoad), tr("decreasing beam load"));
+		combo->addItem(colinIcons::instance().icon(ColinLoad::increasingLinearLoad), tr("increasing beam load"));
+		combo->addItem(colinIcons::instance().icon(ColinLoad::tempChange), tr("temperature change"));
+		combo->addItem(colinIcons::instance().icon(ColinLoad::tempDiffrence), tr("temperature difference"));
+		combo->addItem(colinIcons::instance().icon(ColinLoad::doubleLoadLeft), tr("double load left side"));
+		combo->addItem(colinIcons::instance().icon(ColinLoad::doubleLoadRight), tr("double load right side"));
+
+		connect(combo,              SIGNAL(activated(int)),
+				this,               SLOT(emitCommitData()));
+
+		combo->setFocus(Qt::PopupFocusReason);
+		return combo;
+	}
+	if(index.data(32).toInt() == ColinStruct::Mat) //column for material
+	{
+		QComboBox *combo = new QComboBox(parent);
+		for(int i=0; i<LIB.mats_n(); i++)
+		{
+			combo->addItem(LIB.mat(i).name());
+		}
+
+		connect(combo,              SIGNAL(activated(int)),
+				this,               SLOT(emitCommitData()));
+
+		combo->setFocus(Qt::PopupFocusReason);
+		return combo;
+	}
+
+	if(index.data(32).toInt() == ColinStruct::CrossSection) //column for Qs
+	{
+		QComboBox *combo = new QComboBox(parent);
+		for(int i=0; i<LIB.profiles_n(); i++)
+		{
+			combo->addItem(LIB.Profile(i).name());
+		}
+
+		connect(combo,              SIGNAL(activated(int)),
+				this,               SLOT(emitCommitData()));
+		combo->setFocus(Qt::PopupFocusReason);
+		return combo;
+	}
 
 
-    if(index.data(32).toInt() == ColinStruct::Mat) //column for material
-    {
-        QComboBox *combo = new QComboBox(parent);
-        for(int i=0; i<LIB.mats_n(); i++)
-        {
-            combo->addItem(LIB.mat(i).name());
-        }
-        connect(combo,              SIGNAL(activated(int)),
-                this,               SLOT(emitCommitData()));
+	if(index.data(32).toInt() == ColinStruct::Bearing_h ||
+	   index.data(32).toInt() == ColinStruct::Bearing_v ||
+	   index.data(32).toInt() == ColinStruct::Bearing_m )
+	{
+		QComboBox *combo = new QComboBox(parent);
+		combo->addItem(tr("free"));
+		combo->addItem(tr("locked"));
+		QString s = index.data(0).toString();
+		if(s.contains(UNIT.Feh()))
+		{
+			s.remove(UNIT.Feh());
+			combo->addItem(s);
+			combo->setCurrentIndex(combo->count()-1);
+		}
+		else if(s.contains(UNIT.FMeh()))
+		{
+			s.remove(UNIT.FMeh());
+			combo->addItem(s);
+			combo->setCurrentIndex(combo->count()-1);
+		}
+		combo->setEditable(true);
 
-        combo->setFocus();
-        return combo;
-    }
+		connect(combo,              SIGNAL(activated(int)),
+				this,               SLOT(emitCommitData()));
+		combo->setFocus(Qt::PopupFocusReason);
+		return combo;
+	}
 
-    if(index.data(32).toInt() == ColinStruct::CrossSection) //column for Qs
-    {
-        QComboBox *combo = new QComboBox(parent);
-        for(int i=0; i<LIB.profiles_n(); i++)
-        {
-            combo->addItem(LIB.Profile(i).name());
-        }
-        connect(combo,              SIGNAL(activated(int)),
-                this,               SLOT(emitCommitData()));
-        combo->setFocus();
-        return combo;
-    }
+	if(index.data(32).toInt() == ColinStruct::Spring)
+	{
+		QComboBox *combo = new QComboBox(parent);
+		combo->addItem(tr("free"));
+		combo->addItem(tr("locked"));
+		combo->setEditable(true);
 
-
-    if(index.data(32).toInt() == ColinStruct::Bearing_h ||
-       index.data(32).toInt() == ColinStruct::Bearing_v ||
-       index.data(32).toInt() == ColinStruct::Bearing_m )
-    {
-        QComboBox *combo = new QComboBox(parent);
-        combo->addItem(tr("free"));
-        combo->addItem(tr("locked"));
-        QString s = index.data(0).toString();
-        if(s.contains("c = "))
-        {
-            s.remove("c =");
-            combo->addItem(s);
-            combo->setCurrentIndex(combo->count()-1);
-        }
-        combo->setEditable(true);
-
-	connect(combo,              SIGNAL(activated(int)),
-                this,               SLOT(emitCommitData()));
-        combo->setFocus();
-        return combo;
-    }
-
-    if(index.data(32).toInt() == ColinStruct::Spring)
-    {
-        QComboBox *combo = new QComboBox(parent);
-        combo->addItem(tr("free"));
-        combo->addItem(tr("locked"));
-        combo->setEditable(true);
-
-        connect(combo,              SIGNAL(activated(int)),
-                this,               SLOT(emitCommitData()));
-        combo->setFocus();
-        return combo;
-    }
+		connect(combo,              SIGNAL(activated(int)),
+				this,               SLOT(emitCommitData()));
+		combo->setFocus(Qt::PopupFocusReason);
+		return combo;
+	}
 
 	if(((index.data(32).toInt() & (~ColinStruct::creation)) == ColinStruct::CLSBLS))
 	{
@@ -111,7 +178,7 @@ QWidget *treeDelegate::createEditor( QWidget *parent, const QStyleOptionViewItem
 
 		connect(combo,				SIGNAL(activated(int)),
 				this,				SLOT(emitCommitData()));
-		combo->setFocus();
+		combo->setFocus(Qt::PopupFocusReason);
 		return combo;
 	}
 
@@ -126,7 +193,7 @@ QWidget *treeDelegate::createEditor( QWidget *parent, const QStyleOptionViewItem
 
 		connect(combo,				SIGNAL(activated(int)),
 				this,				SLOT(emitCommitData()));
-		combo->setFocus();
+		combo->setFocus(Qt::PopupFocusReason);
 		return combo;
 	}
 
@@ -142,39 +209,39 @@ QWidget *treeDelegate::createEditor( QWidget *parent, const QStyleOptionViewItem
 
 		connect(combo,				SIGNAL(activated(int)),
 				this,				SLOT(emitCommitData()));
-		combo->setFocus();
+		combo->setFocus(Qt::PopupFocusReason);
 		return combo;
 	}
 
-    QWidget *temp = QItemDelegate::createEditor( parent, option, index );
-    temp->setFocus();
-    return  temp;
+	QWidget *temp = QItemDelegate::createEditor( parent, option, index );
+	temp->setFocus(Qt::PopupFocusReason);
+	return  temp;
 }
 
 void treeDelegate::setEditorData( QWidget *editor, const QModelIndex &index ) const
 {
-    QComboBox *combo = qobject_cast<QComboBox *>( editor );
-    if ( !combo )
-    {
-        QItemDelegate::setEditorData( editor, index );
-        return;
-    }
-    int pos = combo -> findText( index.model() -> data( index ).toString(), Qt::MatchExactly );
-    combo -> setCurrentIndex( pos );
+	QComboBox *combo = qobject_cast<QComboBox *>( editor );
+	if ( !combo )
+	{
+		QItemDelegate::setEditorData( editor, index );
+		return;
+	}
+	int pos = combo -> findText( index.model() -> data( index ).toString(), Qt::MatchExactly );
+	combo -> setCurrentIndex( pos );
 }
 
 void treeDelegate::setModelData( QWidget *editor, QAbstractItemModel *model, const QModelIndex &index ) const
 {
-    QComboBox *combo = qobject_cast<QComboBox *>( editor );
-    if ( !combo )
-    {
-        QItemDelegate::setModelData( editor, model, index );
-        return;
-    }
-    model -> setData( index, combo -> currentText() );
+	QComboBox *combo = qobject_cast<QComboBox *>( editor );
+	if ( !combo )
+	{
+		QItemDelegate::setModelData( editor, model, index );
+		return;
+	}
+	model -> setData( index, combo -> currentText() );
 }
 
 void treeDelegate::emitCommitData()
 {
-    emit commitData( qobject_cast<QWidget *>( sender() ) );
+	emit commitData( qobject_cast<QWidget *>( sender() ) );
 }

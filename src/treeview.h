@@ -27,10 +27,7 @@
 #ifndef TREEVIEW_H
 #define TREEVIEW_H
 
-#include <QtGui/QTreeWidget>
-#include <QtGui/QTreeWidgetItem>
-#include <QtGui/QKeyEvent>
-#include <QtGui/QDropEvent>
+#include <QtGui/QTreeView>
 
 #include "filelist.h"
 #include "colinicons.h"
@@ -41,110 +38,39 @@
 #endif
 
 
-class treeView : public QTreeWidget
+class treeView : public QTreeView
 {
     Q_OBJECT
 public:
     explicit treeView(QWidget *parent = 0);
 
-
-
-
-    void recount(QTreeWidgetItem *parent, const int &i);
-    void fill();
-
-
 	void keyPressEvent(QKeyEvent *e);
-	void dropEvent(QDropEvent *event);
 
 
 signals:
 
 public slots:
 
-    void dumpTw(QObject *o);
-    void setTw(ColinStruct *t);
-    void actualSelection();
-    void actualEH();
-    void selectionChanged();
 
     void popupEditor(const QModelIndex &index);
     void popupMenu(const QPoint &p);
 
 
-    void addNode(const ColinNode &n, int i = -1);
-    void addBeam(const ColinBeam &b, int i = -1);
-	void addLoad(const ColinLoad &l, int i = -1);
-	void addBLS(const ColinBLS &bls, int i = -1);
-	void addCLS(const ColinCLS &cls, int i = -1);
-
-    void addNode(const int &i){addNode(tw->node(i), i);}
-	void addBeam(const int &i){addBeam(tw->beam(i), i);}
-	void addLoad(const int &i){addLoad(tw->load(i), i);}
-	void addBLS(const int &i){addBLS(tw->bls(i), i);}
-	void addCLS(const int &i){addCLS(tw->cls(i), i);}
-
-    void removeNode(const int &i);
-	void removeBeam(const int &i);
-	void removeLoad(const int &i);
-	void removeBLS(const int &i);
-	void removeCLS(const int &i);
-
-    void setNode(const int &i, const ColinNode &n);
-	void setBeam(const int &i, const ColinBeam &b);
-	void setLoad(const int &i, const ColinLoad &l);
-	void setBLS(const int &i, const ColinBLS &l);
-	void setCLS(const int &i, const ColinCLS &l);
-
-    void setNode(const int &i){setNode(i, tw->node(i));}
-	void setBeam(const int &i){setBeam(i, tw->beam(i));}
-	void setLoad(const int &i){setLoad(i, tw->load(i));}
-	void setBLS(const int &i){setBLS(i, tw->bls(i));}
-	void setCLS(const int &i){setCLS(i, tw->cls(i));}
 
 
-    void writeData(QTreeWidgetItem *item, int column);
-
-    void disableSelection(){selectionisUpToDate = true;}
-    void enableSelection(){selectionisUpToDate = false; actualSelection();}
-
-    //void editorClosed(QWidget *w, QAbstractItemDelegate::EndEditHint eh);
-
-    void nextColumn();
-    void previousColumn();
-    void nextItem();
-    void previousItem();
-
-	void addVoidNode();
-	void addVoidBeam();
-	void addVoidLoad();
-	void addVoidBLS();
-	void addVoidCLS();
-	void addVoidBLSCLS(int i);
-
-	void checkAndCreateNode();
-	void checkAndCreateBeam();
-	void checkAndCreateLoad();
-	void checkAndCreateBLS();
-	void checkAndCreateCLS();
-	void checkAndCreateCLSBLS();
+	void nextColumn(const QModelIndex &index);
+	void previousColumn(const QModelIndex &index);
+	void nextItem(const QModelIndex &index);
+	void previousItem(const QModelIndex &index);
+	void firstColumn(const QModelIndex &index);
 
 private:
 
-    void setHeader();
-    QTreeWidgetItem *nodeParent;
-	QTreeWidgetItem *beamParent;
-	QTreeWidgetItem *loadParent;
-	QTreeWidgetItem *blsParent;
-	QTreeWidgetItem *clsParent;
+	void setHeader();
 
     int opencolumn;
-    QTreeWidgetItem *openitem;
 
-    bool selectionisUpToDate;
-    ColinStruct *tw;
     treeDelegate *delegate;
-    bool isChanging;
 
 
 };
