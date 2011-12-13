@@ -98,10 +98,11 @@ Section "main" SEC01
   File "${PREFIX}/bin/libintl-8.dll"
   File "${PREFIX}/bin/libiconv-2.dll"
   File "${PREFIX}/bin/QtGui4.dll"
-  File "${PREFIX}/bin/libpng12-0.dll"
+  File "${PREFIX}/bin/libpng15-15.dll"
   File "${PREFIX}/bin/QtCore4.dll"
   File "${PREFIX}/bin/zlib1.dll"
   File "${PREFIX}/bin/libgcc_s_sjlj-1.dll"
+  File "${PREFIX}/lib/libstdc++-6.dll"
 
   CreateDirectory "$SMPROGRAMS\Colin"
   CreateShortCut "$SMPROGRAMS\Colin\Colin.lnk" "$INSTDIR\bin\Colin.exe"

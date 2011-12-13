@@ -162,7 +162,7 @@ void colinIcons::loadToolTipIcons()
 void colinIcons::saveSettings()
 {
     QSettings settings("clazzes.org", "Colin");
-    settings.setValue("icons/dark", dark);
+	settings.setValue("icons/dark", dark?1:0);
 }
 
 /*
