@@ -88,6 +88,10 @@ public:
 	void setCLS(const QList<int> &clslist);
 	void setBLS(const QList<int> &blslist);
 
+
+	static catcher::CatchCases highlightMode;
+	static int highlight;
+
 private:
     QPainter *p;
     viewPortSettings *v;
@@ -108,8 +112,6 @@ private:
 	QPolygonF* cache;
 	const ColinStruct *t;
 
-	static catcher::CatchCases highlightMode;
-	static int highlight;
 };
 
 #endif // STRUCTPAINTER_H

@@ -62,16 +62,6 @@ void previewRenderer::run()
         current = toDo_.first();
         toDo_.removeFirst();
         size = size_;
-
-
-#ifndef QT_NO_DEBUG
-        QTextStream debugS(stdout);
-        debugS  << "rendering \""
-                << current << "\""
-                << endl;
-#endif
-
-
         lock.unlock();
 
 /*************************
@@ -142,19 +132,7 @@ void previewRenderer::run()
                     emit finished(current, device);
                 }
             }
-        }
-        lock.relock();
-
-
-#ifndef QT_NO_DEBUG
-        debugS  << "image emited"
-                << endl;
-        debugS  << "removed from list"
-                << endl;
-#endif
-
-
-        lock.unlock();
+		}
     }
 }
 

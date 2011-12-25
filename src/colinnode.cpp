@@ -39,7 +39,6 @@ ColinNode::ColinNode():
 
 	res = NULL;
 
-	qDebug() << "node without parent";
 }
 
 ColinNode::ColinNode(double _x, double _z):

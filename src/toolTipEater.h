@@ -30,6 +30,9 @@
 #include <QtCore/QObject>
 #include <QtCore/QEvent>
 #include <QtCore/QDebug>
+#include <QtGui/QWhatsThisClickedEvent>
+
+#include "colinmanual.h"
 
 class toolTipEater : public QObject
 {
@@ -40,6 +43,10 @@ protected:
 	bool eventFilter(QObject *obj, QEvent *event){
 		if(event->type() == QEvent::ToolTip && obj->inherits("QToolButton")){
 			qDebug() << "eat tooltip!";
+			return true;
+		}
+		if(event->type() == QEvent::WhatsThisClicked){
+			colinManual::launch(static_cast<QWhatsThisClickedEvent*>(event)->href());
 			return true;
 		}
 		else

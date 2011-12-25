@@ -103,7 +103,9 @@ MOCHEADERS= abstractcolintooltip.h \
 	scriptengine.h \
 	javascriptwraper.h \
 	viewportlayout.h \
-	printpreview.h
+	printpreview.h \
+	treemodel.h \
+	historymenu.h
 
 
 BUILDDATESOURCES=colinversion.cpp
@@ -185,7 +187,10 @@ SOURCES= beammenu.cpp \
 	scriptengine.cpp \
 	javascriptwraper.cpp \
 	viewportlayout.cpp \
-	printpreview.cpp
+	printpreview.cpp \
+	treemodel.cpp \
+	historymenu.cpp \
+	colinmanual.cpp
 
 
 

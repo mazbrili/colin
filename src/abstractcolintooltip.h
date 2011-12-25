@@ -50,7 +50,7 @@ public:
 	setBackgroundRole(QPalette::ToolTipBase);
 	setPalette(QToolTip::palette());
 	ensurePolished();
-	setFrameStyle(QFrame::NoFrame);
+	//setFrameStyle(QFrame::NoFrame);
 	setWindowOpacity(style()->styleHint(QStyle::SH_ToolTipLabel_Opacity, 0, this)/255.);
     }
 

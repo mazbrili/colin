@@ -34,7 +34,7 @@
 treeView::treeView(QWidget *parent) :
 	QTreeView(parent)
 {
-	this->setHeaderHidden(true);
+//	this->setHeaderHidden(true);
 	this->setSelectionBehavior(QAbstractItemView::SelectRows);
 	this->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
@@ -55,6 +55,16 @@ treeView::treeView(QWidget *parent) :
 
 	setModel(new treeModel(this));
 
+
+	setWhatsThis(tr("<b>tree</b> ")+
+				 tr("<a href=\"tree\">open manual</a><br /><br />")+
+				 tr("This is a tree like representation of your structure. ")+
+				 tr("You can use it to edit and create elements in an table like enviroment. ")+
+				 tr("Click on any property of any element to edit it. Columns marked with a triangle can be expanded to show more information.<br />")+
+				 tr("Click on the triangles on the left side of the columns to expand it and show more information!<br />")+
+				 tr("Items marked with a  green plus can be used to add new elements to your structure!<br /><br />")+
+				 treeModel::treeNavigation());
+
 	connect(delegate,                           SIGNAL(openNext(QModelIndex)),
 			this,                               SLOT(nextColumn(QModelIndex)));
 
@@ -73,10 +83,10 @@ treeView::treeView(QWidget *parent) :
 	connect(this,                               SIGNAL(customContextMenuRequested(QPoint)),
 			this,                               SLOT(popupMenu(QPoint)));
 */
-
+/*
 	connect(this->itemDelegate(),				SIGNAL(closeEditor(QWidget*,QAbstractItemDelegate::EndEditHint)),
 			this,								SLOT(closeEditor(QWidget*,QAbstractItemDelegate::EndEditHint)));
-
+*/
 	connect(this,								SIGNAL(clicked(QModelIndex)),
 			this,								SLOT(popupEditor(QModelIndex)));
 }

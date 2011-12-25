@@ -27,7 +27,7 @@
 #include "wgv.h"
 
 #include <QtCore/QTime>
-#include <QDebug>
+#include <QtCore/QDebug>
 /***********************************************************************************************************
   Programming Is Like Sex: One mistake and you have to support it for the rest of your life. (Michael Sinz)
  ***********************************************************************************************************/

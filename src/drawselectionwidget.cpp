@@ -36,6 +36,17 @@ drawSelectionWidget::drawSelectionWidget(int _id, QWidget *parent) :
 
     setMouseTracking(true);
     mouseOver = false;
+
+	setWhatsThis(tr("<b>visible elements</b> <a href=\"view/visible\">open manual</a><br /> <br />")+
+				 tr("Use this widget to specify the visible elements in the view by clicking the propriate symbol!<br />")+
+				 tr("<b>u</b>: Show the displancment of the structure <br />")+
+				 tr("<b>N</b>: Show normal forces in the structure <br />")+
+				 tr("<b>Q</b>: Show shear forces in the structure <br />")+
+				 tr("<b>M</b>: Show moments in the structure <br />")+
+				 tr("<b>Node</b>: Show the displancment of loads <br />")+
+				 tr("<b>Load</b>: Show loads <br />")+
+				 tr("<b>Support</b>: Show Supports and reaction forces <br />")+
+				 tr("<b>Hinge</b>: Show Hinges of the structure <br />"));
     
 }
 

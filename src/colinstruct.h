@@ -323,7 +323,7 @@ public:
     const QPointF &lastObjectClick() const { return lOClick;}
     void setlastObjectClick(const QPointF &p) { lOClick = p;}
 
-    void calculateShapes() const;
+	void calculateShapes(const QList<int> &activebls = QList<int>(), const QList<double> &multipliers = QList<double>()) const;
 
     //catch
     int nearestNode(const QPointF &p, const double &maxabs) const;

@@ -77,13 +77,13 @@ shortcutSettingsWidget::shortcutSettingsWidget(QWidget *parent) :
 
 
         setter->addButton(setB, i);
-        restorer->addButton(restoreB, i);
+		restorer->addButton(restoreB, i);
 
-        layout->addWidget(icon, i, 0, 1, 1);
-        layout->addWidget(name, i, 1, 1, 1);
-        layout->addWidget(shortcut, i, 2, 1, 1);
-        layout->addWidget(setB, i, 3, 1, 1);
-        layout->addWidget(restoreB, i, 4, 1, 1);
+		layout->addWidget(icon, i, 0, 1, 1);
+		layout->addWidget(name, i, 1, 1, 1);
+		layout->addWidget(shortcut, i, 2, 1, 1);
+		layout->addWidget(setB, i, 3, 1, 1);
+		layout->addWidget(restoreB, i, 4, 1, 1);
 
         i++;
     }
@@ -114,12 +114,12 @@ void shortcutSettingsWidget::buttonClicked(const int &i)
 {
     if(old != -1)
         setter->button(old)->show();
-    setter->button(i)->hide();
-    layout->addWidget(editor, i, 3, 1, 1);
-    editor->setText(shortcutSettings::instance().action(i).a->shortcut().toString(QKeySequence::NativeText));
+	setter->button(i)->hide();
+	layout->addWidget(editor, i, 3, 1, 1);
+	editor->setText(shortcutSettings::instance().action(i).a->shortcut().toString(QKeySequence::NativeText));
     editor->show();
     editor->setFocus();
-    old = i;
+	old = i;
 
 }
 

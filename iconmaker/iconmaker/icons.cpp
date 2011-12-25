@@ -7,6 +7,7 @@ double iconMaker::lineWidth = 1;
 bool iconMaker::light = false;
 iconMaker::icon iconMaker::current = iconMaker::placeholder;
 bool iconMaker::shadow = false;
+bool iconMaker::shadowMode = false;
 
 iconMaker *iconMaker::create(icon i)
 {
@@ -43,7 +44,7 @@ iconMaker::icon iconMaker::fromString(QString s)
 
 QBrush iconMaker::gradLight(QLinearGradient grad)
 {
-	if(shadow)
+	if(shadowMode)
 	{
 		grad.setColorAt(0, QColor(200, 200, 200));
 		grad.setColorAt(1, QColor(200, 200, 200));
@@ -58,7 +59,7 @@ QBrush iconMaker::gradLight(QLinearGradient grad)
 
 QBrush iconMaker::gradDark(QLinearGradient grad)
 {
-	if(shadow)
+	if(shadowMode)
 	{
 		grad.setColorAt(0, QColor(200, 200, 200));
 		grad.setColorAt(1, QColor(200, 200, 200));
@@ -74,12 +75,15 @@ QBrush iconMaker::gradDark(QLinearGradient grad)
 
 void iconMaker::paint(QPainter *p, bool light)
 {
-	p->translate(1./sqrt(2)/32.*double(p->device()->width()), 1./sqrt(2)/32.*double(p->device()->width()));
-	shadow = true;
-	this->paint(p, light, shadow);
-	p->resetMatrix();
-	shadow = false;
-	this->paint(p, light, shadow);
+	if(shadow)
+	{
+		p->translate(1./64.*double(p->device()->width()), 1./64.*double(p->device()->width()));
+		shadowMode = true;
+		this->paint(p, light, shadowMode);
+		p->resetMatrix();
+	}
+	shadowMode = false;
+	this->paint(p, light, shadowMode);
 }
 
 void iconMaker::paint(QPainter *p, bool light, bool shadow)

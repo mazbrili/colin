@@ -105,3 +105,8 @@ bool shortcutSettings::menuBeside() const
 {
 	return menusBesideActions;
 }
+
+QAction *shortcutSettings::lastAction() const
+{
+	return actions_.last().a;
+}

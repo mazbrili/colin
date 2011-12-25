@@ -115,10 +115,18 @@ int main(int argc, char *argv[])
         }
     }
 
+
     //show GUI
 	MainWindow w;
     w.showMaximized();
 
+#ifndef WIN32
+	QPalette palette = a.palette();
+	palette.setColor(QPalette::ToolTipBase, Qt::black);
+	palette.setColor(QPalette::Link, palette.color(QPalette::Link).lighter());
+	palette.setColor(QPalette::ToolTipText, palette.color(QPalette::Inactive, QPalette::ToolTipText));
+	a.setPalette(palette);
+#endif
 
     //run threads and event loop
     previewWidget::renderer->start(QThread::IdlePriority);

@@ -63,6 +63,7 @@ public:
     const QList<act> &actions() const {return actions_;}
 	void hasFile(const bool &t);
 	bool menuBeside() const;
+	QAction *lastAction() const;
 
 signals:
 	void menusBesideChanged(bool);
@@ -70,7 +71,7 @@ public slots:
 	void setMenuBeside(bool beside);
 
 private:
-    shortcutSettings(){}
+	shortcutSettings(){loadSettings();}
 
     QList<act> actions_;
     static shortcutSettings *instance_;

@@ -50,8 +50,10 @@ private:
 	ColinPushButtonPart *save, *print, *printDia;
 	QRectF clipRect;
 
+	QScrollArea *settingArea;
+	QWidget *setting;
+
 	QLabel *printerLabel,
-		   *orientationLabel,
 		   *morePrinterLabel,
 		   *addBLSLabel,
 		   *onePerCLSLabel,
@@ -74,8 +76,7 @@ private:
 
 	QComboBox *printerSelection;
 
-	ColinBoolSlider *orientation,
-					*addBLS,
+	ColinBoolSlider *addBLS,
 					*onePerCLS,
 					*allCLS,
 					*forPerPage,

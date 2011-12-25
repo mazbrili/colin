@@ -1,6 +1,8 @@
 #include "scriptengine.h"
 
 #include <QtCore/QDebug>
+#include <QtGui/QMainWindow>
+#include <QtGui/QApplication>
 
 #include "javascriptwraper.h"
 #include "filelist.h"
@@ -24,6 +26,8 @@ scriptEngine::scriptEngine(QObject *parent) :
 	qScriptRegisterMetaType<ColinLoad>(this, &LoadtoScriptValue, &LoadfromScriptValue);
 	qScriptRegisterMetaType<ColinBLS>(this, &BLStoScriptValue, &BLSfromScriptValue);
 	qScriptRegisterMetaType<ColinCLS>(this, &CLStoScriptValue, &CLSfromScriptValue);
+
+	globalObject().setProperty("QWidget", newFunction(WidgetCtor));
 
 
 	globalObject().setProperty("ColinNode", newFunction(NodeCtor));
@@ -94,6 +98,7 @@ void scriptEngine::eval(QString code)
 
 void scriptEngine::setTw(ColinStruct *tw)
 {
+
 	QScriptValue file = this->newQObject(tw);
 	globalObject().setProperty("struct", file);
 }

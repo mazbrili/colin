@@ -5,6 +5,7 @@
 
 class QComboBox;
 class QPushButton;
+class QCheckBox;
 
 class widget : public QWidget
 {
@@ -19,6 +20,7 @@ public slots:
 	void setTargetLineWidth(QString s);
 	void setTargetColor(QString s);
 	void setTargetName(QString s);
+	void setShadow(bool s);
 	void saveIcon();
 private:
 	QWidget *paintTarget;
@@ -26,6 +28,7 @@ private:
 			  *lineWidth,
 			  *coloring,
 			  *name;
+	QCheckBox *shadow;
 	QPushButton *save;
 
 };

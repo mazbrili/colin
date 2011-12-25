@@ -10,15 +10,18 @@
 #include <QtGui/QFontDialog>
 #include <QtGui/QFileDialog>
 #include <QtGui/QPageSetupDialog>
+#include <QtGui/QDesktopServices>
+#include <QtCore/QUrl>
 
 
 printoverlayWidget::printoverlayWidget(QWidget *parent) :
-    QWidget(parent)
+	QWidget(parent)
 {
 	this->setAttribute(Qt::WA_TranslucentBackground, true);
 
 	mainlayout = new QHBoxLayout(this);
 	vlayout = new QVBoxLayout();
+	vlayout->setMargin(0);
 
 	mainlayout->addLayout(vlayout);
 
@@ -63,9 +66,14 @@ printoverlayWidget::printoverlayWidget(QWidget *parent) :
 
 
 
-	QGridLayout *sliderBox = new QGridLayout();
-	vlayout->addLayout(sliderBox);
-	vlayout->setMargin(0);
+	settingArea = new QScrollArea(this);
+	settingArea->setFrameStyle(0);
+	setting = new QWidget(this);
+	settingArea->setWidget(setting);
+	QGridLayout *sliderBox = new QGridLayout(setting);
+	setting->setLayout(sliderBox);
+	vlayout->addWidget(settingArea);
+
 
 	sliderBox->addWidget(printing, sliderBox->rowCount(), 0, 1, 2);
 
@@ -120,17 +128,6 @@ printoverlayWidget::printoverlayWidget(QWidget *parent) :
 	forPerPage = new ColinBoolSlider(this);
 	addSlider(fourPerPageLabel, forPerPage, tr("4 pictures per page"), sliderBox);
 
-
-	orientationLabel = new QLabel(tr("orientation"), this);
-
-	orientation = new ColinBoolSlider(this);
-	orientation->setFixedHeight(save->sizeHint().height());
-	orientation->setText("Po", true);
-	orientation->setText("LS", false);
-
-	sliderBox->addWidget(orientationLabel, sliderBox->rowCount(), 0, 1, 1);
-	sliderBox->addWidget(orientation, sliderBox->rowCount()-1, 1, 1, 1, Qt::AlignRight);
-
 	sliderBox->addWidget(input, sliderBox->rowCount(), 0, 1, 2);
 
 
@@ -162,12 +159,9 @@ printoverlayWidget::printoverlayWidget(QWidget *parent) :
 	addSlider(beam_valLabel, beam_val, tr("beams(values)"), sliderBox);
 
 
-	vlayout->addStretch(1000);
-
 
 	buttonGroup = new QButtonGroup(this);
 	buttonGroup->setExclusive(false);
-	buttonGroup->addButton(orientation, painterContent::landscape);
 	buttonGroup->addButton(addBLS, painterContent::bls_in);
 	buttonGroup->addButton(onePerCLS, painterContent::cls_single);
 	buttonGroup->addButton(allCLS, painterContent::cls_all);
@@ -200,7 +194,6 @@ printoverlayWidget::printoverlayWidget(QWidget *parent) :
 
 	pContent.font.fromString(settings.value("printing/font", this->font().toString()).toString());
 
-	orientation->setChecked(settings.value("printing/orientation", false).toBool());
 	addBLS->setChecked(settings.value("printing/bls", false).toBool());
 	onePerCLS->setChecked(settings.value("printing/onePerCls", false).toBool());
 	allCLS->setChecked(settings.value("printing/allCls", true).toBool());
@@ -215,9 +208,12 @@ printoverlayWidget::printoverlayWidget(QWidget *parent) :
 
 	printer = new QPrinter();
 
+	printer->setCreator("Colin");
+
 
 	setFontTooltip();
 
+	setting->setFixedSize(setting->layout()->sizeHint());
 }
 
 printoverlayWidget::~printoverlayWidget()
@@ -226,7 +222,6 @@ printoverlayWidget::~printoverlayWidget()
 
 	settings.setValue("printing/font", pContent.font.toString());
 
-	settings.setValue("printing/orientation", orientation->isChecked());
 	settings.setValue("printing/bls", addBLS->isChecked());
 	settings.setValue("printing/onePerCls", onePerCLS->isChecked());
 	settings.setValue("printing/allCls", allCLS->isChecked());
@@ -278,8 +273,6 @@ void printoverlayWidget::paintEvent(QPaintEvent *e)
 
 void printoverlayWidget::keyPressEvent(QKeyEvent *e)
 {
-	if(e->key() == Qt::Key_Escape)
-		this->hide();
 	QWidget::keyPressEvent(e);
 }
 
@@ -327,13 +320,11 @@ void printoverlayWidget::printDialog()
 
 	if(printer->orientation() == QPrinter::Landscape)
 	{
-		if(orientation->isChecked())
-			orientation->setChecked(false);
+		pContent.s |= painterContent::landscape;
 	}
 	else
 	{
-		if(!orientation->isChecked())
-			orientation->setChecked(true);
+		pContent.s &= (~painterContent::landscape);
 	}
 }
 
@@ -347,6 +338,9 @@ void printoverlayWidget::savePdfDialog()
 	printer->setOutputFileName(pdfFile);
 	structPrinter sP(filelist::instance().currentFile(), printer, pContent);
 	sP.print(printer);
+	delete printer;
+	printer = new QPrinter();
+	QDesktopServices::openUrl(QUrl(pdfFile));
 }
 
 

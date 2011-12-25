@@ -175,7 +175,10 @@ private:
 		  bls,
 		  cls,
 		  bls_plus,
-		  cls_plus;
+		  cls_plus,
+		  whatsthis,
+		  leftBeam,
+		  rightBeam;
 
 
     QPixmap key,

@@ -80,25 +80,18 @@ public:
 
 	int clsPlot(int *pages, bool test = false);
 	int clsPlotall(int *pages, bool test = false);
-	int clsPlot(const int &i, const QRect &rect, bool test = false);
 
 	int nodeIn(int *pages, bool test = false);
-	int nodeIn(const int &i, bool test = false);
 
 	int beamIn(int *pages, bool test = false);
-	int beamIn(const int &i, bool test = false);
 
 	int loadIn(int *pages, bool test = false);
-	int loadIn(const int &i, bool test = false);
 
 	int nodeRes(int *pages, bool test = false);
-	int nodeRes(const int &i, bool test = false);
 
 	int beamResF(int *pages, bool test = false);
-	int beamResF(const int &i, bool test = false);
 
 	int beamResVal(int *pages, bool test = false);
-	int beamResVal(const int &i, bool test = false);
 
 	int usablePageHeight();
 	int lineHeight();
@@ -114,6 +107,7 @@ private:
 	QPrinter *p;
 	painterContent c;
 	QPainter *painter;
+	QPaintDevice *device;
     int pageCount;
 	int totalPageCount;
     int dx;

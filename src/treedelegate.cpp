@@ -168,6 +168,19 @@ QWidget *treeDelegate::createEditor( QWidget *parent, const QStyleOptionViewItem
 		return combo;
 	}
 
+	if(index.data(32).toInt() == ColinStruct::Joint)
+	{
+		QComboBox *combo = new QComboBox(parent);
+		combo->addItem(tr("hinge"));
+		combo->addItem(tr("no hinge"));
+		combo->setEditable(true);
+
+		connect(combo,              SIGNAL(activated(int)),
+				this,               SLOT(emitCommitData()));
+		combo->setFocus(Qt::PopupFocusReason);
+		return combo;
+	}
+
 	if(((index.data(32).toInt() & (~ColinStruct::creation)) == ColinStruct::CLSBLS))
 	{
 		QComboBox *combo = new QComboBox(parent);
@@ -212,6 +225,40 @@ QWidget *treeDelegate::createEditor( QWidget *parent, const QStyleOptionViewItem
 		combo->setFocus(Qt::PopupFocusReason);
 		return combo;
 	}
+	if(((index.data(32).toInt() & (~ColinStruct::creation)) == ColinStruct::Mat))
+	{
+		QComboBox *combo = new QComboBox(parent);
+
+		ColinStruct *tw = filelist::instance().currentFile();
+
+		for(int i = 0; i< LIB.mats_n(); i++)
+		{
+			combo->addItem(colinIcons::instance().icon(Colin::Material), LIB.mat(i).name());
+		}
+
+		combo->setCurrentIndex(tw->beam(index.row()).MatI());
+		connect(combo,				SIGNAL(activated(int)),
+				this,				SLOT(emitCommitData()));
+		combo->setFocus(Qt::PopupFocusReason);
+		return combo;
+	}
+	if(((index.data(32).toInt() & (~ColinStruct::creation)) == ColinStruct::CrossSection))
+	{
+		QComboBox *combo = new QComboBox(parent);
+
+		ColinStruct *tw = filelist::instance().currentFile();
+
+		for(int i = 0; i< LIB.profiles_n(); i++)
+		{
+			combo->addItem(colinIcons::instance().icon(Colin::Profile), LIB.Profile(i).name());
+		}
+
+		combo->setCurrentIndex(tw->beam(index.row()).ProfileI());
+		connect(combo,				SIGNAL(activated(int)),
+				this,				SLOT(emitCommitData()));
+		combo->setFocus(Qt::PopupFocusReason);
+		return combo;
+	}
 
 	QWidget *temp = QItemDelegate::createEditor( parent, option, index );
 	temp->setFocus(Qt::PopupFocusReason);
@@ -244,4 +291,73 @@ void treeDelegate::setModelData( QWidget *editor, QAbstractItemModel *model, con
 void treeDelegate::emitCommitData()
 {
 	emit commitData( qobject_cast<QWidget *>( sender() ) );
+}
+
+
+bool treeDelegate::eventFilter(QObject *obj, QEvent *event){
+	if(event->type() == QEvent::FocusOut)
+	{
+		QFocusEvent *e = static_cast<QFocusEvent*>(event);
+		if(e->reason() != Qt::PopupFocusReason &&
+		   e->reason() != Qt::OtherFocusReason){
+			qDebug() << "commiting Data on FocusReason " << e->reason();
+			if(commitOnFocusLoss){
+				commitData(static_cast<QWidget*>(obj));
+				obj->deleteLater();
+				return true;
+			}
+		}
+	}
+	if(event->type() == QEvent::KeyPress)
+	{
+		if(static_cast<QKeyEvent*>(event)->key() == Qt::Key_Tab )
+		{
+			qDebug() << "commiting Data on keyPressEvent Tab";
+			commitOnFocusLoss = false;
+			commitData(static_cast<QWidget*>(obj));
+			emit openNext(lastIndex);
+			return true;
+		}
+		else if(static_cast<QKeyEvent*>(event)->key() == Qt::Key_Backtab)
+		{
+			qDebug() << "commiting Data on keyPressEvent Backtab";
+			commitOnFocusLoss = false;
+			commitData(static_cast<QWidget*>(obj));
+			emit openPrevious(lastIndex);
+			return true;
+		}
+		else if(static_cast<QKeyEvent*>(event)->key() == Qt::Key_Down)
+		{
+			qDebug() << "commiting Data on keyPressEvent Down";
+			commitOnFocusLoss = false;
+			commitData(static_cast<QWidget*>(obj));
+			emit openNextItem(lastIndex);
+			return true;
+		}
+		else if(static_cast<QKeyEvent*>(event)->key() == Qt::Key_Up)
+		{
+			qDebug() << "commiting Data on keyPressEvent Up";
+			commitOnFocusLoss = false;
+			commitData(static_cast<QWidget*>(obj));
+			emit openPreviousItem(lastIndex);
+			return true;
+		}
+		else if(static_cast<QKeyEvent*>(event)->key() == Qt::Key_Return)
+		{
+			qDebug() << "commiting Data on keyPressEvent Return";
+			commitOnFocusLoss = false;
+			commitData(static_cast<QWidget*>(obj));
+			emit openFirstColumn(lastIndex);
+			return true;
+		}
+	else if(static_cast<QKeyEvent*>(event)->key() == Qt::Key_Escape)
+		{
+			qDebug() << "returning from Delegate on Escape press";
+			commitOnFocusLoss = false;
+//#warning restore in treeView
+			obj->deleteLater();
+			return true;
+		}
+	}
+//		return QItemDelegate::eventFilter(obj, event);
 }

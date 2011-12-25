@@ -43,6 +43,13 @@ drawSelectionWidget2::drawSelectionWidget2(QWidget *parent) :
 	connect(&filelist::instance(),					SIGNAL(currentChanged(ColinStruct*)),
 			this,									SLOT(setTw(ColinStruct*)));
 
+
+
+
+	setWhatsThis(tr("<b>visible CLS</b> <a href=\"view/cls\">open manual</a><br /> <br />")+
+				 tr("Use this widget to show or hide combinations of loads!"));
+
+
 }
 drawSelectionWidget2::~drawSelectionWidget2()
 {

@@ -66,7 +66,6 @@ public slots:
 
 private:
 
-	void setHeader();
 
     int opencolumn;
 

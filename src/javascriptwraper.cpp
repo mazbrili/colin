@@ -3,6 +3,9 @@
 #include "colinnode.h"
 #include "colinstruct.h"
 
+#include <QtGui/QApplication>
+#include <QtGui/QWidget>
+
 
 QScriptValue NodetoScriptValue(QScriptEngine *engine, const ColinNode &n)
 {
@@ -390,6 +393,20 @@ QScriptValue CLSCtor(QScriptContext *ctxt, QScriptEngine *eng)
 		obj = eng->newObject();
 
 		obj = CLStoScriptValue(eng, ColinCLS());
+		obj.setPrototype(ctxt->callee().property("prototype"));
+	}
+	return obj;
+}
+
+
+QScriptValue WidgetCtor(QScriptContext *ctxt, QScriptEngine *eng)
+{
+	QScriptValue obj;
+	if(ctxt->isCalledAsConstructor()){
+		obj = ctxt->thisObject();
+	}
+	else {
+		obj = eng->newQObject(new QWidget());
 		obj.setPrototype(ctxt->callee().property("prototype"));
 	}
 	return obj;

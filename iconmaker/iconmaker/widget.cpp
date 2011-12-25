@@ -6,6 +6,7 @@
 #include <QtGui/QScrollArea>
 #include <QtGui/QPushButton>
 #include <QtGui/QApplication>
+#include <QtGui/QCheckBox>
 #include <QtCore/QDebug>
 #include "icons.h"
 
@@ -48,6 +49,7 @@ widget::widget(QWidget *parent) :
 	coloring = new QComboBox(this);
 	coloring->addItem("light");
 	coloring->addItem("dark");
+	coloring->setCurrentIndex(1);
 	static_cast<QGridLayout*>(layout())->addWidget(coloring, 0, 2, 1, 1);
 
 	name = new QComboBox(this);
@@ -63,12 +65,17 @@ widget::widget(QWidget *parent) :
 	iconMaker::current = static_cast<iconMaker::icon>(name->currentIndex());
 	static_cast<QGridLayout*>(layout())->addWidget(name, 0, 3, 1, 1);
 
+
+	shadow = new QCheckBox("shadow", this);
+	static_cast<QGridLayout*>(layout())->addWidget(shadow, 0, 4, 1, 1);
+
+
 	save = new QPushButton("save", this);
-	static_cast<QGridLayout*>(layout())->addWidget(save, 0, 4, 1, 1);
+	static_cast<QGridLayout*>(layout())->addWidget(save, 0, 5, 1, 1);
 
 
 	QScrollArea *area = new QScrollArea(this);
-	static_cast<QGridLayout*>(layout())->addWidget(area, 1, 0, 1, 5);
+	static_cast<QGridLayout*>(layout())->addWidget(area, 1, 0, 1, 6);
 	area->setMinimumSize(320, 320);
 	area->setAlignment(Qt::AlignCenter);
 
@@ -89,6 +96,9 @@ widget::widget(QWidget *parent) :
 	connect(lineWidth,			SIGNAL(activated(QString)),
 			this,				SLOT(setTargetLineWidth(QString)));
 
+	connect(shadow,				SIGNAL(clicked(bool)),
+			this,				SLOT(setShadow(bool)));
+
 	connect(save,				SIGNAL(clicked()),
 			this,				SLOT(saveIcon()));
 }
@@ -108,13 +118,19 @@ void widget::setTargetLineWidth(QString s)
 
 void widget::setTargetColor(QString s)
 {
-	iconMaker::light == (s=="light");
+	iconMaker::light = (s=="light");
 	paintTarget->update();
 }
 
 void widget::setTargetName(QString s)
 {
 	iconMaker::current = iconMaker::fromString(s);
+	paintTarget->update();
+}
+
+void widget::setShadow(bool s)
+{
+	iconMaker::shadow = s;
 	paintTarget->update();
 }
 

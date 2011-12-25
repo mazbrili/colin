@@ -390,6 +390,7 @@ ColinLoad ColinStruct::Load(const int &i)
 
 int ColinStruct::addLoad(const ColinLoad &n)
 {
+	Q_ASSERT(n.typ()>=0 && n.typ()<9);
 	emit appended(n);
 	return load_n()-1;
 }
@@ -692,7 +693,7 @@ void ColinStruct::setPos(const int &o, const int &Pos)
 void ColinStruct::setLoadSet(const int &o, const int &ls)
 {
 	Q_ASSERT(!(o<0 || o>=load_n()));
-	Q_ASSERT(!(ls<0||ls>=bls_n()));
+	Q_ASSERT(!(ls<-1||ls>=bls_n()));
 	ColinLoad l(load(o));
 	l.setSet(ls);
 	emit edited(o, l);
@@ -1556,48 +1557,63 @@ void ColinStruct::setScaleU(const double &s)
     emit changedUScale(scale_u);
 }
 
-void ColinStruct::calculateShapes() const
+void ColinStruct::calculateShapes(const QList<int> &activebls, const QList<double> &multipliers) const
 {
 	ColinStruct *t = const_cast<ColinStruct*>(this);
     QMap<int, QLineF> line;
-    for(int i=0; i<load_n(); i++)
+#ifdef SHAPES_VERBOSE
+	qDebug() << "calculating load shapes in global koord system";
+	qDebug() << "for bls" << activebls;
+	qDebug() << "with multipliers" << multipliers;
+#endif
+	for(int i=0; i<load_n(); i++)
     {
+		double fac;
+		if(activebls.isEmpty())
+			fac = 1.0;
+		else if(!activebls.contains(load(i).set()))
+			continue;
+		else
+			fac = multipliers.at(activebls.indexOf(load(i).set()));
+#ifdef SHAPES_VERBOSE
+		qDebug() << "calculating load " << i << " with multiplier " << fac;
+#endif
 		if(load(i).typ() == ColinLoad::decreasingLinearLoad    ||
 		   load(i).typ() == ColinLoad::uniformlyDistibutedLoad ||
 		   load(i).typ() == ColinLoad::increasingLinearLoad    )
-	{
-	    if(!line.contains(load(i).at()))
-	    {
-		line.insert(load(i).at(),
-			    (beam(load(i).at()).toQLineF()));
-	    }
-	    QPolygonF points(4);
+		{
+			if(!line.contains(load(i).at()))
+			{
+			line.insert(load(i).at(),
+					(beam(load(i).at()).toQLineF()));
+			}
+			QPolygonF points(4);
 
-	    points[0] = line[load(i).at()].p1();
-	    points[3] = line[load(i).at()].p2();
-
-
-		if(load(i).typ() == ColinLoad::uniformlyDistibutedLoad)
-	    {
-		points[1] = points[0]-QPointF(load(i).Px(), load(i).Pz())*scaleP();
-		points[2] = points[3]-QPointF(load(i).Px(), load(i).Pz())*scaleP();
-	    }
-		else if(load(i).typ() == ColinLoad::increasingLinearLoad)
-	    {
-		points[1]=points[0];
-		points[2]= points[3]-QPointF(load(i).Px(), load(i).Pz())*scaleP();
-	    }
-		else if(load(i).typ() == ColinLoad::decreasingLinearLoad)
-	    {
-		points[1] = points[0]-QPointF(load(i).Px(), load(i).Pz())*scaleP();
-		points[2] = points[3];
-            }
-
-	    t->loads[i].setShape(points);
+			points[0] = line[load(i).at()].p1();
+			points[3] = line[load(i).at()].p2();
 
 
-	    line[load(i).at()].setP1(points[1]);
-	    line[load(i).at()].setP2(points[2]);
+			if(load(i).typ() == ColinLoad::uniformlyDistibutedLoad)
+			{
+			points[1] = points[0]-QPointF(load(i).Px(), load(i).Pz())*scaleP()*fac;
+			points[2] = points[3]-QPointF(load(i).Px(), load(i).Pz())*scaleP()*fac;
+			}
+			else if(load(i).typ() == ColinLoad::increasingLinearLoad)
+			{
+			points[1]=points[0];
+			points[2]= points[3]-QPointF(load(i).Px(), load(i).Pz())*scaleP()*fac;
+			}
+			else if(load(i).typ() == ColinLoad::decreasingLinearLoad)
+			{
+			points[1] = points[0]-QPointF(load(i).Px(), load(i).Pz())*scaleP()*fac;
+			points[2] = points[3];
+			}
+
+			t->loads[i].setShape(points);
+
+
+			line[load(i).at()].setP1(points[1]);
+			line[load(i).at()].setP2(points[2]);
 	}
 		else if(load(i).typ() == ColinLoad::tempChange ||
 				load(i).typ() == ColinLoad::tempDiffrence)
@@ -1614,7 +1630,7 @@ void ColinStruct::calculateShapes() const
         {
             QPolygonF points(2);
             points[0] = node(load(i).at()).toQPointF();
-            points[1] = node(load(i).at()).toQPointF()-QPointF(load(i).Px(), load(i).Pz())*scaleP();
+			points[1] = node(load(i).at()).toQPointF()-QPointF(load(i).Px(), load(i).Pz())*scaleP()*fac;
             t->loads[i].setShape(points);
         }
     }

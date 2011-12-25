@@ -4,11 +4,11 @@
 #include <QtGui/QApplication>
 #include <QtGui/QWidget>
 #include <QtGui/QPalette>
+#include <QtGui/QTreeView>
 #include "colinstruct.h"
 #include "unitsettings.h"
 #include "colinicons.h"
 
-QBrush HeaderBrush;
 QFont HeaderFont;
 
 
@@ -20,20 +20,7 @@ treeModel::treeModel(QObject *parent) :
 	HeaderFont = QApplication::font();
 	HeaderFont.setBold(true);
 
-	QLinearGradient lg(0, 0, 0, 24);
-	lg.setColorAt(0.,			QApplication::palette("QHeaderView").color(QPalette::Light));
-	lg.setColorAt(1.,			QApplication::palette("QHeaderView").color(QPalette::Background));
-	QPixmap pm(1000, 24);
-	QPainter p(&pm);
-	p.setBrush(QBrush(lg));
-	QPen pen;
-	lg.setColorAt(0.,			QApplication::palette("QWidget").color(QPalette::Dark));
-	lg.setColorAt(0.5,			QApplication::palette("QWidget").color(QPalette::Dark).darker(180));
-	lg.setColorAt(1,			QApplication::palette("QWidget").color(QPalette::Dark));
-	pen.setBrush(QBrush(lg));
-	p.setPen(pen);
-	p.drawRect(0, 0, 1000, 23);
-	HeaderBrush = QBrush(pm);
+
 
 	newNodeBuffer[0]=tr("x");
 	newNodeBuffer[1]=tr("z");
@@ -44,12 +31,14 @@ treeModel::treeModel(QObject *parent) :
 	newBeamBuffer[3]=tr("cross section");
 
 	newLoadFormBuffer = ColinLoad::nodeLoad;
+
+	newBLSBuffer[0]=tr("name");
+	newCLSBuffer[0]=tr("name");
 	setLoadBuffer(newLoadBuffer, newLoadFormBuffer);
 	t = 0;
 	connect(&filelist::instance(),				SIGNAL(currentChanged(ColinStruct*)),
 			this,								SLOT(setStruct(ColinStruct*)));
 }
-
 
 QModelIndex treeModel::index(int row, int column, const QModelIndex & parent) const
 {
@@ -95,7 +84,7 @@ int treeModel::rowCount(const QModelIndex & parent) const
 		default:				return 0;
 		}
 	case cls:					return t->cls(parent.row()).count()+1;
-	case beam:					return 6;
+	case beam:					return 2;
 		default:					return 1;
 	}
 }
@@ -111,7 +100,7 @@ int treeModel::columnCount(const QModelIndex & parent) const
 	case lists:
 		switch(parent.row())
 		{
-		case 0:						return 3;
+		case 0:						return 4;
 		case 1:						return 5;
 		case 2:						return 6;
 		case 3:						return 3;
@@ -120,7 +109,7 @@ int treeModel::columnCount(const QModelIndex & parent) const
 		}
 	case cls:						return 3;
 	case node:						return 4;
-	case beam:						return 1;
+	case beam:						return 4;
 	default:						return 6;
 	}
 }
@@ -267,6 +256,7 @@ treeModel::modelIds treeModel::childId(treeModel::modelIds id, int row)
 	default:						return invalid;
 	}
 }
+
 int treeModel::listindex(const QModelIndex &index)
 {
 	switch(index.internalId() & 0xF)
@@ -281,6 +271,35 @@ int treeModel::listindex(const QModelIndex &index)
 	case clsbls:					return (index.internalId() & ~0xF)>>4;
 	default:						return 0;
 	}
+}
+
+QVariant treeModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+	QFont f = QApplication::font();
+	f.setPointSize(QApplication::font().pointSize()*0.8);
+	f.setItalic(true);
+	if(!t)
+		return QVariant();
+	switch(role)
+	{
+	case Qt::DisplayRole:
+		switch(section)
+		{
+		//case 0:						return QVariant(tr("file: ")+t->objectName());
+		case 0:						return QVariant(tr("adjust width here!"));
+		default:					return QVariant();
+		}
+	case Qt::FontRole:
+	{
+		switch(section)
+		{
+		case 0:						return QVariant(f);
+		default:					return QVariant();
+		}
+	}
+	default:						return QVariant();
+	}
+	return QVariant();
 }
 
 QVariant treeModel::nodeHeader(const QModelIndex &index, int role) const
@@ -308,7 +327,7 @@ QVariant treeModel::nodeHeader(const QModelIndex &index, int role) const
 	case Qt::StatusTipRole:			return QVariant();
 	case Qt::WhatsThisRole:			return QVariant();
 	case Qt::SizeHintRole:			return QVariant(QSize(50, 24));
-	case Qt::BackgroundRole:		return QVariant(HeaderBrush);
+	case Qt::BackgroundRole:		return QVariant(headerDecoration(index));
 	case Qt::FontRole:				return QVariant(HeaderFont);
 	case Qt::TextAlignmentRole:
 		switch(index.column())
@@ -345,7 +364,7 @@ QVariant treeModel::beamHeader(const QModelIndex &index, int role) const
 	case Qt::StatusTipRole:			return QVariant();
 	case Qt::WhatsThisRole:			return QVariant();
 	case Qt::SizeHintRole:			return QVariant(QSize(50, 24));
-	case Qt::BackgroundRole:		return QVariant(HeaderBrush);
+	case Qt::BackgroundRole:		return QVariant(headerDecoration(index));
 	case Qt::FontRole:				return QVariant(HeaderFont);
 	case Qt::TextAlignmentRole:
 		switch(index.column())
@@ -383,7 +402,7 @@ QVariant treeModel::loadHeader(const QModelIndex &index, int role) const
 	case Qt::StatusTipRole:			return QVariant();
 	case Qt::WhatsThisRole:			return QVariant();
 	case Qt::SizeHintRole:			return QVariant();
-	case Qt::BackgroundRole:		return QVariant(HeaderBrush);
+	case Qt::BackgroundRole:		return QVariant(headerDecoration(index));
 	case Qt::FontRole:				return QVariant(HeaderFont);
 	case Qt::TextAlignmentRole:
 		switch(index.column())
@@ -418,7 +437,7 @@ QVariant treeModel::blsHeader(const QModelIndex &index, int role) const
 	case Qt::StatusTipRole:			return QVariant();
 	case Qt::WhatsThisRole:			return QVariant();
 	case Qt::SizeHintRole:			return QVariant();
-	case Qt::BackgroundRole:		return QVariant(HeaderBrush);
+	case Qt::BackgroundRole:		return QVariant(headerDecoration(index));
 	case Qt::FontRole:				return QVariant(HeaderFont);
 	case Qt::TextAlignmentRole:
 		switch(index.column())
@@ -453,7 +472,7 @@ QVariant treeModel::clsHeader(const QModelIndex &index, int role) const
 	case Qt::StatusTipRole:			return QVariant();
 	case Qt::WhatsThisRole:			return QVariant();
 	case Qt::SizeHintRole:			return QVariant();
-	case Qt::BackgroundRole:		return QVariant(HeaderBrush);
+	case Qt::BackgroundRole:		return QVariant(headerDecoration(index));
 	case Qt::FontRole:				return QVariant(HeaderFont);
 	case Qt::TextAlignmentRole:
 		switch(index.column())
@@ -482,6 +501,8 @@ QVariant treeModel::nodeItem(const QModelIndex &index, int role) const
 		case 0:						return QVariant(QString::number(id));
 		case 1:						return QVariant(QString::number(n.x(), 'f', PRECISON)+"m");
 		case 2:						return QVariant(QString::number(n.z(), 'f', PRECISON)+"m");
+		case 3:						return QVariant(QString::number(n.hasbearing()?n.bearing().angle()*ANGLEPREFIX:0, 'f', PRECISON)+"grad");
+
 		default:					return QVariant();
 		}
 	case Qt::DecorationRole:
@@ -496,19 +517,21 @@ QVariant treeModel::nodeItem(const QModelIndex &index, int role) const
 		case 0:						return QVariant(QString::number(id));
 		case 1:						return QVariant(QString::number(n.x(), 'f', PRECISON));
 		case 2:						return QVariant(QString::number(n.z(), 'f', PRECISON));
+		case 3:						return QVariant(QString::number(n.hasbearing()?n.bearing().angle()*ANGLEPREFIX:0, 'f', PRECISON));
 		default:					return QVariant();
 		}
 	case Qt::ToolTipRole:
-		switch(index.column())
-		{
+		switch(index.column()){
 		case 0:						return QVariant(QString(tr("<b>node #%1</b><br />")+
 															tr("<b>x</b>=%2 m <br />")+
 															tr("<b>z</b>=%3 m<br />")+
+															tr("<b>phi</b>=%4 grad<br />")+
 															tr("%4<br /><br />")+
 															tr("press triangle to show support!"))
 															.arg(index.row())
 															.arg(n.x(), 0, 'f', PRECISON)
 															.arg(n.z(), 0, 'f', PRECISON)
+															.arg(n.bearing().angle()*ANGLEPREFIX, 0, 'f', PRECISON)
 															.arg((n.hasbearing()?QString(tr("<b>support</b>: %1 %2 %3")
 																						 .arg(n.bearing().x()?"X":"-")
 																						 .arg(n.bearing().z()?"Z":"-")
@@ -517,12 +540,23 @@ QVariant treeModel::nodeItem(const QModelIndex &index, int role) const
 															.arg(t->node(index.row()).x(), 0, 'f', PRECISON)));
 		case 2:						return QVariant(QString(tr("<b>z</b>=%1 m<br />click to edit.")
 															.arg(t->node(index.row()).z(), 0, 'f', PRECISON)));
+		case 3:						return QVariant(QString(tr("<b>phi</b>=%1 m<br />click to edit.<br />Only effects the node if a support is set.")
+															.arg(t->node(index.row()).hasbearing()?t->node(index.row()).bearing().angle():0, 0, 'f', PRECISON)));
 		default:					return QVariant();
 		}
 
 	case Qt::StatusTipRole:			return QVariant();
-	case Qt::WhatsThisRole:			return QVariant();
+	case Qt::WhatsThisRole:
+									return QVariant(QString(tr("<b>node (in tree)</b> ")+
+															tr("<a href=\"tree/node\">open manual</a><br /><br />")+
+															tr("click on any property to edit: <br />")+
+															tr("<b>x</b>: the x coordinate of the node in [m]<br />")+
+															tr("<b>z</b>: the z coordinate of the node in [m]<br />")+
+															tr("<b>phi</b>: the angle of the node and the support in [grad]<br /><br />")+
+															tr("press the triangle to edit the support attached to this node!<br /><br />")+
+															treeNavigation()));
 	case Qt::SizeHintRole:			return QVariant();
+	default:						return QVariant();
 	}
 	return QVariant();
 }
@@ -598,9 +632,24 @@ QVariant treeModel::beamItem(const QModelIndex &index, int role) const
 													.arg(n.Profile().I()*IPREFIX, 0, 'f', PRECISON).arg(UNIT.Ieh()));
 		default:					return QVariant();
 		}
-
+	case Qt::UserRole:
+		switch(index.column()){
+		case 3:						return ColinStruct::Mat;
+		case 4:						return ColinStruct::CrossSection;
+		default:					return QVariant();
+		}
 	case Qt::StatusTipRole:			return QVariant();
-	case Qt::WhatsThisRole:			return QVariant();
+	case Qt::WhatsThisRole:			return QVariant(QString(tr("<b>beam (in tree)</b> ")+
+															tr("<a href=\"tree/beam\">open manual</a><br /><br />")+
+															tr("click on any property to edit: <br />")+
+															tr("<b>from</b>: the left node of the beam<br />")+
+															tr("<b>to</b>: the right node of the beam<br />")+
+															tr("<b>material</b>: the material of the beam<br />")+
+															tr("<b>cross section</b>: the cross section of the beam<br /><br />")+
+															tr("material and cross section are required for the calulation of staticly indeterminated structrues and the displacement! ")+
+															tr("<a href=\"calculation\">more...</a><br /><br />")+
+															tr("press the triangle to edit hinges!<br /><br />")+
+															treeNavigation()));
 	case Qt::SizeHintRole:			return QVariant();
 	}
 	return QVariant();
@@ -635,13 +684,21 @@ QVariant treeModel::loadItem(const QModelIndex &index, int role) const
 		case 2:						return QVariant(QString::number(n.Px(), 'f', PRECISON)+prefix);
 		case 3:						return QVariant(QString::number(n.Pz(), 'f', PRECISON)+prefix);
 		case 4:						return QVariant(QString::number(n.M(), 'f', PRECISON)+prefix);
-		case 5:						return QVariant(t->bls(n.set()).name());
+		case 5:
+			switch(n.set()){
+			case -1:				return QVariant(QString(tr("none")));
+			default:				return QVariant(t->bls(n.set()).name());
+			}
 		default:					return QVariant();
 		}
 	case Qt::DecorationRole:
 		switch(index.column()){
 		case 0:						return QVariant(colinIcons::instance().icon(n.typ()));
-		case 5:						return QVariant(colinIcons::instance().icon(t->bls(n.set()).color()));
+		case 5:
+			switch(n.set()){
+			case -1:				return QVariant(colinIcons::instance().icon(Colin::Close));
+			default:				return QVariant(colinIcons::instance().icon(t->bls(n.set()).color()));
+			}
 		default:					return QVariant();
 		}
 	case Qt::EditRole:
@@ -651,7 +708,11 @@ QVariant treeModel::loadItem(const QModelIndex &index, int role) const
 		case 2:						return QVariant(QString::number(n.Px(), 'f', PRECISON));
 		case 3:						return QVariant(QString::number(n.Pz(), 'f', PRECISON));
 		case 4:						return QVariant(QString::number(n.M(), 'f', PRECISON));
-		case 5:						return QVariant(t->bls(n.set()).name());
+		case 5:
+			switch(n.set()){
+			case -1:				return QVariant(QString(tr("none")));
+			default:				return QVariant(t->bls(n.set()).name());
+			}
 		default:					return QVariant();
 		}
 	case Qt::ToolTipRole:
@@ -664,7 +725,7 @@ QVariant treeModel::loadItem(const QModelIndex &index, int role) const
 			case ColinLoad::increasingLinearLoad:
 			case ColinLoad::decreasingLinearLoad:
 			case ColinLoad::uniformlyDistibutedLoad:
-									return QVariant(QString(tr("<b>%1</b>: #%2 <br />")+
+									return QVariant(QString(tr("<b>%1 #%2</b><br />")+
 															tr("<b>Px</b> = %3 %4<br />")+
 															tr("<b>Pz</b> = %5 %6<br /><br />")+
 															tr("click to edit"))
@@ -672,9 +733,21 @@ QVariant treeModel::loadItem(const QModelIndex &index, int role) const
 													.arg(id)
 													.arg(n.Px()*PPREFIX, 0, 'f', PRECISON).arg(UNIT.Peh()+(n.isOnBeam()?"/m":""))
 													.arg(n.Pz()*PPREFIX, 0, 'f', PRECISON).arg(UNIT.Peh()+(n.isOnBeam()?"/m":"")));
-			default:			return QVariant();
+			default:				return QVariant();
 			}
 		case 1:
+			switch(n.typ())
+			{
+			case ColinLoad::nodeLoad:
+			case ColinLoad::moment:
+									return QVariant(QString(tr("<b>Position</b>: node #%1<br />")+
+															tr("click to edit!"))
+													.arg(n.at()));
+			default:				return QVariant(QString(tr("<b>Position</b>: beam #%1<br />")+
+															tr("click to edit!"))
+													.arg(n.at()));
+			}
+		case 2:
 			switch(n.typ())
 			{
 			case ColinLoad::nodeLoad:
@@ -688,14 +761,52 @@ QVariant treeModel::loadItem(const QModelIndex &index, int role) const
 									return QVariant(QString(tr("<b>DT</b>: %1 %2<br />")+
 															tr("click to edit!"))
 													.arg(n.Px(), 0, 'f', PRECISON).arg("K"));
-
-			default:				return QVariant(QString(tr("unused fro this type of load")));
+			default:				return QVariant(QString(tr("unused for this type of load")));
 			}
-
+		case 3:
+			switch(n.typ())
+			{
+			case ColinLoad::nodeLoad:
+			case ColinLoad::increasingLinearLoad:
+			case ColinLoad::decreasingLinearLoad:
+			case ColinLoad::uniformlyDistibutedLoad:
+									return QVariant(QString(tr("<b>Pz</b>: %1 %2<br />")+
+															tr("click to edit!"))
+													.arg(n.Pz()*PPREFIX, 0, 'f', PRECISON).arg(UNIT.Peh()+(n.isOnBeam()?"/m":"")));
+			case ColinLoad::tempDiffrence:
+									return QVariant(QString(tr("<b>DT</b>: %1 %2<br />")+
+															tr("click to edit!"))
+													.arg(n.Px(), 0, 'f', PRECISON).arg("K"));
+			default:				return QVariant(QString(tr("unused for this type of load")));
+			}
+		case 4:
+			switch(n.typ())
+			{
+			case ColinLoad::moment:
+			case ColinLoad::doubleLoadLeft:
+			case ColinLoad::doubleLoadRight:
+									return QVariant(QString(tr("<b>M</b>: %1 %2<br />")+
+															tr("click to edit!"))
+													.arg(n.M()*MPREFIX, 0, 'f', PRECISON).arg(UNIT.Meh()));
+			default:				return QVariant(QString(tr("unused for this type of load")));
+			}
+		case 5:						return QVariant(QString(tr("<b>Set</b>: %1<br />")+
+															tr("click to edit!"))
+													.arg((n.set()==-1)?tr("none"):t->bls(n.set()).name()));
 		default:					return QVariant();
 		}
 	case Qt::StatusTipRole:			return QVariant();
-	case Qt::WhatsThisRole:			return QVariant();
+	case Qt::WhatsThisRole:
+		return QVariant(QString(tr("<b>load (in tree)</b> ")+
+								tr("<a href=\"tree/load\">open manual</a><br /><br />")+
+								tr("click on any property to edit: <br />")+
+								tr("<b>icon</b> change the type of load.<br />")+
+								tr("<b>position</b>: the beam or node where the load puts preasure on<br />")+
+								tr("<b>Px</b>: the x value of the load or the temperature change<br />")+
+								tr("<b>Px</b>: the z value of the load or the temperature difference<br />")+
+								tr("<b>M</b>: the moment value of the load<br />")+
+								tr("<b>set</b>: the set which should contain the load. It is not neacesary to set this property!<br /><br />")+
+								treeNavigation()));
 	case Qt::SizeHintRole:			return QVariant();
 	case Qt::UserRole:
 		switch(index.column()){
@@ -716,7 +827,7 @@ QVariant treeModel::loadItem(const QModelIndex &index, int role) const
 									return ColinStruct::DoubleLoadTyp;
 			default:				return QVariant();
 			}
-
+		case 5:						return ColinStruct::LoadSet;
 		default:					return QVariant();
 		}
 	}
@@ -749,9 +860,30 @@ QVariant treeModel::blsItem(const QModelIndex &index, int role) const
 		default:					return QVariant();
 		}
 	case Qt::EditRole:				return QVariant();
-	case Qt::ToolTipRole:			return QVariant();
+	case Qt::ToolTipRole:
+		switch(index.column())
+		{
+		case 0:						return QVariant(QString(tr("<b>basic load set #%1</b><br />")+
+															tr("<b>name</b>: %2<br />"))
+													.arg(id)
+													.arg(n.name()));
+		case 1:						return QVariant(QString(tr("<b>name</b>: %1<br />")+
+															tr("click to edit!"))
+													.arg(n.name()));
+		case 2:						return QVariant(QString(tr("<b>color</b>: %1<br />")+
+															tr("click to edit!"))
+													.arg(n.color().name()));
+		default:					return QVariant();
+		}
 	case Qt::StatusTipRole:			return QVariant();
-	case Qt::WhatsThisRole:			return QVariant();
+	case Qt::WhatsThisRole:			return QVariant(tr("<b>basic load set (in tree)</b> ")+
+													tr("<a href=\"tree/bls\">open manual</a><br /><br />")+
+													tr("You can use these to group loads. ")+
+													tr("Afterwards you can combine basic load sets to combined load sets and calculate different combinations of loads in once!<br />")+
+													tr("click on any property to edit: <br />")+
+													tr("<b>name</b> change the name of the load set.<br />")+
+													tr("<b>color</b>:change the color of loads assigned to this set<br /><br />")+
+													treeNavigation());
 	case Qt::SizeHintRole:			return QVariant();
 	case Qt::UserRole:
 		switch(index.column())
@@ -787,9 +919,30 @@ QVariant treeModel::clsItem(const QModelIndex &index, int role) const
 		case 0:						return QVariant(colinIcons::instance().icon(Colin::CLS));
 		default:					return QVariant();
 		}
-	case Qt::ToolTipRole:			return QVariant();
+	case Qt::ToolTipRole:
+		switch(index.column())
+		{
+		case 0:						return QVariant(QString(tr("<b>combined load set #%1</b><br />")+
+															tr("<b>name</b>: %2<br />"))
+													.arg(id)
+													.arg(n.name()));
+		case 1:						return QVariant(QString(tr("<b>name</b>: %1<br />")+
+															tr("click to edit!"))
+													.arg(n.name()));
+		case 2:						return QVariant(QString(tr("this is <b>%1</b> in view.<br />")+
+															tr("click to show or hide!"))
+													.arg(t->activeCLS().contains(id)?tr("shown"):tr("hidden")));
+		default:					return QVariant();
+		}
 	case Qt::StatusTipRole:			return QVariant();
-	case Qt::WhatsThisRole:			return QVariant();
+	case Qt::WhatsThisRole:			return QVariant(tr("<b>combined load set (in tree)</b> ")+
+													tr("<a href=\"tree/cls\">open manual</a><br /><br />")+
+													tr("You can use use these to combine load sets and calculate different combinations of loads in once!<br />")+
+													tr("click on any property to edit: <br />")+
+													tr("<b>name</b> change the name of the load set.<br />")+
+													tr("<b>active</b> toggle on/off to show or hide the results for this combination in the view!<br /><br />")+
+													tr("click on the treangle to show the combination of basic load sets!<br /><br />")+
+													treeNavigation());
 	case Qt::SizeHintRole:			return QVariant();
 	case Qt::CheckStateRole:
 		switch(index.column()){
@@ -818,7 +971,6 @@ QVariant treeModel::supportItem(const QModelIndex &index, int role) const
 		case 1:						return QVariant("x="+(n.x()?tr("locked"):n.xf()?QString::number(n.xf()*FPREFIX)+UNIT.Feh():tr("free")));
 		case 2:						return QVariant("z="+(n.z()?tr("locked"):n.zf()?QString::number(n.zf()*FPREFIX)+UNIT.Feh():tr("free")));
 		case 3:						return QVariant(QString(QChar(0x03C6))+"="+(n.phi()?tr("locked"):n.phif()?QString::number(n.phif()*FMPREFIX)+UNIT.FMeh():tr("free")));
-		case 4:						return QVariant(QString::number(n.angle()*APREFIX, 'f', PRECISON)+"grad");
 		default:					return QVariant();
 		}
 	case Qt::DecorationRole:
@@ -833,13 +985,42 @@ QVariant treeModel::supportItem(const QModelIndex &index, int role) const
 		case 1:						return QVariant(n.x()?tr("locked"):n.xf()?QString::number(n.xf()*FPREFIX):tr("free"));
 		case 2:						return QVariant(n.z()?tr("locked"):n.zf()?QString::number(n.zf()*FPREFIX):tr("free"));
 		case 3:						return QVariant(n.phi()?tr("locked"):n.phif()?QString::number(n.phif()*FMPREFIX):tr("free"));
-		case 4:						return QVariant(QString::number(n.angle()*ANGLEPREFIX));
 		}
-	case Qt::ToolTipRole:			return QVariant();
+	case Qt::ToolTipRole:
+		switch(index.column())
+		{
+		case 0:						return QVariant(QString(tr("<b>support for node #%1</b><br />")+
+															tr("<b>x</b>: %2<br />")+
+															tr("<b>z</b>: %3<br />")+
+															tr("<b>phi</b>: %4<br />"))
+													.arg(id)
+													.arg((n.c_x()!=0)?QString("%1%2").arg(n.c_x()*FPREFIX).arg(UNIT.Feh()):((n.x())?tr("locked"):tr("free")))
+													.arg((n.c_z()!=0)?QString("%1%2").arg(n.c_z()*FPREFIX).arg(UNIT.Feh()):((n.z())?tr("locked"):tr("free")))
+													.arg((n.c_phi()!=0)?QString("%1%2").arg(n.c_phi()*FMPREFIX).arg(UNIT.FMeh()):((n.phi())?tr("locked"):tr("free")))
+													);
+		case 1:						return QVariant(QString(tr("<b>x</b>: %1<br />")+
+															tr("click to edit!"))
+													.arg((n.c_x()!=0)?QString("%1%2").arg(n.c_x()*FPREFIX).arg(UNIT.Feh()):((n.x())?tr("locked"):tr("free"))));
+		case 2:						return QVariant(QString(tr("<b>z</b>: %1<br />")+
+															tr("click to edit!"))
+													.arg((n.c_z()!=0)?QString("%1%2").arg(n.c_z()*FPREFIX).arg(UNIT.Feh()):((n.z())?tr("locked"):tr("free"))));
+		case 3:						return QVariant(QString(tr("<b>phi</b>: %1<br />")+
+															tr("click to edit!"))
+													.arg((n.c_phi()!=0)?QString("%1%2").arg(n.c_phi()*FMPREFIX).arg(UNIT.FMeh()):((n.phi())?tr("locked"):tr("free"))));
+		default:					return QVariant();
+		}
 	case Qt::StatusTipRole:			return QVariant();
-	case Qt::WhatsThisRole:			return QVariant();
+	case Qt::WhatsThisRole:			return QVariant(tr("<b>support (in tree)</b> ")+
+													tr("<a href=\"tree/support\">open manual</a><br /><br />")+
+													tr("You can define the supports for nodes here.<br />")+
+													tr("click on any property to edit: <br />")+
+													tr("<b>x</b>: support in x-direction<br />")+
+													tr("<b>z</b>: support in z-direction<br />")+
+													tr("<b>phi</b>: support for the moment<br />")+
+													tr("Enter <b>free</b>, <b>locked</b> or any number for a <b>spring</b> with spring constant c as the entered value<br /><br />")+
+													treeNavigation());
 	case Qt::SizeHintRole:			return QVariant();
-	case 32:
+	case Qt::UserRole:
 		switch(index.column())
 		{
 		case 1:						return QVariant(ColinStruct::Bearing_h);
@@ -853,7 +1034,152 @@ QVariant treeModel::supportItem(const QModelIndex &index, int role) const
 
 QVariant treeModel::hingeItem(const QModelIndex &index, int role) const
 {
-	return QVariant();
+	int id = index.parent().row();
+
+	const ColinBeam &n = t->beam(id);
+
+
+	switch(role)
+	{
+	case Qt::DisplayRole:
+		switch(index.row())
+		{
+		case 0:
+			switch(index.column())
+			{
+			case 0:						return QVariant(tr("left"));
+			case 1:						return QVariant((!n.joint(ColinBeam::Nl)?tr("no hinge"):n.spring(ColinBeam::Nl)?QString::number(n.spring(ColinBeam::Nl)*FPREFIX):tr("hinge")));
+			case 2:						return QVariant((!n.joint(ColinBeam::Ql)?tr("no hinge"):n.spring(ColinBeam::Ql)?QString::number(n.spring(ColinBeam::Ql)*FPREFIX):tr("hinge")));
+			case 3:						return QVariant((!n.joint(ColinBeam::Ml)?tr("no hinge"):n.spring(ColinBeam::Ml)?QString::number(n.spring(ColinBeam::Ml)*FMPREFIX):tr("hinge")));
+			default:					return QVariant();
+			}
+		case 1:
+			switch(index.column())
+			{
+			case 0:						return QVariant(tr("right"));
+			case 1:						return QVariant((!n.joint(ColinBeam::Nr)?tr("no hinge"):n.spring(ColinBeam::Nr)?QString::number(n.spring(ColinBeam::Nr)*FPREFIX):tr("hinge")));
+			case 2:						return QVariant((!n.joint(ColinBeam::Qr)?tr("no hinge"):n.spring(ColinBeam::Qr)?QString::number(n.spring(ColinBeam::Qr)*FPREFIX):tr("hinge")));
+			case 3:						return QVariant((!n.joint(ColinBeam::Mr)?tr("no hinge"):n.spring(ColinBeam::Mr)?QString::number(n.spring(ColinBeam::Mr)*FMPREFIX):tr("hinge")));
+			default:					return QVariant();
+			}
+		default:						return QVariant();
+		}
+	case Qt::EditRole:
+		switch(index.row())
+		{
+		case 0:
+			switch(index.column())
+			{
+			case 0:						return QVariant(tr("left"));
+			case 1:						return QVariant("x="+(!n.joint(ColinBeam::Nl)?tr("no hinge"):n.spring(ColinBeam::Nl)?QString::number(n.spring(ColinBeam::Nl)*FPREFIX)+UNIT.Feh():tr("hinge")));
+			case 2:						return QVariant("z="+(!n.joint(ColinBeam::Ql)?tr("no hinge"):n.spring(ColinBeam::Ql)?QString::number(n.spring(ColinBeam::Ql)*FPREFIX)+UNIT.Feh():tr("hinge")));
+			case 3:						return QVariant("phi="+(!n.joint(ColinBeam::Ml)?tr("no hinge"):n.spring(ColinBeam::Ml)?QString::number(n.spring(ColinBeam::Ml)*FMPREFIX)+UNIT.FMeh():tr("hinge")));
+			default:					return QVariant();
+			}
+		case 1:
+			switch(index.column())
+			{
+			case 0:						return QVariant(tr("right"));
+			case 1:						return QVariant("x="+(!n.joint(ColinBeam::Nr)?tr("no hinge"):n.spring(ColinBeam::Nr)?QString::number(n.spring(ColinBeam::Nr)*FPREFIX)+UNIT.Feh():tr("hinge")));
+			case 2:						return QVariant("z="+(!n.joint(ColinBeam::Qr)?tr("no hinge"):n.spring(ColinBeam::Qr)?QString::number(n.spring(ColinBeam::Qr)*FPREFIX)+UNIT.Feh():tr("hinge")));
+			case 3:						return QVariant("phi="+(!n.joint(ColinBeam::Mr)?tr("no hinge"):n.spring(ColinBeam::Mr)?QString::number(n.spring(ColinBeam::Mr)*FMPREFIX)+UNIT.FMeh():tr("hinge")));
+			default:					return QVariant();
+			}
+		default:						return QVariant();
+		}
+	case Qt::DecorationRole:
+		switch(index.column())
+		{
+		case 0:
+			switch(index.row())
+			{
+			case 0:					return QVariant(colinIcons::instance().icon(Colin::leftSide));
+			default:				return QVariant(colinIcons::instance().icon(Colin::rightSide));
+			}
+
+		case 1:						return QVariant(colinIcons::instance().icon(Colin::drawJointN));
+		case 2:						return QVariant(colinIcons::instance().icon(Colin::drawJointQ));
+		case 3:						return QVariant(colinIcons::instance().icon(Colin::drawJointM));
+		default:					return QVariant();
+		}
+	case Qt::ToolTipRole:
+		switch(index.column()){
+		case 0:
+			switch(index.row()){
+			case 0:					return QVariant(QString(tr("<b>left hinge for beam #%1</b><br />")+
+															tr("<b>x</b>: %2<br />")+
+															tr("<b>z</b>: %3<br />")+
+															tr("<b>phi</b>: %4<br />"))
+													.arg(id)
+													.arg((!n.joint(ColinBeam::Nl)?tr("no hinge"):n.spring(ColinBeam::Nl)?QString::number(n.spring(ColinBeam::Nl)*FPREFIX)+UNIT.Feh():tr("hinge")))
+													.arg((!n.joint(ColinBeam::Ql)?tr("no hinge"):n.spring(ColinBeam::Ql)?QString::number(n.spring(ColinBeam::Ql)*FPREFIX)+UNIT.Feh():tr("hinge")))
+													.arg((!n.joint(ColinBeam::Ml)?tr("no hinge"):n.spring(ColinBeam::Ml)?QString::number(n.spring(ColinBeam::Ml)*FMPREFIX)+UNIT.FMeh():tr("hinge")))
+													);
+			case 1:					return QVariant(QString(tr("<b>right hinge for beam #%1</b><br />")+
+															tr("<b>x</b>: %2<br />")+
+															tr("<b>z</b>: %3<br />")+
+															tr("<b>phi</b>: %4<br />"))
+													.arg(id)
+													.arg((!n.joint(ColinBeam::Nr)?tr("no hinge"):n.spring(ColinBeam::Nr)?QString::number(n.spring(ColinBeam::Nr)*FPREFIX)+UNIT.Feh():tr("hinge")))
+													.arg((!n.joint(ColinBeam::Qr)?tr("no hinge"):n.spring(ColinBeam::Qr)?QString::number(n.spring(ColinBeam::Qr)*FPREFIX)+UNIT.Feh():tr("hinge")))
+													.arg((!n.joint(ColinBeam::Mr)?tr("no hinge"):n.spring(ColinBeam::Mr)?QString::number(n.spring(ColinBeam::Mr)*FMPREFIX)+UNIT.FMeh():tr("hinge")))
+													);
+			default:				return QVariant();
+			}
+		case 1:
+			switch(index.row()){
+			case 0:					return QVariant(QString(tr("<b>left side x</b>: %1<br />")+
+															tr("click to edit!"))
+													.arg((!n.joint(ColinBeam::Nl)?tr("no hinge"):n.spring(ColinBeam::Nl)?QString::number(n.spring(ColinBeam::Nl)*FPREFIX)+UNIT.Feh():tr("hinge"))));
+			case 1:					return QVariant(QString(tr("<b>right side x</b>: %1<br />")+
+															tr("click to edit!"))
+													.arg((!n.joint(ColinBeam::Nr)?tr("no hinge"):n.spring(ColinBeam::Nr)?QString::number(n.spring(ColinBeam::Nr)*FPREFIX)+UNIT.Feh():tr("hinge"))));
+			default:				return QVariant();
+			}
+		case 2:
+			switch(index.row()){
+			case 0:					return QVariant(QString(tr("<b>left side z</b>: %1<br />")+
+															tr("click to edit!"))
+													.arg((!n.joint(ColinBeam::Ql)?tr("no hinge"):n.spring(ColinBeam::Ql)?QString::number(n.spring(ColinBeam::Ql)*FPREFIX)+UNIT.Feh():tr("hinge"))));
+			case 1:					return QVariant(QString(tr("<b>right side z</b>: %1<br />")+
+															tr("click to edit!"))
+													.arg((!n.joint(ColinBeam::Qr)?tr("no hinge"):n.spring(ColinBeam::Qr)?QString::number(n.spring(ColinBeam::Qr)*FPREFIX)+UNIT.Feh():tr("hinge"))));
+			default:				return QVariant();
+			}
+		case 3:
+			switch(index.row()){
+			case 0:					return QVariant(QString(tr("<b>left side phi</b>: %1<br />")+
+															tr("click to edit!"))
+													.arg((!n.joint(ColinBeam::Ml)?tr("no hinge"):n.spring(ColinBeam::Ml)?QString::number(n.spring(ColinBeam::Ml)*FPREFIX)+UNIT.Feh():tr("hinge"))));
+			case 1:					return QVariant(QString(tr("<b>right side phi</b>: %1<br />")+
+															tr("click to edit!"))
+													.arg((!n.joint(ColinBeam::Mr)?tr("no hinge"):n.spring(ColinBeam::Mr)?QString::number(n.spring(ColinBeam::Mr)*FPREFIX)+UNIT.Feh():tr("hinge"))));
+			default:				return QVariant();
+			}
+		default:					return QVariant();
+		}
+	case Qt::StatusTipRole:			return QVariant();
+	case Qt::WhatsThisRole:			return QVariant(tr("<b>hinge (in tree)</b> ")+
+													tr("<a href=\"tree/hinge\">open manual</a><br /><br />")+
+													tr("You can define hinges for beams here.<br />")+
+													tr("click on any property to edit: <br />")+
+													tr("<b>x</b>: hinge paralell to beam axis (normal force becomes zero)<br />")+
+													tr("<b>z</b>: hinge normal to beam axis (shear force becomes zero)<br />")+
+													tr("<b>phi</b>: ordinary hinge (moment becomes zero)<br />")+
+													tr("Enter <b>free</b>, <b>locked</b> or any number for a <b>spring</b> between node and beam with spring constant c as the entered value<br /><br />")+
+													treeNavigation());
+	case Qt::SizeHintRole:			return QVariant();
+	case Qt::UserRole:
+		switch(index.column())
+		{
+		case 1:
+		case 2:
+		case 3:						return QVariant(ColinStruct::Joint);
+		default:					return QVariant();
+		}
+	default:						return QVariant();
+	}
+
 }
 
 QVariant treeModel::clsblsItem(const QModelIndex &index, int role) const
@@ -861,8 +1187,9 @@ QVariant treeModel::clsblsItem(const QModelIndex &index, int role) const
 
 	int id = index.parent().row();
 
-	if(index.row()>t->cls(id).count())
+	if(index.row()>=t->cls(id).count())
 		return newCLSBLSItem(index, role);
+
 
 	const ColinCLS &c = t->cls(id);
 
@@ -883,7 +1210,20 @@ QVariant treeModel::clsblsItem(const QModelIndex &index, int role) const
 		case 0:						return QVariant(colinIcons::instance().icon(Colin::BLS));
 		default:					return QVariant();
 		}
-	case Qt::ToolTipRole:			return QVariant();
+	case Qt::ToolTipRole:
+		switch(index.column()){
+		case 0:						return QVariant(QString(tr("<b>%1</b> x <b>%2</b>"))
+													.arg(t->bls(c.bls(index.row())).name())
+													.arg(c.fac(index.row())));
+		case 1:						return QVariant(QString(tr("<b>bls</b>: %1<br />")+
+															tr("click to edit!"))
+													.arg(t->bls(c.bls(index.row())).name()));
+		case 2:						return QVariant(QString(tr("<b>factor</b>: %1<br />")+
+															tr("click to edit!"))
+													.arg(c.fac(index.row())));
+		default:					return QVariant();
+		}
+
 	case Qt::StatusTipRole:			return QVariant();
 	case Qt::WhatsThisRole:			return QVariant();
 	case Qt::SizeHintRole:			return QVariant();
@@ -967,7 +1307,7 @@ QVariant treeModel::newLoadItem(const QModelIndex &index, int role) const
 	case Qt::DisplayRole:
 		switch(index.column())
 		{
-		case 0:						return QVariant(tr("add Load"));
+		case 0:						return QVariant(loadTypeDescription(newLoadFormBuffer));
 		case 1:						return QVariant(newLoadBuffer[0]);
 		case 2:						return QVariant(newLoadBuffer[1]);
 		case 3:						return QVariant(newLoadBuffer[2]);
@@ -1042,11 +1382,66 @@ QVariant treeModel::newBLSItem(const QModelIndex &index, int role) const
 
 QVariant treeModel::newCLSItem(const QModelIndex &index, int role) const
 {
+	switch(role)
+	{
+	case Qt::EditRole:
+	case Qt::DisplayRole:
+		switch(index.column())
+		{
+		case 0:						return QVariant(tr("add CLS"));
+		case 1:						return QVariant(newCLSBuffer[0]);
+		default:					return QVariant();
+		}
+	case Qt::DecorationRole:
+		switch(index.column())
+		{
+		case 0:						return QVariant(colinIcons::instance().icon(Colin::addCLS));
+		default:					return QVariant();
+		}
+	case Qt::ToolTipRole:			return QVariant();
+	case Qt::StatusTipRole:			return QVariant();
+	case Qt::WhatsThisRole:			return QVariant();
+	case Qt::SizeHintRole:			return QVariant();
+	case Qt::CheckStateRole:
+		switch(index.column()){
+		case 2:						return QVariant(false);
+		default:					return QVariant();
+		}
+	}
 	return QVariant();
 }
 
 QVariant treeModel::newCLSBLSItem(const QModelIndex &index, int role) const
 {
+
+	switch(role)
+	{
+	case Qt::DisplayRole:
+	case Qt::EditRole:
+		switch(index.column())
+		{
+		case 0:						return QVariant(QString(tr("add bls")));
+		case 1:						return QVariant(QString(tr("name")));
+		case 2:						return QVariant(QString(tr("factor")));
+		default:					return QVariant();
+		}
+	case Qt::DecorationRole:
+		switch(index.column())
+		{
+		case 0:						return QVariant(colinIcons::instance().icon(Colin::addBLS));
+		default:					return QVariant();
+		}
+	case Qt::ToolTipRole:			return QVariant();
+	case Qt::StatusTipRole:			return QVariant();
+	case Qt::WhatsThisRole:			return QVariant();
+	case Qt::SizeHintRole:			return QVariant();
+	case 32:
+		switch(index.column())
+		{
+		case 1:						return QVariant(ColinStruct::CLSBLS);
+		default:					return QVariant();
+		}
+	}
 	return QVariant();
 }
 
@@ -1065,6 +1460,11 @@ bool treeModel::setNode(const QModelIndex & index, const QVariant & value)
 		case 2:
 			val = value.toString().toDouble(&ok);
 			if(ok)			t->setZ(index.row(), val);
+			return ok;
+		case 3:
+			val = value.toString().toDouble(&ok);
+			if(ok && t->node(index.row()).hasbearing())
+							t->setAngle(index.row(), val/ANGLEPREFIX);
 			return ok;
 		default:
 			return false;
@@ -1177,7 +1577,50 @@ bool treeModel::setCLS(const QModelIndex & index, const QVariant & value)
 
 bool treeModel::setSupport(const QModelIndex & index, const QVariant & value)
 {
-	return true;
+	int nr = index.parent().row();
+	ColinSupport n;
+	if(t->node(nr).hasbearing())
+		n = t->node(nr).bearing();
+	bool ok;
+	double f;
+	switch(index.column())
+	{
+	case 1:
+		if(value.toString() == tr("locked"))
+			n.setX(true);
+		else{
+			f = value.toString().toInt(&ok);
+			if(ok)
+				n.setCx(f);
+			else
+				n.setX(false);
+		}
+		return true;
+	case 2:
+		if(value.toString() == tr("locked"))
+			n.setZ(true);
+		else{
+			f = value.toString().toInt(&ok);
+			if(ok)
+				n.setCz(f);
+			else
+				n.setZ(false);
+		}
+		return true;
+	case 3:
+		if(value.toString() == tr("locked"))
+			n.setPhi(true);
+		else{
+			f = value.toString().toInt(&ok);
+			if(ok)
+				n.setCphi(f);
+			else
+				n.setPhi(false);
+		}
+		return true;
+	default:
+		return false;
+	}
 }
 
 bool treeModel::setHinge(const QModelIndex & index, const QVariant & value)
@@ -1188,8 +1631,23 @@ bool treeModel::setHinge(const QModelIndex & index, const QVariant & value)
 
 bool treeModel::setCLSBLS(const QModelIndex & index, const QVariant & value)
 {
-	return true;
+	int id = index.parent().row();
 
+
+
+	const ColinCLS &c = t->cls(id);
+
+	if(index.row()==t->cls_n())
+		return addCLSBLS(index, value);
+
+	switch(index.column())
+	{
+	case 1:
+		t->setCLSName(index.row(), value.toString());
+		return true;
+	default:
+		return false;
+	}
 }
 
 bool treeModel::addNode(const QModelIndex & index, const QVariant & value)
@@ -1208,6 +1666,8 @@ bool treeModel::addNode(const QModelIndex & index, const QVariant & value)
 
 	newNodeBuffer[0] = tr("x");
 	newNodeBuffer[1] = tr("z");
+	QTreeView *tree = qobject_cast<QTreeView*>(QObject::parent());
+	tree->openPersistentEditor(createIndex(index.row()+1, 0, node));
 
 	return true;
 }
@@ -1253,6 +1713,9 @@ bool treeModel::addBeam(const QModelIndex & index, const QVariant & value)
 	newBeamBuffer[1]=tr("to");
 	newBeamBuffer[2]=tr("material");
 	newBeamBuffer[3]=tr("cross section");
+	QTreeView *tree = qobject_cast<QTreeView*>(QObject::parent());
+	tree->openPersistentEditor(createIndex(index.row()+1, 0, beam));
+
 
 	return true;
 }
@@ -1260,6 +1723,7 @@ bool treeModel::addBeam(const QModelIndex & index, const QVariant & value)
 bool treeModel::addLoad(const QModelIndex & index, const QVariant & value)
 {
 	qDebug() << "treeModel::addLoad, new value for " << index.column() << " = " << value.toString();
+	qDebug() << "loadtype = " << loadTypeDescription(newLoadFormBuffer);
 	if(index.column() == 0){
 		newLoadFormBuffer = loadType(value.toString());
 		setLoadBuffer(newLoadBuffer, newLoadFormBuffer);
@@ -1270,8 +1734,11 @@ bool treeModel::addLoad(const QModelIndex & index, const QVariant & value)
 	int pos = newLoadBuffer[0].toInt(&ok);
 	if(!ok)
 		return true;
+	else
+		qDebug() << "pos = " << pos;
 
-	double px, pz, m, set;
+	int set;
+	double px, pz, m;
 
 	switch(newLoadFormBuffer)
 	{
@@ -1279,50 +1746,55 @@ bool treeModel::addLoad(const QModelIndex & index, const QVariant & value)
 	case ColinLoad::increasingLinearLoad:
 	case ColinLoad::decreasingLinearLoad:
 	case ColinLoad::uniformlyDistibutedLoad:
-		px = newBeamBuffer[1].toDouble(&ok);
+		px = newLoadBuffer[1].toDouble(&ok);
 		if(!ok)	return true;
-		pz = newBeamBuffer[2].toDouble(&ok);
+		else qDebug() << "px = " << px;
+		pz = newLoadBuffer[2].toDouble(&ok);
 		if(!ok) return true;
-		set = t->getBLSIDbyName(newBeamBuffer[3]);
+		else qDebug() << "pz = " << pz;
+		set = t->getBLSIDbyName(newLoadBuffer[4]);
 		t->addLoad(ColinLoad(static_cast<ColinLoad::form>(newLoadFormBuffer), pos, px, pz, 0, set));
 		setLoadBuffer(newLoadBuffer, newLoadFormBuffer);
-		return true;
+		break;
 	case ColinLoad::moment:
-		m = newBeamBuffer[3].toDouble(&ok);
+		m = newLoadBuffer[3].toDouble(&ok);
 		if(!ok) return true;
-		set = t->getBLSIDbyName(newBeamBuffer[3]);
+		set = t->getBLSIDbyName(newLoadBuffer[4]);
 		t->addLoad(ColinLoad(static_cast<ColinLoad::form>(newLoadFormBuffer), pos, 0, 0, m, set));
 		setLoadBuffer(newLoadBuffer, newLoadFormBuffer);
-		return true;
+		break;
 	case ColinLoad::tempChange:
-		px = newBeamBuffer[1].toDouble(&ok);
+		px = newLoadBuffer[1].toDouble(&ok);
 		if(!ok) return true;
-		set = t->getBLSIDbyName(newBeamBuffer[3]);
+		set = t->getBLSIDbyName(newLoadBuffer[4]);
 		t->addLoad(ColinLoad(static_cast<ColinLoad::form>(newLoadFormBuffer), pos, px, 0, 0, set));
 		setLoadBuffer(newLoadBuffer, newLoadFormBuffer);
-		return true;
+		break;
 	case ColinLoad::tempDiffrence:
-		m = newBeamBuffer[2].toDouble(&ok);
+		m = newLoadBuffer[3].toDouble(&ok);
 		if(!ok) return true;
-		set = t->getBLSIDbyName(newBeamBuffer[3]);
+		set = t->getBLSIDbyName(newLoadBuffer[4]);
 		t->addLoad(ColinLoad(static_cast<ColinLoad::form>(newLoadFormBuffer), pos, 0, 0, m, set));
 		setLoadBuffer(newLoadBuffer, newLoadFormBuffer);
-		return true;
+		break;
 	case ColinLoad::doubleLoadLeft:
 	case ColinLoad::doubleLoadRight:
-		px = newBeamBuffer[1].toDouble(&ok);
+		px = newLoadBuffer[1].toDouble(&ok);
 		if(!ok)	return true;
-		pz = newBeamBuffer[2].toDouble(&ok);
+		pz = newLoadBuffer[2].toDouble(&ok);
 		if(!ok) return true;
-		m = newBeamBuffer[3].toDouble(&ok);
+		m = newLoadBuffer[3].toDouble(&ok);
 		if(!ok) return true;
-		set = t->getBLSIDbyName(newBeamBuffer[3]);
+		set = t->getBLSIDbyName(newLoadBuffer[3]);
 		t->addLoad(ColinLoad(static_cast<ColinLoad::form>(newLoadFormBuffer), pos, px, pz, m, set));
 		setLoadBuffer(newLoadBuffer, newLoadFormBuffer);
-		return true;
+		break;
 	default:
 		return true;
 	}
+
+	QTreeView *tree = qobject_cast<QTreeView*>(QObject::parent());
+	tree->openPersistentEditor(createIndex(index.row()+1, 0, load));
 
 
 
@@ -1342,6 +1814,28 @@ bool treeModel::addCLS(const QModelIndex & index, const QVariant & value)
 bool treeModel::addCLSBLS(const QModelIndex & index, const QVariant & value)
 {
 	return true;
+}
+
+QBrush treeModel::headerDecoration(const QModelIndex &index) const
+{
+	QTreeView *tv = qobject_cast<QTreeView*>(QObject::parent());
+	QLinearGradient lg(0, 0, 0, 24);
+	lg.setColorAt(0.,			QApplication::palette("QHeaderView").color(QPalette::Light));
+	lg.setColorAt(1.,			QApplication::palette("QHeaderView").color(QPalette::Background));
+	QPixmap pm(tv->columnWidth(index.column()), 24);
+	QPainter p(&pm);
+	p.setBrush(QBrush(lg));
+	QPen pen;
+	lg.setColorAt(0.,			QApplication::palette("QWidget").color(QPalette::Dark));
+	lg.setColorAt(0.5,			QApplication::palette("QWidget").color(QPalette::Dark).darker(180));
+	lg.setColorAt(1,			QApplication::palette("QWidget").color(QPalette::Dark));
+	pen.setBrush(QBrush(lg));
+	p.setPen(pen);
+	int width = tv->columnWidth(index.column());
+	if(!index.column())
+		width -= 21;
+	p.drawRect(index.column()?-1:0, 0, width, 23);
+	return QBrush(pm);
 }
 
 QString treeModel::loadTypeDescription(int loadtype) const
@@ -1562,35 +2056,47 @@ void treeModel::erasedCLS(const int &i)
 
 void treeModel::addedNode(const int &i)
 {
-	emit beginInsertRows(createIndex(0, 0, lists), i, i);
-	emit dataChanged(createIndex(0, 0, lists), createIndex(0, 0, lists));
+	emit beginInsertRows(createIndex(0, 0, lists), i, i+(i==this->t->node_n()-1));
+	emit dataChanged(createIndex(0, 0, lists), createIndex(0, 2, lists));
 	emit endInsertRows();
 }
 
 void treeModel::addedBeam(const int &i)
 {
-	emit beginInsertRows(createIndex(1, 0, lists), i, i);
-	emit dataChanged(createIndex(1, 0, lists), createIndex(1, 0, lists));
+	emit beginInsertRows(createIndex(1, 0, lists), i, i+(i==this->t->beam_n()-1));
+	emit dataChanged(createIndex(1, 0, lists), createIndex(1, 6, lists));
 	emit endInsertRows();
 }
 
 void treeModel::addedLoad(const int &i)
 {
-	emit beginInsertRows(createIndex(2, 0, lists), i, i);
-	emit dataChanged(createIndex(2, 0, lists), createIndex(2, 0, lists));
+	emit beginInsertRows(createIndex(2, 0, lists), i, i+(i==this->t->load_n()-1));
+	emit dataChanged(createIndex(2, 0, lists), createIndex(2, 6, lists));
 	emit endInsertRows();
 }
 
 void treeModel::addedBLS(const int &i)
 {
-	emit beginInsertRows(createIndex(3, 0, lists), i, i);
-	emit dataChanged(createIndex(3, 0, lists), createIndex(3, 0, lists));
+	emit beginInsertRows(createIndex(3, 0, lists), i, i+(i==this->t->bls_n()-1));
+	emit dataChanged(createIndex(3, 0, lists), createIndex(3, 6, lists));
 	emit endInsertRows();
 }
 
 void treeModel::addedCLS(const int &i)
 {
-	emit beginInsertRows(createIndex(4, 0, lists), i, i);
-	emit dataChanged(createIndex(4, 0, lists), createIndex(4, 0, lists));
+	emit beginInsertRows(createIndex(4, 0, lists), i, i+(i==this->t->cls_n()-1));
+	emit dataChanged(createIndex(4, 0, lists), createIndex(4, 6, lists));
 	emit endInsertRows();
+}
+
+QString treeModel::treeNavigation()
+{
+	return  tr("You can move trough the list with:<br />")+
+			tr("<b>Tab</b>: next property<br />")+
+			tr("<b>BackTab</b>: previous property<br />")+
+			tr("<b>up</b>: previous element<br />")+
+			tr("<b>down</b>: next element<br />")+
+			tr("<b>F2</b>: enter edit mode<br />")+
+			tr("<b>Enter</b>: Finish editing<br />")+
+			tr("<b>Esc</b>: Abort editing<br />");
 }

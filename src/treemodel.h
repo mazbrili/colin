@@ -47,6 +47,8 @@ public:
 
 
 
+
+	static QString treeNavigation();
 signals:
 
 public slots:
@@ -75,6 +77,7 @@ private:
 	static treeModel::modelIds childId(treeModel::modelIds id, int row);
 	static int listindex(const QModelIndex &index);
 	static inline treeModel::modelIds Id(int id){return modelIds(id&root);}
+	QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 	//0
 	QVariant nodeHeader(const QModelIndex &index, int role) const;
 	QVariant beamHeader(const QModelIndex &index, int role) const;
@@ -115,6 +118,8 @@ private:
 	bool addCLS(const QModelIndex & index, const QVariant & value);
 	bool addCLSBLS(const QModelIndex & index, const QVariant & value);
 
+	QBrush headerDecoration(const QModelIndex &index) const;
+
 
 	QString loadTypeDescription(int loadtype) const;
 	int loadType(const QString &description) const;
@@ -124,8 +129,9 @@ private:
 	QString newBeamBuffer[4];
 	QString newLoadBuffer[6];
 	QString newBLSBuffer[2];
-	QString nreCLSBuffer[2];
+	QString newCLSBuffer[2];
 	int newLoadFormBuffer;
+
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(treeModel::modelIds);

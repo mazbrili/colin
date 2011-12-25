@@ -78,6 +78,8 @@ public:
 	void focusInEvent(QFocusEvent *e);
 	void focusOutEvent(QFocusEvent *e);
 	void keyPressEvent(QKeyEvent *e);
+	bool event(QEvent *e);
+	void whatsThisEvent(QEvent *e);
 
 	void requestResize(int target);
 	void setStrech(int val);

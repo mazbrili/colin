@@ -83,7 +83,45 @@ void structPainter::drawStruct(const ColinStruct &t, QPainter *painter, QTransfo
 
 
 	//loads
-	t.calculateShapes();
+	if(structPainter::highlightMode & (catcher::CatchedNLine | catcher::CatchedULine | catcher::CatchedMLine | catcher::CatchedQLine))
+	{
+		QList<int> clschildren;
+		QList<double> clsfactors;
+		this->bls.clear();
+		for(int i=0; i<t.cls(highlight).count(); i++){
+			clschildren.append(t.cls(highlight).bls(i));
+			clsfactors.append(t.cls(highlight).fac(i));
+			bls.append(t.cls(highlight).bls(i));
+		}
+		t.calculateShapes(clschildren, clsfactors);
+	}
+	else if(!bls.empty())
+	{
+		QList<int> clschildren;
+		QList<double> clsfactors;
+		for(int i=0; i<bls.size(); i++){
+			clschildren.append(bls.at(i));
+			clsfactors.append(1);
+		}
+		t.calculateShapes(clschildren, clsfactors);
+	}
+	else if(!cls.empty())
+	{
+		QList<int> clschildren;
+		QList<double> clsfactors;
+		this->bls.clear();
+		foreach(int c, cls){
+			for(int i=0; i<t.cls(c).count(); i++){
+				clschildren.append(t.cls(c).bls(i));
+				clsfactors.append(t.cls(c).fac(i));
+				bls.append(t.cls(c).bls(i));
+			}
+		}
+		t.calculateShapes(clschildren, clsfactors);
+	}
+	else
+		t.calculateShapes();
+
 	if(toDraw.testFlag(Colin::nload))
 	{
 		for(int i=0; i<t.load_n(); i++)
@@ -122,6 +160,11 @@ void structPainter::drawStruct(const ColinStruct &t, QPainter *painter, QTransfo
 		}
 	}
 
+	if(structPainter::highlightMode & (catcher::CatchedNLine | catcher::CatchedULine | catcher::CatchedMLine | catcher::CatchedQLine))
+		bls.clear();
+
+	if(!cls.empty())
+		bls.clear();
 
 	//beams
 	for(int i=0; i<t.beam_n(); i++)
@@ -624,7 +667,7 @@ void structPainter::drawStLoad(const ColinLoad &l, bool highlighted)
 	p->save();
 	p->setBrush(p->pen().color());
 	p->translate(points[0]);
-	//p->setClipRegion(QRegion(p->transform().inverted().map(points).toPolygon()));
+//	p->setClipRegion(QRegion(p->transform().inverted().map(points).toPolygon()));
 
 	const int ac = 5;
 	QLineF line(points[0], points.last());
@@ -645,13 +688,26 @@ void structPainter::drawStLoad(const ColinLoad &l, bool highlighted)
 	p->setBrush(v->color(Colin::C_Load2));
 	if(!ignoreHotSpots_)
 	{
+		line = QLineF(points[1], points[2]);
+		/*
 		if(l.typ()==ColinLoad::uniformlyDistibutedLoad)
 			drawLoadHotSpot(QPointF(line.p1()/2+line.p2()/2)-QPointF(l.Px(), l.Pz())*trm->m11()*scaleP, highlighted);
 		else if(l.typ() == ColinLoad::increasingLinearLoad)
 			drawLoadHotSpot(QPointF(line.p2())-QPointF(l.Px(), l.Pz())*trm->m11()*scaleP, highlighted);
 		else if(l.typ() == ColinLoad::decreasingLinearLoad)
 			drawLoadHotSpot(QPointF(line.p1())-QPointF(l.Px(), l.Pz())*trm->m11()*scaleP, highlighted);
+		*/
+		if(l.typ()==ColinLoad::uniformlyDistibutedLoad)
+			drawLoadHotSpot(QPointF(line.p1()/2+line.p2()/2), highlighted);
+		else if(l.typ() == ColinLoad::increasingLinearLoad)
+			drawLoadHotSpot(QPointF(line.p2()), highlighted);
+		else if(l.typ() == ColinLoad::decreasingLinearLoad)
+			drawLoadHotSpot(QPointF(line.p1()), highlighted);
+
+
+
 	}
+
 
 }
 
@@ -702,7 +758,7 @@ void structPainter::drawStLoad(const ColinLoad &l, QLineF *line, bool highlighte
 	p->save();
 	p->setBrush(p->pen().color());
 	p->translate(points[0]);
-	p->setClipRegion(QRegion(p->transform().inverted().map(points).toPolygon()));
+//	p->setClipRegion(QRegion(p->transform().inverted().map(points).toPolygon()));
 
 	const int ac = 5;
 	for(int i=0; i<=ac; i++)
@@ -1174,12 +1230,14 @@ void structPainter::drawFunction(QPainter *p, const QList<const function*> &f, c
 
 void structPainter::setHighlightedObject(catcher::CatchCases c, int object)
 {
+	qDebug() << "highlighting " << c << ", objnr " << object;
 	highlightMode=c;
 	highlight = object;
 }
 
 void structPainter::setHighlightedObject(catcher::CatchCases c)
 {
+	qDebug() << "highlighting " << c;
 	highlightMode=c;
 }
 
@@ -1326,7 +1384,7 @@ void structPainter::drawLoadHotSpot(const QPointF &po, bool highlighted)
 {
 	int r;
 	if(highlightMode == catcher::CatchedLoadHotSpot && highlighted)
-		r = loadBubblerad*2;
+		r = loadBubblerad*2.5;
 	else
 		r= loadBubblerad;
 	p->drawEllipse(po, r, r);

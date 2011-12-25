@@ -194,7 +194,10 @@ namespace Colin
 		addBeam			= 0x40029,
 		addLoad			= 0x40030,
 		addBLS			= 0x40032,
-		addCLS			= 0x40033
+		addCLS			= 0x40033,
+		what			= 0x40034,
+		leftSide		= 0x40035,
+		rightSide		= 0x40036
     };
 
     enum clipboardAction{

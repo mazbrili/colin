@@ -33,6 +33,7 @@
 #include <QtGui/QPrintDialog>
 #include <QtGui/QPrinter>
 #include <QtGui/QToolButton>
+#include <QtGui/QWhatsThis>
 
 #include "historymenu.h"
 
@@ -54,6 +55,7 @@ MainWindow::MainWindow(QWidget *parent)
 	//}
 	ColinStruct dummy;
 	currentTw = &dummy;
+	this->calcInfo->hide();
 
 	setTw(NULL);
 	autoOpen();
@@ -216,39 +218,54 @@ void MainWindow::initMenu()
 	scS.addAction(
 			filem->addAction(tr("new tab"),
 									  this, SLOT(newTab()), QKeySequence::AddTab));
+	scS.lastAction()->setWhatsThis("<b>"+tr("new tab")+"</b><br/>"+
+								   tr("opens the starter widget<br/>")+
+								   tr("<a href=\"startwidget\">more...</a><br />"));
 
 	scS.addAction(
 			filem->addAction(tr("new"),
 							 this, SLOT(newT()), QKeySequence::New));
+	scS.lastAction()->setWhatsThis("<b>"+tr("new")+"</b><br/>"+
+								   tr("creates a new empty file"));
 
 	scS.addAction(
 			filem->addAction(colinIcons::instance().icon(Colin::Open), tr("open"),
 							this, SLOT(openT()), QKeySequence::Open));
+	scS.lastAction()->setWhatsThis("<b>"+tr("open")+"</b><br/>"+
+								   tr("open a file saved on your disk or any other device!"));
 	filem->addSeparator();
 
-	scS.addAction(
-			filem->addAction(tr("print"),
-							 this, SLOT(print()), QKeySequence::Print), true);
-	filem->addSeparator();
+	//scS.addAction(
+	//		filem->addAction(tr("print"),
+	//						 this, SLOT(print()), QKeySequence::Print), true);
+	//filem->addSeparator();
 
 	scS.addAction(
 			filem->addAction(colinIcons::instance().icon(Colin::Save), tr("save"),
 							 this, SLOT(saveCurrent()), QKeySequence::Save), true);
+	scS.lastAction()->setWhatsThis("<b>"+tr("save")+"</b><br/>"+
+								   tr("save the current file to your disk or any other device!")+
+								   tr("The file is saved without asking for the filename, if already named!"));
 
 	scS.addAction(
 			filem->addAction(tr("save as"),
 							 this, SLOT(saveAsT()), QKeySequence::SaveAs), true);
+	scS.lastAction()->setWhatsThis("<b>"+tr("save")+"</b><br/>"+
+								   tr("save the current file to your disk or any other device under a new name!"));
 	filem->addSeparator();
 
 	scS.addAction(
 			filem->addAction(tr("close tab"),
 							 this, SLOT(closeTab()),
 							 QKeySequence(tr("Ctrl+W", "action | close tab"))));
+	scS.lastAction()->setWhatsThis("<b>"+tr("close tab")+"</b><br/>"+
+								   tr("close the current tab!"));
 
 	scS.addAction(
 			filem->addAction(colinIcons::instance().icon(Colin::Close), tr("quit"),
 							 this, SLOT(close()), QKeySequence::Quit));
-
+	scS.lastAction()->setWhatsThis("<b>"+tr("quit")+"</b><br/>"+
+								   tr("close the application!"));
 
 
 	menuBar()->addMenu(filem);
@@ -277,11 +294,20 @@ void MainWindow::initMenu()
 	act = editm->addAction(colinIcons::instance().icon(Colin::Copy), tr("copy"),
 						   this, SLOT(copy()), QKeySequence::Copy);
 	act->setData(Colin::Copy);
+	act->setWhatsThis(tr("<b>copy tool</b> ")+
+					  tr("<a href=\"tool/copy\">more...</a><br /><br />")+
+					  tr("copy the current selection to the clipboard "));
 	scS.addAction(act , true);
 
 	scS.addAction(
 			editm->addAction(colinIcons::instance().icon(Colin::Copy), tr("copy with basepoint"),
 							 this, SLOT(copyBase()), QKeySequence(tr("Ctrl+Shift+C", "action | copy with basepoint"))), true);
+	scS.lastAction()->setWhatsThis(tr("<b>copy with basepoint</b> ")+
+								  tr("<a href=\"menu/copybasepoint\">more...</a><br /><br />")+
+								  tr("copy the current selection to the clipboard. You have to specify a point in the view. ")+
+								  tr("This point will be used as reference when pasting from clipboard!"));
+
+
 
 	act = editm->addAction(colinIcons::instance().icon(Colin::Cut), tr("cut"),
 					 this, SLOT(cut()), QKeySequence::Cut);
@@ -387,6 +413,8 @@ void MainWindow::initMenu()
 	 *        aboutmenu          *
 	 *****************************/
 
+
+
 	QMenu *aboutm = new QMenu(tr("&about", "menu | aboutmenu(don't remve the \"&\""), this);
 //    scS.addAction(
 //            aboutm->addAction(tr("documentation"),
@@ -396,199 +424,305 @@ void MainWindow::initMenu()
 	aboutm->addAction("Qt", this, SLOT(aboutQt()));
 	menuBar()->addMenu(aboutm);
 
+
 }
 
 void MainWindow::initToolBar()
 {
 
-   shortcutSettings &scS = shortcutSettings::instance();
+	shortcutSettings &scS = shortcutSettings::instance();
 
-   toolBarTip = new colinToolTip(this);
-   toolBarTip->hide();
+	toolBarTip = new colinToolTip(this);
+	toolBarTip->hide();
 
-   viewm = new viewMenu(this);                      //viewoptionMenu1
-   viewm2 = new viewMenu2(centralWidget, this);     //viewoptionMenu2
+	viewm = new viewMenu(this);                      //viewoptionMenu1
+	viewm2 = new viewMenu2(centralWidget, this);     //viewoptionMenu2
 
-   toolbar = new cToolBar(tr("toolbar"), this);
-   QActionGroup *aGroup = new QActionGroup(this);
-   aGroup->setExclusive(true);
-   toolbar->setIconSize(colinIcons::iconSize());
-   //nodes
-   QAction *action = new QAction(colinIcons::instance().icon(Colin::drawNode), "draw Nodes", this);
-   action->setData(Colin::drawNode);
-   action->setShortcut(QKeySequence(tr("Ctrl+K", "Action | drawNode")));
-   toolbar->addAction(action);
-   aGroup->addAction(action);
-   scS.addAction(action);
+	toolbar = new cToolBar(tr("toolbar"), this);
+	QActionGroup *aGroup = new QActionGroup(this);
+	aGroup->setExclusive(true);
+	toolbar->setIconSize(colinIcons::iconSize());
+	//nodes
+	QAction *action = new QAction(colinIcons::instance().icon(Colin::drawNode), "draw Nodes", this);
+	action->setData(Colin::drawNode);
+	action->setShortcut(QKeySequence(tr("Ctrl+K", "Action | drawNode")));
+	toolbar->addAction(action);
+	aGroup->addAction(action);
+	scS.addAction(action);
 
-
-   //beam
-   action = new QAction(colinIcons::instance().icon(Colin::drawBeam), "draw beams", this);
-   action->setData(Colin::drawBeam);
-   action->setShortcut(QKeySequence(tr("Ctrl+F", "Action | drawBeam")));
-   toolbar->addAction(action);
-   aGroup->addAction(action);
-   scS.addAction(action);
-
-
-   //bearing
-   action = new QAction("draw support",  this);
-   action->setShortcut(QKeySequence(tr("Ctrl+B", "Action | drawBearing")));
-   aGroup->addAction(action);
-   toolbar->addAction(action);
-   scS.addAction(action);
-   new bMenu(aGroup->actions().at(2), this);
+	scS.lastAction()->setWhatsThis(tr("<b>node tool</b> ")+
+								  tr("<a href=\"tool/node\">open manual</a><br /> <br />")+
+								  tr("Use this tool to add nodes. ")+
+								  tr("<a href=\"nodes\">more...</a><br />")+
+								  tr("To do so click on the designated position in the view. ")+
+								  tr("<a href=\"view\">more...</a><br />")+
+								  tr("The <b>snap</b> will help you! ")+
+								  tr("<a href=\"snap\">more...</a><br />")+
+								  tr("Afterwards you can add supports to the node with the <b>support tool</b>. ")+
+								  tr("<a href=\"tool/support\">more...</a><br />"));
 
 
-   //joint
-   action = new QAction("draw joints", this);
-   action->setShortcut(QKeySequence(tr("Ctrl+J", "Action | drawHinge")));
-   aGroup->addAction(action);
-   toolbar->addAction(action);
-   scS.addAction(action);
-   new jMenu(aGroup->actions().at(3), this);
+	//beam
+	action = new QAction(colinIcons::instance().icon(Colin::drawBeam), "draw beams", this);
+	action->setData(Colin::drawBeam);
+	action->setShortcut(QKeySequence(tr("Ctrl+F", "Action | drawBeam")));
+	toolbar->addAction(action);
+	aGroup->addAction(action);
+	scS.addAction(action);
+
+   scS.lastAction()->setWhatsThis(tr("<b>beam tool</b> ")+
+								  tr("<a href=\"tool/beam\">open manual</a><br /> <br />")+
+								  tr("Use this tool to add beams. ")+
+								  tr("<a href=\"beams\">more...</a><br />")+
+								  tr("To do so click on the designated positions or nodes in the view. ")+
+								  tr("<a href=\"view\">more...</a><br />")+
+								  tr("The <b>snap</b> will help you! ")+
+								  tr("<a href=\"snap\">more...</a><br />")+
+								  tr("The chosen material and cross section can be chosen in the sidebar. ")+
+								  tr("<a href=\"library\">more...</a><br />"));
 
 
-   //load
-   action = new QAction("draw loads", this);
-   action->setShortcut(QKeySequence(tr("Ctrl+L", "Action | drawLoad")));
-   aGroup->addAction(action);
-   toolbar->addAction(action);
-   scS.addAction(action);
-   new lMenu(aGroup->actions().at(4), this);
+	//bearing
+	action = new QAction("draw support",  this);
+	action->setShortcut(QKeySequence(tr("Ctrl+B", "Action | drawBearing")));
+	aGroup->addAction(action);
+	toolbar->addAction(action);
+	scS.addAction(action);
+	new bMenu(aGroup->actions().at(2), this);
 
-   //cls
-   /*
-   action = new QAction("combined load sets", this);
-   scS.addAction(action);
-   connect(action,			SIGNAL(triggered()),
+	scS.lastAction()->setWhatsThis(tr("<b>support tool</b> ")+
+								  tr("<a href=\"tool/support\">open manual</a><br /> <br /> <br />")+
+								  tr("Use this tool to add supports to existion nodes. ")+
+								  tr("<a href=\"support\">more...</a><br />")+
+								  tr("To do so click on the designated node in the view. ")+
+								  tr("<a href=\"view\">more...</a><br />")+
+								  tr("To specify the form of the support which gets added to your structure, keep the triangle beside the tool button pressed. ")+
+								  tr("Use the appearing buttons to set the form to what you need! ")+
+								  tr("Additional posibilities, such as rotated supports and springs as supports can be specified in the tree or view afterwards."));
+
+
+
+	//joint
+	action = new QAction("draw joints", this);
+	action->setShortcut(QKeySequence(tr("Ctrl+J", "Action | drawHinge")));
+	aGroup->addAction(action);
+	toolbar->addAction(action);
+	scS.addAction(action);
+	new jMenu(aGroup->actions().at(3), this);
+
+
+   scS.lastAction()->setWhatsThis(tr("<b>hinge tool</b> ")+
+								  tr("<a href=\"tool/hinge\">open manual</a><br /> <br />")+
+								  tr("Use this tool to add hinges to existion beams. ")+
+								  tr("<a href=\"hinges\">more...</a><br />")+
+								  tr("To do so click on the designated beam. ")+
+								  tr("<a href=\"view\">more...</a><br />")+
+								  tr("Click near a node and the hinge will be placed between the node and the beam. Otherwise it will be created at some position on the beam. ")+
+								  tr("To specify the form of hinge wich gets added to your structure, keep the triangle beside the tool button pressed. ")+
+								  tr("Use the appearing buttons to set the form to what you need! ")+
+								  tr("Additional posibilities, such as springs between the hinge can be set in the tree afterwards!"));
+
+
+
+	//load
+	action = new QAction("draw loads", this);
+	action->setShortcut(QKeySequence(tr("Ctrl+L", "Action | drawLoad")));
+	aGroup->addAction(action);
+	toolbar->addAction(action);
+	scS.addAction(action);
+	new lMenu(aGroup->actions().at(4), this);
+
+	//cls
+	/*
+	action = new QAction("combined load sets", this);
+	scS.addAction(action);
+	connect(action,			SIGNAL(triggered()),
 		   this,			SLOT(loadset()));
-   toolbar->addAction(action);
-*/
+	toolbar->addAction(action);
+	*/
 
-   //undo-redo
-   toolbar->addSeparator();
-   toolbar->addAction(undoA);
-   toolbar->addAction(redoA);
-   scS.addAction(undoA);
-   scS.addAction(redoA);
-   toolbar->addSeparator();
+	//undo-redo
+	toolbar->addSeparator();
+	toolbar->addAction(undoA);
+	toolbar->addAction(redoA);
+	scS.addAction(undoA);
+	scS.addAction(redoA);
+	toolbar->addSeparator();
 
-   undoA->setMenu(new historyMenu());
-   redoA->setMenu(new historyMenu());
+	undoA->setMenu(new historyMenu());
+	redoA->setMenu(new historyMenu());
 
-   //clipboard
-   toolbar->addAction(shortcutSettings::instance().actionWithData(Colin::Copy));
-   toolbar->addAction(shortcutSettings::instance().actionWithData(Colin::Cut));
-   toolbar->addAction(shortcutSettings::instance().actionWithData(Colin::Paste));
-   toolbar->addSeparator();
+	undoA->setWhatsThis(tr("<b>undo</b> ")+
+					   tr("<a href=\"tool/undo\">open manual</a><br /> <br />")+
+					   tr("Use this tool to revert your last modification. ")+
+					   tr("Klick on the triangle beside the tool button to show the history. Here you can revert and resotre many steps in once!"));
 
-   //move and selection
-   aGroup->addAction(toolbar->addAction(colinIcons::instance().icon(Colin::drawMove),
+	redoA->setWhatsThis(tr("<b>redo</b> ")+
+					   tr("<a href=\"tool/redo\">open manual</a><br /> <br />")+
+					   tr("Use this tool to revert your last modification. ")+
+					   tr("Klick on the triangle beside the tool button to show the history. Here you can revert and resotre many steps in once!"));
+
+
+
+	//clipboard
+	toolbar->addAction(shortcutSettings::instance().actionWithData(Colin::Copy));
+	toolbar->addAction(shortcutSettings::instance().actionWithData(Colin::Cut));
+	toolbar->addAction(shortcutSettings::instance().actionWithData(Colin::Paste));
+	toolbar->addSeparator();
+
+	//move and selection
+	aGroup->addAction(toolbar->addAction(colinIcons::instance().icon(Colin::drawMove),
 										tr("move")));
-   stdA = aGroup->actions().last();
-   aGroup->actions().last()->setData(Colin::drawMove);
-   aGroup->addAction(toolbar->addAction(colinIcons::instance().icon(Colin::drawSelec), tr("select")));
-   aGroup->actions().last()->setData(Colin::drawSelec);
-   aGroup->actions().last()->setShortcut(tr("Ctrl+D", "action | select"));
-   scS.addAction(aGroup->actions().last());
+	stdA = aGroup->actions().last();
+	aGroup->actions().last()->setData(Colin::drawMove);
 
-   //zoom
-   toolbar->addSeparator();
-   action = new QAction(("zoom all"), this);
-   action->setIcon(QIcon(colinIcons::instance().icon(Colin::drawZoomAll)));
-   action->setData(Colin::drawZoomAll);
-   action->setShortcut(QKeySequence(tr("Ctrl+E", "action | zoom all")));
-   toolbar->addAction(action);
-   action->setMenu(viewm);
-   connect(action,              SIGNAL(triggered()),
+	stdA->setWhatsThis(tr("<b>move</b> ")+
+					  tr("<a href=\"tool/move\">open manual</a><br /> <br />")+
+					  tr("Use this tool to move stuff in the <a href=\"view\">view</a>. <br />")+
+					  tr("If you click on a void place in the view you can move the visible area as long as the mouse button is pressed. <br />")+
+					  tr("If you click on a node, you can move the node as long as the mouse is pressed. <br />")+
+					  tr("If you click on a load, you can move the load from beam to beam or from node to node as ling as the mouse is pressed. <br />")+
+					  tr("Temperatures behave the same as loads. <br />")+
+					  tr("If you click on a the circle attacted to a node, you can change the values of the load as ling as the mouse is pressed. <br />"));
+
+
+
+
+
+	aGroup->addAction(toolbar->addAction(colinIcons::instance().icon(Colin::drawSelec), tr("select")));
+	aGroup->actions().last()->setData(Colin::drawSelec);
+	aGroup->actions().last()->setShortcut(tr("Ctrl+D", "action | select"));
+	scS.addAction(aGroup->actions().last());
+
+	scS.lastAction()->setWhatsThis(tr("<b>select</b> ")+
+								  tr("<a href=\"tool/select\">open manual</a><br /> <br />")+
+								  tr("Use this tool to select objects within an area you can specify in the view.<br />")+
+								  tr("You can also select single Objects be clicking them (also in the view).")+
+								  tr("You will probably find also other selection tools usefull. You can find them in the edit menu: <br />")+
+								  tr("<b>Select all</b> (press Ctrl+A by default),<br />")+
+								  tr("<b>Invert Selection</b> (press Ctrl+I by default) and <br />")+
+								  tr("<b>Deselect all</b> (press Ctrl+Shift+A by default) <br />")+
+								  tr("<a href=\"menu/edit\">more...</a>"));
+
+	//zoom
+	toolbar->addSeparator();
+	action = new QAction(("zoom all"), this);
+	action->setIcon(QIcon(colinIcons::instance().icon(Colin::drawZoomAll)));
+	action->setData(Colin::drawZoomAll);
+	action->setShortcut(QKeySequence(tr("Ctrl+E", "action | zoom all")));
+	toolbar->addAction(action);
+	action->setMenu(viewm);
+	connect(action,              SIGNAL(triggered()),
 		   this,                SLOT(zoomAll()));
-   scS.addAction(action, true);
+	scS.addAction(action, true);
 
-   action = new QAction(tr("zoom"), this);
-   aGroup->addAction(action);
-   toolbar->addAction(action);
-   new zMenu(action, this);
+	scS.lastAction()->setWhatsThis(tr("<b>auto zoom tools</b> ")+
+								  tr("<a href=\"tool/setzoom\">open manual</a><br /> <br />")+
+								  tr("Use this tool to automatically adjust the zoom factor<br />")+
+								  tr("Keep the triangle beside the tool button pressed to get access to the zoom factors of results. ")+
+								  tr("An auto zoom function for the results can be found there too!"));
 
-   //spacingItemfrom filelist
-   QWidget* dummy = new QWidget(toolbar);
-   dummy->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-   toolbar->addWidget(dummy);
 
-   //calculate
-   calcA = toolbar->addAction(colinIcons::instance().icon(Colin::Calculate), tr("calculate"));
-   calcA->setData(Colin::Calculate);
-   calcA->setShortcut(QKeySequence(tr("Ctrl+R", "action | calculate")));
-   connect(calcA,               SIGNAL(triggered()),
+	action = new QAction(tr("zoom"), this);
+	aGroup->addAction(action);
+	toolbar->addAction(action);
+	new zMenu(action, this);
+
+
+
+	//spacingItemfrom filelist
+	QWidget* dummy = new QWidget(toolbar);
+	dummy->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	toolbar->addWidget(dummy);
+
+
+
+	QAction *what = QWhatsThis::createAction(this);
+	toolbar->addAction(what);
+	what->setData(Colin::what);
+	what->setIcon(colinIcons::instance().icon(Colin::what));
+	what->setShortcut(QKeySequence("F1"));
+	what->setWhatsThis(tr("<b>What's this?</b><br />")+
+					  tr("Congratulation! You found the help system of Colin!<br /> <br />")+
+					  tr("Use this tool to get descriptions of any button or other element of Colin!<br />")+
+					  tr("Also, you will get links to the manual or to books.google"));
+	scS.addAction(what);
+
+	//calculate
+	calcA = toolbar->addAction(colinIcons::instance().icon(Colin::Calculate), tr("calculate"));
+	calcA->setData(Colin::Calculate);
+	calcA->setShortcut(QKeySequence(tr("Ctrl+R", "action | calculate")));
+	connect(calcA,               SIGNAL(triggered()),
 		   this,                SLOT(calculate()));
-   toolbar->addSeparator();
-   scS.addAction(calcA, true);
+	toolbar->addSeparator();
+	scS.addAction(calcA, true);
 
-   //snapoptions
-   snapA = new QAction(tr("snap"), this);
-   snapA->setIcon(colinIcons::instance().icon(Colin::Snap));
-   snapA->setShortcut(QKeySequence(tr("Ctrl+U", "action | snap on-off")));
-   scS.addAction(snapA);
+	//snapoptions
+	snapA = new QAction(tr("snap"), this);
+	snapA->setIcon(colinIcons::instance().icon(Colin::Snap));
+	snapA->setShortcut(QKeySequence(tr("Ctrl+U", "action | snap on-off")));
+	scS.addAction(snapA);
 
-   toolbar->addAction(snapA);
-   new cMenu(snapA, this);
+	toolbar->addAction(snapA);
+	new cMenu(snapA, this);
 
-   //viewoptions
-   action =toolbar->addAction(colinIcons::instance().icon(Colin::Windows), tr("view"),
+	//viewoptions
+	action =toolbar->addAction(colinIcons::instance().icon(Colin::Windows), tr("view"),
 					  this, SLOT(launchViewMenu2()));
-   action->setData(Colin::Windows);
+	action->setData(Colin::Windows);
 
 
-   //making the group work
-   foreach(QAction *a, aGroup->actions())
+	//making the group work
+	foreach(QAction *a, aGroup->actions())
 	   a->setCheckable(true);
-   aGroup->actions().at(aGroup->actions().count()-2)->setChecked(true);
+	aGroup->actions().at(aGroup->actions().count()-2)->setChecked(true);
 
-   //...and add to the mainwindow
-   toolbar->setMovable(false);
-   addToolBar(toolbar);
-
-
-   //widgetswitcher!
-   tab = new cTabBar(this);
-   tab->setMovable(false);
-   tab->setAllowedAreas(Qt::BottomToolBarArea | Qt::TopToolBarArea);
-   addToolBar(Qt::BottomToolBarArea, tab);
-
-   tab->setObjectName("tabbar");
-   toolbar->setObjectName("toolbar");
+	//...and add to the mainwindow
+	toolbar->setMovable(false);
+	addToolBar(toolbar);
 
 
-   //make sure the tooltip will launched!
+	//widgetswitcher!
+	tab = new cTabBar(this);
+	tab->setMovable(false);
+	tab->setAllowedAreas(Qt::BottomToolBarArea | Qt::TopToolBarArea);
+	addToolBar(Qt::BottomToolBarArea, tab);
+
+	tab->setObjectName("tabbar");
+	toolbar->setObjectName("toolbar");
 
 
-   foreach(QAction *a, toolbar->actions())
-   {
+	//make sure the tooltip will launched!
+
+
+	foreach(QAction *a, toolbar->actions())
+	{
 	   connect(a,           SIGNAL(hovered()),
 			   this,        SLOT(launchToolTip()));
 
 	   a->setToolTip("");
-   }
+	}
 
 
-   connect(toolbar,							SIGNAL(actionTriggered(QAction*)),
+
+	connect(toolbar,							SIGNAL(actionTriggered(QAction*)),
 		   toolBarTip,						SLOT(hide()));
 
-   connect(toolbar,							SIGNAL(mouseLeft()),
+	connect(toolbar,							SIGNAL(mouseLeft()),
 		   toolBarTip,						SLOT(hide()));
 
-   connect(aGroup,							SIGNAL(selected(QAction*)),
+	connect(aGroup,							SIGNAL(selected(QAction*)),
 		   this,							SLOT(actionSelected(QAction*)));
 
-   connect(viewm2,							SIGNAL(fullScreenRequested(bool)),
+	connect(viewm2,							SIGNAL(fullScreenRequested(bool)),
 	   this,								SLOT(fullScreen(bool)));
 
-   connect(&shortcutSettings::instance(),	SIGNAL(menusBesideChanged(bool)),
+	connect(&shortcutSettings::instance(),	SIGNAL(menusBesideChanged(bool)),
 		   this,							SLOT(setActionMenus(bool)));
 
-   stdA->toggle();
+	stdA->toggle();
 
-   this->setActionMenus(shortcutSettings::instance().menuBeside());
+	this->setActionMenus(shortcutSettings::instance().menuBeside());
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e)
@@ -976,7 +1110,15 @@ void MainWindow::launchToolTip()
 	else if(senderA->data().toInt()>Colin::startsAt)
 	{
 		Colin::otherAction cA = static_cast<Colin::otherAction>(senderA->data().toInt());
-		if(cA == Colin::Copy)
+		if(cA == Colin::what)
+		{
+			title = tr("What's this?");
+			description = tr("Click on any element of Colin to get a description of it");
+			icon = QPixmap(icondir +"tooltip/whatsThis"+dark+".png");
+			shortcut = senderA->shortcut();
+			alignright = true;
+		}
+		else if(cA == Colin::Copy)
 		{
 			title = tr("copy");
 			description = tr("copy selection into clipboard.");

@@ -26,6 +26,7 @@ public:
 	static bool light;
 	static icon current;
 	static bool shadow;
+	static bool shadowMode;
 
 	void paint(QPainter *p, bool light);
 protected:

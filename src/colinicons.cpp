@@ -115,6 +115,9 @@ void colinIcons::load()
 	cls.addFile(icondir+"cls.png");
 	bls_plus.addFile(icondir+"bls_plus_on.png");
 	cls_plus.addFile(icondir+"cls_plus_on.png");
+	whatsthis.addFile(icondir+"whatsThis.png");
+	leftBeam.addFile(icondir+"left.png");
+	rightBeam.addFile(icondir+"right.png");
 
     loadToolTipIcons();
 }
@@ -362,6 +365,12 @@ const QIcon &colinIcons::icon(const Colin::otherAction &a, bool tooltip) const
 		return bls;
 	case CLS:
 		return cls;
+	case what:
+		return whatsthis;
+	case leftSide:
+		return leftBeam;
+	case rightSide:
+		return rightBeam;
     default:
         return placeholder;
     }
@@ -717,6 +726,7 @@ QBrush colinIcons::lightBrush(QLinearGradient &grad) const
     grad.setColorAt(1, QColor(178, 178, 178));
     return QBrush(grad);
 }
+
 QBrush colinIcons::darkBrush(QLinearGradient &grad) const
 {
     grad.setColorAt(0, QColor(30, 30, 30));

@@ -2,7 +2,6 @@ colin (0.2.0-0) any; urgency=low
 
   * added Basic Load Sets
   * added Combined Load Sets
-  * elements can now be created in the treeview
   * fixed some problems with the tooltips
   * using native selection rectangles
   * added a dialog for printing of the protocol
@@ -10,8 +9,15 @@ colin (0.2.0-0) any; urgency=low
   * added javscript engine
   * added a console
   * added some animations to the GUI
+  * complete reimplementation of treeview
 
- -- Matthias Rauter <matthias.rauter@student.uibk.ac.at>  Mon, 28 Nov 2011 11:01:00 +0100
+ -- Matthias Rauter <matthias.rauter@student.uibk.ac.at>  Mon, 13 Dec 2011 00:00:01 +0100
+
+colin (0.1.10-1) any; urgency=low
+
+  * changed mingw gcc version to 4.6.2
+
+ -- Matthias Rauter <matthias.rauter@student.uibk.ac.at>  Mon, 13 Dec 2011 23:08:00 +0100
 
 colin (0.1.10-0) any; urgency=low
 

@@ -40,70 +40,15 @@
 
 class treeDelegate : public QItemDelegate
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    explicit treeDelegate(QObject *parent = 0 );
-    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
-    void setEditorData(QWidget *editor, const QModelIndex &index ) const;
-    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index ) const;
+	explicit treeDelegate(QObject *parent = 0 );
+	QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+	void setEditorData(QWidget *editor, const QModelIndex &index ) const;
+	void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index ) const;
 
 protected:
-    bool eventFilter(QObject *obj, QEvent *event){
-		if(event->type() == QEvent::FocusOut)
-		{
-			if(commitOnFocusLoss){
-				commitData(static_cast<QWidget*>(obj));
-				obj->deleteLater();
-				return true;
-			}
-		}
-        if(event->type() == QEvent::KeyPress)
-        {
-            if(static_cast<QKeyEvent*>(event)->key() == Qt::Key_Tab )
-            {
-				commitOnFocusLoss = false;
-				commitData(static_cast<QWidget*>(obj));
-				emit openNext(lastIndex);
-                return true;
-            }
-            else if(static_cast<QKeyEvent*>(event)->key() == Qt::Key_Backtab)
-            {
-				commitOnFocusLoss = false;
-				commitData(static_cast<QWidget*>(obj));
-				emit openPrevious(lastIndex);
-                return true;
-            }
-            else if(static_cast<QKeyEvent*>(event)->key() == Qt::Key_Down)
-            {
-				commitOnFocusLoss = false;
-				commitData(static_cast<QWidget*>(obj));
-				emit openNextItem(lastIndex);
-                return true;
-            }
-            else if(static_cast<QKeyEvent*>(event)->key() == Qt::Key_Up)
-            {
-				commitOnFocusLoss = false;
-				commitData(static_cast<QWidget*>(obj));
-				emit openPreviousItem(lastIndex);
-                return true;
-            }
-            else if(static_cast<QKeyEvent*>(event)->key() == Qt::Key_Return)
-			{
-				commitOnFocusLoss = false;
-				commitData(static_cast<QWidget*>(obj));
-				emit openFirstColumn(lastIndex);
-                return true;
-            }
-	    else if(static_cast<QKeyEvent*>(event)->key() == Qt::Key_Escape)
-			{
-				commitOnFocusLoss = false;
-//#warning restore in treeView
-				obj->deleteLater();
-				return true;
-            }
-        }
-        return QItemDelegate::eventFilter(obj, event);
-    }
+	bool eventFilter(QObject *obj, QEvent *event);
 
 	mutable QModelIndex lastIndex;
 	mutable bool commitOnFocusLoss;
@@ -119,7 +64,7 @@ signals:
 public slots:
 
 private slots:
-    void emitCommitData();
+	void emitCommitData();
 };
 
 #endif // TREEDELEGATE_H

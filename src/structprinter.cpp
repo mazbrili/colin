@@ -42,10 +42,13 @@ structPrinter::structPrinter(ColinStruct *t, QPrinter *printer, const painterCon
 	this->c = content;
 	this->p = printer;
 	painter = 0;
+	device = 0;
 }
 
 void structPrinter::print(QPaintDevice *target, int pageNr)
 {
+	qDebug()  << "structPrinter::print(...)";
+	this->device = target;
 	if(!painter)
 		painter = new QPainter(target);
 	painter->scale(double(target->width())/double(p->paperRect(QPrinter::DevicePixel).width()),
@@ -84,8 +87,10 @@ void structPrinter::print(QPaintDevice *target, int pageNr)
 	{
 		tableContent(indizes);
 	}
+	this->device=0;
 
 	delete painter;
+	painter=0;
 }
 
 painterContent structPrinter::getContentOfPage(QPrinter *printer, painterContent content, int pageNr)
@@ -100,9 +105,13 @@ int structPrinter::getPageOfContent(QPrinter *printer, painterContent all, paint
 
 int structPrinter::requiredPages(QPrinter *printer, painterContent content, int* indizes)
 {
+	qDebug()  << "structPrinter::requiredPages(...)";
 	bool createdPainter = false;
 	if(!painter){
-		painter = new QPainter(printer);
+		if(device)
+			painter = new QPainter(device);
+		else
+			painter = new QPainter();
 		createdPainter = true;
 	}
 	if(indizes){
@@ -164,6 +173,7 @@ int structPrinter::requiredPages(QPrinter *printer, painterContent content, int*
 
 void structPrinter::tableContent(int *indizes)
 {
+	qDebug()  << "structPrinter::tableContent(...)";
 	QRectF bR;
 	decoratePage();
 
@@ -295,6 +305,7 @@ void structPrinter::tableContent(int *indizes)
 void structPrinter::decoratePage()
 {
 
+	qDebug()  << "structPrinter::decoratePage(...)" << " pageNr: " << pageCount;
 	QRect pr = p->pageRect(QPrinter::DevicePixel).toRect();
 	QRect bR;
 
@@ -321,6 +332,8 @@ void structPrinter::decoratePage()
 	}
 	painter->drawLine(QPoint(pr.left(), pr.bottom()-painter->fontMetrics().height()-2),
 					  QPoint(pr.right(), pr.bottom()-painter->fontMetrics().height()-2));
+
+	pageCount++;
 }
 
 int structPrinter::usablePageHeight()
@@ -341,6 +354,7 @@ int structPrinter::needLine(int i)
 
 int structPrinter::blsPlot(int *pages, bool test)
 {
+	qDebug()  << "structPrinter::blsPlot(...)" << " pageNr: " << pageCount;
 	if(test)
 	{
 		int required;
@@ -392,13 +406,11 @@ int structPrinter::blsPlot(int *pages, bool test)
 	}
 }
 
-int structPrinter::blsPlot(const int &i, const QRect &rect, bool test)
-{
-
-}
 
 int structPrinter::clsPlot(int *pages, bool test)
 {
+	qDebug()  << "structPrinter::clsPlot(...)" << " pageNr: " << pageCount;
+
 	if(test)
 	{
 		int required;
@@ -409,20 +421,10 @@ int structPrinter::clsPlot(int *pages, bool test)
 		*pages+=required;
 		return usablePageHeight();
 	}
-	if(test)
-	{
-		int required;
-		if(c.s.testFlag(painterContent::fourPerPage))
-			required = tw->bls_n()/4 + (required%4)?1:0;
-		else
-			required = tw->bls_n();
-		*pages+=required;
-		return usablePageHeight();
-	}
+
 
 	QRect rect = p->pageRect();
 	rect.setHeight(usablePageHeight());
-
 	if(c.s.testFlag(painterContent::fourPerPage))
 	{
 		rect.setWidth(rect.width()/2);
@@ -470,6 +472,8 @@ int structPrinter::clsPlot(int *pages, bool test)
 
 int structPrinter::clsPlotall(int *pages, bool test)
 {
+	qDebug()  << "structPrinter::clsPlotall(...)" << " pageNr: " << pageCount;
+
 	if(test)
 	{
 		int required;
@@ -480,15 +484,54 @@ int structPrinter::clsPlotall(int *pages, bool test)
 		*pages+=required;
 		return usablePageHeight();
 	}
-}
 
-int structPrinter::clsPlot(const int &i, const QRect &rect, bool test)
-{
+	QRect rect = p->pageRect();
+	rect.setHeight(usablePageHeight());
+	if(c.s.testFlag(painterContent::fourPerPage))
+	{
+		rect.setWidth(rect.width()/2);
+		rect.setHeight(rect.height()/2);
+		rect.translate(rect.width(), rect.height());
+	}
+	for(int j=0; j<4; j++)
+	{
+		int i = j;
+		Colin::Elements toDraw;
+		if(j==0)				toDraw = Colin::nload | Colin::u;
+		if(j==1)				toDraw = Colin::N;
+		if(j==2)				toDraw = Colin::Q;
+		if(j==3)				toDraw = Colin::M;
 
+		if(!(i%4) || !c.s.testFlag(painterContent::fourPerPage)){
+			*pages++;
+			p->newPage();
+			decoratePage();
+			if(c.s.testFlag(painterContent::fourPerPage)){
+				rect.translate(-rect.width(), -rect.height());
+				painter->drawLine(rect.topRight(), rect.bottomRight()+QPointF(0, rect.height()));
+				painter->drawLine(rect.bottomLeft(), rect.bottomRight()+QPointF(rect.width(), 0));
+			}
+		}
+		else if(!(i%2))
+			rect.translate(-rect.width(), rect.height());
+		else
+			rect.translate(rect.width(), 0);
+
+		QList<int> cls;
+		for(int m=0; m<tw->cls_n(); m++) cls << m;
+		printStruct(rect,
+					 Colin::beam    |
+					 Colin::bearing |
+					 Colin::joint   |
+					 toDraw,
+					 cls);
+	}
 }
 
 int structPrinter::nodeIn(int *pages, bool test)
 {
+	qDebug()  << "structPrinter::nodeIn(...)" << " pageNr: " << pageCount;
+
 	if(test)
 	{
 		int requiredHeight = lineHeight()*(tw->node_n()+titleSize);
@@ -499,10 +542,6 @@ int structPrinter::nodeIn(int *pages, bool test)
 	}
 }
 
-int structPrinter::nodeIn(const int &i, bool test)
-{
-
-}
 
 int structPrinter::beamIn(int *pages, bool test)
 {
@@ -514,11 +553,6 @@ int structPrinter::beamIn(int *pages, bool test)
 		*pages+=required;
 		return requiredHeight;
 	}
-}
-
-int structPrinter::beamIn(const int &i, bool test)
-{
-
 }
 
 int structPrinter::loadIn(int *pages, bool test)
@@ -533,11 +567,6 @@ int structPrinter::loadIn(int *pages, bool test)
 	}
 }
 
-int structPrinter::loadIn(const int &i, bool test)
-{
-
-}
-
 int structPrinter::nodeRes(int *pages, bool test)
 {
 	if(test)
@@ -548,11 +577,6 @@ int structPrinter::nodeRes(int *pages, bool test)
 		*pages+=required;
 		return requiredHeight;
 	}
-}
-
-int structPrinter::nodeRes(const int &i, bool test)
-{
-
 }
 
 int structPrinter::beamResF(int *pages, bool test)
@@ -567,11 +591,6 @@ int structPrinter::beamResF(int *pages, bool test)
 	}
 }
 
-int structPrinter::beamResF(const int &i, bool test)
-{
-
-}
-
 int structPrinter::beamResVal(int *pages, bool test)
 {
 	if(test)
@@ -582,11 +601,6 @@ int structPrinter::beamResVal(int *pages, bool test)
 		*pages+=required;
 		return requiredHeight;
 	}
-}
-
-int structPrinter::beamResVal(const int &i, bool test)
-{
-
 }
 
 void structPrinter::printStruct(const QRect &rect, Colin::Elements e, QList<int> cls)
@@ -605,6 +619,7 @@ void structPrinter::printStruct(const QRect &rect, const QRectF &tRect, Colin::E
 	QTransform transform = getScale(QRectF(rect), tRect);
 	structPainter sP;
 	painter->setClipRect(rect);
+	sP.ignoreHotSpots(true);
 	sP.setCLS(cls);
 	sP.drawStruct(*filelist::instance().currentFile(), painter, &transform, e);
 	painter->restore();
@@ -617,6 +632,7 @@ void structPrinter::printStructBLS(const QRect &rect, const QRectF &tRect, Colin
 	structPainter sP;
 	painter->setClipRect(rect);
 	sP.setBLS(bls);
+	sP.ignoreHotSpots(true);
 	sP.drawStruct(*filelist::instance().currentFile(), painter, &transform, e);
 	painter->restore();
 }

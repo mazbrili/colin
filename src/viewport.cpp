@@ -32,8 +32,12 @@
 #include "nloadmenu.h"
 #include "momentmenu.h"
 #include "unitsettings.h"
+#include "colinmanual.h"
+#include "colinmanual.h"
 
 #include <QtCore/QTimer>
+#include <QtGui/QWhatsThis>
+#include <QtGui/QWhatsThisClickedEvent>
 
 //QPoint viewport::lastClick = QPoint(-1, -1);
 //int drawingSteps = -1;
@@ -58,22 +62,26 @@ viewport::viewport(QWidget *parent) :
 		QWidget (parent)
 {
 
+	setWhatsThis("fake");
 	mouseIsOverChild = false;
 	id_ = viewCounter++;
 	maximizer = new QPushButton("", this);
 	maximizer->setIcon(colinIcons::instance().icon(Colin::drawZoomIn));
 	maximizer->setFocusPolicy(Qt::NoFocus);
 	maximizer->setFlat(true);
+	maximizer->setWhatsThis(tr("miximze this view and hide all other!"));
 
 	hider = new QPushButton("", this);
 	hider->setIcon(colinIcons::instance().icon(Colin::Close));
 	hider->setFocusPolicy(Qt::NoFocus);
 	hider->setFlat(true);
+	hider->setWhatsThis(tr("hide this view and let the other expand!"));
 
 	allshower = new QPushButton("", this);
 	allshower->setIcon(colinIcons::instance().icon(Colin::Windows));
 	allshower->setFocusPolicy(Qt::NoFocus);
 	allshower->setFlat(true);
+	allshower->setWhatsThis(tr("show all views!"));
 
 	setMouseTracking(true);
 	setFocusPolicy(Qt::WheelFocus);
@@ -194,9 +202,11 @@ void viewport::paintEvent(QPaintEvent *)
 
 	QPoint cursorpos = mapFromGlobal(QCursor::pos());
 
-//	if(cursorpos.x() < 0 || cursorpos.y() < 0 ||
-//	   cursorpos.x() > width()-1 || cursorpos.y() > height()-1)
-//		structPainter::setHighlightedObject(catcher::CatchedNLine | catcher::CatchedULine | catcher::CatchedMiddle | catcher::CatchedQLine);
+	if(cursorpos.x() < 0 || cursorpos.y() < 0 ||
+	   cursorpos.x() > width()-1 || cursorpos.y() > height()-1){
+		if(structPainter::highlightMode & (catcher::CatchedNLine | catcher::CatchedULine | catcher::CatchedMLine | catcher::CatchedQLine))
+			structPainter::setHighlightedObject(catcher::CatchedNLine | catcher::CatchedULine | catcher::CatchedMLine | catcher::CatchedQLine);
+	}
 
 
 
@@ -222,7 +232,7 @@ void viewport::paintEvent(QPaintEvent *)
 
 	globM = QTransform(globM.m11()*zf,         0,                       0,
 					   0,                      globM.m22()*zf,          0,
-					   int(globM.dx()),        int(globM.dy()),         1);
+					   int(globM.dx()*zf),        int(globM.dy()*zf),   1);
 
 
 	//gird looks much more better if the pixmap dont need to be scaled..
@@ -236,6 +246,7 @@ void viewport::paintEvent(QPaintEvent *)
 					 width(),
 					 height()),
 			   brushpix);
+
 
 	//center ...
 
@@ -260,7 +271,7 @@ void viewport::paintEvent(QPaintEvent *)
 
 	//making this a rounded rect
 	p.setPen(palette().color(QPalette::Dark));
-	if(!rect().contains(mapFromGlobal(QCursor::pos())))
+	if(!this->hasFocus())
 		p.setPen(palette().color(QPalette::Dark));
 	else
 		p.setPen(palette().color(QPalette::Highlight));
@@ -345,6 +356,12 @@ void viewport::paintEvent(QPaintEvent *)
 #endif //QT_NO_DEBUG
 */
 
+#ifdef PAINTEVENT_VERBOSE
+	qDebug() << "paintEvent of viewport #" << id();
+	qDebug() << "highlightingmode: " << highlightedObject.highlightingMode;
+	qDebug() << "highlighted obje: " << highlightedObject.objectIndex;
+#endif
+
 }
 
 void viewport::drawStruct(QPainter *p)
@@ -367,6 +384,7 @@ void viewport::findHighLightedObject()
 		return;
 	}
 
+	highlight oldHighlightedObject = highlightedObject;
 	int &aditional =  highlightedObject.objectIndex2;
 	int &first = highlightedObject.objectIndex;
 	catcher::CatchCases &cC = highlightedObject.highlightingMode;
@@ -880,6 +898,16 @@ void viewport::findHighLightedObject()
 		}                                                           //NEED SOME SLEEP
 	}*/
 
+
+	if(oldHighlightedObject.highlightingMode != highlightedObject.highlightingMode ||
+	   oldHighlightedObject.objectIndex != highlightedObject.objectIndex ||
+	   oldHighlightedObject.objectIndex2 != highlightedObject.objectIndex2)
+	{
+		foreach(QWidget *vp, parent()->findChildren<viewport *>())
+		{
+			vp->update();
+		}
+	}
 }
 
 void viewport::drawCursorAxes(QPainter *p)
@@ -1669,6 +1697,7 @@ void viewport::leaveEvent(QEvent *e)
 void viewport::focusInEvent(QFocusEvent *e)
 {
 	tooltip->show();
+	update();
 }
 
 void viewport::focusOutEvent(QFocusEvent *e)
@@ -1681,8 +1710,10 @@ void viewport::keyPressEvent(QKeyEvent *e)
 {
 	if(e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return)
 	{
-		foreach(viewport *vp, parent()->findChildren<viewport*>())
-			vp->zoomRect(tw->view(vp->id()).mapRect(tw->boundingRect()), true);
+		foreach(viewport *vp, parent()->findChildren<viewport*>()){
+			if(vp->isVisible())
+				vp->zoomRect(tw->view(vp->id()).mapRect(tw->boundingRect()), true);
+		}
 	}
 	else if(e->key() == Qt::Key_Space)
 	{
@@ -1708,6 +1739,147 @@ void viewport::keyPressEvent(QKeyEvent *e)
 		translateView(QPoint(25, 0));
 	}
 	QWidget::keyPressEvent(e);
+}
+
+
+bool viewport::event(QEvent *e)
+{
+	switch(e->type())
+	{
+	case QEvent::WhatsThis:
+		whatsThisEvent(e);
+		return true;
+	case QEvent::WhatsThisClicked:
+		colinManual::launch(static_cast<QWhatsThisClickedEvent*>(e)->href());
+		return true;
+	default:
+		return QWidget::event(e);
+	}
+}
+
+void viewport::whatsThisEvent(QEvent *e)
+{
+	QHelpEvent *event = static_cast<QHelpEvent*>(e);
+	catcher::CatchCases cC =
+			catcher::CatchedBeam					|
+			catcher::CatchedNode					|
+			(viewPortSettings::instance().elements(id()).testFlag(Colin::M)?catcher::CatchedMLine:catcher::CatchedNothing)						|
+			(viewPortSettings::instance().elements(id()).testFlag(Colin::N)?catcher::CatchedNLine:catcher::CatchedNothing)						|
+			(viewPortSettings::instance().elements(id()).testFlag(Colin::Q)?catcher::CatchedQLine:catcher::CatchedNothing)						|
+			(viewPortSettings::instance().elements(id()).testFlag(Colin::u)?catcher::CatchedULine:catcher::CatchedNothing)						|
+			(viewPortSettings::instance().elements(id()).testFlag(Colin::nload)?catcher::CatchedLoad:catcher::CatchedNothing)					|
+			(viewPortSettings::instance().elements(id()).testFlag(Colin::nload)?catcher::CatchedLoadHotSpot:catcher::CatchedNothing)			|
+			(viewPortSettings::instance().elements(id()).testFlag(Colin::nload)?catcher::CatchedTemp:catcher::CatchedNothing);
+	QPointF pos = mapFromGlobal(QCursor::pos());
+	int adi = 0;
+	catcher::instance().doYourWork(&pos,
+						&cC,
+						globalMatrix(),
+						&adi, true);
+
+	switch(cC)
+	{
+	case catcher::CatchedNothing:
+		QWhatsThis::showText(mapToGlobal(pos.toPoint()), tr("view <a href=\"graphicsview\">more...</a>"), this);
+		return;
+	case catcher::CatchedNode:
+		QWhatsThis::showText(mapToGlobal(pos.toPoint()),
+							 tr("<b>nodes</b><br />")+
+							 tr("define the coordinates of the structure and connect beams with eatch other ")+
+							 tr("<a href=\"node\">more...</a><br />")+
+							 tr("you can draw them with the <b>node tool </b>")+
+							 tr("<a href=\"tool/node\">more...</a><br />")+
+							 tr("or the <b>beam tool </b>")+
+							 tr("<a href=\"tool/beam\">more...</a><br />")+
+							 tr("add supports to nodes with the <b>support tool </b>")+
+							 tr("<a href=\"tool/support\">more...</a><br />")+
+							 tr("add nodal loads to nodes with the <b>load tool </b>")+
+							 tr("<a href=\"tool/load\">more...</a><br />")+
+							 tr("move them with the <b>move tool </b>")+
+							 tr("<a href=\"tool/move\">more...</a><br />")+
+							 tr("right click on a node to edit it ")+
+							 tr("<a href=\"rightclick/node\">more...</a><br />"), this);
+		return;
+	case catcher::CatchedBeam:
+		QWhatsThis::showText(mapToGlobal(pos.toPoint()),
+							 tr("<b>beams</b><br />")+
+							 tr("beams define the actual structure")+
+							 tr("<a href=\"beam\">more...</a><br />")+
+							 tr("you can draw them with the <b>beam tool </b>")+
+							 tr("<a href=\"tool/beam\">more...</a><br />")+
+							 tr("add hinges to beams with the <b>hinge tool </b>")+
+							 tr("<a href=\"tool/hinges\">more...</a><br />")+
+							 tr("add loads to beams with the <b>load tool </b>")+
+							 tr("<a href=\"tool/load\">more...</a><br />")+
+							 tr("right click on a beam to edit it ")+
+							 tr("<a href=\"rightclick/beam\">more...</a><br />"), this);
+		return;
+	case catcher::CatchedLoad:
+		QWhatsThis::showText(mapToGlobal(pos.toPoint()),
+							 tr("<b>loads</b><br />")+
+							 tr("loads represent influence of gravitation, snow, wind, etc. on the structure")+
+							 tr("<a href=\"load\">more...</a><br />")+
+							 tr("you can draw them with the <b>load tool </b>")+
+							 tr("<a href=\"tool/load\">more...</a><br />")+
+							 tr("you can change their position and their values with the <b>move tool </b>")+
+							 tr("<a href=\"tool/move\">more...</a><br />")+
+							 tr("right click on a load to edit it ")+
+							 tr("<a href=\"rightclick/load\">more...</a><br />"), this);
+		return;
+	case catcher::CatchedLoadHotSpot:
+		QWhatsThis::showText(QCursor::pos(),
+							 tr("<b>change loads</b><br />")+
+							 tr("the circle attaced to loads can be used to change loads. ")+
+							 tr("keep the mouse pressed on the circle to do so! ")+
+							 tr("<a href=\"load/hotspot\">more...</a><br />"), this);
+		return;
+	case catcher::CatchedTemp:
+		QWhatsThis::showText(mapToGlobal(pos.toPoint()),
+							 tr("<b>temeratures</b><br />")+
+							 tr("temperatures represent influence of temperatur changes and differences on the structure")+
+							 tr("<a href=\"temp\">more...</a><br />")+
+							 tr("you can draw them with the <b>load tool </b>")+
+							 tr("<a href=\"tool/load\">more...</a><br />")+
+							 tr("you can change their position with the <b>move tool </b>")+
+							 tr("<a href=\"tool/move\">more...</a><br />")+
+							 tr("right click on a temperature to edit it ")+
+							 tr("<a href=\"rightclick/load\">more...</a><br />"), this);
+		return;
+	case catcher::CatchedMLine:
+		QWhatsThis::showText(mapToGlobal(pos.toPoint()),
+							 tr("<b>moment</b><br />")+
+							 tr("Moments represent forces witch lead to the rotation or the bending of an object. ")+
+							 tr("<a href=\"moment\">more...</a><br />"),
+							 /*	linking to hofstetter book
+								this could be done easy! but I need books on google witch are more
+								or less completly availible and availible in many languages
+							*/
+							 //tr("Search online in <b>Mang and Hofstetter (2004)</b> ")+
+							 //tr("<a href=\"cite/hofstetter/moment\">books.google</a><br />"),
+							 this);
+		return;
+	case catcher::CatchedQLine:
+		QWhatsThis::showText(mapToGlobal(pos.toPoint()),
+							 tr("<b>shear forces</b><br />")+
+							 tr("Shear forces represent forces in a beam <b>normal</b> to the beam axis. ")+
+							 tr("<a href=\"shear\">more...</a><br />"),
+							 this);
+		return;
+	case catcher::CatchedNLine:
+		QWhatsThis::showText(mapToGlobal(pos.toPoint()),
+							 tr("<b>normal forces</b><br />")+
+							 tr("normal forces represent forces in a beam <b>paralell</b> to the beam axis. ")+
+							 tr("<a href=\"shear\">more...</a><br />"),
+							 this);
+		return;
+	case catcher::CatchedULine:
+		QWhatsThis::showText(mapToGlobal(pos.toPoint()),
+							 tr("<b>deformation</b><br />")+
+							 tr("This represents the deformated form of the structure. ")+
+							 tr("<a href=\"deformation\">more...</a><br />"),
+							 this);
+		 return;
+	}
 }
 
 void viewport::hideToolTip()
@@ -2378,27 +2550,39 @@ void viewport::selectRect(const QRect &r)
 void viewport::zoomRect(const QRectF &r, bool keepSpace)
 {
 	QRectF globR = globalMatrix().inverted().mapRect(r);
+
 	double zoom;
+	double width=this->width();
+	double height=this->height();
 	if(keepSpace)
 	{
-		zoom = qMin((width()-60)/globR.width(),
-					(height()-60)/globR.height());
+		zoom = qMin((width-60.)/globR.width(),
+					(height-60.)/globR.height());
 	}
 	else
 	{
-		zoom = qMin((width())/globR.width(),
-					(height())/globR.height());
+		zoom = qMin((width)/globR.width(),
+					(height)/globR.height());
 	}
-	QPointF dP = -globR.topLeft()*zoom;
-	dP += QPointF(width()-globR.width()*zoom, height()-globR.height()*zoom)/2+
-		  (keepSpace ? QPointF(0, 0) : QPointF(30, 30));
-
-	if (zoom > minZoomfactor && zoom <maxZoomfactor)
+	double zf = zoom;
+	grid::instance().gridmap(&zf);
+	zoom*=zf;
+	qDebug() << "globalMatrix" << globalMatrix();
+	qDebug() << "view " << id() << "zooming global Rect " << globR << (keepSpace?" with space":"without space");
+	qDebug() << "viewport Rect " << rect();
+	if (zoom > minZoomfactor && zoom < maxZoomfactor)
 	{
-		globalMatrix() = QTransform(zoom,      0,             0,
-									0,         zoom,          0,
-									dP.x(),    dP.y(),        1);
+		//if(keepSpace)
+		//	globalMatrix().translate(30, 30);
+		//globalMatrix().translate(-globR.x()*zoom+qMax((width()-globR.width()*zoom)/2., (keepSpace?30.:0.)),
+		//						 -globR.y()*zoom+qMax((height()-globR.height()*zoom)/2., (keepSpace?30.:0.)));
+		//globalMatrix().scale(zoom, zoom);
+		globalMatrix() = QTransform(zoom, 0, 0,
+									0, zoom, 0,
+									-globR.x()*zoom-globR.width()*zoom/2.+width/2.,
+									-globR.y()*zoom-globR.height()*zoom/2.+height/2., 1);
 	}
+	qDebug() << "new Matrix " << globalMatrix();
 	update();
 }
 

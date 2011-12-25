@@ -101,6 +101,8 @@ catcher::CatchCases catcher::CasesForAction(const Colin::Actions &a)const
 int catcher::doYourWork(QPointF *mouse, CatchCases *c,
 						const QTransform &t, int *adi, bool ignoreOff)
 {
+	if(!filelist::instance().currentFile())
+		return -1;
     const ColinStruct &tw = *filelist::instance().currentFile();
     if(!ignoreOff)
     {
