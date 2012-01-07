@@ -465,15 +465,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;b&gt;copy tool&lt;/b&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>copy the current selection to the clipboard </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;a href=&quot;tool/copy&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -746,6 +738,54 @@ The icons are licensed under a Creative Commons Attribution-Noncommercial-Share 
 See http://creativecommons.org/ for more information.
 
 Thanks to Pongo, Ben, Anouck, Neo and ibcl.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;copy tool&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;tool/copy&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;copy with basepoint&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;menu/copybasepoint&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>copy the current selection to the clipboard. You have to specify a point in the view. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This point will be used as reference when pasting from clipboard!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;auto zoom tools&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;tool/setzoom&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt; &lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use this tool to automatically adjust the zoom factor&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keep the triangle beside the tool button pressed to get access to the zoom factors of results. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An auto zoom function for the results can be found there too!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;cut&lt;/b&gt; </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1817,10 +1857,6 @@ Line %2, column %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>orientation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>nodes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2351,6 +2387,14 @@ or simply characters divided with  &quot;+&quot; to change the shortcuts:
         <source>more...</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>hinge</source>
+        <translation type="unfinished">Gelenk</translation>
+    </message>
+    <message>
+        <source>no hinge</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>treeModel</name>
@@ -2475,10 +2519,6 @@ or simply characters divided with  &quot;+&quot; to change the shortcuts:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;b&gt;z&lt;/b&gt;: the z coordinate of the node in [m]&lt;br /&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>press the triangle to edit the support attached to this node!&lt;br /&gt;&lt;br /&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2587,10 +2627,6 @@ or simply characters divided with  &quot;+&quot; to change the shortcuts:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;b&gt;%1&lt;/b&gt;: #%2 &lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&lt;b&gt;Px&lt;/b&gt; = %3 %4&lt;br /&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2604,10 +2640,6 @@ or simply characters divided with  &quot;+&quot; to change the shortcuts:
     </message>
     <message>
         <source>&lt;b&gt;DT&lt;/b&gt;: %1 %2&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>unused fro this type of load</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2632,10 +2664,6 @@ or simply characters divided with  &quot;+&quot; to change the shortcuts:
     </message>
     <message>
         <source>add Beam</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>add Load</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2742,6 +2770,630 @@ or simply characters divided with  &quot;+&quot; to change the shortcuts:
         <source>&lt;b&gt;Esc&lt;/b&gt;: Abort editing&lt;br /&gt;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>adjust width here!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;phi&lt;/b&gt;=%4 grad&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;phi&lt;/b&gt;=%1 m&lt;br /&gt;click to edit.&lt;br /&gt;Only effects the node if a support is set.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;z&lt;/b&gt;: the z coordinate of the node in [m]&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;phi&lt;/b&gt;: the angle of the node and the support in [grad]&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>none</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;%1 #%2&lt;/b&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Position&lt;/b&gt;: node #%1&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Position&lt;/b&gt;: beam #%1&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>unused for this type of load</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Pz&lt;/b&gt;: %1 %2&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;M&lt;/b&gt;: %1 %2&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Set&lt;/b&gt;: %1&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;load (in tree)&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;tree/load&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;icon&lt;/b&gt; change the type of load.&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;position&lt;/b&gt;: the beam or node where the load puts preasure on&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Px&lt;/b&gt;: the x value of the load or the temperature change&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Px&lt;/b&gt;: the z value of the load or the temperature difference&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;M&lt;/b&gt;: the moment value of the load&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;set&lt;/b&gt;: the set which should contain the load. It is not neacesary to set this property!&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;basic load set #%1&lt;/b&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;name&lt;/b&gt;: %2&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;name&lt;/b&gt;: %1&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;color&lt;/b&gt;: %1&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;basic load set (in tree)&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;tree/bls&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can use these to group loads. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Afterwards you can combine basic load sets to combined load sets and calculate different combinations of loads in once!&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;name&lt;/b&gt; change the name of the load set.&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;color&lt;/b&gt;:change the color of loads assigned to this set&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;combined load set #%1&lt;/b&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>this is &lt;b&gt;%1&lt;/b&gt; in view.&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>click to show or hide!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>shown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hidden</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;combined load set (in tree)&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;tree/cls&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can use use these to combine load sets and calculate different combinations of loads in once!&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;active&lt;/b&gt; toggle on/off to show or hide the results for this combination in the view!&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>click on the treangle to show the combination of basic load sets!&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;support for node #%1&lt;/b&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;x&lt;/b&gt;: %2&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;z&lt;/b&gt;: %3&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;phi&lt;/b&gt;: %4&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;x&lt;/b&gt;: %1&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;z&lt;/b&gt;: %1&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;phi&lt;/b&gt;: %1&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;support (in tree)&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;tree/support&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can define the supports for nodes here.&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;x&lt;/b&gt;: support in x-direction&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;z&lt;/b&gt;: support in z-direction&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;phi&lt;/b&gt;: support for the moment&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter &lt;b&gt;free&lt;/b&gt;, &lt;b&gt;locked&lt;/b&gt; or any number for a &lt;b&gt;spring&lt;/b&gt; with spring constant c as the entered value&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>left</source>
+        <translation type="unfinished">links</translation>
+    </message>
+    <message>
+        <source>no hinge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hinge</source>
+        <translation type="unfinished">Gelenk</translation>
+    </message>
+    <message>
+        <source>right</source>
+        <translation type="unfinished">rechts</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;left hinge for beam #%1&lt;/b&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;right hinge for beam #%1&lt;/b&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;left side x&lt;/b&gt;: %1&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;right side x&lt;/b&gt;: %1&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;left side z&lt;/b&gt;: %1&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;right side z&lt;/b&gt;: %1&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;left side phi&lt;/b&gt;: %1&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;right side phi&lt;/b&gt;: %1&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;hinge (in tree)&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;tree/hinge&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can define hinges for beams here.&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;x&lt;/b&gt;: hinge paralell to beam axis (normal force becomes zero)&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;z&lt;/b&gt;: hinge normal to beam axis (shear force becomes zero)&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;phi&lt;/b&gt;: ordinary hinge (moment becomes zero)&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter &lt;b&gt;free&lt;/b&gt;, &lt;b&gt;locked&lt;/b&gt; or any number for a &lt;b&gt;spring&lt;/b&gt; between node and beam with spring constant c as the entered value&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;%1&lt;/b&gt; x &lt;b&gt;%2&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;bls&lt;/b&gt;: %1&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;factor&lt;/b&gt;: %1&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>enter the z coordinate of the new node</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>enter values within this line to add new beams to your system!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>enter the left node of the new beam</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>enter the right node of the Åew beam</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>enter the material of the new beam</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>enter the cross section of the new beam</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>enter values within this line to add new loads to your system!&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>press the icon to chose the type of load to create</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>enter the beam/node of the new load!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>enter Px of the new load!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>enter temperature change dT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>enter Pz of the new load!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>enter temperature difference dT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>enter M of the new load!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>enter the set of the new load!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;nodes (supports)&lt;/b&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>click to show or hide nodes of the current structure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;beams (hinges)&lt;/b&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>click to show or hide beams of the current structure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;loads&lt;/b&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>click to show or hide loads of the current structure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;basic load sets&lt;/b&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>click to show or hide basic load sets of the current structure&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;It is not required to use this feature&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;bls (in tree)&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;tree/blscls&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>These elements define the load cases of wich the comined load case is created.&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;bls&lt;/b&gt;: the bls&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;factor&lt;/b&gt;: the factor wich is used to multiply the load case&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;creating nodes (in tree)&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;tree/newnode&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This line can be used to create new nodes.&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set the following properties:&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Once they are valid, a new node is created!&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nodes appear right in top of this line!&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can set any property by clicking on it!&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;creating beams (in tree)&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;tree/newbeam&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This line can be used to create new beams.&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;to&lt;/b&gt;: the right node of the beam[m]&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Once you entered valid values, a new beam is created! Material and cross section can be set afterwards.&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Beams appear right in top of this line!&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;creating loads (in tree)&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;tree/newload&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This line can be used to create new loads.&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can set the type of load to create by clicking on the icon in the first column.&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Depending on the chosen type you have to enter the following porperties:&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;nodal load&lt;/b&gt;:&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Px&lt;/b&gt;: the horizontal component of the load in [%1]&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Pz&lt;/b&gt;: the vertical component of the load in [%1]&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;uniformly or linear load load&lt;/b&gt;:&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Px&lt;/b&gt;: the horizontal component of the load in [%1/m]&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Pz&lt;/b&gt;: the vertical component of the load in [%1/m]&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;moment&lt;/b&gt;:&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;M&lt;/b&gt;: the moment of the load in [%1]&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;temperature change&lt;/b&gt;:&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Px&lt;/b&gt;: the change of the temperature in [K]&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;temperature difference&lt;/b&gt;:&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Pz&lt;/b&gt;: the difference of the temperature between top and bottom of the beam in [K]&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;double load&lt;/b&gt;:&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Px&lt;/b&gt;: the component paralell to the beam axis of the load in [%1]&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Pz&lt;/b&gt;: the component normal to the beam axis of the load in [%1]&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Once you entered valid values, a new load is created!&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Loads appear right in top of this line!&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>enter values within this line to add new load sets to your system!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>enter the name of the new load set!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>enter the color of loads, grouped by this set!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;creating load sets (in tree)&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;tree/newbls&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This line can be used to create new basic load sets.&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;name&lt;/b&gt;: the name of the laod set&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Once you entered a valid value for the name, a new bls is created! The color can be set afterwards.&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load sets appear right in top of this line!&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;creating comnined load sets (in tree)&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;tree/newcls&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This line can be used to create new combined load sets.&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;name&lt;/b&gt;: the name of the combined laod set&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Once you entered a valid value for the name, a new bls is created! You can add basic load sets to the combined load set afterwards.&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Combined load sets appear right in top of this line!&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>treeView</name>
@@ -2782,10 +3434,6 @@ or simply characters divided with  &quot;+&quot; to change the shortcuts:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;a href=&quot;tree&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>This is a tree like representation of your structure. </source>
         <translation type="unfinished"></translation>
     </message>
@@ -2795,6 +3443,18 @@ or simply characters divided with  &quot;+&quot; to change the shortcuts:
     </message>
     <message>
         <source>Click on any property of any element to edit it. Columns marked with a triangle can be expanded to show more information.&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;tree&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click on the triangles on the left side of the columns to expand it and show more information!&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Items marked with a  green plus can be used to add new elements to your structure!&lt;br /&gt;&lt;br /&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

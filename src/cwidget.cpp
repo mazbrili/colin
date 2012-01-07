@@ -25,8 +25,12 @@
  ***********************************************************/
 
 #include "cwidget.h"
+#include "nodeoverlay.h"
+#include "beamoverlay.h"
 #include <limits>
 
+#include <QtGui/QGraphicsBlurEffect>
+#include <QtGui/QGraphicsDropShadowEffect>
 
 cWidget::cWidget(QWidget *parent) :
 	QSplitter(parent)
@@ -96,6 +100,9 @@ void cWidget::setViewCount(int i)
 
             connect(v,          SIGNAL(basePoint(QPointF)),
                     this,       SLOT(emitBasePoint(QPointF)));
+
+			connect(v,			SIGNAL(nodeRightClick(catcher::CatchCases, int)),
+					this,		SLOT(showMenu(catcher::CatchCases, int)));
         }
     }
     else if(i<views.size())
@@ -210,15 +217,38 @@ void cWidget::hideToolTips()
 	}
 }
 
-void cWidget::resizeEvent(QResizeEvent *e)
-{
-	QWidget::resizeEvent(e);
-}
-
 void cWidget::showSideBar(bool show)
 {
 	if(show)
 		sidebar->show();
 	else
 		sidebar->hide();
+}
+
+
+void cWidget::showMenu(catcher::CatchCases cC, const int &i)
+{
+	abstractOverlay *menu;
+	if(cC == catcher::CatchedNode)
+		menu = new nodeOverlay(viewContainer);
+	else if(cC == catcher::CatchedBeam)
+		menu = new beamOverlay(viewContainer);
+	menu->setFixedSize(viewContainer->size());
+	menu->show();
+	menu->raise();
+	menu->setFocus(Qt::PopupFocusReason);
+	menu->setCurrentItem(i);
+	viewContainer->installEventFilter(menu);
+
+	foreach(viewport *v, views)
+	{
+		QGraphicsBlurEffect *eff = new QGraphicsBlurEffect(menu);
+		eff->setBlurRadius(10);
+		v->setGraphicsEffect(eff);
+	}
+	QGraphicsDropShadowEffect *eff = new QGraphicsDropShadowEffect(menu);
+	eff->setOffset(0);
+	eff->setBlurRadius(10);
+	eff->setColor(viewPortSettings::instance().color(Colin::C_Background));
+	menu->setGraphicsEffect(eff);
 }

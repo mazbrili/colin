@@ -46,7 +46,6 @@ public:
         views[i]->zoomRect(filelist::instance().currentFile()->view(i).mapRect(r), true);}
 
 	void hideToolTips();
-	void resizeEvent(QResizeEvent *e);
 
 signals:
     void viewChanged();
@@ -62,6 +61,8 @@ public slots:
     void showAll();
 	void showSideBar(bool show);
     void emitBasePoint(QPointF p){emit basePoint(p);}
+
+	void showMenu(catcher::CatchCases, const int &i);
 
     inline int viewCount() const {return views.size();}
     inline int rowmax() const {return rowmax_;}

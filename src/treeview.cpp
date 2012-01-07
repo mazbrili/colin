@@ -79,14 +79,7 @@ treeView::treeView(QWidget *parent) :
 
 	connect(delegate,                           SIGNAL(openFirstColumn(QModelIndex)),
 			this,                               SLOT(firstColumn(QModelIndex)));
-/*
-	connect(this,                               SIGNAL(customContextMenuRequested(QPoint)),
-			this,                               SLOT(popupMenu(QPoint)));
-*/
-/*
-	connect(this->itemDelegate(),				SIGNAL(closeEditor(QWidget*,QAbstractItemDelegate::EndEditHint)),
-			this,								SLOT(closeEditor(QWidget*,QAbstractItemDelegate::EndEditHint)));
-*/
+
 	connect(this,								SIGNAL(clicked(QModelIndex)),
 			this,								SLOT(popupEditor(QModelIndex)));
 }

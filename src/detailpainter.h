@@ -24,38 +24,23 @@
  *
  ***********************************************************/
 
-#ifndef COLINHMULTIBUTTON_H
-#define COLINHMULTIBUTTON_H
+#ifndef DETAILPAINTER_H
+#define DETAILPAINTER_H
 
-#include <QtGui/QWidget>
-#include <QtGui/QPushButton>
-#include <QtCore/QCoreApplication>
 #include <QtCore/QList>
-#include <QtGui/QResizeEvent>
-#include "colinpushbuttonpart.h"
 
-class ColinHMultiButton : public QWidget
+#include "colinstruct.h"
+
+class detailPainter
 {
-    Q_OBJECT
-
 public:
-    ColinHMultiButton(QWidget *parent = 0);
-
-    ~ColinHMultiButton();
-
-
-    void addButton(ColinPushButtonPart *but);
-	void removeButton(QAbstractButton *but);
-	void clear();
-    void paintEvent(QPaintEvent *);
-	void resizeEvent(QResizeEvent *event);
-    void adjustButtons();
-    void adjustButtons(const QSize &size);
-	QSize sizeHint() const;
-
+	detailPainter();
+	void drawNode(QPainter *p, const ColinStruct &t, const int &i, const QList<int> &cls);
+	void drawBeamExtern(QPainter *p, const ColinStruct &t, const int &i, const QList<int> &cls);
+	void drawBeamIntern(QPainter *p, const ColinStruct &t, const int &i, const double &x, const QList<int> &cls);
+	void drawBeamFunctions(QPainter *p, const ColinStruct &t, const int &i, const QList<int> &cls);
 private:
-    QList<ColinPushButtonPart*> buttonlist;
-
+	double validAngle(double angle) const;
 };
 
-#endif // COLINHMULTIBUTTON_H
+#endif // DETAILPAINTER_H

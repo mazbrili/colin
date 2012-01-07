@@ -38,7 +38,7 @@ class viewPortToolTip : public abstractColinToolTip
 {
 public:
     viewPortToolTip(QWidget *parent = 0);
-    void set(const QIcon &i, const QString &s, const QString &more);
+	void set(const QIcon &i, const QString &s, const QString &more);
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
 private:

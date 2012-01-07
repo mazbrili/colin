@@ -35,6 +35,12 @@ cTabBar::cTabBar(QWidget *parent) :
     this->setWindowTitle(tr("tabbar"));
     this->setMouseTracking(true);
 
+	this->setWhatsThis(tr("<b>tabbar</b> ")+
+					   tr("<a href=\"tabbar\">open manual</a><br /> <br />")+
+					   tr("Switch between opened files.<br /><br />")+
+					   tr("<b>x</b>: Close the file.<br />")+
+					   tr("<b>+</b>: Create a new empty file."));
+
     connect(&filelist::instance(),  SIGNAL(currentChanged(int)),
             this,                   SLOT(repaint()));
 

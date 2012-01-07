@@ -323,7 +323,9 @@ QVariant treeModel::nodeHeader(const QModelIndex &index, int role) const
 		default:					return QVariant();
 		}
 	case Qt::EditRole:				return QVariant();
-	case Qt::ToolTipRole:			return QVariant();
+	case Qt::ToolTipRole:
+									return QVariant(tr("<b>nodes (supports)</b><br />")+
+													tr("click to show or hide nodes of the current structure"));
 	case Qt::StatusTipRole:			return QVariant();
 	case Qt::WhatsThisRole:			return QVariant();
 	case Qt::SizeHintRole:			return QVariant(QSize(50, 24));
@@ -360,7 +362,8 @@ QVariant treeModel::beamHeader(const QModelIndex &index, int role) const
 		default:					return QVariant();
 		}
 	case Qt::EditRole:				return QVariant();
-	case Qt::ToolTipRole:			return QVariant();
+	case Qt::ToolTipRole:			return QVariant(tr("<b>beams (hinges)</b><br />")+
+													tr("click to show or hide beams of the current structure"));
 	case Qt::StatusTipRole:			return QVariant();
 	case Qt::WhatsThisRole:			return QVariant();
 	case Qt::SizeHintRole:			return QVariant(QSize(50, 24));
@@ -398,7 +401,8 @@ QVariant treeModel::loadHeader(const QModelIndex &index, int role) const
 		default:					return QVariant();
 		}
 	case Qt::EditRole:				return QVariant();
-	case Qt::ToolTipRole:			return QVariant();
+	case Qt::ToolTipRole:			return QVariant(tr("<b>loads</b><br />")+
+													tr("click to show or hide loads of the current structure"));
 	case Qt::StatusTipRole:			return QVariant();
 	case Qt::WhatsThisRole:			return QVariant();
 	case Qt::SizeHintRole:			return QVariant();
@@ -433,7 +437,9 @@ QVariant treeModel::blsHeader(const QModelIndex &index, int role) const
 		default:					return QVariant();
 		}
 	case Qt::EditRole:				return QVariant();
-	case Qt::ToolTipRole:			return QVariant();
+	case Qt::ToolTipRole:			return QVariant(tr("<b>basic load sets</b><br />")+
+													tr("click to show or hide basic load sets of the current structure<br /><br />")+
+													tr("<b>It is not required to use this feature</b>"));
 	case Qt::StatusTipRole:			return QVariant();
 	case Qt::WhatsThisRole:			return QVariant();
 	case Qt::SizeHintRole:			return QVariant();
@@ -968,9 +974,9 @@ QVariant treeModel::supportItem(const QModelIndex &index, int role) const
 		switch(index.column())
 		{
 		case 0:						return QVariant(QString::number(id));
-		case 1:						return QVariant("x="+(n.x()?tr("locked"):n.xf()?QString::number(n.xf()*FPREFIX)+UNIT.Feh():tr("free")));
-		case 2:						return QVariant("z="+(n.z()?tr("locked"):n.zf()?QString::number(n.zf()*FPREFIX)+UNIT.Feh():tr("free")));
-		case 3:						return QVariant(QString(QChar(0x03C6))+"="+(n.phi()?tr("locked"):n.phif()?QString::number(n.phif()*FMPREFIX)+UNIT.FMeh():tr("free")));
+		case 1:						return QVariant("x="+(n.x()?tr("locked"):n.xf()?QString::number(n.c_x()*FPREFIX)+UNIT.Feh():tr("free")));
+		case 2:						return QVariant("z="+(n.z()?tr("locked"):n.zf()?QString::number(n.c_z()*FPREFIX)+UNIT.Feh():tr("free")));
+		case 3:						return QVariant(QString(QChar(0x03C6))+"="+(n.phi()?tr("locked"):n.phif()?QString::number(n.c_phi()*FMPREFIX)+UNIT.FMeh():tr("free")));
 		default:					return QVariant();
 		}
 	case Qt::DecorationRole:
@@ -982,9 +988,9 @@ QVariant treeModel::supportItem(const QModelIndex &index, int role) const
 	case Qt::EditRole:
 		switch(index.column())
 		{
-		case 1:						return QVariant(n.x()?tr("locked"):n.xf()?QString::number(n.xf()*FPREFIX):tr("free"));
-		case 2:						return QVariant(n.z()?tr("locked"):n.zf()?QString::number(n.zf()*FPREFIX):tr("free"));
-		case 3:						return QVariant(n.phi()?tr("locked"):n.phif()?QString::number(n.phif()*FMPREFIX):tr("free"));
+		case 1:						return QVariant(n.x()?tr("locked"):n.xf()?QString::number(n.c_x()*FPREFIX):tr("free"));
+		case 2:						return QVariant(n.z()?tr("locked"):n.zf()?QString::number(n.c_z()*FPREFIX):tr("free"));
+		case 3:						return QVariant(n.phi()?tr("locked"):n.phif()?QString::number(n.c_phi()*FMPREFIX):tr("free"));
 		}
 	case Qt::ToolTipRole:
 		switch(index.column())
@@ -1225,7 +1231,13 @@ QVariant treeModel::clsblsItem(const QModelIndex &index, int role) const
 		}
 
 	case Qt::StatusTipRole:			return QVariant();
-	case Qt::WhatsThisRole:			return QVariant();
+	case Qt::WhatsThisRole:			return QVariant(tr("<b>bls (in tree)</b> ")+
+													tr("<a href=\"tree/blscls\">open manual</a><br /><br />")+
+													tr("These elements define the load cases of wich the comined load case is created.<br />")+
+													tr("click on any property to edit: <br />")+
+													tr("<b>bls</b>: the bls<br />")+
+													tr("<b>factor</b>: the factor wich is used to multiply the load case<br /><br />")+
+													treeNavigation());
 	case Qt::SizeHintRole:			return QVariant();
 	case 32:
 		switch(index.column())
@@ -1261,11 +1273,20 @@ QVariant treeModel::newNodeItem(const QModelIndex &index, int role) const
 		{
 		case 0:						return QVariant(QString(tr("enter values within this line to add new nodes to your system!")));
 		case 1:						return QVariant(QString(tr("enter the x coordinate of the new node")));
-		case 2:						return QVariant(QString(tr("enter the x coordinate of the new node")));
+		case 2:						return QVariant(QString(tr("enter the z coordinate of the new node")));
 		default:					return QVariant();
 		}
 	case Qt::StatusTipRole:			return QVariant();
-	case Qt::WhatsThisRole:			return QVariant();
+	case Qt::WhatsThisRole:			return QVariant(tr("<b>creating nodes (in tree)</b> ")+
+													tr("<a href=\"tree/newnode\">open manual</a><br /><br />")+
+													tr("This line can be used to create new nodes.<br />")+
+													tr("Set the following properties:<br />")+
+													tr("<b>x</b>: the x coordinate of the node in [m]<br />")+
+													tr("<b>z</b>: the z coordinate of the node in [m]<br />")+
+													tr("Once they are valid, a new node is created!<br />")+
+													tr("Nodes appear right in top of this line!<br />")+
+													tr("You can set any property by clicking on it!<br /><br />")+
+													treeNavigation());
 	case Qt::SizeHintRole:			return QVariant();
 	default:						return QVariant();
 	}
@@ -1292,9 +1313,27 @@ QVariant treeModel::newBeamItem(const QModelIndex &index, int role) const
 		case 0:						return QVariant(colinIcons::instance().icon(Colin::addBeam));
 		default:					return QVariant();
 		}
-	case Qt::ToolTipRole:			return QVariant();
+	case Qt::ToolTipRole:
+		switch(index.column())
+		{
+		case 0:						return QVariant(QString(tr("enter values within this line to add new beams to your system!")));
+		case 1:						return QVariant(QString(tr("enter the left node of the new beam")));
+		case 2:						return QVariant(QString(tr("enter the right node of the ńew beam")));
+		case 3:						return QVariant(QString(tr("enter the material of the new beam")));
+		case 4:						return QVariant(QString(tr("enter the cross section of the new beam")));
+		default:					return QVariant();
+		}
 	case Qt::StatusTipRole:			return QVariant();
-	case Qt::WhatsThisRole:			return QVariant();
+	case Qt::WhatsThisRole:			return QVariant(tr("<b>creating beams (in tree)</b> ")+
+													tr("<a href=\"tree/newbeam\">open manual</a><br /><br />")+
+													tr("This line can be used to create new beams.<br />")+
+													tr("Set the following properties:<br />")+
+													tr("<b>from</b>: the left node of the beam<br />")+
+													tr("<b>to</b>: the right node of the beam[m]<br />")+
+													tr("Once you entered valid values, a new beam is created! Material and cross section can be set afterwards.<br />")+
+													tr("Beams appear right in top of this line!<br />")+
+													tr("You can set any property by clicking on it!<br /><br />")+
+													treeNavigation());
 	case Qt::SizeHintRole:			return QVariant();
 	default:						return QVariant();
 	}
@@ -1332,10 +1371,77 @@ QVariant treeModel::newLoadItem(const QModelIndex &index, int role) const
 		case 0:						return QVariant(colinIcons::instance().newIcon(Colin::addLoad, newLoadFormBuffer));
 		default:					return QVariant();
 		}
-	case Qt::ToolTipRole:			return QVariant();
+	case Qt::ToolTipRole:
+		switch(index.column()){
+		case 0:						return QVariant(tr("enter values within this line to add new loads to your system!<br />")+
+													tr("press the icon to chose the type of load to create"));
+		case 1:						return QVariant(tr("enter the beam/node of the new load!"));
+		case 2:
+			switch(newLoadFormBuffer)
+			{
+			case ColinLoad::nodeLoad:
+			case ColinLoad::uniformlyDistibutedLoad:
+			case ColinLoad::increasingLinearLoad:
+			case ColinLoad::decreasingLinearLoad:
+			case ColinLoad::doubleLoadLeft:
+			case ColinLoad::doubleLoadRight:
+									return QVariant(tr("enter Px of the new load!"));
+			case ColinLoad::tempChange:
+									return QVariant(tr("enter temperature change dT"));
+			default:				return QVariant(tr("unused for this type of load"));
+			}
+		case 3:
+			switch(newLoadFormBuffer)
+			{
+			case ColinLoad::nodeLoad:
+			case ColinLoad::uniformlyDistibutedLoad:
+			case ColinLoad::increasingLinearLoad:
+			case ColinLoad::decreasingLinearLoad:
+			case ColinLoad::doubleLoadLeft:
+			case ColinLoad::doubleLoadRight:
+									return QVariant(tr("enter Pz of the new load!"));
+			case ColinLoad::tempDiffrence:
+									return QVariant(tr("enter temperature difference dT"));
+			default:				return QVariant(tr("unused for this type of load"));
+			}
+		case 4:
+			switch(newLoadFormBuffer)
+			{
+			case ColinLoad::moment:
+			case ColinLoad::doubleLoadLeft:
+			case ColinLoad::doubleLoadRight:
+									return QVariant(tr("enter M of the new load!"));
+			default:				return QVariant(tr("unused for this type of load"));
+			}
+		case 5:						return QVariant(tr("enter the set of the new load!"));
+		default:					return QVariant();
+		}
 	case Qt::StatusTipRole:			return QVariant();
-	case Qt::WhatsThisRole:			return QVariant();
-	case Qt::SizeHintRole:			return QVariant();
+	case Qt::WhatsThisRole:			return QVariant(tr("<b>creating loads (in tree)</b> ")+
+													tr("<a href=\"tree/newload\">open manual</a><br /><br />")+
+													tr("This line can be used to create new loads.<br />")+
+													tr("You can set the type of load to create by clicking on the icon in the first column.<br />")+
+													tr("Depending on the chosen type you have to enter the following porperties:<br />")+
+													tr("<b>nodal load</b>:<br />")+
+													QString(tr("<b>Px</b>: the horizontal component of the load in [%1]<br />")).arg(unitSettings::instance().Peh())+
+													QString(tr("<b>Pz</b>: the vertical component of the load in [%1]<br />")).arg(unitSettings::instance().Peh())+
+													tr("<b>uniformly or linear load load</b>:<br />")+
+													QString(tr("<b>Px</b>: the horizontal component of the load in [%1/m]<br />")).arg(unitSettings::instance().Peh())+
+													QString(tr("<b>Pz</b>: the vertical component of the load in [%1/m]<br />")).arg(unitSettings::instance().Peh())+
+													tr("<b>moment</b>:<br />")+
+													QString(tr("<b>M</b>: the moment of the load in [%1]<br />")).arg(unitSettings::instance().Meh())+
+													tr("<b>temperature change</b>:<br />")+
+													QString(tr("<b>Px</b>: the change of the temperature in [K]<br />"))+
+													tr("<b>temperature difference</b>:<br />")+
+													QString(tr("<b>Pz</b>: the difference of the temperature between top and bottom of the beam in [K]<br />"))+
+													tr("<b>double load</b>:<br />")+
+													QString(tr("<b>Px</b>: the component paralell to the beam axis of the load in [%1]<br />")).arg(unitSettings::instance().Peh())+
+													QString(tr("<b>Pz</b>: the component normal to the beam axis of the load in [%1]<br />")).arg(unitSettings::instance().Peh())+
+													QString(tr("<b>M</b>: the moment of the load in [%1]<br />")).arg(unitSettings::instance().Meh())+
+													tr("Once you entered valid values, a new load is created!<br />")+
+													tr("Loads appear right in top of this line!<br />")+
+													tr("You can set any property by clicking on it!<br /><br />")+
+													treeNavigation());	case Qt::SizeHintRole:			return QVariant();
 	case Qt::UserRole:
 		switch(index.column())
 		{
@@ -1372,9 +1478,24 @@ QVariant treeModel::newBLSItem(const QModelIndex &index, int role) const
 		case 0:						return QVariant(colinIcons::instance().icon(Colin::addBLS));
 		default:					return QVariant();
 		}
-	case Qt::ToolTipRole:			return QVariant();
+	case Qt::ToolTipRole:
+		switch(index.column())
+		{
+		case 0:						return QVariant(QString(tr("enter values within this line to add new load sets to your system!")));
+		case 1:						return QVariant(QString(tr("enter the name of the new load set!")));
+		case 2:						return QVariant(QString(tr("enter the color of loads, grouped by this set!")));
+		default:					return QVariant();
+		}
 	case Qt::StatusTipRole:			return QVariant();
-	case Qt::WhatsThisRole:			return QVariant();
+	case Qt::WhatsThisRole:			return QVariant(tr("<b>creating load sets (in tree)</b> ")+
+													tr("<a href=\"tree/newbls\">open manual</a><br /><br />")+
+													tr("This line can be used to create new basic load sets.<br />")+
+													tr("Set the following properties:<br />")+
+													tr("<b>name</b>: the name of the laod set<br />")+
+													tr("Once you entered a valid value for the name, a new bls is created! The color can be set afterwards.<br />")+
+													tr("Load sets appear right in top of this line!<br />")+
+													tr("You can set any property by clicking on it!<br /><br />")+
+													treeNavigation());
 	case Qt::SizeHintRole:			return QVariant();
 	case Qt::UserRole:				return QVariant();
 	default:						return QVariant();
@@ -1398,10 +1519,26 @@ QVariant treeModel::newCLSItem(const QModelIndex &index, int role) const
 		case 0:						return QVariant(colinIcons::instance().icon(Colin::addCLS));
 		default:					return QVariant();
 		}
-	case Qt::ToolTipRole:			return QVariant();
+	case Qt::ToolTipRole:
+		switch(index.column())
+		{
+		case 0:						return QVariant(QString(tr("enter values within this line to add new beams to your system!")));
+		case 1:						return QVariant(QString(tr("enter the left node of the new beam")));
+		case 2:						return QVariant(QString(tr("enter the right node of the ńew beam")));
+		case 3:						return QVariant(QString(tr("enter the material of the new beam")));
+		case 4:						return QVariant(QString(tr("enter the cross section of the new beam")));
+		default:					return QVariant();
+		}
 	case Qt::StatusTipRole:			return QVariant();
-	case Qt::WhatsThisRole:			return QVariant();
-	case Qt::SizeHintRole:			return QVariant();
+	case Qt::WhatsThisRole:			return QVariant(tr("<b>creating comnined load sets (in tree)</b> ")+
+													tr("<a href=\"tree/newcls\">open manual</a><br /><br />")+
+													tr("This line can be used to create new combined load sets.<br />")+
+													tr("Set the following properties:<br />")+
+													tr("<b>name</b>: the name of the combined laod set<br />")+
+													tr("Once you entered a valid value for the name, a new bls is created! You can add basic load sets to the combined load set afterwards.<br />")+
+													tr("Combined load sets appear right in top of this line!<br />")+
+													tr("You can set any property by clicking on it!<br /><br />")+
+													treeNavigation());	case Qt::SizeHintRole:			return QVariant();
 	case Qt::CheckStateRole:
 		switch(index.column()){
 		case 2:						return QVariant(false);
@@ -1481,20 +1618,18 @@ bool treeModel::setBeam(const QModelIndex & index, const QVariant & value)
 	switch(index.column()){
 		case 1:
 			val = value.toString().toInt(&ok);
-			if(!ok)			t->setLeft(index.row(), val);
+			if(ok)			t->setLeft(index.row(), val);
 			return ok;
 		case 2:
 			val = value.toString().toInt(&ok);
 			if(ok)			t->setRight(index.row(), val);
 			return ok;
 		case 3:
-			val = value.toString().toInt(&ok);
-			if(ok)			t->setMat(index.row(), val);
-			return ok;
+			t->setMat(index.row(), value.toString());
+			return true;
 		case 4:
-			val = value.toString().toInt(&ok);
-			if(ok)			t->setProfile(index.row(), val);
-			return ok;
+			t->setProfile(index.row(), value.toString());
+			return true;
 		default:
 			return false;
 	}
@@ -1511,8 +1646,13 @@ bool treeModel::setLoad(const QModelIndex & index, const QVariant & value)
 	switch(index.column())
 	{
 	case 0:
-		t->setLoadTyp(index.row(), static_cast<ColinLoad::form>(loadType(value.toString())));
-		return true;
+		if(loadType(value.toString()) && !value.toString().isEmpty()){
+			t->setLoadTyp(index.row(), static_cast<ColinLoad::form>(loadType(value.toString())));
+			return true;
+		 }
+		else{
+			return false;
+		}
 	case 1:
 		ival = value.toInt(&ok);
 		if(ok)
@@ -1521,17 +1661,17 @@ bool treeModel::setLoad(const QModelIndex & index, const QVariant & value)
 	case 2:
 		val = value.toDouble(&ok);
 		if(ok)
-			t->setPx(index.row(), ival);
+			t->setPx(index.row(), val);
 		return ok;
 	case 3:
 		val = value.toDouble(&ok);
 		if(ok)
-			t->setPz(index.row(), ival);
+			t->setPz(index.row(), val);
 		return ok;
 	case 4:
 		val = value.toDouble(&ok);
 		if(ok)
-			t->setM(index.row(), ival);
+			t->setM(index.row(), val);
 		return ok;
 	case 5:
 		t->setLoadSet(index.row(), t->getBLSIDbyName(value.toString()));
@@ -1589,34 +1729,37 @@ bool treeModel::setSupport(const QModelIndex & index, const QVariant & value)
 		if(value.toString() == tr("locked"))
 			n.setX(true);
 		else{
-			f = value.toString().toInt(&ok);
+			f = value.toString().toDouble(&ok);
 			if(ok)
 				n.setCx(f);
 			else
 				n.setX(false);
 		}
+		t->setBearing(nr, n);
 		return true;
 	case 2:
 		if(value.toString() == tr("locked"))
 			n.setZ(true);
 		else{
-			f = value.toString().toInt(&ok);
+			f = value.toString().toDouble(&ok);
 			if(ok)
 				n.setCz(f);
 			else
 				n.setZ(false);
 		}
+		t->setBearing(nr, n);
 		return true;
 	case 3:
 		if(value.toString() == tr("locked"))
 			n.setPhi(true);
 		else{
-			f = value.toString().toInt(&ok);
+			f = value.toString().toDouble(&ok);
 			if(ok)
 				n.setCphi(f);
 			else
 				n.setPhi(false);
 		}
+		t->setBearing(nr, n);
 		return true;
 	default:
 		return false;
@@ -1625,17 +1768,27 @@ bool treeModel::setSupport(const QModelIndex & index, const QVariant & value)
 
 bool treeModel::setHinge(const QModelIndex & index, const QVariant & value)
 {
-	return true;
+	int id = index.parent().row();
 
+	if(value.toString() == tr("hinge"))
+		t->setJoint(id, index.column()*(index.row()+1), true);
+	else if(value.toString() == tr("no hinge"))
+		t->setJoint(id, index.column()*(index.row()+1), false);
+	else{
+		bool ok;
+		double c = value.toString().toDouble(&ok);
+		if(ok)
+			t->setSpring(id, index.column()*(index.row()+1), c);
+		else
+			return false;
+	}
+	return true;
 }
 
 bool treeModel::setCLSBLS(const QModelIndex & index, const QVariant & value)
 {
 	int id = index.parent().row();
 
-
-
-	const ColinCLS &c = t->cls(id);
 
 	if(index.row()==t->cls_n())
 		return addCLSBLS(index, value);

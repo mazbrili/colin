@@ -1425,10 +1425,10 @@ void viewport::mousePressEvent(QMouseEvent *e)
 		switch(cC)
 		{
 		case catcher::CatchedNode:
-			launchMenuNode(catched);
+			emit  nodeRightClick(catcher::CatchedNode, catched);
 			return;
 		case catcher::CatchedBeam:
-			launchMenuBeam(catched);
+			emit nodeRightClick(catcher::CatchedBeam, catched);
 			return;
 		case catcher::CatchedTemp:
 			launchMenuTemp(catched);
@@ -1759,7 +1759,6 @@ bool viewport::event(QEvent *e)
 
 void viewport::whatsThisEvent(QEvent *e)
 {
-	QHelpEvent *event = static_cast<QHelpEvent*>(e);
 	catcher::CatchCases cC =
 			catcher::CatchedBeam					|
 			catcher::CatchedNode					|
@@ -1849,13 +1848,13 @@ void viewport::whatsThisEvent(QEvent *e)
 		QWhatsThis::showText(mapToGlobal(pos.toPoint()),
 							 tr("<b>moment</b><br />")+
 							 tr("Moments represent forces witch lead to the rotation or the bending of an object. ")+
-							 tr("<a href=\"moment\">more...</a><br />"),
+							 tr("<a href=\"moment\">more...</a><br />")+
 							 /*	linking to hofstetter book
 								this could be done easy! but I need books on google witch are more
 								or less completly availible and availible in many languages
 							*/
-							 //tr("Search online in <b>Mang and Hofstetter (2004)</b> ")+
-							 //tr("<a href=\"cite/hofstetter/moment\">books.google</a><br />"),
+							 tr("Search online in <b>Mang and Hofstetter (2004)</b> ")+
+							 tr("<a href=\"cite/hofstetter/moment\">books.google</a><br />"),
 							 this);
 		return;
 	case catcher::CatchedQLine:

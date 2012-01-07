@@ -14,7 +14,7 @@ MOC=/usr/bin/$(arch)-moc-qt4
 
 INCLUDES=-I$(srcdir) -I/usr/$(arch)/include/qt4 -I/usr/$(arch)/include
 
-LIBS=-lqtmain -lQtCore4 -lQtGui4 -lQtScript4 -lintl
+LIBS=-lqtmain -lQtCore4 -lQtGui4 -lQtScript4 -lQtSvg4 -lintl
 LDFLAGS=-Wl,-subsystem,windows -L/usr/$(arch)/lib/qt4 $(LDOPTFLAGS)
 
 include $(srcdir)/include.mk

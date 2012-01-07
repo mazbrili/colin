@@ -17,7 +17,7 @@ ARTIFACT=Colin
 ABI_VERSION=1
 
 ifeq ($(WINDRES),)
-EXTPKGS=QtGui, QtScript
+EXTPKGS=QtGui, QtScript, QtSvg
 endif
 
 ifeq ($(INCLUDES),)
@@ -105,7 +105,11 @@ MOCHEADERS= abstractcolintooltip.h \
 	viewportlayout.h \
 	printpreview.h \
 	treemodel.h \
-	historymenu.h
+	historymenu.h \
+	abstractoverlay.h \
+	nodeoverlay.h \
+	beamoverlay.h \
+	detailpainter.h
 
 
 BUILDDATESOURCES=colinversion.cpp
@@ -190,7 +194,11 @@ SOURCES= beammenu.cpp \
 	printpreview.cpp \
 	treemodel.cpp \
 	historymenu.cpp \
-	colinmanual.cpp
+	colinmanual.cpp \
+	abstractoverlay.cpp \
+	nodeoverlay.cpp \
+	beamoverlay.cpp \
+	detailpainter.h
 
 
 

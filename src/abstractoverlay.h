@@ -24,38 +24,53 @@
  *
  ***********************************************************/
 
-#ifndef COLINHMULTIBUTTON_H
-#define COLINHMULTIBUTTON_H
+#ifndef ABSTRACTOVERLAY_H
+#define ABSTRACTOVERLAY_H
 
 #include <QtGui/QWidget>
-#include <QtGui/QPushButton>
-#include <QtCore/QCoreApplication>
-#include <QtCore/QList>
-#include <QtGui/QResizeEvent>
-#include "colinpushbuttonpart.h"
+#include <QtGui/QLabel>
 
-class ColinHMultiButton : public QWidget
+#include "colinhmultibutton.h"
+
+class quadWidget: public QWidget
 {
-    Q_OBJECT
-
+	Q_OBJECT
 public:
-    ColinHMultiButton(QWidget *parent = 0);
+	explicit quadWidget(QWidget *parent = 0):QWidget(parent){};
+	int heightForWidth(int w) const {return w;}
+};
 
-    ~ColinHMultiButton();
+class abstractOverlay : public QWidget
+{
+	Q_OBJECT
+public:
+	explicit abstractOverlay(QWidget *parent = 0);
 
 
-    void addButton(ColinPushButtonPart *but);
-	void removeButton(QAbstractButton *but);
-	void clear();
-    void paintEvent(QPaintEvent *);
-	void resizeEvent(QResizeEvent *event);
-    void adjustButtons();
-    void adjustButtons(const QSize &size);
-	QSize sizeHint() const;
+	void keyPressEvent(QKeyEvent *e);
+	void paintEvent(QPaintEvent *e);
+
+	bool eventFilter(QObject *o, QEvent *e);
+signals:
+
+public slots:
+	void hideMyChildren(bool hide);
+	virtual void nextItem();
+	virtual void previousItem();
+	virtual void setCurrentItem(const int &i);
 
 private:
-    QList<ColinPushButtonPart*> buttonlist;
+
+protected:
+	ColinHMultiButton *header;
+	ColinPushButtonPart *before,
+						*item,
+						*after;
+	QLabel *quitmessage;
+	QPushButton *quit;
+
+
 
 };
 
-#endif // COLINHMULTIBUTTON_H
+#endif // NODEOVERLAY_H

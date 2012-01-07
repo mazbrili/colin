@@ -99,6 +99,7 @@ signals:
     void hideMe();
     void showAll();
     void basePoint(QPointF);
+	void nodeRightClick(catcher::CatchCases, int);
 public slots:
     void setTw(ColinStruct* t);
     void setFullyArea(bool doI);

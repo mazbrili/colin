@@ -43,12 +43,41 @@
 #include <QtCore/QLibraryInfo>
 #include <QtCore/QDebug>
 
+#ifndef QT_NO_DEBUG
+#ifdef WIN32
+QTextEdit *logWin;
+void MyOutputHandler(QtMsgType type, const char *msg) {
+	switch (type) {
+	case QtDebugMsg:
+		logWin->append(QString("DEBUG: ")+msg);
+		break;
+	case QtWarningMsg:
+		logWin->append(QString("DEBUG: ")+msg);
+		break;
+	case QtFatalMsg:
+		logWin->append(QString("DEBUG: ")+msg);
+		abort();
+	}
+}
+#endif
+#endif
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     toolTipEater NomNomMampfMampf;
     a.installEventFilter(&NomNomMampfMampf); //disable tooltips
     a.setAttribute(Qt::AA_DontShowIconsInMenus, false); //enable icons
+
+
+#ifndef QT_NO_DEBUG
+#ifdef WIN32
+	logWin = new QTextEdit();
+	logWin->setWindowFlags(Qt::WindowStaysOnTopHint);
+	logWin->show();
+	qInstallMsgHandler(MyOutputHandler);
+#endif
+#endif
 
 #ifdef WIN32
 	colinIcons::icondir_ = a.applicationDirPath() + "/../share/icons/";
@@ -127,6 +156,7 @@ int main(int argc, char *argv[])
 	palette.setColor(QPalette::ToolTipText, palette.color(QPalette::Inactive, QPalette::ToolTipText));
 	a.setPalette(palette);
 #endif
+
 
     //run threads and event loop
     previewWidget::renderer->start(QThread::IdlePriority);

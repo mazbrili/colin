@@ -33,13 +33,13 @@ viewPortToolTip::viewPortToolTip(QWidget *parent):
     QGridLayout *layout = new QGridLayout(this);
     icon_ = new QLabel(this);
     text_ = new QLabel(this);
-    extend_ = new QLabel(this);
+	extend_ = new QLabel(this);
     icon_->setFixedSize(32, 32);
     layout->addWidget(icon_, 0, 0, 1, 1);
     layout->addWidget(text_, 0, 1, 1, 1);
-    layout->addWidget(extend_, 1, 0, 1, 2);
+	layout->addWidget(extend_, 1, 0, 1, 2);
     layout->setMargin(2);
-    setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+	setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 }
 
 void viewPortToolTip::set(const QIcon &i, const QString &s, const QString &more)

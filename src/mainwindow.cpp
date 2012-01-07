@@ -295,16 +295,17 @@ void MainWindow::initMenu()
 						   this, SLOT(copy()), QKeySequence::Copy);
 	act->setData(Colin::Copy);
 	act->setWhatsThis(tr("<b>copy tool</b> ")+
-					  tr("<a href=\"tool/copy\">more...</a><br /><br />")+
-					  tr("copy the current selection to the clipboard "));
+					  tr("<a href=\"tool/copy\">open manual</a><br /><br />")+
+					  tr("copy the current selection to the clipboard!"));
 	scS.addAction(act , true);
 
 	scS.addAction(
 			editm->addAction(colinIcons::instance().icon(Colin::Copy), tr("copy with basepoint"),
 							 this, SLOT(copyBase()), QKeySequence(tr("Ctrl+Shift+C", "action | copy with basepoint"))), true);
-	scS.lastAction()->setWhatsThis(tr("<b>copy with basepoint</b> ")+
-								  tr("<a href=\"menu/copybasepoint\">more...</a><br /><br />")+
-								  tr("copy the current selection to the clipboard. You have to specify a point in the view. ")+
+	scS.lastAction()->setWhatsThis("<b>"+tr("copy with basepoint")+"</b> "+
+								  tr("<a href=\"menu/copybasepoint\">open manual</a><br /><br />")+
+								  tr("copy the current selection to the clipboard. ")+
+								  tr("You have to specify a point in the view. ")+
 								  tr("This point will be used as reference when pasting from clipboard!"));
 
 
@@ -312,16 +313,31 @@ void MainWindow::initMenu()
 	act = editm->addAction(colinIcons::instance().icon(Colin::Cut), tr("cut"),
 					 this, SLOT(cut()), QKeySequence::Cut);
 	act->setData(Colin::Cut);
+	act->setWhatsThis(tr("<b>cut</b> ")+
+					  tr("<a href=\"menu/cut tool\">open manual</a><br /><br />")+
+					  tr("put the current selection to the clipboard and remove it from current file!"));
 	scS.addAction(act, true);
 
 	scS.addAction(
 			editm->addAction(colinIcons::instance().icon(Colin::Cut), tr("cut with basepoint"),
 							 this, SLOT(cutBase()), QKeySequence(tr("Ctrl+Shift+X", "action | cut with basepoint"))), true);
 
+	scS.lastAction()->setWhatsThis(tr("<b>cut with basepoint</b> ")+
+								   tr("<a href=\"menu/cut tool\">open manual</a><br /><br />")+
+								   tr("put the current selection to the clipboard and remove it from current file! ")+
+								   tr("You have to specify a point in the view. ")+
+								   tr("This point will be used as reference when pasting from clipboard!"));
+
 	act = editm->addAction(colinIcons::instance().icon(Colin::Paste), tr("paste"),
 							 this, SLOT(paste()), QKeySequence::Paste);
 	act->setData(Colin::Paste);
 	scS.addAction(act, true);
+
+	scS.lastAction()->setWhatsThis(tr("<b>paste tool</b> ")+
+								   tr("<a href=\"menu/paste tool\">open manual</a><br /><br />")+
+								   tr("Add content from the clipboard to your current structure. ")+
+								   tr("You have to specify the position where to inert the content in one of the views."));
+
 
 	editm->addSeparator();
 
@@ -349,16 +365,29 @@ void MainWindow::initMenu()
 	scS.addAction(
 			editm->addAction(tr("select all"),
 							 this, SLOT(selectAll()), QKeySequence::SelectAll), true);
+	scS.lastAction()->setWhatsThis(tr("<b>select all</b> ")+
+								   tr("<a href=\"menu/selectall\">open manual</a><br /><br />")+
+								   tr("mark all objects of the current file as selected!"));
 
 	scS.addAction(
 			editm->addAction(tr("invert selection"),
 							 this, SLOT(invertSelection()),
 							 QKeySequence(tr("Ctrl+I", "action | invert selection"))), true);
 
+	scS.lastAction()->setWhatsThis(tr("<b>invert selection</b> ")+
+								   tr("<a href=\"menu/invert selection\">open manual</a><br /><br />")+
+								   tr("mark all unmarked objects and unmark all markes objects!"));
+
 	scS.addAction(
 			editm->addAction(tr("deselct all"),
 							 this, SLOT(deselectAll()),
 							 QKeySequence(tr("Ctrl+Shift+A", "action | deselect"))), true);
+
+
+	scS.lastAction()->setWhatsThis(tr("<b>invert selection</b> ")+
+								   tr("<a href=\"menu/deselect all\">open manual</a><br /><br />")+
+								   tr("unmark all objects. No object will be selected afterwards!"));
+
 	editm->addSeparator();
 
 	//delete
@@ -367,6 +396,10 @@ void MainWindow::initMenu()
 				  editm->addAction(tr("delete"),
 								   this, SLOT(deleteSelection()), QKeySequence::Delete));
 
+	scS.lastAction()->setWhatsThis(tr("<b>delete</b> ")+
+								   tr("<a href=\"menu/delete\">open manual</a><br /><br />")+
+								   tr("Removes the currently selected objects from structure!"));
+
 	editm->addSeparator();
 
 	//settings
@@ -374,6 +407,12 @@ void MainWindow::initMenu()
 			editm->addAction(colinIcons::instance().icon(Colin::Settings), tr("settings"),
 							 &filelist::instance(), SLOT(showSettings()),
 							 QKeySequence(tr("Ctrl+Space", "(Ctrl+Space) action | Settings"))));
+
+	scS.lastAction()->setWhatsThis(tr("<b>settings</b> ")+
+								   tr("<a href=\"menu/settings\">open manual</a><br /><br />")+
+								   tr("Opens a Window where you can edit some settings! <a href=\"settings\">more...</a><br /><br />"));
+
+
 	menuBar()->addMenu(editm);
 
 	/*****************************
@@ -657,11 +696,20 @@ void MainWindow::initToolBar()
 	toolbar->addSeparator();
 	scS.addAction(calcA, true);
 
+	calcA->setWhatsThis(tr("<b>calculate tools</b> ")+
+						tr("<a href=\"tool/calculate\">open manual</a><br /> <br />")+
+						tr("Press to calculate stress and dispalement of your structure"));
+
 	//snapoptions
 	snapA = new QAction(tr("snap"), this);
 	snapA->setIcon(colinIcons::instance().icon(Colin::Snap));
 	snapA->setShortcut(QKeySequence(tr("Ctrl+U", "action | snap on-off")));
 	scS.addAction(snapA);
+
+	snapA->setWhatsThis(tr("<b>snap tools</b> ")+
+						tr("<a href=\"tool/snap\">open manual</a><br /> <br />")+
+						tr("When active, this tool helps you to draw. ")+
+						tr("For some settings, keep the triangle beside the tool button pressed"));
 
 	toolbar->addAction(snapA);
 	new cMenu(snapA, this);
@@ -670,6 +718,10 @@ void MainWindow::initToolBar()
 	action =toolbar->addAction(colinIcons::instance().icon(Colin::Windows), tr("view"),
 					  this, SLOT(launchViewMenu2()));
 	action->setData(Colin::Windows);
+
+	action->setWhatsThis(tr("<b>windows</b> ")+
+						 tr("<a href=\"tool/windows\">open manual</a><br /> <br />")+
+						 tr("Press to get access to a menu where you can specify the arrangement of views."));
 
 
 	//making the group work
@@ -697,18 +749,18 @@ void MainWindow::initToolBar()
 
 	foreach(QAction *a, toolbar->actions())
 	{
-	   connect(a,           SIGNAL(hovered()),
-			   this,        SLOT(launchToolTip()));
+	   connect(a,							SIGNAL(hovered()),
+			   this,						SLOT(launchToolTip()));
 
 	   a->setToolTip("");
 	}
 
 
 
-	connect(toolbar,							SIGNAL(actionTriggered(QAction*)),
+	connect(toolbar,						SIGNAL(actionTriggered(QAction*)),
 		   toolBarTip,						SLOT(hide()));
 
-	connect(toolbar,							SIGNAL(mouseLeft()),
+	connect(toolbar,						SIGNAL(mouseLeft()),
 		   toolBarTip,						SLOT(hide()));
 
 	connect(aGroup,							SIGNAL(selected(QAction*)),

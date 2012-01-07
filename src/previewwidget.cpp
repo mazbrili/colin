@@ -55,6 +55,12 @@ previewWidget::previewWidget(QWidget *parent) :
 
     renderer->renderFile(myUrl);
 
+	this->setWhatsThis(tr("<b>recently used file</b> ")+
+					   tr("<a href=\"recused\">open manual</a><br /> <br />")+
+					   tr("Shows one of the recently used files.<br /><br />")+
+					   tr("<b>click</b>: Open the file.<br />")+
+					   tr("<b>x</b>: Remove this preview."));
+
 }
 
 void previewWidget::resizeEvent(QResizeEvent *)

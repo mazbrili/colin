@@ -26,6 +26,7 @@
 
 #include "nwidget.h"
 #include "colinicons.h"
+#include <QtSvg/QSvgRenderer>
 
 nWidget::nWidget(QWidget *parent) :
     QWidget(parent)
@@ -66,20 +67,36 @@ nWidget::nWidget(QWidget *parent) :
     libB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
 
+	newB->setWhatsThis("<b>"+tr("new file")+"</b><br /><br />"+
+					   tr("Create a new empty file."));
+
+	openB->setWhatsThis("<b>"+tr("open file")+"</b><br /><br />"+
+						tr("Open a file dialog. Specify the file to open there."));
+
+	settingsB->setWhatsThis("<b>"+tr("settings")+"</b> "+
+							tr("<a href=\"settings\">open manual</a><br /><br />")+
+							tr("Goto settings page."));
+
+	libB->setWhatsThis("<b>"+tr("clear library")+"</b> "+
+					   tr("<a href=\"library\">open manual</a><br /><br />")+
+					   tr("Remove all materials and cross sections form the library. This can not be done while files are open to edit!"));
 
     renderer = new previewRenderer(QSize(196, 135), this);
     previewWidget::renderer = renderer;
 
+	connect(&filelist::instance(),      SIGNAL(recUsedCanged()),
+			this,						SLOT(update()));
 
     for(int i=0; i<8; i++)
     {
         previews[i] = new previewWidget(this);
 
-        connect(&filelist::instance(),      SIGNAL(recUsedCanged()),
-                previews[i],                SLOT(actualUrl()));
+		connect(&filelist::instance(),      SIGNAL(recUsedCanged()),
+				previews[i],                SLOT(actualUrl()));
 
         connect(renderer,                   SIGNAL(finished(QString,QImage)),
                 previews[i],                SLOT(giefPix(QString,QImage)));
+
 
 
 	layout->addWidget(previews[i], 2+i/4, 1+i%4, 1, 1);
@@ -106,14 +123,28 @@ void nWidget::paintEvent(QPaintEvent *)
 
     //QLinearGradient grad(rect.topLeft(), rect.bottomLeft());
     //QColor gc = palette().color(QPalette::Mid);
-    //grad.setColorAt(0, gc);
+	//grad.setColorAt(0, gc);""
     //gc.setAlpha(50);
     //grad.setColorAt(1, gc);
     //p.setBrush(QBrush(grad));
 
     //p.drawRoundedRect(rect, 5, 5);
 
-    p.drawPixmap(QRect(15, height()-15-64, 64, 64), colinicon);
+	if(filelist::instance().recUsedFileName(4) == "")
+	{
+
+		QRect textrect;
+		if(filelist::instance().recUsedFileName(0) == "")
+			textrect = QRect(140, 140, width()-280, (width()-280)*0.1363615);
+		else
+			textrect = QRect(140, height()/2, width()-280, (width()-280)*0.1363615);
+
+		QSvgRenderer re;
+		re.load(QString("../graphics/dont_panic.svg"));
+		re.render(&p, textrect);
+
+		p.drawPixmap(QRect(15, height()-15-64, 64, 64), colinicon);
+	}
 
     QRect br;
     QFont f(p.font());
@@ -130,6 +161,7 @@ void nWidget::paintEvent(QPaintEvent *)
                Qt::AlignVCenter | Qt::AlignLeft,
                "[Colin]", &br);
 
+/*
     QPoint middle = br.topRight();
 
     const double polyCount = 36;
@@ -155,7 +187,7 @@ void nWidget::paintEvent(QPaintEvent *)
     //p.setFont(f);
 
     p.drawText(poly.boundingRect(), QString(QChar(0x03B2)), Qt::AlignHCenter | Qt::AlignVCenter);
-
+*/
 
     f.setPixelSize(40);
     p.setFont(f);

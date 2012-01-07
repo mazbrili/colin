@@ -101,6 +101,7 @@ Section "main" SEC01
   File "${PREFIX}/bin/libpng15-15.dll"
   File "${PREFIX}/bin/QtCore4.dll"
   File "${PREFIX}/bin/QtScript4.dll"
+  File "${PREFIX}/bin/QtSvg4.dll"
   File "${PREFIX}/bin/zlib1.dll"
   File "${PREFIX}/bin/libgcc_s_sjlj-1.dll"
   File "${PREFIX}/lib/libstdc++-6.dll"

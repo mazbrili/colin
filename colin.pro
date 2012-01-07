@@ -101,7 +101,11 @@ HEADERS += src/abstractcolintooltip.h \
     src/costumizedprintpreviewdialog.h \
     src/treemodel.h \
     src/historymenu.h \
-    src/colinmanual.h
+    src/colinmanual.h \
+    src/nodeoverlay.h \
+    src/abstractoverlay.h \
+    src/detailpainter.h \
+    src/beamoverlay.h
 SOURCES += src/abstractdrawselectionwidget.cpp \
            src/beammenu.cpp \
            src/bmenu.cpp \
@@ -186,7 +190,11 @@ SOURCES += src/abstractdrawselectionwidget.cpp \
     src/costumizedprintpreviewdialog.cpp \
     src/treemodel.cpp \
     src/historymenu.cpp \
-    src/colinmanual.cpp
+    src/colinmanual.cpp \
+    src/nodeoverlay.cpp \
+    src/abstractoverlay.cpp \
+    src/detailpainter.cpp \
+    src/beamoverlay.cpp
 TRANSLATIONS += src/colin_de.ts src/colin_it.ts
 
 OTHER_FILES += \

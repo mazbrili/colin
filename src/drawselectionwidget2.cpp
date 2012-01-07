@@ -211,9 +211,12 @@ void drawSelectionWidget2::setTw(ColinStruct *tw)
 			if(allowedShowing)
 				show();
 		}
+		else
+			hide();
 
 		connect(tw,					SIGNAL(addedCLS(int)),
 				this,				SLOT(addedCLS()));
+
 		connect(tw,					SIGNAL(removed(int,ColinCLS)),
 				this,				SLOT(removedCLS()));
 	}

@@ -39,6 +39,7 @@ treeDelegate::treeDelegate(QObject *parent) :
 
 QWidget *treeDelegate::createEditor( QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
+	qDebug() << "treeDelegate: Editor requested for Index: " << index;
 	lastIndex = index;
 	commitOnFocusLoss = true;
 	if(index.data(Qt::UserRole).toInt() == ColinStruct::NodalLoadTyp)
