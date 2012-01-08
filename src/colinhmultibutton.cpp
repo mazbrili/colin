@@ -27,12 +27,16 @@
 #include "colinhmultibutton.h"
 
 #include <QtCore/QDebug>
+#include <QtGui/QHBoxLayout>
 
 
 ColinHMultiButton::ColinHMultiButton(QWidget *parent)
     : QWidget(parent)
 {
 	setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+	QHBoxLayout *l = new QHBoxLayout(this);
+	l->setMargin(0);
+	l->setSpacing(1);
 }
 
 
@@ -54,70 +58,34 @@ void ColinHMultiButton::paintEvent(QPaintEvent *)
 	style()->drawControl(QStyle::CE_PushButton, &option, &painter, this);
 }
 
-
-void ColinHMultiButton::resizeEvent(QResizeEvent *event)
-{
-    adjustButtons(event->size() );
-}
-
-
-void ColinHMultiButton::adjustButtons()
-{
-    adjustButtons(size());
-}
-
-QSize ColinHMultiButton::sizeHint() const
-{
-	QSize s(0, 0);
-	foreach(ColinPushButtonPart *b, this->buttonlist)
-	{
-		s.setWidth(s.width()+b->sizeHint().width());
-		s.setHeight(qMax(s.height(), b->sizeHint().height()));
-	}
-	return s;
-}
-
-void ColinHMultiButton::adjustButtons(const QSize &size)
-{
-	if(buttonlist.isEmpty())
-		return;
-	int HMultiButtonth_ = (size.width()-buttonlist.size()+1)/(int)buttonlist.size();
-    int rest = (size.width()-buttonlist.size()+1)%(int)buttonlist.size();
-
-    for(int i = 0, xpos = 0; i<buttonlist.size(); i++)
-    {
-		buttonlist[i]->setGeometry(QRect(xpos, 0, HMultiButtonth_+((i<rest)? 1 : 0), height()));
-		xpos+=HMultiButtonth_+((i<rest)? 2 : 1);
-		if(buttonlist[i]->isVisible())
-			qDebug() << "button " << i << " -> " << buttonlist[i]->geometry();
-    }
-}
-
-
 void ColinHMultiButton::addButton(ColinPushButtonPart *but)
 {
-    if(!buttonlist.isEmpty())
-    {
-        buttonlist.last()->setCutted(ColinPushButtonPart::Right, true);
-        but->setCutted(ColinPushButtonPart::Left, true);
-    }
+	QHBoxLayout *l = static_cast<QHBoxLayout*>(layout());
+	if(l->count())
+	{
+		QWidget *last = l->itemAt(l->count()-1)->widget();
+		if(last){
+			if(qobject_cast<ColinPushButtonPart*>(last))
+			{
+				qobject_cast<ColinPushButtonPart*>(last)->setCutted(ColinPushButtonPart::Right, true);
+				but->setCutted(ColinPushButtonPart::Left, true);
+			}
+		}
+	}
 
 
-    buttonlist.append(but);
-    but->setParent(this);
-    adjustButtons();
+	but->setParent(this);
+	layout()->addWidget(but);
+
 }
 
 void ColinHMultiButton::removeButton(QAbstractButton *but)
 {
-	buttonlist.removeAll(static_cast<ColinPushButtonPart*>(but));
 	delete but;
-	adjustButtons();
 }
 
 void ColinHMultiButton::clear()
 {
-	foreach(QAbstractButton *b, buttonlist)
+	foreach(QAbstractButton *b, this->findChildren<ColinPushButtonPart*>())
 		delete b;
-	buttonlist.clear();
 }

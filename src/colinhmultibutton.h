@@ -46,15 +46,8 @@ public:
 
     void addButton(ColinPushButtonPart *but);
 	void removeButton(QAbstractButton *but);
-	void clear();
     void paintEvent(QPaintEvent *);
-	void resizeEvent(QResizeEvent *event);
-    void adjustButtons();
-    void adjustButtons(const QSize &size);
-	QSize sizeHint() const;
-
-private:
-    QList<ColinPushButtonPart*> buttonlist;
+	void clear();
 
 };
 
