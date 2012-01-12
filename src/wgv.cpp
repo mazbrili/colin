@@ -255,16 +255,27 @@ void wgv::writeResultsNodes()
      *    nodes    *
      ***************/
 
+	int supp_n = 0;
+	for(int i=0; i<node_n; i++)
+	{
+		if(nodes[i].hasbearing())
+			supp_n++;
+	}
 	u_r = new node_result[cls_n*node_n];
-	a_r = new bearing_result[cls_n*a_n];
+	a_r = new bearing_result[cls_n*supp_n];
 
 	//double u_, w, phi;
 	int i, j, m;
 
+	qDebug() << "creating " << cls_n*node_n << " node results";
+	qDebug() << "creating " << cls_n*supp_n << " support results";
 	for(i=0, j=0; i<node_n; i++){
-		nodes[i].setU(u_r+cls_n*i);
-		if(nodes[i].hasbearing())
-			nodes[i].setR(a_r+cls_n*j++);
+		qDebug() << "creating result objects for node " << i;
+		nodes[i].setU(&u_r[cls_n*i]);
+		if(nodes[i].hasbearing()){
+			qDebug() << "creating result objects for bearing " << j << " of node " << i ;
+			nodes[i].setR(&a_r[cls_n*j]);
+			j++;}
 	}
 	for(int ls=0; ls<cls_n; ls++)
 	{
