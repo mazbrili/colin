@@ -238,6 +238,11 @@ void wgv::writeBack()
 	tw->n_res = u_r;
 	tw->a_res = a_r;
 	tw->b_res = b_r;
+
+	qDebug() << "maximum of Moment " << globalMMax;
+	qDebug() << "maximum of Force " << globalPMax;
+	qDebug() << "maximum of Displacement " << globalUMax;
+
 	tw->emitSelectionChanged();
     tw->emitCalculationFinished();
     emit calcFinished();
@@ -327,10 +332,15 @@ void wgv::writeResultsNodes()
 				}
 
 
-				nodes[i].bearing_results()[ls].x =	nodes[i].bearing_results()[ls].x*cos(nodes[i].angle())-
-													nodes[i].bearing_results()[ls].z*sin(nodes[i].angle());
-				nodes[i].bearing_results()[ls].z=	nodes[i].bearing_results()[ls].x*sin(nodes[i].angle())+
-													nodes[i].bearing_results()[ls].z*cos(nodes[i].angle());
+				if(nodes[i].angle()!=0)
+				{
+					double Ax = nodes[i].bearing_results()[ls].x;
+					double Az = nodes[i].bearing_results()[ls].z;
+					nodes[i].bearing_results()[ls].x =	Ax*cos(nodes[i].angle())-
+														Az*sin(nodes[i].angle());
+					nodes[i].bearing_results()[ls].z=	Ax*sin(nodes[i].angle())+
+														Az*cos(nodes[i].angle());
+				}
 
 				if(nodes[i].bearing().phi())
 				{
@@ -380,6 +390,9 @@ void wgv::writeResultsBeams()
 	for(int n=0; n<beam_n; n++)
 		beams[n].setResults(b_r+n*cls_n);
 
+	globalMMax = 0;
+	globalPMax = 0;
+	globalUMax = 0;
 
 	for(int ls=0; ls<cls_n; ls++)
 	{
@@ -475,13 +488,23 @@ void wgv::writeResultsBeams()
 			beams[n].Q(ls).calcMax();
 			beams[n].M(ls).calcMax();
 
-			globalMMax= qMax(globalMMax, fabs(beams[n].M(ls, beams[n].M(ls).max(0))));
-			globalMMax= qMax(globalMMax, fabs(beams[n].M(ls, beams[n].M(ls).max(1))));
+			qDebug() << "N(x=" << beams[n].N(ls).max(0) <<")=" << beams[n].N(ls, beams[n].N(ls).max(0));
+			qDebug() << "Q(x=" << beams[n].Q(ls).max(0) <<")=" << beams[n].Q(ls, beams[n].Q(ls).max(0));
+			qDebug() << "M(x=" << beams[n].M(ls).max(0) <<")=" << beams[n].M(ls, beams[n].M(ls).max(0));
+			qDebug() << "M(x=" << beams[n].M(ls).max(1) <<")=" << beams[n].M(ls, beams[n].M(ls).max(1));
+
+			if(beams[n].M(ls).max(0)<beams[n].l() && beams[n].M(ls).max(0)>0)
+				globalMMax= qMax(globalMMax, fabs(beams[n].M(ls, beams[n].M(ls).max(0))));
+			if(beams[n].M(ls).max(1)<beams[n].l() && beams[n].M(ls).max(1)>0)
+				globalMMax= qMax(globalMMax, fabs(beams[n].M(ls, beams[n].M(ls).max(1))));
 			globalMMax= qMax(globalMMax, fabs(beams[n].M(ls, 0)));
 			globalMMax= qMax(globalMMax, fabs(beams[n].M(ls, beams[n].l())));
 
-			globalPMax= qMax(globalPMax, fabs(beams[n].Q(ls, beams[n].Q(ls).max(0))));
-			globalPMax= qMax(globalPMax, fabs(beams[n].N(ls, beams[n].N(ls).max(0))));
+
+			if(beams[n].Q(ls).max(0)<beams[n].l() && beams[n].Q(ls).max(0)>0)
+				globalPMax= qMax(globalPMax, fabs(beams[n].Q(ls, beams[n].Q(ls).max(0))));
+			if(beams[n].N(ls).max(0)<beams[n].l() && beams[n].N(ls).max(0)>0)
+				globalPMax= qMax(globalPMax, fabs(beams[n].N(ls, beams[n].N(ls).max(0))));
 			globalPMax= qMax(globalPMax, fabs(beams[n].N(ls, 0)));
 			globalPMax= qMax(globalPMax, fabs(beams[n].N(ls, beams[n].l())));
 			globalPMax= qMax(globalPMax, fabs(beams[n].Q(ls, 0)));
@@ -491,6 +514,7 @@ void wgv::writeResultsBeams()
 			globalUMax=qMax(globalUMax, fabs(beams[n].w(ls, beams[n].l()/2.)));
 			globalUMax=qMax(globalUMax, fabs(beams[n].w(ls, beams[n].l()*3./4.)));
 			globalUMax=qMax(globalUMax, fabs(beams[n].w(ls, beams[n].l())));
+
 
 		}
 	}
