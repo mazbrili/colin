@@ -207,6 +207,8 @@ void structPainter::drawNode(const ColinNode &n, const int &i, bool highlighted)
 	QList<int> cls_list;
 	if(t->cls_n()==0)
 		cls_list << 0;
+	else
+		cls_list = t->activeCLS().toList();
 	if(drawResults && toDraw.testFlag(Colin::node))
 	{
 		foreach(int ls, cls_list)
