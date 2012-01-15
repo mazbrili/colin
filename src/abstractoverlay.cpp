@@ -32,14 +32,20 @@
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QKeyEvent>
+#include <QtGui/QLabel>
 
 #include "viewportsettings.h"
 
 #include "colinicons.h"
 
+abstractOverlay *abstractOverlay::instance = 0;
+
 abstractOverlay::abstractOverlay(QWidget *parent) :
 	QWidget(parent)
 {
+	if(instance)
+		delete instance;
+	instance = this;
 	QVBoxLayout *layout = new QVBoxLayout(this);
 
 
@@ -53,7 +59,7 @@ abstractOverlay::abstractOverlay(QWidget *parent) :
 	header->addButton(after);
 
 	header->setFixedHeight(item->sizeHint().height());
-	QHBoxLayout *headerlayout = new QHBoxLayout();
+	headerlayout = new QHBoxLayout();
 	layout->addLayout(headerlayout);
 	headerlayout->addSpacing(1000);
 	headerlayout->addWidget(header, Qt::AlignHCenter | Qt::AlignVCenter);
@@ -99,6 +105,11 @@ abstractOverlay::abstractOverlay(QWidget *parent) :
 
 }
 
+abstractOverlay::~abstractOverlay()
+{
+	instance = 0;
+}
+
 
 bool abstractOverlay::eventFilter(QObject *o, QEvent *e)
 {
@@ -109,7 +120,7 @@ bool abstractOverlay::eventFilter(QObject *o, QEvent *e)
 		this->setFixedSize(event->size());
 		return false;
 	}
-	//return QWidget::eventFilter(o, e);
+	return QWidget::eventFilter(o, e);
 }
 
 void abstractOverlay::keyPressEvent(QKeyEvent *e)
@@ -132,11 +143,6 @@ void abstractOverlay::keyPressEvent(QKeyEvent *e)
 		return;
 	}
 	QWidget::keyPressEvent(e);
-}
-;
-void abstractOverlay::paintEvent(QPaintEvent *)
-{
-
 }
 
 void abstractOverlay::hideMyChildren(bool hide)

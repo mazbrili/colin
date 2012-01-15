@@ -24,59 +24,29 @@
  *
  ***********************************************************/
 
-#ifndef ABSTRACTOVERLAY_H
-#define ABSTRACTOVERLAY_H
+#ifndef GENERALOVERLAY_H
+#define GENERALOVERLAY_H
 
-#include <QtGui/QWidget>
 
-#include "colinhmultibutton.h"
+#include "abstractoverlay.h"
 
+class ColinStruct;
+class QLineEdit;
 class QLabel;
-class QHBoxLayout;
+class QButtonGroup;
+class QComboBox;
 
-class quadWidget: public QWidget
+
+class generalOverlay : public abstractOverlay
 {
 	Q_OBJECT
 public:
-	explicit quadWidget(QWidget *parent = 0):QWidget(parent){};
-	int heightForWidth(int w) const {return w;}
-};
-
-class abstractOverlay : public QWidget
-{
-	Q_OBJECT
-public:
-	explicit abstractOverlay(QWidget *parent = 0);
-	~abstractOverlay();
-
-
-	void keyPressEvent(QKeyEvent *e);
-
-	bool eventFilter(QObject *o, QEvent *e);
+	explicit generalOverlay(QWidget *parent = 0);
 signals:
 
 public slots:
-	void hideMyChildren(bool hide);
-	virtual void nextItem();
-	virtual void previousItem();
-	virtual void setCurrentItem(const int &i);
-
 private:
-
-protected:
-	ColinHMultiButton *header;
-	ColinPushButtonPart *before,
-						*item,
-						*after;
-	QLabel *quitmessage;
-	QPushButton *quit;
-
-	QHBoxLayout *headerlayout;
-
-	static abstractOverlay *instance;
-
-
 
 };
 
-#endif // NODEOVERLAY_H
+#endif // GENERALOVERLAY_H

@@ -417,7 +417,14 @@ void ColinStruct::setBLS(const int &i, const ColinBLS &n)
 
 int ColinStruct::addBLS(const ColinBLS &n)
 {
-	emit appended(n);
+	QString blsname = n.name();
+	int nr = 1;
+	ColinBLS nn = n;
+	while(getBLSIDbyName(nn.name())!=-1){
+		nn.setName(blsname + " ("+QString::number(nr++)+")");
+	}
+
+	emit appended(nn);
 	return bls_n()-1;
 }
 
@@ -678,6 +685,12 @@ void ColinStruct::setLoadTyp(const int &o, const ColinLoad::form &Typn)
         puh
     */
 	ColinLoad l(load(o));
+	if(l.typ() == ColinLoad::tempChange &&
+	   Typn == ColinLoad::tempDiffrence )
+		l.setPz(l.Px());
+	else if(l.typ() == ColinLoad::tempDiffrence &&
+			Typn == ColinLoad::tempChange)
+		l.setPx(l.Pz());
     l.setTyp(Typn);
     emit edited(o, l);
 }
@@ -1641,6 +1654,7 @@ void ColinStruct::mergeWith(ColinStruct *tw, QPointF dp)
 {
     emit beginS(tr("paste"));
     QMap<int, int> n;
+	QMap<int, int> blsConversation;
     int beamCount = beam_n();
 
     for(int i=0; i<tw->node_n(); i++)
@@ -1725,6 +1739,20 @@ void ColinStruct::mergeWith(ColinStruct *tw, QPointF dp)
 		b.setStruct(this);
         addBeam(b);
     }
+	for(int i=0; i<tw->bls_n(); i++)
+	{
+		for(int j=0; j<bls_n(); j++)
+		{
+			if(tw->bls(i).name() == bls(j).name())
+			{
+				blsConversation.insert(i, j);
+				break;
+			}
+
+			if(j==bls_n()-1)
+				blsConversation.insert(addBLS(tw->bls(i)), i);
+		}
+	}
     for(int i=0; i<tw->load_n(); i++)
     {
 		if(tw->load(i).typ() == ColinLoad::decreasingLinearLoad    ||
@@ -1737,6 +1765,8 @@ void ColinStruct::mergeWith(ColinStruct *tw, QPointF dp)
         {
 			ColinLoad l = tw->load(i);
             l.setBeam(tw->load(i).at()+beamCount);
+			if(l.set()!=-1)
+				l.setSet(blsConversation[l.set()]);
             Q_ASSERT(l.at()<beam_n() && l.at()>-1);
             addLoad(l);
         }

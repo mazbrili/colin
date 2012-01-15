@@ -12,6 +12,7 @@
 QFont HeaderFont;
 
 
+
 treeModel::treeModel(QObject *parent) :
     QAbstractItemModel(parent)
 {
@@ -83,9 +84,11 @@ int treeModel::rowCount(const QModelIndex & parent) const
 		case 4:					return t->cls_n()+1;
 		default:				return 0;
 		}
-	case cls:					return t->cls(parent.row()).count()+1;
+	case node:					return 1;
+	case cls:					return (parent.row()==t->cls_n())?0:t->cls(parent.row()).count()+1;
 	case beam:					return 2;
-		default:					return 1;
+	case bls:					return 0;
+	default:					return 1;
 	}
 }
 
@@ -202,6 +205,8 @@ Qt::ItemFlags treeModel::flags(const QModelIndex &index) const
 bool treeModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
 	qDebug() << "treeModel::setData(" << index << ") = " << value.toString() << "role = " << role;
+	qDebug() << "internalId = " << (index.internalId() & 0xF);
+	qDebug() << "index = " << listindex(index);
 	switch(role){
 	case Qt::EditRole:
 		switch(index.internalId() & 0xF){
@@ -532,16 +537,16 @@ QVariant treeModel::nodeItem(const QModelIndex &index, int role) const
 															tr("<b>x</b>=%2 m <br />")+
 															tr("<b>z</b>=%3 m<br />")+
 															tr("<b>phi</b>=%4 grad<br />")+
-															tr("%4<br /><br />")+
+															tr("%5<br /><br />")+
 															tr("press triangle to show support!"))
 															.arg(index.row())
 															.arg(n.x(), 0, 'f', PRECISON)
 															.arg(n.z(), 0, 'f', PRECISON)
-															.arg(n.bearing().angle()*ANGLEPREFIX, 0, 'f', PRECISON)
+															.arg((n.hasbearing()?(n.bearing().angle()*ANGLEPREFIX):0), 0, 'f', PRECISON)
 															.arg((n.hasbearing()?QString(tr("<b>support</b>: %1 %2 %3")
-																						 .arg(n.bearing().x()?"X":"-")
-																						 .arg(n.bearing().z()?"Z":"-")
-																						 .arg(n.bearing().phi()?"P":"-")):"")));
+																						 .arg(n.hasbearing()?(n.bearing().x()?"X":"-"):"")
+																						 .arg(n.hasbearing()?(n.bearing().z()?"Z":"-"):"")
+																						 .arg(n.hasbearing()?(n.bearing().phi()?"P":"-"):"")):"")));
 		case 1:						return QVariant(QString(tr("<b>x</b>=%1 m<br />click to edit.")
 															.arg(t->node(index.row()).x(), 0, 'f', PRECISON)));
 		case 2:						return QVariant(QString(tr("<b>z</b>=%1 m<br />click to edit.")
@@ -1207,7 +1212,7 @@ QVariant treeModel::clsblsItem(const QModelIndex &index, int role) const
 		{
 		case 0:						return QVariant(QString::number(index.row()));
 		case 1:						return QVariant(t->bls(c.bls(index.row())).name());
-		case 2:						return QVariant(QString::number(c.bls(index.row()), 'f', PRECISON));
+		case 2:						return QVariant(QString::number(c.fac(index.row()), 'f', PRECISON));
 		default:					return QVariant();
 		}
 	case Qt::DecorationRole:
@@ -1239,7 +1244,8 @@ QVariant treeModel::clsblsItem(const QModelIndex &index, int role) const
 													tr("<b>factor</b>: the factor wich is used to multiply the load case<br /><br />")+
 													treeNavigation());
 	case Qt::SizeHintRole:			return QVariant();
-	case 32:
+	case Qt::FontRole:				return QVariant();
+	case Qt::UserRole:
 		switch(index.column())
 		{
 		case 1:						return QVariant(ColinStruct::CLSBLS);
@@ -1468,8 +1474,8 @@ QVariant treeModel::newBLSItem(const QModelIndex &index, int role) const
 		switch(index.column())
 		{
 		case 0:						return QVariant();
-		case 1:						return QVariant(newLoadBuffer[0]);
-		case 2:						return QVariant(newLoadBuffer[1]);
+		case 1:						return QVariant(newBLSBuffer[0]);
+		case 2:						return QVariant(newBLSBuffer[1]);
 		default:					return QVariant();
 		}
 	case Qt::DecorationRole:
@@ -1790,14 +1796,21 @@ bool treeModel::setCLSBLS(const QModelIndex & index, const QVariant & value)
 	int id = index.parent().row();
 
 
-	if(index.row()==t->cls_n())
+	bool ok;
+	double val;
+	if(index.row() == t->cls(id).count())
 		return addCLSBLS(index, value);
 
 	switch(index.column())
 	{
 	case 1:
-		t->setCLSName(index.row(), value.toString());
-		return true;
+		return false;
+	case 2:
+		val = value.toString().toDouble(&ok);
+		if(ok)
+			t->setFacbyIndex(id, index.row(), val);
+		else
+			return false;
 	default:
 		return false;
 	}
@@ -1956,21 +1969,49 @@ bool treeModel::addLoad(const QModelIndex & index, const QVariant & value)
 
 bool treeModel::addBLS(const QModelIndex & index, const QVariant & value)
 {
-	return true;
+	qDebug() << "treeModel::addBLS: " << value.toString();
+	if(index.column() == 1)
+	{
+		ColinBLS newBLS(value.toString());
+		newBLS.setColor(viewPortSettings::instance().nextStandardColor(t->bls(t->bls_n()-1).color()));
+		t->addBLS(newBLS);
+		return true;
+	}
+	return false;
 }
 
 bool treeModel::addCLS(const QModelIndex & index, const QVariant & value)
 {
-	return true;
+	qDebug() << "treeModel::addCLS: " << value.toString();
+	if(index.column() == 1)
+	{
+		ColinCLS newCLS(value.toString());
+		t->addCLS(newCLS);
+		return true;
+	}
+	return false;
 }
 
 bool treeModel::addCLSBLS(const QModelIndex & index, const QVariant & value)
 {
-	return true;
+	qDebug() << "treeModel::addBLSCLS: " << value.toString();
+	if(index.column() == 1)
+	{
+		int blsId = t->getBLSIDbyName(value.toString());
+		if(blsId==-1)
+			return false;
+		int clsId = index.parent().row();
+		qDebug() << "blsId = " << blsId;
+		qDebug() << "clsId = " << clsId;
+		t->addBLStoCLS(clsId, blsId, 1);
+		return true;
+	}
+	return false;
 }
 
 QBrush treeModel::headerDecoration(const QModelIndex &index) const
 {
+	return QBrush();/*
 	QTreeView *tv = qobject_cast<QTreeView*>(QObject::parent());
 	QLinearGradient lg(0, 0, 0, 24);
 	lg.setColorAt(0.,			QApplication::palette("QHeaderView").color(QPalette::Light));
@@ -1988,7 +2029,7 @@ QBrush treeModel::headerDecoration(const QModelIndex &index) const
 	if(!index.column())
 		width -= 21;
 	p.drawRect(index.column()?-1:0, 0, width, 23);
-	return QBrush(pm);
+	return QBrush(pm);*/
 }
 
 QString treeModel::loadTypeDescription(int loadtype) const
@@ -2168,7 +2209,10 @@ void treeModel::changedBLS(const int &i)
 
 void treeModel::changedCLS(const int &i)
 {
+	emit beginInsertRows(createIndex(i, 0, cls), 0, t->cls(i).count()+1);
 	emit dataChanged(createIndex(i, 0, cls), createIndex(i, 6, cls));
+	emit dataChanged(createIndex(0, 0, childId(clsbls, i)), createIndex(t->cls(i).count()+1, 2,  childId(clsbls, i)));
+	emit endInsertRows();
 }
 
 void treeModel::erasedNode(const int &i)

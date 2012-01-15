@@ -48,7 +48,11 @@ void XmlWriter::writeLoad(const ColinStruct &tw, const int &nr)
     writeAttribute("Px", QString("%1").arg(l.Px()));
     writeAttribute("Pz", QString("%1").arg(l.Pz()));
     writeAttribute("M", QString("%1").arg(l.M()));
-    writeEndElement();
+	if(l.set()>=0)
+		writeAttribute("set", tw.bls(l.set()).name());
+	else
+		writeAttribute("set", "none");
+	writeEndElement();
     writeEndDocument();//ColinClipboardLoad
 
 
@@ -68,7 +72,8 @@ void XmlWriter::writeSelection(const ColinStruct &tw, QPointF translation)
     writeRequredLibEntries(tw);
 
     QMap<int, int> nodes;
-    QMap<int, int> beams;
+	QMap<int, int> beams;
+	QSet<int> bls;
     int beamCount = 0;
     int nodeCount = 0;
 
@@ -127,6 +132,11 @@ void XmlWriter::writeSelection(const ColinStruct &tw, QPointF translation)
                tw.load(i).typ() == ColinLoad::tempChange              ||
                tw.load(i).typ() == ColinLoad::tempDiffrence           )
             {
+				if(tw.load(i).set()>-1 && !bls.contains(tw.load(i).set()))
+				{
+					writeBLS(tw.bls(tw.load(i).set()));
+					bls.insert(tw.load(i).set());
+				}
                 if(!beams.contains(tw.load(i).at()))
 		{
 		    if(!nodes.contains(tw.beam(tw.load(i).at()).leftNodeI()))

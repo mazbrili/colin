@@ -49,7 +49,7 @@ double detailPainter::validAngle(double angle) const
 	return angle;
 }
 
-void detailPainter::drawNode(QPainter *p, const ColinStruct &t, const int &object, const QList<int> &cls)
+void detailPainter::drawNode(QPainter *p, const ColinStruct &t, int object, const QList<int> &cls)
 {
 	QSize s = QSize(p->device()->width(), p->device()->height());
 	p->setPen(viewPortSettings::instance().color(Colin::C_Beam));
@@ -383,7 +383,7 @@ void detailPainter::drawNode(QPainter *p, const ColinStruct &t, const int &objec
 		p->resetTransform();
 	}
 }
-void detailPainter::drawBeamExtern(QPainter *p, const ColinStruct &t, const int &i, const QList<int> &cls)
+void detailPainter::drawBeamExtern(QPainter *p, const ColinStruct &t, int i, const QList<int> &cls)
 {
 
 	double scale = viewPortSettings::instance().resultsWidgetScale();
@@ -392,7 +392,7 @@ void detailPainter::drawBeamExtern(QPainter *p, const ColinStruct &t, const int 
 
 	double l = 120;
 	p->translate(p->device()->height()/2, p->device()->height()/2);
-	p->scale(p->device()->height()/200., p->device()->height()/250.);
+	p->scale(p->device()->height()/200., p->device()->height()/200.);
 	p->rotate(b.angle()*180./M_PI);
 	p->setPen(QPen(p->pen().color(), 0.5));
 
@@ -403,26 +403,30 @@ void detailPainter::drawBeamExtern(QPainter *p, const ColinStruct &t, const int 
 
 	QLineF loadLine;
 	QTransform forLine;
-	forLine.rotate(-b.angle()*180/M_PI);
-	for(int j=0; j<t.cls(cls.at(0)).count(); j++)
+	forLine.rotate(-b.angle()*180./M_PI);
+	for(int j=0; j<(t.cls_n()?t.cls(cls.at(0)).count():1); j++)
 	{
-		double fac = t.cls(cls.at(0)).fac(j)*t.scaleP()*scale;
+		double fac;
+		if(t.cls_n())
+			fac = t.cls(cls.at(0)).fac(j)*t.scaleP()*scale;
+		else
+			fac = t.scaleP()*scale;
 		for(int l=0; l<t.load_n(); l++)
 		{
-			if(t.load(l).set() == t.cls(cls.at(0)).bls(j) && t.load(l).at() == i)
+			if((t.load(l).set() == (t.cls_n()?t.cls(cls.at(0)).bls(j):-1) && t.load(l).at() == i))
 			{
 				if(t.load(l).typ() == ColinLoad::uniformlyDistibutedLoad)
 				{
-					loadLine.setP1(forLine.map(QPointF(loadLine.x1()-t.load(l).Px()*fac, loadLine.y1()-t.load(l).Pz()*fac)));
-					loadLine.setP2(forLine.map(QPointF(loadLine.x2()-t.load(l).Px()*fac, loadLine.y2()-t.load(l).Pz()*fac)));
+					loadLine.setP1(loadLine.p1()+forLine.map(QPointF(-t.load(l).Px()*fac, -t.load(l).Pz()*fac)));
+					loadLine.setP2(loadLine.p2()+forLine.map(QPointF(-t.load(l).Px()*fac, -t.load(l).Pz()*fac)));
 				}
 				else if(t.load(l).typ() == ColinLoad::increasingLinearLoad)
 				{
-					loadLine.setP2(forLine.map(QPointF(loadLine.x2()-t.load(l).Px()*fac, loadLine.y2()-t.load(l).Pz()*fac)));
+					loadLine.setP2(loadLine.p2()+forLine.map(QPointF(-t.load(l).Px()*fac, -t.load(l).Pz()*fac)));
 				}
 				else if(t.load(l).typ() == ColinLoad::decreasingLinearLoad)
 				{
-					loadLine.setP1(forLine.map(QPointF(loadLine.x1()-t.load(l).Px()*fac, loadLine.y1()-t.load(l).Pz()*fac)));
+					loadLine.setP1(loadLine.p1()+forLine.map(QPointF(-t.load(l).Px()*fac, -t.load(l).Pz()*fac)));
 				}
 				else
 					continue;
@@ -462,41 +466,104 @@ void detailPainter::drawBeamExtern(QPainter *p, const ColinStruct &t, const int 
 
 	p->save();
 	p->setBrush(lcolor);
-	p->translate(-l/2, 0);
-
 
 	const int ac = 5;
 
-	loads.translate(l/2, 0);
 	p->setClipPath(loads);
 	p->setBrush(p->pen().color());
 
 	for(int arr=0; arr<=ac; arr++)
 	{
-		p->drawPolygon(arrow);
-		p->drawLine(0, -10, 0, -l*2);
-		loads.translate(-l/ac, 0);
-		p->translate(l/ac, 0);
+		QLineF sl(QPointF(-l/2+l*arr/ac, 0), loadLine.pointAt(double(arr)/double(ac)));
+		p->drawLine(sl);
+		QTransform forarrow;
+		forarrow.translate(-l/2+l*arr/ac, 0);
+		forarrow.rotate(-sl.angle()+b.angle()*180./M_PI+90);
+		p->drawPolygon(forarrow.map(arrow));
 	}
 
 	p->restore();
 
-	p->save();
-
-	p->translate(-l/2, 0);
-
-	p->setPen(QPen(viewPortSettings::instance().color(Colin::C_Np), p->pen().widthF()));
-
-	p->drawLine(-10, 0, -10-fabs(b.N(cls.at(0), 0)), 0);
-
+	if(b.getStruct()->isCalculated())
+	{
+		p->save();
+		p->translate(-l/2, 0);
+		p->scale(-1, 1);
+		drawLoads(p, b.N(cls.at(0), 0), -b.Q(cls.at(0), 0), b.M(cls.at(0), 0));
+		p->restore();
+		p->save();
+		p->translate(l/2, 0);
+		drawLoads(p, b.N(cls.at(0), b.l()), b.Q(cls.at(0), b.l()), b.M(cls.at(0), b.l()));
+		p->restore();
+	}
 }
 
-void detailPainter::drawBeamIntern(QPainter *p, const ColinStruct &t, const int &i, const double &x, const QList<int> &cls)
+void detailPainter::drawBeamIntern(QPainter *p, const ColinStruct &t, int i, const double &x, const QList<int> &cls)
 {
 
 }
 
-void detailPainter::drawBeamFunctions(QPainter *p, const ColinStruct &t, const int &i, const QList<int> &cls)
+void detailPainter::drawBeamFunctions(QPainter *p, const ColinStruct &t, int i, const QList<int> &cls)
 {
 
 }
+
+
+void detailPainter::drawLoads(QPainter *p, double N, double Q, double M)
+{
+
+	const double NStart = 10;
+	const double QStart = 20;
+	const double MStart = 30;
+
+	double scale = viewPortSettings::instance().resultsWidgetScale();
+	ColinStruct *tw = filelist::instance().currentFile();
+	QPolygonF arrow(3);
+
+	if(!qFuzzyIsNull(N))
+	{
+		p->setPen(QPen(viewPortSettings::instance().color(Colin::C_Np), p->pen().widthF()));
+
+		if(N>0)
+		{
+			arrow[0] = QPointF(NStart+N*tw->scaleP()*scale+5, 0);
+			arrow[1] = QPointF(NStart+N*tw->scaleP()*scale, -3);
+			arrow[2] = QPointF(NStart+N*tw->scaleP()*scale, 3);
+		}
+		else
+		{
+			arrow[0] = QPointF(NStart-5, 0);
+			arrow[1] = QPointF(NStart, -3);
+			arrow[2] = QPointF(NStart, 3);
+		}
+		p->setBrush(p->pen().color());
+		p->drawPolygon(arrow);
+		p->drawLine(NStart, 0, NStart+fabs(N*tw->scaleP()*scale), 0);
+	}
+
+	if(!qFuzzyIsNull(Q))
+	{
+		arrow[0] = QPointF(QStart, Q*tw->scaleP()*scale/2+((Q>0)?5:-5));
+		arrow[1] = QPointF(QStart-3, Q*tw->scaleP()*scale/2);
+		arrow[2] = QPointF(QStart+3, Q*tw->scaleP()*scale/2);
+		p->setPen(QPen(viewPortSettings::instance().color(Colin::C_Qp), p->pen().widthF()));
+		p->setBrush(p->pen().color());
+		p->drawPolygon(arrow);
+		p->drawLine(QStart, fabs(Q*tw->scaleP()*scale)/2, QStart, -fabs(Q*tw->scaleP()*scale)/2);
+	}
+
+
+	if(!qFuzzyIsNull(M))
+	{
+		arrow[0] = QPointF(MStart, (M>0)?-5:5);
+		arrow[1] = QPointF(MStart-3, 0);
+		arrow[2] = QPointF(MStart+3, 0);
+		p->setPen(viewPortSettings::instance().color(Colin::C_Mp));
+		p->setBrush(p->pen().color());
+		p->rotate(-M*tw->scaleM()/2*viewPortSettings::instance().MtoRad());
+		p->drawPolygon(arrow);
+		p->drawArc(-MStart, -MStart, 2*MStart, 2*MStart, 0, -M*tw->scaleM()*16*viewPortSettings::instance().MtoRad());
+	}
+
+}
+

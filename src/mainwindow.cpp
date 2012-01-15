@@ -34,6 +34,8 @@
 #include <QtGui/QPrinter>
 #include <QtGui/QToolButton>
 #include <QtGui/QWhatsThis>
+#include <QtScriptTools/QScriptEngineDebugger>
+
 
 #include "historymenu.h"
 
@@ -452,7 +454,11 @@ void MainWindow::initMenu()
 	 *        aboutmenu          *
 	 *****************************/
 
+	QMenu *jsMenu = new QMenu("javascript");
+	jsMenu->addAction(QIcon(), tr("run script"), this, SLOT(runScript()));
+	jsMenu->addAction(QIcon(), tr("debug script"), this, SLOT(runDebug()));
 
+	menuBar()->addMenu(jsMenu);
 
 	QMenu *aboutm = new QMenu(tr("&about", "menu | aboutmenu(don't remve the \"&\""), this);
 //    scS.addAction(
@@ -1508,6 +1514,7 @@ void MainWindow::paste()
 	debugS << "beamcount" << tw->beam_n() << endl;
 	debugS << "nodecount" << tw->node_n() << endl;
 	debugS << "loadcount" << tw->load_n() << endl;
+	debugS << "bls" << tw->bls_n() << endl;
 #endif
 
 
@@ -1690,4 +1697,40 @@ void MainWindow::setActionMenus(bool beside)
 			b->actions().at(0)->setEnabled(!b->actions().at(0)->isEnabled());
 		}
 	}
+}
+
+void MainWindow::runScript()
+{
+	QString scriptFile;
+	scriptFile = QFileDialog::getOpenFileName(this, tr("open *js file"), QString(), "javascript (*.js)");
+	QString programm;
+	QFile code(scriptFile);
+	code.open(QIODevice::ReadOnly);
+	programm = code.readAll();
+	code.close();
+
+	scriptEngine *sE = new scriptEngine(this);
+
+	sE->evaluate(programm);
+}
+
+void MainWindow::runDebug()
+{
+	QString scriptFile;
+	scriptFile = QFileDialog::getOpenFileName(this, tr("open *js file"), QString(), "javascript (*.js)");
+	QString programm;
+	QFile code(scriptFile);
+	code.open(QIODevice::ReadOnly);
+	programm = code.readAll();
+	code.close();
+
+	scriptEngine *sE = new scriptEngine(this);
+	QScriptEngineDebugger *debugger = new QScriptEngineDebugger(this);
+	QWidget *debugWindow = debugger->standardWindow();
+	debugWindow->setWindowModality(Qt::ApplicationModal);
+	debugWindow->resize(1280, 704);
+	debugWindow->show();
+	debugger->attachTo(sE);
+	debugger->action(QScriptEngineDebugger::InterruptAction)->trigger();
+	sE->evaluate(programm, scriptFile);
 }

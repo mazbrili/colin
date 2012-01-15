@@ -28,15 +28,33 @@
 #define TREEVIEW_H
 
 #include <QtGui/QTreeView>
+#include <QtGui/QMenu>
 
 #include "filelist.h"
 #include "colinicons.h"
 #include "treedelegate.h"
+#include "catcher.h"
 
 #ifndef QT_NO_DEBUG
 #include <QtCore/QTextStream>
 #endif
 
+
+class delMenu : public QMenu
+{
+	Q_OBJECT
+public:
+	delMenu(int clsId, int blsId, QWidget *parent = 0);
+
+public slots:
+	void delBLS(){
+		filelist::instance().currentFile()->removeBLSbyIndex(clsId, blsId);
+		deleteLater();
+	}
+private:
+	int clsId;
+	int blsId;
+};
 
 class treeView : public QTreeView
 {
@@ -45,15 +63,15 @@ public:
     explicit treeView(QWidget *parent = 0);
 
 	void keyPressEvent(QKeyEvent *e);
+	void mousePressEvent(QMouseEvent *e);
 
 
 signals:
-
+	void rightClick(catcher::CatchCases, int);
 public slots:
 
 
     void popupEditor(const QModelIndex &index);
-    void popupMenu(const QPoint &p);
 
 
 
@@ -64,8 +82,10 @@ public slots:
 	void previousItem(const QModelIndex &index);
 	void firstColumn(const QModelIndex &index);
 
+
 private:
 
+	void popupDelMenu(int clsId, int blsId);
 
     int opencolumn;
 

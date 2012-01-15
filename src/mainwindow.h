@@ -136,6 +136,9 @@ public slots:
 
 	void setActionMenus(bool beside);
 
+	void runScript();
+	void runDebug();
+
 //	void loadset();
 
 private:

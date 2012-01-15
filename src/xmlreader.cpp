@@ -76,6 +76,10 @@ bool XmlReader::read(const QByteArray &array)
                 l.setPx(attributes().value("Px").toString().toDouble());
                 l.setPz(attributes().value("Pz").toString().toDouble());
                 l.setM(attributes().value("M").toString().toDouble());
+				if(attributes().value("set").toString()!=QString("none")){
+					tw->CommandInsertBLS(tw->bls_n(), ColinBLS(attributes().value("set").toString()));
+					l.setSet(tw->bls_n()-1);
+				}
                 tw->CommandInsertLoad(tw->load_n(), l);
             }
             else

@@ -27,6 +27,8 @@
 #include "cwidget.h"
 #include "nodeoverlay.h"
 #include "beamoverlay.h"
+#include "loadoverlay.h"
+#include "generaloverlay.h"
 #include <limits>
 
 #include <QtGui/QGraphicsBlurEffect>
@@ -64,6 +66,10 @@ cWidget::cWidget(QWidget *parent) :
 	views.at(2)->setStrech(0);
 	views.at(3)->setStrech(0);
 	views.at(0)->setStrech(std::numeric_limits<unsigned char>::max());
+
+
+	connect(sidebar->container->tV,					SIGNAL(rightClick(catcher::CatchCases, int)),
+			this,									SLOT(showMenu(catcher::CatchCases, int)));
 }
 
 void cWidget::idrequest(int* id)
@@ -233,6 +239,10 @@ void cWidget::showMenu(catcher::CatchCases cC, const int &i)
 		menu = new nodeOverlay(viewContainer);
 	else if(cC == catcher::CatchedBeam)
 		menu = new beamOverlay(viewContainer);
+	else if(cC == catcher::CatchedLoad)
+		menu = new loadOverlay(viewContainer);
+	else
+		menu = new generalOverlay(viewContainer);
 	menu->setFixedSize(viewContainer->size());
 	menu->show();
 	menu->raise();

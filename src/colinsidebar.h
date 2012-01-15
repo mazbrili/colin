@@ -44,15 +44,15 @@ class ColinSidebarContainer : public SlidingStackedWidget
 public:
 	explicit ColinSidebarContainer(QWidget *parent = 0);
 
+	printoverlayWidget *print;
+	treeView *tV;
+	libSidebar *library;
+	consoleWidget *console;
 signals:
 
 public slots:
 
 private:
-	printoverlayWidget *print;
-	treeView *tV;
-	libSidebar *library;
-	consoleWidget *console;
 
 };
 

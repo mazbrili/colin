@@ -211,11 +211,17 @@ public:
 template<> inline void polynom<0>::calcMax(){}
 template<> inline void polynom<1>::calcMax(){}
 template<> inline void polynom<2>::calcMax(){
-    max_[0]=-a[1]/2/a[2];}
+	if(a[2]==0)
+		max_[0]=0;
+	else
+		max_[0]=-a[1]/2/a[2];}
 template<> inline void polynom<3>::calcMax(){
-    if(a[3]==0){
-        max_[0]=-a[1]/2/a[2];
-        max_[1]=0;
+	if(a[3]==0){
+		if(a[2]==0)
+			max_[0]=0;
+		else
+			max_[0]=-a[1]/2/a[2];
+		max_[1]=0;
         return;}
     double d = 4*a[2]*a[2]-12*a[3]*a[1];
     if(d<0){

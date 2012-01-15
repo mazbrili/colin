@@ -85,6 +85,7 @@ class nodeOverlay : public abstractOverlay
     Q_OBJECT
 public:
 	explicit nodeOverlay(QWidget *parent = 0);
+	~nodeOverlay();
 signals:
 
 public slots:
@@ -119,6 +120,12 @@ private:
 	QLabel *beamforces_min;
 	QLabel *beamforces_max;
 	int currentItem;
+
+	QGroupBox *reac, *disp, *beams;
+	static bool showReactions;
+	static bool showDisplacement;
+	static bool showBeamForces;
+	static bool showSupportExtended;
 
 };
 

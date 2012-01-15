@@ -38,6 +38,34 @@ class QLabel;
 class QButtonGroup;
 class QComboBox;
 
+class hingeExtended: public QGroupBox
+{
+	Q_OBJECT
+public:
+	explicit hingeExtended(QWidget *parent);
+	~hingeExtended();
+	ColinPushButtonPart *basicLeft, *basicRight;
+	QLineEdit **springCs;
+
+
+	QButtonGroup *freeButtons,
+				 *springButtons,
+				 *basicButtons;
+
+
+	QGroupBox *moreBox;
+
+public slots:
+	void extended(bool show);
+	void setCurrentItem(const int &i);
+	void setBasic();
+	void setSpring();
+	void setSpringConstants();
+
+private:
+	int currentItem;
+};
+
 class beamDetail : public quadWidget
 {
 	Q_OBJECT
@@ -53,7 +81,7 @@ public:
 public slots:
 	void setCurrentItem(const int &i);
 	void setCurrentCLS(const int &i);
-	void setMode(const mode &M);
+	void setMode(const int &M);
 	void setCutAt(const double X);
 private:
 	int currentItem;
@@ -95,18 +123,16 @@ private:
 
 	QPushButton *mat;
 	QPushButton *cs;
-	ColinPushButtonPart *leftHinge, *rightHinge;
+	hingeExtended *hinges;
 
 	ColinPushButtonPart *copyButton, *cutButton;
 	ColinHMultiButton *clsButton;
 	QButtonGroup *cls;
-	ColinPushButtonPart *modeExtern, *modeIntern, *modeFunctions;
+	ColinPushButtonPart *modeExtern, *modeIntern;
 	QButtonGroup *modeGroup;
 	beamDetail *detailWidget;
 
 	QLabel *displacement;
-	QLabel *forces_min;
-	QLabel *forces_max;
 	QLabel *endforces;
 
 	int currentItem;

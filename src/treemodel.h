@@ -49,6 +49,10 @@ public:
 
 
 	static QString treeNavigation();
+
+	static int listindex(const QModelIndex &index);
+	static inline treeModel::modelIds Id(int id){return modelIds(id&root);}
+
 signals:
 
 public slots:
@@ -75,8 +79,6 @@ private:
 	ColinStruct *t;
 	static treeModel::modelIds parentId(treeModel::modelIds id);
 	static treeModel::modelIds childId(treeModel::modelIds id, int row);
-	static int listindex(const QModelIndex &index);
-	static inline treeModel::modelIds Id(int id){return modelIds(id&root);}
 	QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 	//0
 	QVariant nodeHeader(const QModelIndex &index, int role) const;

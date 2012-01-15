@@ -17,7 +17,7 @@ ARTIFACT=Colin
 ABI_VERSION=1
 
 ifeq ($(WINDRES),)
-EXTPKGS=QtGui, QtScript, QtSvg
+EXTPKGS=QtGui, QtScript, QtSvg, QtScriptTools
 endif
 
 ifeq ($(INCLUDES),)
@@ -109,6 +109,8 @@ MOCHEADERS= abstractcolintooltip.h \
 	abstractoverlay.h \
 	nodeoverlay.h \
 	beamoverlay.h \
+	loadoverlay.h \
+	generaloverlay.h \
 	detailpainter.h
 
 
@@ -198,6 +200,8 @@ SOURCES= beammenu.cpp \
 	abstractoverlay.cpp \
 	nodeoverlay.cpp \
 	beamoverlay.cpp \
+	loadoverlay.cpp \
+	generaloverlay.cpp \
 	detailpainter.h
 
 

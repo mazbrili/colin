@@ -82,6 +82,8 @@ scriptEngine::scriptEngine(QObject *parent) :
 	connect(&filelist::instance(),					SIGNAL(currentChanged(ColinStruct*)),
 			this,									SLOT(setTw(ColinStruct*)));
 
+	if(filelist::instance().currentFile())
+		setTw(filelist::instance().currentFile());
 }
 
 void scriptEngine::eval(QString code)

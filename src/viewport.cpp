@@ -1375,6 +1375,13 @@ void viewport::mousePressEvent(QMouseEvent *e)
 		if(cC != catcher::CatchedNothing)
 		{
 			ColinLoad l = toPaste_->load(0);
+			if(l.set()>-1)
+			{
+				ColinBLS bls = toPaste_->bls(0);
+				l.setSet(tw->getBLSIDbyName(bls.name()));
+				if(l.set()==-1)
+					l.setSet(tw->addBLS(bls));
+			}
 			l.setBeam(catched);
 			tw->addLoad(l);
 			vS->setClipBoard(Colin::noRequest);
@@ -1431,13 +1438,11 @@ void viewport::mousePressEvent(QMouseEvent *e)
 			emit nodeRightClick(catcher::CatchedBeam, catched);
 			return;
 		case catcher::CatchedTemp:
-			launchMenuTemp(catched);
-			return;
 		case catcher::CatchedLoad:
-			launchMenuLoad(catched);
+			emit nodeRightClick(catcher::CatchedLoad, catched);
 			return;
 		default:
-			return;
+			emit nodeRightClick(catcher::CatchedNothing, -1);
 		}
 	}
 

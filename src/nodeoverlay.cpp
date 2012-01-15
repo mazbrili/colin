@@ -45,6 +45,11 @@
 #include "unitsettings.h"
 
 
+bool nodeOverlay::showReactions = true;
+bool nodeOverlay::showDisplacement = true;
+bool nodeOverlay::showBeamForces = true;
+bool nodeOverlay::showSupportExtended = false;
+
 
 nodeDetail::nodeDetail(QWidget *parent):
 	quadWidget(parent)
@@ -192,7 +197,6 @@ supportExtended::supportExtended(QWidget *parent) :
 	connect(mc,					SIGNAL(editingFinished()),
 			this,				SLOT(setSpringConstants()));
 
-	extended(false);
 }
 
 void supportExtended::extended(bool show)
@@ -436,8 +440,7 @@ nodeOverlay::nodeOverlay(QWidget *parent) :
 
 
 
-
-	QGroupBox *disp = new QGroupBox(this);
+	disp = new QGroupBox(this);
 	vl3->addWidget(disp);
 
 	disp->setTitle("["+tr("displacement")+"]");
@@ -447,10 +450,11 @@ nodeOverlay::nodeOverlay(QWidget *parent) :
 	QVBoxLayout *labels = new QVBoxLayout(disp);
 	disp->setLayout(labels);
 	displacement = new QLabel("N/A", disp);
+	displacement->setTextInteractionFlags(Qt::TextBrowserInteraction | Qt::TextSelectableByKeyboard);
 	labels->addWidget(displacement);
 
 
-	QGroupBox *reac = new QGroupBox(this);
+	reac = new QGroupBox(this);
 	vl3->addWidget(reac);
 
 	reac->setTitle("["+tr("reactions")+"]");
@@ -460,9 +464,10 @@ nodeOverlay::nodeOverlay(QWidget *parent) :
 	labels = new QVBoxLayout(reac);
 	reac->setLayout(labels);
 	reactions = new QLabel("N/A", reac);
+	reactions->setTextInteractionFlags(Qt::TextBrowserInteraction | Qt::TextSelectableByKeyboard);
 	labels->addWidget(reactions);
 
-	QGroupBox *beams = new QGroupBox(this);
+	beams = new QGroupBox(this);
 	vl3->addWidget(beams);
 	beams->setTitle("["+tr("beam forces")+"]");
 	beams->setMinimumWidth(250);
@@ -472,7 +477,9 @@ nodeOverlay::nodeOverlay(QWidget *parent) :
 	hl = new QHBoxLayout(beams);
 	beams->setLayout(hl);
 	beamforces_min = new QLabel("N/A", beams);
+	beamforces_min->setTextInteractionFlags(Qt::TextBrowserInteraction | Qt::TextSelectableByKeyboard);
 	beamforces_max = new QLabel("", beams);
+	beamforces_max->setTextInteractionFlags(Qt::TextBrowserInteraction | Qt::TextSelectableByKeyboard);
 	hl->addWidget(beamforces_min);
 	hl->addWidget(beamforces_max);
 
@@ -506,8 +513,33 @@ nodeOverlay::nodeOverlay(QWidget *parent) :
 			this,			SLOT(cut()));
 
 
+	reac->setChecked(nodeOverlay::showReactions);
+	disp->setChecked(nodeOverlay::showDisplacement);
+	beams->setChecked(nodeOverlay::showBeamForces);
+	support->morebox->setChecked(nodeOverlay::showSupportExtended);
+
+	QList<QGroupBox*> boxes;
+	boxes << reac << disp << beams << support->morebox;
+
+	foreach(QGroupBox *gb, boxes)
+	{
+		if(!gb->isChecked())
+		{
+			foreach(QWidget *w, gb->findChildren<QWidget* >())
+				w->setHidden(true);
+		}
+	}
+
 	currentItem = -1;
 
+}
+
+nodeOverlay::~nodeOverlay()
+{
+	nodeOverlay::showReactions = reac->isChecked();
+	nodeOverlay::showDisplacement = disp->isChecked();
+	nodeOverlay::showBeamForces = beams->isChecked();
+	nodeOverlay::showSupportExtended = support->morebox->isChecked();
 }
 
 void nodeOverlay::setCurrentItem(const int &i)
@@ -696,7 +728,7 @@ void nodeOverlay::setCurrentItem(const int &i)
 						min = qMin(t.beam(j).N(cls, (!m?0:t.beam(j).l())), min);
 					//if(min*PPREFIX*PRECISON<-1)
 						txt_min.append(QString("<font color=\"%1\">N<sub>%2,%3,%4</sub> = %5 %6</font><br/>")
-								   .arg(viewPortSettings::instance().color(Colin::C_Nm).name())
+								   .arg(viewPortSettings::instance().color(Colin::C_Np).name())
 								   .arg(!m?tr("l"):tr("r")).arg(t.cls_n()?"min":"").arg(j)
 								   .arg(min*PPREFIX, 0, 'f', PRECISON).arg(unitSettings::instance().Peh()));
 
@@ -716,7 +748,7 @@ void nodeOverlay::setCurrentItem(const int &i)
 						min = qMin(t.beam(j).Q(cls, (!m?0:t.beam(j).l())), min);
 					//if(min*PPREFIX*PRECISON<-1)
 						txt_min.append(QString("<font color=\"%1\">Q<sub>%2,%3,%4</sub> = %5 %6</font><br/>")
-								   .arg(viewPortSettings::instance().color(Colin::C_Qm).name())
+								   .arg(viewPortSettings::instance().color(Colin::C_Qp).name())
 								   .arg(!m?tr("l"):tr("r")).arg(t.cls_n()?"min":"").arg(j)
 								   .arg(min*PPREFIX, 0, 'f', PRECISON).arg(unitSettings::instance().Peh()));
 
@@ -736,7 +768,7 @@ void nodeOverlay::setCurrentItem(const int &i)
 						min = qMin(t.beam(j).M(cls, (!m?0:t.beam(j).l())), min);
 					//if(min*MPREFIX*PRECISON<-1)
 						txt_min.append(QString("<font color=\"%1\">M<sub>%2,%3,%4</sub> = %5 %6</font><br/>")
-								   .arg(viewPortSettings::instance().color(Colin::C_Mm).name())
+								   .arg(viewPortSettings::instance().color(Colin::C_Mp).name())
 								   .arg(!m?tr("l"):tr("r")).arg(t.cls_n()?"min":"").arg(j)
 								   .arg(min*MPREFIX, 0, 'f', PRECISON).arg(unitSettings::instance().Meh()));
 
@@ -745,15 +777,11 @@ void nodeOverlay::setCurrentItem(const int &i)
 				}
 			}
 		}
-		if(t.cls_n()){
-			beamforces_min->show();
-			beamforces_min->setText(txt_min);
-		}
+		beamforces_min->setText(txt_min);
+		if(t.cls_n())
+			beamforces_max->setText(txt_max);
 		else
-		{
-			beamforces_min->hide();
-		}
-		beamforces_max->setText(txt_max);
+			beamforces_max->setText("");
 	}
 	else
 	{

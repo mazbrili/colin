@@ -25,11 +25,18 @@
  ***********************************************************/
 
 #include <QtGui/QKeyEvent>
+#include <QtGui/QMouseEvent>
 #include <QtGui/QDropEvent>
-
+#include <QtGui/QMenu>
 
 #include "treeview.h"
 #include "treemodel.h"
+
+delMenu::delMenu(int clsId, int blsId, QWidget *parent) : QMenu(parent){
+	addAction(colinIcons::instance().icon(Colin::Close), tr("remove from combination"), this, SLOT(delBLS()));
+	this->clsId = clsId;
+	this->blsId = blsId;
+}
 
 treeView::treeView(QWidget *parent) :
 	QTreeView(parent)
@@ -50,7 +57,6 @@ treeView::treeView(QWidget *parent) :
 //	this->setAllColumnsShowFocus(true);
 //	this->setAlternatingRowColors(true);
 	this->setUniformRowHeights(true);
-
 	setContextMenuPolicy(Qt::CustomContextMenu);
 
 	setModel(new treeModel(this));
@@ -90,10 +96,39 @@ void treeView::keyPressEvent(QKeyEvent *e)
 	QTreeView::keyPressEvent(e);
 }
 
-void treeView::popupMenu(const QPoint &p)
+void treeView::mousePressEvent(QMouseEvent *e)
 {
-
+	if(e->buttons().testFlag(Qt::RightButton))
+	{
+		QModelIndex index = indexAt(e->pos());
+		qDebug() << "treeView::rightClick on " << index;
+		qDebug() << "internal id " << int(treeModel::Id(index.internalId()));
+		switch(treeModel::Id(index.internalId())){
+		case treeModel::node:
+			emit rightClick(catcher::CatchedNode, index.row());
+			return;
+		case treeModel::support:
+			emit rightClick(catcher::CatchedNode, index.parent().row());
+			return;
+		case treeModel::beam:
+			emit rightClick(catcher::CatchedBeam, index.row());
+			return;
+		case treeModel::hinge:
+			emit rightClick(catcher::CatchedBeam, index.parent().row());
+			return;
+		case treeModel::load:
+			emit rightClick(catcher::CatchedLoad, index.row());
+			return;
+		case treeModel::clsbls:
+			popupDelMenu(index.parent().row(), index.row());
+			return;
+		default:
+			return;
+		}
+	}
+	QTreeView::mousePressEvent(e);
 }
+
 
 void treeView::popupEditor(const QModelIndex &index)
 {
@@ -211,4 +246,9 @@ void treeView::firstColumn(const QModelIndex &index)
 	}
 }
 
-
+void treeView::popupDelMenu(int clsId, int blsId)
+{
+	qDebug() << "popup";
+	delMenu *Menu = new delMenu(clsId, blsId);
+	Menu->popup(QCursor::pos());
+}

@@ -399,7 +399,7 @@ QScriptValue CLSCtor(QScriptContext *ctxt, QScriptEngine *eng)
 }
 
 
-QScriptValue WidgetCtor(QScriptContext *ctxt, QScriptEngine *eng)
+QScriptValue jWidgetCtor(QScriptContext *ctxt, QScriptEngine *eng)
 {
 	QScriptValue obj;
 	if(ctxt->isCalledAsConstructor()){
