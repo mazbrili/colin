@@ -111,7 +111,9 @@ MOCHEADERS= abstractcolintooltip.h \
 	beamoverlay.h \
 	loadoverlay.h \
 	generaloverlay.h \
-	detailpainter.h
+	detailpainter.h \
+	colinpastebuffer.h \
+	pastepreviewwidget.h
 
 
 BUILDDATESOURCES=colinversion.cpp
@@ -202,7 +204,9 @@ SOURCES= beammenu.cpp \
 	beamoverlay.cpp \
 	loadoverlay.cpp \
 	generaloverlay.cpp \
-	detailpainter.h
+	detailpainter.cpp \
+	colinpastebuffer.cpp \
+	pastepreviewwidget.cpp
 
 
 

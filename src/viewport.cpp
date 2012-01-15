@@ -1340,6 +1340,12 @@ void viewport::mousePressEvent(QMouseEvent *e)
 		catcher::CatchCases cC = catcher::CatchedNode | catcher::CatchedGrid;
 		int catched = catcher::instance().doYourWork(&p, &cC, globalMatrix(), 0, true);
 
+		int lastBLS = tw->bls_n();
+		//reorder colors of all inserted basic load sets
+		//keep colors of old bls the same, so we save the current count of bls
+		//to start there afterwards
+
+
 		if(cC == catcher::CatchedNode)
 		{
 			tw->mergeWith(toPaste_, tw->node(catched).toQPointF());
@@ -1356,6 +1362,14 @@ void viewport::mousePressEvent(QMouseEvent *e)
 		else
 		{
 			tw->mergeWith(toPaste_, globalMatrix().inverted().map(p));
+		}
+
+		for(int i=lastBLS; i<tw->bls_n(); i++)
+		{
+			if(i>0)
+				tw->setBLSColor(i, viewPortSettings::instance().nextStandardColor(tw->bls(i-1).color()));
+			else
+				tw->setBLSColor(i, viewPortSettings::instance().firstStandardColor());
 		}
 		delete toPaste_;
 		toPaste_ = 0;

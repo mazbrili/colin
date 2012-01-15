@@ -338,6 +338,8 @@ public:
 
 	void mergeWith(ColinStruct *tw, QPointF dp = QPointF());
 
+	void copy(ColinStruct *tw);
+
 public slots:
     //void reset();
     void removeViewPort(int i);

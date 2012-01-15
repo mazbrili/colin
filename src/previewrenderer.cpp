@@ -69,7 +69,7 @@ void previewRenderer::run()
  *************************/
 
         QImage device(size, QImage::Format_RGB32);
-        device.fill(qRgb(255, 255, 255));
+		device.fill(qRgba(255, 255, 255, 0));
 
 
         ColinStruct tw;

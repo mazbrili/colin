@@ -397,17 +397,3 @@ QScriptValue CLSCtor(QScriptContext *ctxt, QScriptEngine *eng)
 	}
 	return obj;
 }
-
-
-QScriptValue jWidgetCtor(QScriptContext *ctxt, QScriptEngine *eng)
-{
-	QScriptValue obj;
-	if(ctxt->isCalledAsConstructor()){
-		obj = ctxt->thisObject();
-	}
-	else {
-		obj = eng->newQObject(new QWidget());
-		obj.setPrototype(ctxt->callee().property("prototype"));
-	}
-	return obj;
-}

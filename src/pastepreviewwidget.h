@@ -24,34 +24,34 @@
  *
  ***********************************************************/
 
-#ifndef GENERALOVERLAY_H
-#define GENERALOVERLAY_H
+#ifndef PASTEPREVIEWWIDGET_H
+#define PASTEPREVIEWWIDGET_H
+
+#include <QWidget>
+
+class ColinPushButtonPart;
 
 
-#include "abstractoverlay.h"
-#include <QtGui/QClipboard>
-
-class ColinStruct;
-class QLineEdit;
-class QLabel;
-class QButtonGroup;
-class QComboBox;
-class QGroupBox;
-
-
-class generalOverlay : public abstractOverlay
+class pastePreviewWidget : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	explicit generalOverlay(QWidget *parent = 0);
+	explicit pastePreviewWidget(int nr, QWidget *parent = 0);
+	void paintEvent(QPaintEvent *e);
+	int heightForWidth(int w) const;
+
 signals:
-
+	void pasteRequest();
 public slots:
-	void clipBoardChanged();
+	void giefPix(QImage image, int nr);
+	void paste();
+	void remove();
 private:
+	ColinPushButtonPart *removeButton;
+	ColinPushButtonPart *pasteButton;
+	int index;
+	QImage image;
 
-
-	QGroupBox *paste;
 };
 
-#endif // GENERALOVERLAY_H
+#endif // PASTEPREVIEWWIDGET_H

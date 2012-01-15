@@ -27,8 +27,6 @@ scriptEngine::scriptEngine(QObject *parent) :
 	qScriptRegisterMetaType<ColinBLS>(this, &BLStoScriptValue, &BLSfromScriptValue);
 	qScriptRegisterMetaType<ColinCLS>(this, &CLStoScriptValue, &CLSfromScriptValue);
 
-	globalObject().setProperty("QWidget", newFunction(WidgetCtor));
-
 
 	globalObject().setProperty("ColinNode", newFunction(NodeCtor));
 	globalObject().setProperty("ColinBeam", newFunction(BeamCtor));

@@ -24,34 +24,53 @@
  *
  ***********************************************************/
 
-#ifndef GENERALOVERLAY_H
-#define GENERALOVERLAY_H
+#ifndef COLINPASTEBUFFER_H
+#define COLINPASTEBUFFER_H
 
-
-#include "abstractoverlay.h"
+#include <QtCore/QThread>
 #include <QtGui/QClipboard>
+#include <QtCore/QMutex>
+#include <QtGui/QImage>
+#include <QtCore/QList>
+#include <QtCore/QWaitCondition>
 
 class ColinStruct;
-class QLineEdit;
-class QLabel;
-class QButtonGroup;
-class QComboBox;
-class QGroupBox;
 
 
-class generalOverlay : public abstractOverlay
+class ColinPasteBuffer : public QThread
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	explicit generalOverlay(QWidget *parent = 0);
+	static ColinPasteBuffer &instance(){
+		if(!_instance) _instance = new ColinPasteBuffer();
+		return *_instance;
+	}
+
+	int size() const;
+	ColinStruct *structAt(int i);
+	void renderPreview(QSize size, int i);
+	void remove(int i);
+	void copy(int i, ColinStruct *target);
+	void run();
+
 signals:
-
+	void changedBuffer();
+	void finishedRendering(QImage image, int i);
 public slots:
-	void clipBoardChanged();
+	void changed(QClipboard::Mode mode);
+
 private:
+	ColinPasteBuffer();
+	~ColinPasteBuffer();
+	static ColinPasteBuffer *_instance;
+	QClipboard *board;
+	QList<ColinStruct*> structs;
+	mutable QMutex lockStructs;
+	QList<int> toDo_;
+	QSize size_;
+	QWaitCondition waitCondition;
+	bool killYourSelf;
 
-
-	QGroupBox *paste;
 };
 
-#endif // GENERALOVERLAY_H
+#endif // COLINPASTEBUFFER_H

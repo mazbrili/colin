@@ -33,6 +33,7 @@
 
 class QLabel;
 class QHBoxLayout;
+class ColinStruct;
 
 class quadWidget: public QWidget
 {
@@ -60,6 +61,7 @@ public slots:
 	virtual void nextItem();
 	virtual void previousItem();
 	virtual void setCurrentItem(const int &i);
+	virtual void setTw(ColinStruct *tw);
 
 private:
 

@@ -84,8 +84,8 @@ bool XmlReader::read(const QByteArray &array)
             }
             else
                 raiseError(QObject::tr("can't read file!"));
-        }
-    return !error();
+		}
+	return !error();
 }
 
 void XmlReader::readTw()

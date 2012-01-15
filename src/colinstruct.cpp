@@ -1741,16 +1741,23 @@ void ColinStruct::mergeWith(ColinStruct *tw, QPointF dp)
     }
 	for(int i=0; i<tw->bls_n(); i++)
 	{
-		for(int j=0; j<bls_n(); j++)
+		if(bls_n())
 		{
-			if(tw->bls(i).name() == bls(j).name())
+			for(int j=0; j<bls_n(); j++)
 			{
-				blsConversation.insert(i, j);
-				break;
-			}
+				if(tw->bls(i).name() == bls(j).name())
+				{
+					blsConversation.insert(i, j);
+					break;
+				}
 
-			if(j==bls_n()-1)
-				blsConversation.insert(addBLS(tw->bls(i)), i);
+				if(j==bls_n()-1)
+					blsConversation.insert(addBLS(tw->bls(i)), i);
+			}
+		}
+		else
+		{
+			blsConversation.insert(addBLS(tw->bls(i)), i);
 		}
 	}
     for(int i=0; i<tw->load_n(); i++)
@@ -1780,4 +1787,40 @@ void ColinStruct::mergeWith(ColinStruct *tw, QPointF dp)
 
 
     emit endS();
+}
+
+
+void ColinStruct::copy(ColinStruct *tw)
+{
+	nodes.clear();
+	beams.clear();
+	loads.clear();
+	basicloadsets.clear();
+	combinedloadsets.clear();
+
+	for(int i=0; i<tw->node_n(); i++)
+	{
+		nodes.append(tw->node(i));
+		nodes[i].setStruct(this);
+	}
+	for(int i=0; i<tw->beam_n(); i++)
+	{
+		beams.append(tw->beam(i));
+		beams[i].setStruct(this);
+	}
+	for(int i=0; i<tw->load_n(); i++)
+	{
+		loads.append(tw->load(i));
+		loads[i].setStruct(this);
+	}
+	for(int i=0; i<tw->bls_n(); i++)
+	{
+		basicloadsets.append((tw->bls(i)));
+		basicloadsets[i].setStruct(this);
+	}
+	for(int i=0; i<tw->cls_n(); i++)
+	{
+		combinedloadsets.append(tw->cls(i));
+		combinedloadsets[i].setStruct(this);
+	}
 }

@@ -174,3 +174,8 @@ void abstractOverlay::setCurrentItem(const int &i)
 {
 
 }
+
+void abstractOverlay::setTw(ColinStruct *tw)
+{
+	deleteLater();
+}

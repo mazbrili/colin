@@ -36,6 +36,7 @@
 
 #include "mainwindow.h"
 #include "toolTipEater.h"
+#include "colinpastebuffer.h"
 
 #include <QtGui/QApplication>
 #include <QtCore/QDir>
@@ -159,6 +160,7 @@ int main(int argc, char *argv[])
 
 
     //run threads and event loop
+	ColinPasteBuffer::instance().start(QThread::IdlePriority);
     previewWidget::renderer->start(QThread::IdlePriority);
     return a.exec();
 }

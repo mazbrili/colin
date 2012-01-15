@@ -45,9 +45,4 @@ QScriptValue CLStoScriptValue(QScriptEngine *engine, const ColinCLS &cls);
 void CLSfromScriptValue(const QScriptValue &obj, ColinCLS &cls);
 QScriptValue CLSCtor(QScriptContext *ctxt, QScriptEngine *eng);
 
-
-QScriptValue WidgetCtor(QScriptContext *ctxt, QScriptEngine *eng);
-
-
-
 #endif // JAVASCRIPTWRAPER_H

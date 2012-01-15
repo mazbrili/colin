@@ -29,6 +29,12 @@
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QLabel>
 #include <QtGui/QScrollArea>
+#include <QtGui/QGroupBox>
+#include <QtGui/QApplication>
+
+#include "previewrenderer.h"
+#include "colinpastebuffer.h"
+#include "pastepreviewwidget.h"
 
 generalOverlay::generalOverlay(QWidget *parent):
 	abstractOverlay(parent)
@@ -51,7 +57,8 @@ generalOverlay::generalOverlay(QWidget *parent):
 	scrollArea->setWidgetResizable(true);
 	scrollArea->setFrameStyle(0);
 	scrollArea->setWidget(area);
-	scrollArea->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
+	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+	scrollArea->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
 	QVBoxLayout *vl1 = new QVBoxLayout(area);
 	area->setLayout(vl1);
 	hl->addWidget(scrollArea);
@@ -79,4 +86,41 @@ generalOverlay::generalOverlay(QWidget *parent):
 	hl->setStretch(0, 100);
 	hl->setStretch(1, 160);
 	hl->setStretch(2, 100);
+
+
+	paste = new QGroupBox(this);
+
+	paste->setTitle("["+tr("paste")+"]");
+	paste->setCheckable(true);
+	QVBoxLayout *pasteLayout = new QVBoxLayout(paste);
+	paste->setLayout(pasteLayout);
+	vl1->addWidget(paste);
+
+	connect(paste,					SIGNAL(clicked(bool)),
+			this,					SLOT(hideMyChildren(bool)));
+
+	vl1->addStretch(10000);
+
+	clipBoardChanged();
+
+	connect(&ColinPasteBuffer::instance(),		SIGNAL(changedBuffer()),
+			this,								SLOT(clipBoardChanged()),
+			Qt::QueuedConnection);
+}
+
+
+void generalOverlay::clipBoardChanged()
+{
+	QVBoxLayout *layout = static_cast<QVBoxLayout*>(paste->layout());
+	foreach(QWidget *w, paste->findChildren<QWidget*>())
+	{
+		w->deleteLater();
+	}
+	for(int i=0; i<ColinPasteBuffer::instance().size(); i++)
+	{
+		pastePreviewWidget *w = new pastePreviewWidget(i, this);
+		layout->addWidget(w);
+		connect(w,					SIGNAL(pasteRequest()),
+				this,				SLOT(deleteLater()));
+	}
 }
