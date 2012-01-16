@@ -33,6 +33,8 @@
 #include <QtGui/QStyle>
 #include <QtGui/QStyleOptionButton>
 #include <QtGui/QPaintEvent>
+#include <QtGui/QLabel>
+
 
 #include "colinicons.h"
 #include "filelist.h"
@@ -47,11 +49,11 @@ public:
 
 
     void paintEvent(QPaintEvent *e);
-    void enterEvent(QEvent *){repaint();}
-    void leaveEvent(QEvent *){repaint();}
-    void mouseMoveEvent(QMouseEvent *){repaint(QRegion(xRect()));}
+	void enterEvent(QEvent *){repaint();}
+	void leaveEvent(QEvent *){repaint();}
     void mousePressEvent(QMouseEvent *e);
     void resizeEvent(QResizeEvent *e);
+	void moveEvent(QMoveEvent *e);
 
     QSize sizeHint() const{return QSize(200, 155);}
     static previewRenderer *renderer;
@@ -64,7 +66,8 @@ private:
     bool hasPreview;
     int id;
     static int count;
-    QImage image;
+	QImage image;
+	QLabel *backG;
     QString myUrl;
     QRect xRect();
 

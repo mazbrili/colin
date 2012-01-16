@@ -31,12 +31,15 @@
 #include "abstractoverlay.h"
 #include <QtGui/QClipboard>
 
+
 class ColinStruct;
 class QLineEdit;
 class QLabel;
 class QButtonGroup;
 class QComboBox;
 class QGroupBox;
+class QListWidget;
+class QGridLayout;
 
 
 class generalOverlay : public abstractOverlay
@@ -48,10 +51,18 @@ signals:
 
 public slots:
 	void clipBoardChanged();
+	void clsChanged();
+	void loadCLS(QModelIndex clsIndex);
+	void loadCLS(int clsIndex);
 private:
 
 
 	QGroupBox *paste;
+	QListWidget *clsView;
+	QListWidget *blsView;
+
+	QGridLayout *clsEditorLayout;
+	QWidget *clsEditor;
 };
 
 #endif // GENERALOVERLAY_H

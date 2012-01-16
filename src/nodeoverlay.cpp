@@ -390,7 +390,7 @@ nodeOverlay::nodeOverlay(QWidget *parent) :
 	phi = new QLineEdit();
 	cl->addWidget(philabel, 2, 0, 1, 1);
 	cl->addWidget(phi, 2, 1, 1, 1);
-	cl->addWidget(new QLabel("[g]", coords), 2, 2, 1, 1);
+	cl->addWidget(new QLabel("[grad]", coords), 2, 2, 1, 1);
 
 
 	support = new supportExtended(this);

@@ -27,7 +27,7 @@
 #ifndef PASTEPREVIEWWIDGET_H
 #define PASTEPREVIEWWIDGET_H
 
-#include <QWidget>
+#include <QtGui/QWidget>
 
 class ColinPushButtonPart;
 

@@ -500,14 +500,42 @@ void detailPainter::drawBeamExtern(QPainter *p, const ColinStruct &t, int i, con
 
 void detailPainter::drawBeamIntern(QPainter *p, const ColinStruct &t, int i, const double &x, const QList<int> &cls)
 {
+	double scale = viewPortSettings::instance().resultsWidgetScale();
 
+	const ColinBeam &b = t.beam(i);
+
+	double l = 250;
+	p->translate(p->device()->height()/2, p->device()->height()/2);
+	p->scale(p->device()->height()/200., p->device()->height()/200.);
+	p->rotate(b.angle()*180./M_PI);
+	p->setPen(QPen(p->pen().color(), 0.5));
+
+	p->setRenderHint(QPainter::Antialiasing, true);
+	p->drawLine(-l/2, 1.5, -l/3, 1.5);
+	p->drawLine( l/2, 1.5,  l/3, 1.5);
+	p->drawLine(-l/2, -1.5, -l/3, -1.5);
+	p->drawLine( l/2, -1.5,  l/3, -1.5);
+
+	p->translate(-l/3, 0);
+
+	if(b.getStruct()->isCalculated())
+	{
+		p->save();
+		drawLoads(p, b.N(cls.at(0), x),
+					 b.Q(cls.at(0), x),
+					 b.M(cls.at(0), x));
+		p->restore();
+
+		p->translate(l/1.5, 0);
+		p->scale(-1, 1);
+
+		p->save();
+		drawLoads(p, b.N(cls.at(0), x),
+					-b.Q(cls.at(0), x),
+					 b.M(cls.at(0), x));
+		p->restore();
+	}
 }
-
-void detailPainter::drawBeamFunctions(QPainter *p, const ColinStruct &t, int i, const QList<int> &cls)
-{
-
-}
-
 
 void detailPainter::drawLoads(QPainter *p, double N, double Q, double M)
 {
@@ -567,3 +595,15 @@ void detailPainter::drawLoads(QPainter *p, double N, double Q, double M)
 
 }
 
+void detailPainter::setFunctionGradient(QPainter *p, QColor c1, QColor c2)
+{
+	QLinearGradient grad(0, 20, 0, -20);
+	grad.setColorAt(0, c1);
+	grad.setColorAt(1, c2);
+	p->setPen(QPen(QBrush(grad), 0));
+	c1.setAlpha(100);
+	c2.setAlpha(100);
+	grad.setColorAt(0, c1);
+	grad.setColorAt(1, c2);
+	p->setBrush(QBrush(grad));
+}

@@ -1345,7 +1345,6 @@ void MainWindow::aboutMe()
 					"The icons are licensed under a Creative Commons Attribution-Noncommercial-Share Alike 3.0 License.\n\n"
 					"See http://creativecommons.org/ for more information.\n\n"
 
-					"Thanks to Pongo, Ben, Anouck, Neo and ibcl."
 #ifdef WINDOWS_IS_BUILD_SYS
 			  )).arg("COLINVERSION").arg("BUILDDATE"));
 #else

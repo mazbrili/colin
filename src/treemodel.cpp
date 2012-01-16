@@ -1973,7 +1973,10 @@ bool treeModel::addBLS(const QModelIndex & index, const QVariant & value)
 	if(index.column() == 1)
 	{
 		ColinBLS newBLS(value.toString());
-		newBLS.setColor(viewPortSettings::instance().nextStandardColor(t->bls(t->bls_n()-1).color()));
+		if(t->bls_n()>0)
+			newBLS.setColor(viewPortSettings::instance().nextStandardColor(t->bls(t->bls_n()-1).color()));
+		else
+			newBLS.setColor(viewPortSettings::instance().firstStandardColor());
 		t->addBLS(newBLS);
 		return true;
 	}

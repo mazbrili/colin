@@ -38,8 +38,8 @@ public:
 	void drawNode(QPainter *p, const ColinStruct &t, int i, const QList<int> &cls);
 	void drawBeamExtern(QPainter *p, const ColinStruct &t, int i, const QList<int> &cls);
 	void drawBeamIntern(QPainter *p, const ColinStruct &t, int i, const double &x, const QList<int> &cls);
-	void drawBeamFunctions(QPainter *p, const ColinStruct &t, int i, const QList<int> &cls);
 	void drawLoads(QPainter *p, double N, double Q, double M);
+	void setFunctionGradient(QPainter *p, QColor c1, QColor c2);
 private:
 	double validAngle(double angle) const;
 };

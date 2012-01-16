@@ -26,13 +26,18 @@
 
 #include "nwidget.h"
 #include "colinicons.h"
-#include <QtSvg/QSvgRenderer>
+#include <QtGui/QFileDialog>
+#include <QtGui/QGraphicsDropShadowEffect>
+
+
+QPixmap *nWidget::back = 0;
 
 nWidget::nWidget(QWidget *parent) :
     QWidget(parent)
 {
     QGridLayout *layout = new QGridLayout(this);
     QHBoxLayout *buttonbox = new QHBoxLayout();
+	QHBoxLayout *bottombox = new QHBoxLayout();
 
     newB = new QPushButton(tr("new"), this);
     openB = new QPushButton(tr("open"), this);
@@ -57,6 +62,7 @@ nWidget::nWidget(QWidget *parent) :
     layout->setRowStretch(1, 1);
     layout->setRowStretch(2, 3);
     layout->setRowStretch(3, 3);
+	layout->addLayout(bottombox, 4, 0, 1, 6, Qt::AlignBottom);
     layout->setRowMinimumHeight(1, 20);
 
 
@@ -104,100 +110,111 @@ nWidget::nWidget(QWidget *parent) :
 
     layout->setRowMinimumHeight(4, 140);
 
-    colinicon = QPixmap(colinIcons::icondir_+"/tooltip/node_dark_64.png");
+
+	QLabel *colinIcon = new QLabel(this);
+	colinIcon->setPixmap(QPixmap(colinIcons::icondir_+"/tooltip/node_dark_64.png"));
+	bottombox->addWidget(colinIcon, 0, Qt::AlignLeft | Qt::AlignVCenter);
+	QLabel *colinText = new QLabel("[Colin]");
+	QFont bigF = colinText->font();
+	bigF.setPixelSize(40);
+	colinText->setFont(bigF);
+	bottombox->addWidget(colinText, 0, Qt::AlignLeft | Qt::AlignVCenter);
+	bottombox->addStretch(1000);
+
+	QGraphicsDropShadowEffect *eff = new QGraphicsDropShadowEffect(colinIcon);
+	eff->setBlurRadius(10);
+	eff->setColor(Qt::white);
+	eff->setOffset(0);
+	colinIcon->setGraphicsEffect(eff);
+
+	eff = new QGraphicsDropShadowEffect(colinIcon);
+	eff->setBlurRadius(10);
+	eff->setColor(Qt::white);
+	eff->setOffset(0);
+	colinText->setGraphicsEffect(eff);
+
+
+
+	setWallpaper = new QPushButton(tr("change wallpaper"), this);
+	setWallpaper->setFlat(true);
+
+	QFont miniFont = setWallpaper->font();
+	miniFont.setPointSize(7);
+	setWallpaper->setFont(miniFont);
+
+	eff = new QGraphicsDropShadowEffect(setWallpaper);
+	eff->setBlurRadius(10);
+	eff->setColor(Qt::white);
+	eff->setOffset(0);
+	setWallpaper->setGraphicsEffect(eff);
+
+
+	bottombox->addWidget(setWallpaper, 0, Qt::AlignBottom | Qt::AlignHCenter);
+
+	bottombox->addStretch(1000);
+
+
 #ifdef CLAZZES_DOT_ORG_ICON
-    clazzesicon = QPixmap(colinIcons::icondir_+"clazzes-logo-alpha_64x64.png");
+	QLabel *clazzesText = new QLabel("clazzes.org");
+	clazzesText->setFont(bigF);
+	eff = new QGraphicsDropShadowEffect(clazzesText);
+	eff->setBlurRadius(10);
+	eff->setColor(Qt::white);
+	eff->setOffset(0);
+	clazzesText->setGraphicsEffect(eff);
+	bottombox->addWidget(clazzesText, 0, Qt::AlignVCenter | Qt::AlignRight);
+
+	QLabel *clazzesIcon = new QLabel(this);
+	clazzesIcon->setPixmap(QPixmap(colinIcons::icondir_+"clazzes-logo-alpha_64x64.png"));
+	eff = new QGraphicsDropShadowEffect(clazzesText);
+	eff->setBlurRadius(10);
+	eff->setColor(Qt::white);
+	eff->setOffset(0);
+	clazzesIcon->setGraphicsEffect(eff);
+	bottombox->addWidget(clazzesIcon, 0, Qt::AlignVCenter | Qt::AlignRight);
+
 #endif
+
+	if(!back){
+		QSettings settings("clazzes.org", "Colin");
+		back = new QPixmap(settings.value("wallpaper","../graphics/ChrisM70_at_flickr.png").toString());
+	}
+
+	connect(setWallpaper,				SIGNAL(pressed()),
+			this,						SLOT(openWallpaper()));
 
 }
 
-void nWidget::paintEvent(QPaintEvent *)
+nWidget::~nWidget()
+{
+	delete back;
+	back = 0;
+}
+
+void nWidget::openWallpaper()
+{
+	QString fileName = QFileDialog::getOpenFileName(this, tr("open picture"), QDir::homePath(), tr("Images (*.png *.xpm *.jpg)"));
+	if(back)
+		delete back;
+	QSettings settings("clazzes.org", "Colin");
+	settings.setValue("wallpaper", fileName);
+	back = new QPixmap(fileName);
+
+	update();
+
+}
+
+void nWidget::paintEvent(QPaintEvent *e)
 {
     QPainter p(this);
     p.setRenderHint(QPainter::Antialiasing, true);
     p.setPen(Qt::NoPen);
 
-    //QRect rect;
-    //rect.setTopLeft(newB->pos()-QPoint(10, 10));
-    //rect.setBottomRight(libB->pos()+libB->rect().bottomRight()+QPoint(10, 10));
+	p.setClipRegion(e->region());
+	p.drawPixmap(0, 0, back->width(), back->height(), *back);
 
-    //QLinearGradient grad(rect.topLeft(), rect.bottomLeft());
-    //QColor gc = palette().color(QPalette::Mid);
-	//grad.setColorAt(0, gc);""
-    //gc.setAlpha(50);
-    //grad.setColorAt(1, gc);
-    //p.setBrush(QBrush(grad));
 
-    //p.drawRoundedRect(rect, 5, 5);
 
-	if(filelist::instance().recUsedFileName(4) == "")
-	{
-
-		QRect textrect;
-		if(filelist::instance().recUsedFileName(0) == "")
-			textrect = QRect(140, 140, width()-280, (width()-280)*0.1363615);
-		else
-			textrect = QRect(140, height()/2, width()-280, (width()-280)*0.1363615);
-
-		QSvgRenderer re;
-		re.load(QString("../graphics/dont_panic.svg"));
-		re.render(&p, textrect);
-
-		p.drawPixmap(QRect(15, height()-15-64, 64, 64), colinicon);
-	}
-
-    QRect br;
-    QFont f(p.font());
-    f.setPixelSize(40);
-    p.setFont(f);
-    QLinearGradient grad;
-    grad.setStart(0, height()-15-128);
-    grad.setFinalStop(0, height()-15);
-    grad.setColorAt(0, QColor(30, 30, 30));
-    grad.setColorAt(1, QColor(90, 90, 90));
-    p.setPen(QPen(QBrush(grad), 2));
-
-    p.drawText(QRect(15+64, height()-15-64,  width(), 64),
-               Qt::AlignVCenter | Qt::AlignLeft,
-               "[Colin]", &br);
-
-/*
-    QPoint middle = br.topRight();
-
-    const double polyCount = 36;
-    const double innerRad = 23;
-    const double outerRad = 26;
-    QPolygon poly(polyCount);
-    for(int i=0; i<polyCount; i++)
-    {
-        poly.setPoint(i, QPoint(cos(M_PI*2/polyCount*i)*((i%2==1)?innerRad:outerRad), sin(M_PI*2/polyCount*i)*((i%2==1)?innerRad:outerRad))+middle);
-    }
-    p.setPen(QPen(p.pen().brush(), 1));
-    f.setPixelSize(23);
-    p.setFont(f);
-    p.setBrush(QColor(255, 200, 0));
-    p.drawPolygon(poly);
-
-    //p.save();
-    //p.setPen(QPen(this->palette().color(QPalette::Window), 1));
-    //p.setBrush(QColor(88, 139, 241));
-    //p.drawPolygon(poly);
-    //p.restore();
-    //f.setPixelSize(23);
-    //p.setFont(f);
-
-    p.drawText(poly.boundingRect(), QString(QChar(0x03B2)), Qt::AlignHCenter | Qt::AlignVCenter);
-*/
-
-    f.setPixelSize(40);
-    p.setFont(f);
-
-#ifdef CLAZZES_DOT_ORG_ICON
-    p.drawPixmap(width()-15-64, height()-15-64, 64, 64, clazzesicon);
-    p.drawText(QRect(width()-15-64-500-10, height()-15-64, 500, 64),
-                     Qt::AlignVCenter | Qt::AlignRight,
-                     "clazzes.org");
-#endif
 
 
 

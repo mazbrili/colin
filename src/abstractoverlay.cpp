@@ -89,6 +89,7 @@ abstractOverlay::abstractOverlay(QWidget *parent) :
 	grad.setColorAt(0.7, bc);
 #endif
 	pal.setBrush(QPalette::Window, QBrush(grad));
+	pal.setBrush(QPalette::Base, QBrush(grad));
 
 	this->setPalette(pal);
 
@@ -121,6 +122,15 @@ bool abstractOverlay::eventFilter(QObject *o, QEvent *e)
 		return false;
 	}
 	return QWidget::eventFilter(o, e);
+}
+
+void abstractOverlay::paintEvent(QPaintEvent *e)
+{
+	QPainter p(this);
+	foreach(QRect r, e->region().rects())
+	{
+		p.fillRect(r, QColor(255, 255, 255, 100));
+	}
 }
 
 void abstractOverlay::keyPressEvent(QKeyEvent *e)

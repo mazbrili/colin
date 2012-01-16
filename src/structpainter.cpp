@@ -1370,7 +1370,7 @@ void structPainter::setColor(QPainter *p, const ColinLoad &l, bool highlighted, 
 		if(l.set()==-1)
 			lc = QColor(v->color(Colin::C_Load1));
 		else
-			lc = t->bls(l.set()).color();
+			lc = l.getStruct()->bls(l.set()).color();
 	}
 	p->setPen(QPen(lc, 1));
 

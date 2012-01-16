@@ -37,6 +37,7 @@ class QLineEdit;
 class QLabel;
 class QButtonGroup;
 class QComboBox;
+class QDoubleSpinBox;
 
 class hingeExtended: public QGroupBox
 {
@@ -78,16 +79,20 @@ public:
 
 	explicit beamDetail(QWidget *parent);
 	void paintEvent(QPaintEvent *e);
+
+signals:
+	void showForcesAt(double x);
 public slots:
 	void setCurrentItem(const int &i);
 	void setCurrentCLS(const int &i);
 	void setMode(const int &M);
-	void setCutAt(const double X);
+	void setCutAt(const double &X);
 private:
 	int currentItem;
 	int currentCLS;
-	double x;
+	double xVal;
 	mode toDraw;
+	QDoubleSpinBox *x;
 };
 
 class beamOverlay : public abstractOverlay
@@ -103,6 +108,9 @@ public slots:
 	void setTw(ColinStruct *t);
 	void beamChanged();
 	void beamChanged(int i);
+	void fillLabels();
+	void fillLabels(double x);
+	void showForcesAt(double x);
 	void nextItem();
 	void previousItem();
 	void clsChanged();
@@ -132,10 +140,13 @@ private:
 	QButtonGroup *modeGroup;
 	beamDetail *detailWidget;
 
+	QLabel *functions;
+
 	QLabel *displacement;
 	QLabel *endforces;
 
 	int currentItem;
+	double cuttedAt;
 
 };
 

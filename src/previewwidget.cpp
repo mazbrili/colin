@@ -27,6 +27,9 @@
 #include "previewwidget.h"
 
 #include <QtCore/QFileInfo>
+#include <QtGui/QGraphicsBlurEffect>
+
+#include "nwidget.h"
 
 
 int previewWidget::count = 0;
@@ -39,7 +42,7 @@ previewWidget::previewWidget(QWidget *parent) :
     Q_ASSERT(renderer);
 
 
-    setMouseTracking(true);
+	setMouseTracking(true);
 
 
     id = count++;
@@ -61,13 +64,38 @@ previewWidget::previewWidget(QWidget *parent) :
 					   tr("<b>click</b>: Open the file.<br />")+
 					   tr("<b>x</b>: Remove this preview."));
 
+
+	backG = new QLabel(parentWidget());
+	backG->lower();
+	QGraphicsBlurEffect *eff = new QGraphicsBlurEffect(backG);
+	eff->setBlurRadius(20);
+	backG->setGraphicsEffect(eff);
+	backG->hide();
+
+	QGraphicsDropShadowEffect *eff2 = new QGraphicsDropShadowEffect(this);
+	eff2->setOffset(0);
+	eff2->setBlurRadius(10);
+	eff2->setColor(Qt::white);
+	this->setGraphicsEffect(eff2);
+
 }
 
 void previewWidget::resizeEvent(QResizeEvent *)
 {
-    renderer->setSize(size());
-    renderer->renderFile(myUrl);
+	QPixmap backLabelPix(size());
+	QPainter p(&backLabelPix);
+	p.setClipRect(rect());
+	p.drawPixmap(QRect(mapFromParent(QPoint(0, 0)), QSize(nWidget::back->width(), nWidget::back->height())), *nWidget::back);
+	backG->setPixmap(backLabelPix);
+	backG->resize(size());
+	renderer->setSize(size());
+	renderer->renderFile(myUrl);
     repaint();
+}
+
+void previewWidget::moveEvent(QMoveEvent *e)
+{
+	backG->move(pos());
 }
 
 void previewWidget::actualUrl()
@@ -77,6 +105,7 @@ void previewWidget::actualUrl()
         myUrl = filelist::instance().recUsedFileName(id);
         renderer->renderFile(myUrl);
         hasPreview = false;
+		backG->hide();
         repaint();
     }
 }
@@ -86,20 +115,18 @@ void previewWidget::paintEvent(QPaintEvent *)
     if(!hasPreview)
         return;
 
-    QPainter p(this);
+	QPainter p(this);
+
     p.setRenderHint(QPainter::Antialiasing, true);
-    p.drawImage(QRect(QPoint(2,18), QSize(size().width()-4, size().height()-20)), image, image.rect());
-    QLinearGradient grad(0, 0, 0, height());
-    if(rect().contains(mapFromGlobal(QCursor::pos())))
-    {
-        grad.setColorAt(0,palette().color(QPalette::Light));
-        grad.setColorAt(1,palette().color(QPalette::Midlight));
-    }
-    else
-    {
-        grad.setColorAt(0,palette().color(QPalette::Mid));
-        grad.setColorAt(1,palette().color(QPalette::Dark));
-    }
+
+
+
+	//p.setBrush(QColor(255, 255, 255, 100));
+	p.setPen(QColor(0, 0, 0, 100));
+	p.drawRoundedRect(QRect(0, 0, width()-1, height()-1), 4, 4);
+
+	p.drawImage(QRect(QPoint(2,18), QSize(size().width()-4, size().height()-20)), image, image.rect());
+
     QRect r = QRect(1, 1, width()-2, height()-2);
     QPainterPath p1, p2;
     p1.addRoundedRect(r, 5, 5);
@@ -109,19 +136,9 @@ void previewWidget::paintEvent(QPaintEvent *)
     r.setBottom(r.bottom()-3);
     p2.addRoundedRect(r, 5, 5);
     p1 = p1 - p2;
-    p.fillPath(p1, grad);
-    if(rect().contains(mapFromGlobal(QCursor::pos())))
-    {
-        p.setPen(QPen(palette().color(QPalette::Highlight), 1));
-        p.setBrush(Qt::NoBrush);
-        p.drawRoundedRect(QRect(1, 1, width()-2, height()-2), 5, 5);
-    }
 
-    if(xRect().contains(mapFromGlobal(QCursor::pos())))
-        colinIcons::instance().icon(Colin::Close).paint(&p, xRect(),
-                                                        Qt::AlignCenter, QIcon::Active);
-    else
-        colinIcons::instance().icon(Colin::Close).paint(&p, xRect());
+	colinIcons::instance().icon(Colin::Close).paint(&p, xRect(),
+														Qt::AlignCenter, QIcon::Active, QIcon::On);
 
     p.setPen(palette().color(QPalette::Dark));
     p.drawText(QRect(4, 2, xRect().x()-8, 20-4),
@@ -152,7 +169,8 @@ void previewWidget::giefPix(const QString &url, const QImage &pix)
 {
     if(url != myUrl)
         return;
-    image = pix;
+	backG->show();
+	image = pix;
     hasPreview = true;
     repaint();
 }

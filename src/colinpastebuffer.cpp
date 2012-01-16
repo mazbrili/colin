@@ -109,6 +109,9 @@ ColinStruct *ColinPasteBuffer::structAt(int i)
 void ColinPasteBuffer::remove(int i)
 {
 	QMutexLocker lock(&lockStructs);
+	toDo_.clear();
+	if(structs.size()<=i)
+		return;
 	delete structs.takeAt(i);
 	emit changedBuffer();
 }
@@ -126,7 +129,7 @@ void ColinPasteBuffer::renderPreview(QSize size, int i)
 	this->size_ = size;
 	this->toDo_.append(i);
 	lock.unlock();
-	this->waitCondition.wakeAll();
+	this->waitCondition.wakeOne();
 }
 
 void ColinPasteBuffer::run()
@@ -147,9 +150,13 @@ void ColinPasteBuffer::run()
 		size = size_;
 		qDebug() << "ColinPasteBuffer::rendering struct" << current;
 
+		if(structs.size()<=current)
+			continue;
 
 		ColinStruct tw;
 		tw.copy(structs.at(current));
+
+		lock.unlock();
 
 /*************************
  **     RENDERING       **
@@ -166,47 +173,146 @@ void ColinPasteBuffer::run()
 
 		structPainter sP;
 
-		QTransform t(1.0,  0.0,  0.0,
-			 0.0,  1.0,  0.0,
-			 0.0,  0.0,  1.0);
-
-
-		//get a first idea about the global scale
-		QRectF boundingRect = tw.boundingNodeRect();
-		double scale = qMin((size.width()-30)*2/boundingRect.width(), (size.height()-30)*2/boundingRect.height());
-
-
-		//scale M and P so they look good
-		double mScale = tw.mMax();
-		if(mScale != 0)
-		{
-			tw.setScaleM(120/mScale);
-		}
-		double pScale = tw.pMax();
-		if(pScale != 0)
-		{
-			tw.setScaleP(size.height()/3/scale/pScale);
-		}
-
-		//calculate the
-		boundingRect = tw.boundingRect();
-		scale = qMin((size.width()-30)*2/boundingRect.width(), (size.height()-30)*2/boundingRect.height());
-
-
-		t.translate(-boundingRect.x()*scale+size.width()-boundingRect.width()*scale/2,
-			-boundingRect.y()*scale+size.height()-boundingRect.height()*scale/2);
-		t.scale(scale, scale);
-
-
 		QPainter p(&device);
-		p.scale(0.5, 0.5);
-		sP.drawStruct(tw, &p, &t,
-			  Colin::beam    |
-			  Colin::node    |
-			  Colin::nload   |
-			  Colin::bearing |
-			  Colin::joint   );
+		p.setRenderHint(QPainter::Antialiasing, viewPortSettings::instance().antialiasing());
 
+		if(tw.node_n()>0)
+		{
+			QTransform t(1.0,  0.0,  0.0,
+						 0.0,  1.0,  0.0,
+						 0.0,  0.0,  1.0);
+
+
+			//get a first idea about the global scale
+			QRectF boundingRect = tw.boundingNodeRect();
+			double scale = qMin((size.width()-30)*2/boundingRect.width(), (size.height()-30)*2/boundingRect.height());
+
+
+			//scale M and P so they look good
+			double mScale = tw.mMax();
+			if(mScale != 0)
+			{
+				tw.setScaleM(120/mScale);
+			}
+			double pScale = tw.pMax();
+			if(pScale != 0)
+			{
+				tw.setScaleP(size.height()/3/scale/pScale);
+			}
+
+			//calculate the
+			boundingRect = tw.boundingRect();
+			scale = qMin((size.width()-30)*2/boundingRect.width(), (size.height()-30)*2/boundingRect.height());
+
+
+			t.translate(-boundingRect.x()*scale+size.width()-boundingRect.width()*scale/2,
+				-boundingRect.y()*scale+size.height()-boundingRect.height()*scale/2);
+			t.scale(scale, scale);
+
+
+			p.scale(0.5, 0.5);
+			sP.ignoreHotSpots(true);
+			sP.drawStruct(tw, &p, &t,
+				  Colin::beam    |
+				  Colin::node    |
+				  Colin::nload   |
+				  Colin::bearing |
+				  Colin::joint   );
+		}
+		else if(tw.load_n() == 1)
+		{
+			if(tw.load(0).typ() == ColinLoad::uniformlyDistibutedLoad ||
+			   tw.load(0).typ() == ColinLoad::increasingLinearLoad ||
+			   tw.load(0).typ() == ColinLoad::decreasingLinearLoad)
+			{
+				QLineF line;
+				double angle = atan2(tw.load(0).Pz(), tw.load(0).Px());
+				double abs = hypot(tw.load(0).Pz(), tw.load(0).Px());
+				double pscale = qMin(size.width()/2/fabs(tw.load(0).Px()), size.height()/2/fabs(tw.load(0).Pz()));
+				angle -= M_PI_2;
+				QPointF m(size.width()/2+tw.load(0).Px()/2*pscale, size.height()/2+tw.load(0).Pz()/2*pscale);
+				double d = hypot(size.width(), size.height())/4;
+				line = QLineF(m.x()-d*cos(angle), m.y()-d*sin(angle), m.x()+d*cos(angle), m.y()+d*sin(angle));
+				p.drawLine(line);
+				p.translate(line.p1());
+				p.rotate(-line.angle());
+				p.scale(1, pscale);
+				sP.setColor(&p, tw.load(0), false);
+				QPen pen = p.pen();
+				pen.setWidth(0);
+				p.setPen(pen);
+
+				QPolygonF points(4);
+
+				points[0] = QPointF(0, 0);
+				points[3] = QPointF(line.length(), 0);
+
+				const ColinLoad &l = tw.load(0);
+
+				if(l.typ() == ColinLoad::uniformlyDistibutedLoad)
+				{
+					points[1] = points[0]-QPointF(0, abs);
+					points[2] = points[3]-QPointF(0, abs);
+				}
+				else if(l.typ() == ColinLoad::increasingLinearLoad)
+				{
+					points[1]=points[0];
+					points[2]= points[3]-QPointF(0, abs);
+				}
+				else if(l.typ() == ColinLoad::decreasingLinearLoad)
+				{
+					points[1] = points[0]-QPointF(0, abs);
+					points[2] = points[3];
+				}
+
+				p.drawPolygon(points);
+
+				QPainterPath clip;
+				clip.moveTo(points[0]);
+				clip.lineTo(points[1]);
+				clip.lineTo(points[2]);
+				clip.lineTo(points[3]);
+				clip.closeSubpath();
+				p.setClipPath(clip);
+				for(int i=0; i<6; i++){
+					p.drawLine(line.length()/5.*double(i), 0, line.length()/5.*double(i), -abs);
+					QPainterPath arrow;
+					arrow.moveTo(line.length()/5.*double(i), 0);
+					arrow.lineTo(line.length()/5.*double(i)-2.5, -5/pscale);
+					arrow.lineTo(line.length()/5.*double(i)+2.5, -5/pscale);
+					arrow.closeSubpath();
+					p.fillPath(arrow, p.pen().color());
+				}
+			}
+			else if(tw.load(0).typ() == ColinLoad::nodeLoad)
+			{
+				sP.setColor(&p, tw.load(0), false);
+				p.translate(size.width()/2, size.height()/2);
+
+				const ColinLoad &l = tw.load(0);
+
+				double angle = atan2(tw.load(0).Pz(), tw.load(0).Px());
+				double abs = hypot(tw.load(0).Pz(), tw.load(0).Px());
+				p.rotate(angle/M_PI*180+180);
+				p.drawLine(-abs/2, 0, abs/2, 0);
+				p.translate(-abs/2, 0);
+				QPainterPath arrow;
+				arrow.moveTo(0, 0);
+				arrow.lineTo(5, -2.5);
+				arrow.lineTo(5, 2.5);
+				arrow.closeSubpath();
+				p.fillPath(arrow, p.pen().color());
+			}
+			else if(tw.load(0).typ() == ColinLoad::moment)
+			{
+				sP.setColor(&p, tw.load(0), false);
+				p.translate(size.width()/2, size.height()/2);
+
+				const ColinLoad &l = tw.load(0);
+
+				p.drawArc(-size.width()/3, -size.width()/3, size.width()/6, size.width()/6, 30, -240);
+			}
+		}
 		emit finishedRendering(device, current);
 	}
 }

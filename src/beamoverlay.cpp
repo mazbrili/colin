@@ -35,6 +35,7 @@
 #include <QtGui/QClipboard>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QVBoxLayout>
+#include <QtGui/QDoubleSpinBox>
 #include <limits>
 
 #include "detailpainter.h"
@@ -202,7 +203,17 @@ beamDetail::beamDetail(QWidget *parent)
 	currentItem = -1;
 	currentCLS = 0;
 	toDraw = externForces;
-	x=0;
+
+	x = new QDoubleSpinBox(this);
+	x->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+	x->setMinimum(0);
+	x->setSingleStep(0.1);
+	x->setDecimals(PRECISON);
+
+	x->hide();
+	connect(x,			SIGNAL(valueChanged(double)),
+			this,		SLOT(setCutAt(double)));
+	xVal=0;
 }
 
 void beamDetail::paintEvent(QPaintEvent *e)
@@ -215,10 +226,10 @@ void beamDetail::paintEvent(QPaintEvent *e)
 	{
 	case externForces:
 		dP.drawBeamExtern(&p, *filelist::instance().currentFile(), currentItem, QList<int>() << currentCLS);
+		return;
 	case internForces:
-		dP.drawBeamIntern(&p, *filelist::instance().currentFile(), currentItem, x, QList<int>() << currentCLS);
-	default:
-		dP.drawBeamFunctions(&p, *filelist::instance().currentFile(), currentItem, QList<int>() << currentCLS);
+		dP.drawBeamIntern(&p, *filelist::instance().currentFile(), currentItem, xVal, QList<int>() << currentCLS);
+		return;
 	}
 
 
@@ -227,6 +238,7 @@ void beamDetail::paintEvent(QPaintEvent *e)
 void beamDetail::setCurrentItem(const int &i)
 {
 	currentItem = i;
+	x->setMaximum(filelist::instance().currentFile()->beam(i).l());
 	update();
 }
 
@@ -239,12 +251,23 @@ void beamDetail::setCurrentCLS(const int &i)
 void beamDetail::setMode(const int &M)
 {
 	toDraw = static_cast<mode>(M);
+	if(toDraw == internForces)
+	{
+		x->show();
+		emit showForcesAt(xVal);
+	}
+	else
+	{
+		x->hide();
+		emit showForcesAt(-1);
+	}
 	update();
 }
 
-void beamDetail::setCutAt(const double X)
+void beamDetail::setCutAt(const double &X)
 {
-	x = X;
+	xVal = X;
+	emit showForcesAt(xVal);
 	update();
 }
 
@@ -411,6 +434,19 @@ beamOverlay::beamOverlay(QWidget *parent) :
 	sP.setHeightForWidth(true);
 	detailWidget->setSizePolicy(sP);
 	dl->addWidget(detailWidget);
+
+	QGroupBox *functionBox = new QGroupBox(this);
+	functionBox->setTitle("["+tr("functions")+"]");
+	functionBox->setCheckable(true);
+
+	vl2->addWidget(functionBox);
+	dl = new QVBoxLayout(functionBox);
+	functionBox->setLayout(dl);
+
+	functions = new QLabel(functionBox);
+	functions->setTextInteractionFlags(Qt::TextBrowserInteraction | Qt::TextSelectableByKeyboard);
+
+	dl->addWidget(functions);
 	vl2->addStretch(10000);
 
 
@@ -439,7 +475,11 @@ beamOverlay::beamOverlay(QWidget *parent) :
 
 	vl3->addStretch(10000);
 
+	cuttedAt = -1;
 
+
+	connect(detailWidget,	SIGNAL(showForcesAt(double)),
+			this,			SLOT(showForcesAt(double)));
 
 	connect(modeGroup,		SIGNAL(buttonClicked(int)),
 			detailWidget,	SLOT(setMode(int)));
@@ -496,12 +536,106 @@ void beamOverlay::setCurrentItem(const int &i)
 	leftN->setText(QString::number(t.beam(i).leftNodeI()));
 	rightN->setText(QString::number(t.beam(i).rightNodeI()));
 
-	angleInfo->setText(tr("<b>apha</b>")+" = "+QString::number(t.beam(i).angle()*ANGLEPREFIX, 'f', PRECISON)+" [g]");
+	angleInfo->setText(tr("<b>apha</b>")+" = "+QString::number(t.beam(i).angle()*ANGLEPREFIX, 'f', PRECISON)+" [grad]");
 	lengthInfo->setText(tr("<b>length</b>")+" = "+QString::number(t.beam(i).l(), 'f', PRECISON)+" [m]");
 
 	mat->setText(t.beam(i).Mat().name());
 	cs->setText(t.beam(i).Profile().name());
 
+
+	if(t.isCalculated())
+	{
+		QString txt;
+
+		if(t.cls_n()==0){
+			txt.append(QString("<b>u</b>"));
+			txt.append(QString(" = %1 [m]<br/>").arg(t.beam(i).uconst(0).toString(1, 'g', PRECISON)));
+		}else{
+			foreach(int cls, t.activeCLS()){
+				txt.append(QString("<b>u<sub>%1</sub></b> = %2 [m]<br/>").arg(cls).arg(t.beam(i).uconst(cls).toString(1, 'g', PRECISON)));
+			}
+			txt.append("<hr/><br/>");
+		}
+
+		if(t.cls_n()==0){
+			txt.append(QString("<b>w</b>"));
+			txt.append(QString(" = %1 [m]<br/>").arg(t.beam(i).wconst(0).toString(1, 'g', PRECISON)));
+		}else{
+			foreach(int cls, t.activeCLS()){
+				txt.append(QString("<b>w<sub>%1</sub></b> = %2 [m]<br/>").arg(cls).arg(t.beam(i).wconst(cls).toString(1, 'g', PRECISON)));
+			}
+			txt.append("<hr/><br/>");
+		}
+
+		if(t.cls_n()==0){
+			txt.append(QString("<b>phi</b>"));
+			txt.append(QString(" = %1 [grad]<br/>").arg(t.beam(i).phiconst(0).toString(ANGLEPREFIX, 'g', PRECISON)));
+		}else{
+			foreach(int cls, t.activeCLS()){
+				txt.append(QString("<b>phi<sub>%1</sub></b> = %2 [grad]<br/>").arg(cls).arg(t.beam(i).phiconst(cls).toString(ANGLEPREFIX, 'g', PRECISON)));
+			}
+			txt.append("<hr/><br/>");
+		}
+
+		txt.append(QString("<font color=\"%1\">")
+							.arg(viewPortSettings::instance().color(Colin::C_Np).name()));
+		if(t.cls_n()==0){
+			txt.append(QString("<b>N</b>"));
+			txt.append(QString(" = %1 [%2]<br/>").arg(t.beam(i).Nconst(0).toString(PPREFIX, 'f', PRECISON)).arg(unitSettings::instance().Peh()));
+		}else{
+			foreach(int cls, t.activeCLS()){
+				txt.append(QString("<b>N<sub>%1</sub></b> = %2 [%3]<br/>").arg(cls).arg(t.beam(i).Nconst(cls).toString(PPREFIX, 'f', PRECISON)).arg(unitSettings::instance().Peh()));
+			}
+			txt.append("<hr/><br/>");
+		}
+		txt.append("</font>");
+
+		txt.append(QString("<font color=\"%1\">")
+							.arg(viewPortSettings::instance().color(Colin::C_Qp).name()));
+		if(t.cls_n()==0){
+			txt.append(QString("<b>Q</b>"));
+			txt.append(QString(" = %1 [%2]<br/>").arg(t.beam(i).Qconst(0).toString(PPREFIX, 'f', PRECISON)).arg(unitSettings::instance().Peh()));
+		}else{
+			foreach(int cls, t.activeCLS()){
+				txt.append(QString("<b>Q<sub>%1</sub></b> = %2 [%3]<br/>").arg(cls).arg(t.beam(i).Qconst(cls).toString(PPREFIX, 'f', PRECISON)).arg(unitSettings::instance().Peh()));
+			}
+			txt.append("<hr/><br/>");
+		}
+		txt.append("</font>");
+
+		txt.append(QString("<font color=\"%1\">")
+							.arg(viewPortSettings::instance().color(Colin::C_Mp).name()));
+		if(t.cls_n()==0){
+			txt.append(QString("<b>M</b>"));
+			txt.append(QString(" = %1 [%2]<br/>").arg(t.beam(i).Mconst(0).toString(MPREFIX, 'f', PRECISON)).arg(unitSettings::instance().Meh()));
+		}else{
+			foreach(int cls, t.activeCLS()){
+				txt.append(QString("<b>M<sub>%1</sub></b> = %2 [%3]<br/>").arg(cls).arg(t.beam(i).Mconst(cls).toString(MPREFIX, 'f', PRECISON)).arg(unitSettings::instance().Meh()));
+			}
+			txt.append("<hr/><br/>");
+		}
+		txt.append("</font>");
+
+		functions->setText(txt);
+	}
+	else
+	{
+		functions->setText("N/A");
+	}
+
+	if(cuttedAt<0)
+		fillLabels();
+	else
+		fillLabels(cuttedAt);
+
+}
+
+
+void beamOverlay::fillLabels()
+{
+	ColinStruct &t = *filelist::instance().currentFile();
+
+	int i = currentItem;
 
 	if(t.isCalculated())
 	{
@@ -698,7 +832,201 @@ void beamOverlay::setCurrentItem(const int &i)
 	{
 		endforces->setText("N/A");
 	}
+}
 
+void beamOverlay::fillLabels(double x)
+{
+
+	ColinStruct &t = *filelist::instance().currentFile();
+
+	int i = currentItem;
+
+	if(t.isCalculated())
+	{
+		QString txt;
+		txt.append(QString("<b>u</b>"));
+		if(t.cls_n()==0){
+			txt.append(QString(" = %1 m<br/>").arg(t.beam(i).u(0, x)));
+		}else{
+			double max = 0;
+			foreach(int cls, t.activeCLS()) max = qMax(fabs(t.beam(i).u(cls, x)), max);
+			if(qFuzzyIsNull(max)) max=0;
+			txt.append(QString("<b><sub> max</sub> = %1 m</b><br/>").arg(max));
+			if(max!=0){
+				foreach(int cls, t.activeCLS()){
+					double stress = t.beam(i).u(cls, x);
+					if(qFuzzyIsNull(stress)) stress = 0;
+					txt.append(QString("u<sub>%1</sub> = %2 m<br/>").arg(cls).arg(stress));
+				}
+			}
+			txt.append("<br/>");
+		}
+
+		txt.append(QString("<b>w</b>"));
+		if(t.cls_n()==0){
+			txt.append(QString(" = %1 m<br/>").arg(t.beam(i).w(0, x)));
+		}else{
+			double max = 0;
+			foreach(int cls, t.activeCLS()) max = qMax(fabs(t.beam(i).w(cls, x)), max);
+			if(qFuzzyIsNull(max)) max=0;
+			txt.append(QString("<b><sub> max</sub> = %1 m</b><br/>").arg(max));
+			if(max!=0){
+				foreach(int cls, t.activeCLS()){
+					double stress = t.beam(i).w(cls, x);
+					if(qFuzzyIsNull(stress)) stress = 0;
+					txt.append(QString("u<sub>%1</sub> = %2 m<br/>").arg(cls).arg(stress));
+				}
+			}
+			txt.append("<br/>");
+		}
+
+		txt.append(QString("<b>phi</b>"));
+		if(t.cls_n()==0){
+			txt.append(QString(" = %1 m<br/>").arg(t.beam(i).phi(0, x)));
+		}else{
+			double max = 0;
+			foreach(int cls, t.activeCLS()) max = qMax(fabs(t.beam(i).phi(cls, x)), max);
+			if(qFuzzyIsNull(max)) max=0;
+			txt.append(QString("<b><sub> max</sub> = %1 m</b><br/>").arg(max));
+			if(max!=0){
+				foreach(int cls, t.activeCLS()){
+					double stress = t.beam(i).phi(cls, x);
+					if(qFuzzyIsNull(stress)) stress = 0;
+					txt.append(QString("phi<sub>%1</sub> = %2 m<br/>").arg(cls).arg(stress));
+				}
+			}
+			txt.append("<br/>");
+		}
+
+		displacement->setText(txt);
+	}
+	else
+	{
+		displacement->setText("N/A");
+	}
+
+
+	if(t.isCalculated())
+	{
+		QString txt;
+
+		//N
+		txt.append(QString("<font color=\"%1\">")
+							.arg(viewPortSettings::instance().color(Colin::C_Np).name()));
+		txt.append(QString("<b>N</b>"));
+		if(t.cls_n()==0){
+			txt.append(QString(" = %1 %2<br/>").arg(t.beam(i).N(0, x)*PPREFIX).arg(unitSettings::instance().Peh()));
+		}else{
+			double max = -std::numeric_limits<double>::max();
+			double min = std::numeric_limits<double>::max();
+			foreach(int cls, t.activeCLS()){
+				max = qMax(t.beam(i).N(cls, x), max);
+				min = qMin(t.beam(i).N(cls, x), min);
+			}
+			if(qFuzzyIsNull(max)) max=0;
+			if(qFuzzyIsNull(min)) min=0;
+			txt.append(QString("<b> = %1 %2</b><br/>").arg(max*PPREFIX).arg(unitSettings::instance().Peh()));
+			txt.append(QString("<font color=\"%1\">")
+								.arg(viewPortSettings::instance().color(Colin::C_Np).name()));
+			txt.append(QString("<b>N</b>"));
+			txt.append(QString("<b><sub> min</sub> = %1 %2</b><br/>").arg(min*PPREFIX).arg(unitSettings::instance().Peh()));
+			txt.append("</font>");
+			if(max!=0 || min!=0){
+				foreach(int cls, t.activeCLS()){
+					double stress = t.beam(i).N(cls, x);
+					if(qFuzzyIsNull(stress)) stress = 0;
+					if(stress<0)
+						txt.append(QString("<font color=\"%1\">")
+											.arg(viewPortSettings::instance().color(Colin::C_Np).name()));
+					txt.append(QString("N<sub>%1</sub> = %2 %3<br/>").arg(cls).arg(stress*PPREFIX).arg(unitSettings::instance().Peh()));
+					if(stress<0)
+						txt.append("</font>");
+				}
+			}
+			txt.append("</font>");
+			txt.append("<br/>");
+		}
+
+		//Q
+		txt.append(QString("<font color=\"%1\">")
+							.arg(viewPortSettings::instance().color(Colin::C_Qp).name()));
+		txt.append(QString("<b>Q</b>"));
+		if(t.cls_n()==0){
+			txt.append(QString(" = %1 %2<br/>").arg(t.beam(i).Q(0, x)*PPREFIX).arg(unitSettings::instance().Peh()));
+		}else{
+			double max = -std::numeric_limits<double>::max();
+			double min = std::numeric_limits<double>::max();
+			foreach(int cls, t.activeCLS()){
+				max = qMax(t.beam(i).Q(cls, x), max);
+				min = qMin(t.beam(i).Q(cls, x), min);
+			}
+			if(qFuzzyIsNull(max)) max=0;
+			if(qFuzzyIsNull(min)) min=0;
+			txt.append(QString("<b><sub> max</sub> = %1 %2</b><br/>").arg(max*PPREFIX).arg(unitSettings::instance().Peh()));
+			txt.append(QString("<font color=\"%1\">")
+								.arg(viewPortSettings::instance().color(Colin::C_Qp).name()));
+			txt.append(QString("<b>Q</b>"));
+			txt.append(QString("<b><sub> min</sub> = %1 %2</b><br/>").arg(min*PPREFIX).arg(unitSettings::instance().Peh()));
+			txt.append("</font>");
+			if(max!=0 || min!=0){
+				foreach(int cls, t.activeCLS()){
+					double stress = t.beam(i).Q(cls, x);
+					if(qFuzzyIsNull(stress)) stress = 0;
+					if(stress<0)
+						txt.append(QString("<font color=\"%1\">")
+											.arg(viewPortSettings::instance().color(Colin::C_Qp).name()));
+					txt.append(QString("Q<sub>%1</sub> = %2 %3<br/>").arg(cls).arg(stress*PPREFIX).arg(unitSettings::instance().Peh()));
+					if(stress<0)
+						txt.append("</font>");
+				}
+			}
+			txt.append("</font>");
+			txt.append("<br/>");
+		}
+
+		//M
+		txt.append(QString("<font color=\"%1\">")
+							.arg(viewPortSettings::instance().color(Colin::C_Mp).name()));
+		txt.append(QString("<b>M</b>"));
+		if(t.cls_n()==0){
+			txt.append(QString(" = %1 %2<br/>").arg(t.beam(i).M(0, x)*MPREFIX).arg(unitSettings::instance().Meh()));
+		}else{
+			double max = -std::numeric_limits<double>::max();
+			double min = std::numeric_limits<double>::max();
+			foreach(int cls, t.activeCLS()){
+				max = qMax(t.beam(i).M(cls, x), max);
+				min = qMin(t.beam(i).M(cls, x), min);
+			}
+			if(qFuzzyIsNull(max)) max=0;
+			if(qFuzzyIsNull(min)) min=0;
+			txt.append(QString("<b><sub> max</sub> = %1 %2</b><br/>").arg(max*MPREFIX).arg(unitSettings::instance().Meh()));
+			txt.append(QString("<font color=\"%1\">")
+								.arg(viewPortSettings::instance().color(Colin::C_Mp).name()));
+			txt.append(QString("<b>M</b>"));
+			txt.append(QString("<b><sub> min</sub> = %1 %2</b><br/>").arg(min*MPREFIX).arg(unitSettings::instance().Meh()));
+			txt.append("</font>");
+			if(max!=0 || min!=0){
+				foreach(int cls, t.activeCLS()){
+					double stress = t.beam(i).M(cls, x);
+					if(qFuzzyIsNull(stress)) stress = 0;
+					if(stress<0)
+						txt.append(QString("<font color=\"%1\">")
+											.arg(viewPortSettings::instance().color(Colin::C_Mp).name()));
+					txt.append(QString("M<sub>%1</sub> = %2 %3<br/>").arg(cls).arg(stress*MPREFIX).arg(unitSettings::instance().Meh()));
+					if(stress<0)
+						txt.append("</font>");
+				}
+			}
+			txt.append("</font>");
+			txt.append("<br/>");
+
+		}
+		endforces->setText(txt);
+	}
+	else
+	{
+		endforces->setText("N/A");
+	}
 }
 
 void beamOverlay::changed()
@@ -720,6 +1048,15 @@ void beamOverlay::beamChanged(int i)
 {
 	if(i==currentItem)
 		this->setCurrentItem(i);
+}
+
+void beamOverlay::showForcesAt(double x)
+{
+	cuttedAt=x;
+	if(cuttedAt<0)
+		fillLabels();
+	else
+		fillLabels(cuttedAt);
 }
 
 void beamOverlay::nextItem()

@@ -43,26 +43,25 @@ class nWidget : public QWidget
     Q_OBJECT
 public:
     explicit nWidget(QWidget *parent = 0);
+	~nWidget();
 
     void paintEvent(QPaintEvent *);
 signals:
 public slots:
-
+	void openWallpaper();
 public:
     QPushButton *newB,
                 *openB,
                 *settingsB,
                 *libB;
+
+
+	static QPixmap *back;
 private:
     previewWidget *previews[8];
     previewRenderer *renderer;
 
-    QPixmap colinicon;
-#ifdef CLAZZES_DOT_ORG_ICON
-    QPixmap clazzesicon;
-#endif
-
-
+	QPushButton *setWallpaper;
 
 };
 

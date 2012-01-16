@@ -233,9 +233,10 @@ const QColor &viewPortSettings::nextStandardColor(const QColor &c)const
 {
 	while(*nextCol != c)
 	{
+		nextCol++;
+
 		if(nextCol==standardColors().constEnd())
 			nextCol = standardColors().constBegin();
-		nextCol++;
 	}
 	nextCol++;
 	if(nextCol==standardColors().constEnd())

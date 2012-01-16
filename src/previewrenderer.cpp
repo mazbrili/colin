@@ -68,7 +68,7 @@ void previewRenderer::run()
  **     RENDERING       **
  *************************/
 
-        QImage device(size, QImage::Format_RGB32);
+		QImage device(size, QImage::Format_ARGB32);
 		device.fill(qRgba(255, 255, 255, 0));
 
 
@@ -123,6 +123,7 @@ void previewRenderer::run()
 
                     QPainter p(&device);
                     p.scale(0.5, 0.5);
+					sP.ignoreHotSpots(true);
                     sP.drawStruct(tw, &p, &t,
                                   Colin::beam    |
                                   Colin::node    |

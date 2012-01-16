@@ -68,7 +68,7 @@ pastePreviewWidget::pastePreviewWidget(int nr, QWidget *parent) :
 
 int pastePreviewWidget::heightForWidth(int w) const
 {
-	return 0.8*w;
+	return 0.75*w;
 }
 void pastePreviewWidget::paintEvent(QPaintEvent *e)
 {

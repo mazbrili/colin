@@ -256,9 +256,11 @@ void cWidget::showMenu(catcher::CatchCases cC, const int &i)
 		eff->setBlurRadius(10);
 		v->setGraphicsEffect(eff);
 	}
+
+	/* this slows down all action on the overlay widget too much
 	QGraphicsDropShadowEffect *eff = new QGraphicsDropShadowEffect(menu);
 	eff->setOffset(0);
 	eff->setBlurRadius(10);
 	eff->setColor(viewPortSettings::instance().color(Colin::C_Background));
-	menu->setGraphicsEffect(eff);
+	menu->setGraphicsEffect(eff);*/
 }

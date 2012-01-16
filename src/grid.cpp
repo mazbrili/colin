@@ -48,6 +48,8 @@ void grid::saveSettings()
 QPixmap grid::gridmap(double *zoomf)
 {
     double z = *zoomf;
+	if(z<=0)
+		z = 1;
     forever
     {
         if(z>maxabs) z /= 10;
