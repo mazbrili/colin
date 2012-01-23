@@ -33,7 +33,6 @@ endif
 LD=$(CXX)
 
 MOCHEADERS= abstractcolintooltip.h \
-	beammenu.h \
 	bmenu.h \
 	closedialog.h \
 	cmenu.h \
@@ -46,7 +45,6 @@ MOCHEADERS= abstractcolintooltip.h \
 	ctabbar.h \
 	ctoolbar.h \
 	cwidget.h \
-	dloadmenu.h \
 	abstractdrawselectionwidget.h \
 	drawselectionwidget.h \
 	drawselectionwidget2.h \
@@ -57,25 +55,19 @@ MOCHEADERS= abstractcolintooltip.h \
 	jmenu.h \
 	libsidebar.h \
 	lmenu.h \
-	loadmenu.h \
 	mainwindow.h \
 	miscsettingswidget.h \
-	momentmenu.h \
 	newmaterialdialog.h \
 	newprofiledialog.h \
-	nloadmenu.h \
-	nodemenu.h \
 	nwidget.h \
 	previewrenderer.h \
 	previewwidget.h \
-	resultvisualwidget.h \
 	scalewidget.h \
 	shortcutsettings.h \
 	shortcutsettingswidget.h \
 	structpainter.h \
 	structprinter.h \
 	swidget.h \
-	tempmenu.h \
 	termovaluewidget.h \
 	toolTipEater.h \
 	treedelegate.h \
@@ -93,7 +85,7 @@ MOCHEADERS= abstractcolintooltip.h \
 	colinload.h \
 	colinstruct.h \
 	zmenu.h \
-	printoverlaywidget.h \
+	printsidewidget.h \
 	slidingstackedwidget.h \
 	colinsidebar.h \
 	colinrubberband.h \
@@ -118,8 +110,7 @@ MOCHEADERS= abstractcolintooltip.h \
 
 BUILDDATESOURCES=colinversion.cpp
 
-SOURCES= beammenu.cpp \
-	bmenu.cpp \
+SOURCES= bmenu.cpp \
 	catcher.cpp \
 	closedialog.cpp \
 	cmenu.cpp \
@@ -133,7 +124,6 @@ SOURCES= beammenu.cpp \
 	colorsettingswidget.cpp \
 	ctabbar.cpp \
 	cwidget.cpp \
-	dloadmenu.cpp \
 	abstractdrawselectionwidget.cpp \
 	drawselectionwidget.cpp \
 	drawselectionwidget2.cpp \
@@ -144,25 +134,19 @@ SOURCES= beammenu.cpp \
 	jmenu.cpp \
 	libsidebar.cpp \
 	lmenu.cpp \
-	loadmenu.cpp \
 	mainwindow.cpp \
 	miscsettingswidget.cpp \
-	momentmenu.cpp \
 	newmaterialdialog.cpp \
 	newprofiledialog.cpp \
-	nloadmenu.cpp \
-	nodemenu.cpp \
 	nwidget.cpp \
 	previewrenderer.cpp \
 	previewwidget.cpp \
-	resultvisualwidget.cpp \
 	scalewidget.cpp \
 	shortcutsettings.cpp \
 	shortcutsettingswidget.cpp \
 	structpainter.cpp \
 	structprinter.cpp \
 	swidget.cpp \
-	tempmenu.cpp \
 	termovaluewidget.cpp \
 	treedelegate.cpp \
 	treeview.cpp \
@@ -185,7 +169,7 @@ SOURCES= beammenu.cpp \
 	xmlreader.cpp \
 	xmlwriter.cpp \
 	zmenu.cpp \
-	printoverlaywidget.cpp \
+	printsidewidget.cpp \
 	slidingstackedwidget.cpp \
 	colinsidebar.cpp \
 	colinrubberband.cpp \

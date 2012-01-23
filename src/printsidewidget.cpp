@@ -1,4 +1,4 @@
-#include "printoverlaywidget.h"
+#include "printsidewidget.h"
 
 #include <QtGui/QPainter>
 #include <QtGui/QKeyEvent>
@@ -14,7 +14,7 @@
 #include <QtCore/QUrl>
 
 
-printoverlayWidget::printoverlayWidget(QWidget *parent) :
+printsideWidget::printsideWidget(QWidget *parent) :
 	QWidget(parent)
 {
 	this->setAttribute(Qt::WA_TranslucentBackground, true);
@@ -216,7 +216,7 @@ printoverlayWidget::printoverlayWidget(QWidget *parent) :
 	setting->setFixedSize(setting->layout()->sizeHint());
 }
 
-printoverlayWidget::~printoverlayWidget()
+printsideWidget::~printsideWidget()
 {
 	QSettings settings("clazzes.org", "Colin", this);
 
@@ -236,7 +236,7 @@ printoverlayWidget::~printoverlayWidget()
 	delete printer;
 }
 
-void printoverlayWidget::addSlider(QLabel *label, ColinBoolSlider *slider, QString labelName, QGridLayout *layout)
+void printsideWidget::addSlider(QLabel *label, ColinBoolSlider *slider, QString labelName, QGridLayout *layout)
 {
 	label->setParent(this);
 	slider->setParent(this);
@@ -251,7 +251,7 @@ void printoverlayWidget::addSlider(QLabel *label, ColinBoolSlider *slider, QStri
 
 }
 
-void printoverlayWidget::showEvent(QShowEvent *e)
+void printsideWidget::showEvent(QShowEvent *e)
 {
 	//layout->setGeometry(QRect(width()-400, 0, 400, height()));
 	//clipRect = QRect(parentWidget()->rect().adjusted(20, 20, -200, -20));
@@ -259,7 +259,7 @@ void printoverlayWidget::showEvent(QShowEvent *e)
 	QWidget::showEvent(e);
 }
 
-void printoverlayWidget::paintEvent(QPaintEvent *e)
+void printsideWidget::paintEvent(QPaintEvent *e)
 {
 	//QPainter p(this);
 	//p.setRenderHint(QPainter::Antialiasing, true);
@@ -271,28 +271,28 @@ void printoverlayWidget::paintEvent(QPaintEvent *e)
 
 }
 
-void printoverlayWidget::keyPressEvent(QKeyEvent *e)
+void printsideWidget::keyPressEvent(QKeyEvent *e)
 {
 	QWidget::keyPressEvent(e);
 }
 
-void printoverlayWidget::mouseMoveEvent(QMouseEvent *e)
+void printsideWidget::mouseMoveEvent(QMouseEvent *e)
 {
 	QWidget::mouseMoveEvent(e);
 }
 
-void printoverlayWidget::mousePressEvent(QMouseEvent *e)
+void printsideWidget::mousePressEvent(QMouseEvent *e)
 {
 	this->setFocus();
 	QWidget::mousePressEvent(e);
 }
 
-void printoverlayWidget::mouseReleaseEvent(QMouseEvent *e)
+void printsideWidget::mouseReleaseEvent(QMouseEvent *e)
 {
 	QWidget::mouseReleaseEvent(e);
 }
 
-void printoverlayWidget::resizeEvent(QResizeEvent *e)
+void printsideWidget::resizeEvent(QResizeEvent *e)
 {
 	//clipRect.adjust(0, 0, width()-e->oldSize().width(), height()-e->oldSize().height());
 
@@ -301,7 +301,7 @@ void printoverlayWidget::resizeEvent(QResizeEvent *e)
 }
 
 
-void printoverlayWidget::fontDialog()
+void printsideWidget::fontDialog()
 {
 	QFontDialog dia(pContent.font, this);
 	dia.exec();
@@ -311,7 +311,7 @@ void printoverlayWidget::fontDialog()
 	setFontTooltip();
 }
 
-void printoverlayWidget::printDialog()
+void printsideWidget::printDialog()
 {
 
 	QPageSetupDialog dia(printer, this);
@@ -328,7 +328,7 @@ void printoverlayWidget::printDialog()
 	}
 }
 
-void printoverlayWidget::savePdfDialog()
+void printsideWidget::savePdfDialog()
 {
 	QString pdfFile = QFileDialog::getSaveFileName(this, tr("save as pdf"),
 												   QDir::homePath(),
@@ -344,7 +344,7 @@ void printoverlayWidget::savePdfDialog()
 }
 
 
-void printoverlayWidget::setFontTooltip()
+void printsideWidget::setFontTooltip()
 {
 	fontSetter->setToolTip(pContent.font.toString());
 	fontSetter->setFont(pContent.font);
@@ -352,12 +352,12 @@ void printoverlayWidget::setFontTooltip()
 	preview->update(printer, pContent);
 }
 
-void printoverlayWidget::setPrinterToolTip()
+void printsideWidget::setPrinterToolTip()
 {
 	preview->update(printer, pContent);
 }
 
-void printoverlayWidget::setContent()
+void printsideWidget::setContent()
 {
 	pContent.s = 0x0;
 	foreach(QAbstractButton *b, buttonGroup->buttons())
@@ -369,7 +369,7 @@ void printoverlayWidget::setContent()
 	preview->update(printer, pContent);
 }
 
-void printoverlayWidget::paintRequest(QPrinter *printer)
+void printsideWidget::paintRequest(QPrinter *printer)
 {
 	structPrinter sP(filelist::instance().currentFile(), printer, pContent);
 	sP.print(printer);

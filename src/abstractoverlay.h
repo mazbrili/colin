@@ -63,6 +63,7 @@ public slots:
 	virtual void previousItem();
 	virtual void setCurrentItem(const int &i);
 	virtual void setTw(ColinStruct *tw);
+	virtual void setBrushOnBoxes();
 
 private:
 

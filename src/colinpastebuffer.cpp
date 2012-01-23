@@ -289,7 +289,6 @@ void ColinPasteBuffer::run()
 				sP.setColor(&p, tw.load(0), false);
 				p.translate(size.width()/2, size.height()/2);
 
-				const ColinLoad &l = tw.load(0);
 
 				double angle = atan2(tw.load(0).Pz(), tw.load(0).Px());
 				double abs = hypot(tw.load(0).Pz(), tw.load(0).Px());
@@ -307,8 +306,6 @@ void ColinPasteBuffer::run()
 			{
 				sP.setColor(&p, tw.load(0), false);
 				p.translate(size.width()/2, size.height()/2);
-
-				const ColinLoad &l = tw.load(0);
 
 				p.drawArc(-size.width()/3, -size.width()/3, size.width()/6, size.width()/6, 30, -240);
 			}

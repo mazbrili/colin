@@ -27,11 +27,15 @@
 #include "colinbeam.h"
 #include "colinstruct.h"
 
+#include <QtCore/QDebug>
+
+
 ColinBeam::ColinBeam(ColinStruct *parent):
 	ColinElement()
 {
 	par=parent;
-	for(int i=0; i<6; i++){gel[i]=0; spr[i]=0;}
+	hinges = NoHinge;
+	for(int i=0; i<6; i++){spr[i]=0;}
 	mt = 0;
 	qs = 0;
 	dirty = true;
@@ -42,7 +46,8 @@ ColinBeam::ColinBeam(ColinStruct *parent, int leftN, int rightN, int Mat, int qS
 	ColinElement()
 {
 	par=parent;
-	for(int i=0; i<6; i++){gel[i]=0; spr[i]=0;}
+	hinges = NoHinge;
+	for(int i=0; i<6; i++){spr[i]=0;}
 	node_l=leftN;
 	node_r=rightN;
 	mt=Mat;
@@ -55,7 +60,8 @@ ColinBeam::ColinBeam(ColinStruct *parent, int leftN, int rightN, QString Mat, QS
 	ColinElement()
 {
 	par=parent;
-	for(int i=0; i<6; i++){gel[i]=0; spr[i]=0;}
+	hinges = NoHinge;
+	for(int i=0; i<6; i++){spr[i]=0;}
 	node_l=leftN;
 	node_r=rightN;
 	mt=LIB.IndexFromMatByName(Mat);
@@ -67,9 +73,9 @@ ColinBeam::ColinBeam(ColinStruct *parent, int leftN, int rightN, QString Mat, QS
 ColinBeam::ColinBeam(const ColinBeam &other)
 	:ColinElement(other)
 {
+	hinges = other.hinges;
 	for(int i=0; i<6; i++)
 	{
-		gel[i]=other.joint(i);
 		spr[i]=other.spring(i);
 	}
 	node_l=other.leftNodeI();
@@ -84,10 +90,10 @@ ColinBeam::ColinBeam(const ColinBeam &other)
 
 ColinBeam &ColinBeam::operator=(const ColinBeam &other)
 {
+	hinges = other.hinges;
 	par=other.par;
 	for(int i=0; i<6; i++)
 	{
-		gel[i]=other.joint(i);
 		spr[i]=other.spring(i);
 	}
 	node_l=other.leftNodeI();
@@ -160,12 +166,9 @@ const double &ColinBeam::l() const
 }
 
 
-void ColinBeam::setJoints(const bool *array)
+void ColinBeam::setJoints(hingeForms h)
 {
-	for(int o=0;o<6; o++)
-	{
-		gel[o]=array[o];
-	}
+	hinges = h;
 }
 
 void ColinBeam::setSprings(const double *array)
@@ -176,33 +179,40 @@ void ColinBeam::setSprings(const double *array)
 	}
 }
 
-
-void ColinBeam::setJointsandSprings(const bool *barray, const double *darray)
-{
-	 setJoints(barray);
-	 setSprings(darray);
-}
-
-
 void ColinBeam::setJoint(const int &pos, const bool &thereIsAJoint)
 {
-	gel[pos]=thereIsAJoint;
-	if(!thereIsAJoint)
-		spr[pos]=0;
+	hinges &= (~springfromPos(position(pos)));
+	if(thereIsAJoint)
+		hinges |= hingefromPos(position(pos));
+
+	qDebug() << hinges
+			 << (((hinges&Xleft)!=0)?((hinges&fxleft)!=0?"S":"H"):"-")
+			 << (((hinges&Zleft)!=0)?((hinges&fzleft)!=0?"S":"H"):"-")
+			 << (((hinges&Phileft)!=0)?((hinges&fphileft)!=0?"S":"H"):"-")
+			 << (((hinges&Xright)!=0)?((hinges&fxright)!=0?"S":"H"):"-")
+			 << (((hinges&Zright)!=0)?((hinges&fzright)!=0?"S":"H"):"-")
+			 << (((hinges&Phiright)!=0)?((hinges&fphiright)!=0?"S":"H"):"-");
+}
+
+void ColinBeam::setHasSpring(const int& pos, const bool& thereIsAJoint)
+{
+	hinges &= (~springfromPos(position(pos)));
+	if(thereIsAJoint)
+		hinges |= springfromPos(position(pos));
+
+	qDebug() << hinges
+			 << (((hinges&Xleft)!=0)?((hinges&fxleft)!=0?"S":"H"):"-")
+			 << (((hinges&Zleft)!=0)?((hinges&fzleft)!=0?"S":"H"):"-")
+			 << (((hinges&Phileft)!=0)?((hinges&fphileft)!=0?"S":"H"):"-")
+			 << (((hinges&Xright)!=0)?((hinges&fxright)!=0?"S":"H"):"-")
+			 << (((hinges&Zright)!=0)?((hinges&fzright)!=0?"S":"H"):"-")
+			 << (((hinges&Phiright)!=0)?((hinges&fphiright)!=0?"S":"H"):"-");
 }
 
 void ColinBeam::setSpring(const int &pos, const double &c_f)
 {
+	hinges |= springfromPos(position(pos));
 	spr[pos]=c_f;
-	gel[pos]=true;
-}
-
-
-
-void ColinBeam::joints(bool *bool_array_6)
-{
-	for(int o=0; o<6; o++)
-		bool_array_6[o]=gel[o];
 }
 
 void ColinBeam::springs(double *double_array_6)
@@ -222,11 +232,11 @@ double ColinBeam::s(const int &i, const int& pos) const
 	case 2:
 		return res[i].M(0);
 	case 3:
-		return res[i].N(1);
+		return res[i].N(l());
 	case 4:
-		return res[i].Q(1);
+		return res[i].Q(l());
 	case 5:
-		return res[i].M(1);
+		return res[i].M(l());
 	default:
 		Q_ASSERT(true);
 		return(0);
@@ -244,11 +254,11 @@ double ColinBeam::v(const int &i, const int& pos) const
 	case 2:
 		return res[i].p(0);
 	case 3:
-		return res[i].u(1);
+		return res[i].u(l());
 	case 4:
-		return res[i].w(1);
+		return res[i].w(l());
 	case 5:
-		return res[i].p(1);
+		return res[i].p(l());
 	default:
 		Q_ASSERT(true);
 		return(0);

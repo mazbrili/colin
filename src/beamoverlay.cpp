@@ -36,6 +36,7 @@
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QDoubleSpinBox>
+#include <QtGui/QComboBox>
 #include <limits>
 
 #include "detailpainter.h"
@@ -43,6 +44,10 @@
 #include "colinicons.h"
 #include "unitsettings.h"
 
+bool beamOverlay::showFunctions = false;
+bool beamOverlay::showDisplacement = false;
+bool beamOverlay::showForces = true;
+bool beamOverlay::showHingesExtended = false;
 
 hingeExtended::hingeExtended(QWidget *parent):
 	QGroupBox(parent)
@@ -125,13 +130,13 @@ hingeExtended::hingeExtended(QWidget *parent):
 	freeButtons->setExclusive(false);
 
 	connect(basicButtons,			SIGNAL(buttonClicked(int)),
-			this,					SLOT(setBasic()));
+			this,					SLOT(setBasic(int)));
 
 	connect(springButtons,			SIGNAL(buttonClicked(int)),
-			this,					SLOT(setSpring()));
+			this,					SLOT(setSpring(int)));
 
 	connect(freeButtons,			SIGNAL(buttonClicked(int)),
-			this,					SLOT(setBasic()));
+			this,					SLOT(setBasic(int)));
 
 	connect(moreBox,				SIGNAL(clicked(bool)),
 			this,					SLOT(extended(bool)));
@@ -164,38 +169,67 @@ void hingeExtended::setCurrentItem(const int &i)
 	for(int j=0; j<6; j++)
 	{
 		freeButtons->button(j)->setChecked(t.beam(i).joint(j));
-		springButtons->button(j)->setChecked(t.beam(i).spring(j)!=0);
+		springButtons->button(j)->setChecked(t.beam(i).hasSpring(j));
+		springCs[j]->setEnabled(t.beam(i).hasSpring(j));
+
+		double pref;
+		if(j%3==2)	pref = FMPREFIX;
+		else		pref = FPREFIX;
+
+		springCs[j]->setText(QString::number(t.beam(i).spring(j)*pref, 'f', PRECISON));
+
 	}
 
 
 }
 
-void hingeExtended::setBasic()
+void hingeExtended::setBasic(int nr)
 {
 	ColinBeam b = filelist::instance().currentFile()->beam(currentItem);
 	if(sender() == freeButtons)
 	{
-		for(int j=0; j<6; j++)
-		{
-			b.setJoint(j, freeButtons->button(j)->isChecked());
-		}
+		b.setJoint(nr, freeButtons->button(nr)->isChecked());
 	}
 	else
 	{
-		b.setJoint(2, basicLeft->isChecked());
-		b.setJoint(5, basicRight->isChecked());
+		if(nr == 2)
+			b.setJoint(2, basicLeft->isChecked());
+		else
+			b.setJoint(5, basicRight->isChecked());
 	}
 	filelist::instance().currentFile()->setBeam(currentItem, b);
 }
 
-void hingeExtended::setSpring()
+void hingeExtended::setSpring(int nr)
 {
+	ColinBeam b = filelist::instance().currentFile()->beam(currentItem);
 
+	b.setHasSpring(nr, springButtons->button(nr)->isChecked());
+
+	filelist::instance().currentFile()->setBeam(currentItem, b);
 }
 
 void hingeExtended::setSpringConstants()
 {
+	for(int i=0; i<6; i++)
+	{
+		double pref;
+		if(i%3==2)	pref = FMPREFIX;
+		else		pref = FPREFIX;
+		if(sender() == springCs[i])
+		{
+			bool ok;
+			double val = springCs[i]->text().toDouble(&ok);
+			if(ok){
+				ColinBeam b = filelist::instance().currentFile()->beam(currentItem);
+				b.setSpring(i, val/pref);
+				filelist::instance().currentFile()->setBeam(currentItem, b);
+			}
+			else
+				springCs[i]->setText(QString::number(filelist::instance().currentFile()->Beam(currentItem).spring(i)*pref, 'f', PRECISON));
 
+		}
+	}
 }
 
 beamDetail::beamDetail(QWidget *parent)
@@ -366,11 +400,17 @@ beamOverlay::beamOverlay(QWidget *parent) :
 	matlabel = new QLabel(tr("material"));
 	cslabel = new QLabel(tr("cross section"));
 
-	mat = new QPushButton(colinIcons::instance().icon(Colin::Material), "");
-	cs = new QPushButton(colinIcons::instance().icon(Colin::Profile), "");
+	mat = new QComboBox(this);
+	for(int j=0; j<LIB.mats_n(); j++)
+	{
+		mat->addItem(colinIcons::instance().icon(Colin::Material), LIB.mat(j).name());
+	}
+	cs = new QComboBox(this);
+	for(int j=0; j<LIB.profiles_n(); j++)
+	{
+		cs->addItem(colinIcons::instance().icon(Colin::Profile), LIB.Profile(j).name());
+	}
 
-	mat->setFlat(true);
-	cs->setFlat(true);
 
 	pl->addWidget(matlabel, 0, 0, 1, 1);
 	pl->addWidget(cslabel, 1, 0, 1, 1);
@@ -435,40 +475,40 @@ beamOverlay::beamOverlay(QWidget *parent) :
 	detailWidget->setSizePolicy(sP);
 	dl->addWidget(detailWidget);
 
-	QGroupBox *functionBox = new QGroupBox(this);
-	functionBox->setTitle("["+tr("functions")+"]");
-	functionBox->setCheckable(true);
+	funs = new QGroupBox(this);
+	funs->setTitle("["+tr("functions")+"]");
+	funs->setCheckable(true);
 
-	vl2->addWidget(functionBox);
-	dl = new QVBoxLayout(functionBox);
-	functionBox->setLayout(dl);
+	vl2->addWidget(funs);
+	dl = new QVBoxLayout(funs);
+	funs->setLayout(dl);
 
-	functions = new QLabel(functionBox);
+	functions = new QLabel(funs);
 	functions->setTextInteractionFlags(Qt::TextBrowserInteraction | Qt::TextSelectableByKeyboard);
 
 	dl->addWidget(functions);
 	vl2->addStretch(10000);
 
 
-	QGroupBox *dispBox = new QGroupBox(this);
-	dispBox->setTitle("["+tr("displacement")+"]");
-	dispBox->setCheckable(true);
+	disp = new QGroupBox(this);
+	disp->setTitle("["+tr("displacement")+"]");
+	disp->setCheckable(true);
 
-	vl3->addWidget(dispBox);
-	dl = new QVBoxLayout(dispBox);
-	dispBox->setLayout(dl);
+	vl3->addWidget(disp);
+	dl = new QVBoxLayout(disp);
+	disp->setLayout(dl);
 	displacement = new QLabel("");
 	displacement->setTextInteractionFlags(Qt::TextBrowserInteraction | Qt::TextSelectableByKeyboard);
 	dl->addWidget(displacement);
 
 
-	QGroupBox *efBox = new QGroupBox(this);
-	efBox->setTitle("["+tr("beam forces")+"]");
-	efBox->setCheckable(true);
+	forces = new QGroupBox(this);
+	forces->setTitle("["+tr("beam forces")+"]");
+	forces->setCheckable(true);
 
-	vl3->addWidget(efBox);
-	dl = new QVBoxLayout(efBox);
-	dispBox->setLayout(dl);
+	vl3->addWidget(forces);
+	dl = new QVBoxLayout(forces);
+	disp->setLayout(dl);
 	endforces = new QLabel("");
 	endforces->setTextInteractionFlags(Qt::TextBrowserInteraction | Qt::TextSelectableByKeyboard);
 	dl->addWidget(endforces);
@@ -487,10 +527,13 @@ beamOverlay::beamOverlay(QWidget *parent) :
 	connect(cls,			SIGNAL(buttonClicked(int)),
 			detailWidget,	SLOT(setCurrentCLS(int)));
 
-	connect(dispBox,		SIGNAL(clicked(bool)),
+	connect(funs,			SIGNAL(clicked(bool)),
 			this,			SLOT(hideMyChildren(bool)));
 
-	connect(efBox,			SIGNAL(clicked(bool)),
+	connect(disp,			SIGNAL(clicked(bool)),
+			this,			SLOT(hideMyChildren(bool)));
+
+	connect(forces,			SIGNAL(clicked(bool)),
 			this,			SLOT(hideMyChildren(bool)));
 
 	connect(copyButton,		SIGNAL(clicked()),
@@ -498,6 +541,12 @@ beamOverlay::beamOverlay(QWidget *parent) :
 
 	connect(cutButton,		SIGNAL(clicked()),
 			this,			SLOT(cut()));
+
+	connect(mat,			SIGNAL(currentIndexChanged(int)),
+			this,			SLOT(setMat(int)));
+
+	connect(cs,				SIGNAL(currentIndexChanged(int)),
+			this,			SLOT(setCs(int)));
 
 	connect(&filelist::instance(),		SIGNAL(currentChanged(ColinStruct*)),
 			this,						SLOT(setTw(ColinStruct*)));
@@ -516,8 +565,29 @@ beamOverlay::beamOverlay(QWidget *parent) :
 	connect(&t,					SIGNAL(erasedCLS(int)),
 			this,				SLOT(clsChanged()));
 
+	funs->setChecked(beamOverlay::showFunctions);
+	disp->setChecked(beamOverlay::showDisplacement);
+	forces->setChecked(beamOverlay::showForces);
+	hinges->moreBox->setChecked(beamOverlay::showHingesExtended);
 
+	QList<QGroupBox*> boxes;
+	boxes << funs << disp << forces << hinges->moreBox;
 
+	foreach(QGroupBox *gb, boxes)
+	{
+		if(!gb->isChecked())
+		{
+			foreach(QWidget *w, gb->findChildren<QWidget* >())
+				w->setHidden(true);
+		}
+	}
+}
+beamOverlay::~beamOverlay()
+{
+	beamOverlay::showFunctions = funs->isChecked();
+	beamOverlay::showDisplacement = disp->isChecked();
+	beamOverlay::showForces = forces->isChecked();
+	beamOverlay::showHingesExtended = hinges->moreBox->isChecked();
 }
 
 void beamOverlay::setCurrentItem(const int &i)
@@ -539,9 +609,12 @@ void beamOverlay::setCurrentItem(const int &i)
 	angleInfo->setText(tr("<b>apha</b>")+" = "+QString::number(t.beam(i).angle()*ANGLEPREFIX, 'f', PRECISON)+" [grad]");
 	lengthInfo->setText(tr("<b>length</b>")+" = "+QString::number(t.beam(i).l(), 'f', PRECISON)+" [m]");
 
-	mat->setText(t.beam(i).Mat().name());
-	cs->setText(t.beam(i).Profile().name());
+	mat->setCurrentIndex(t.beam(i).MatI());
+	cs->setCurrentIndex(t.beam(i).ProfileI());
 
+	/*
+	  Functions
+	*/
 
 	if(t.isCalculated())
 	{
@@ -1106,6 +1179,17 @@ void beamOverlay::clsChanged()
 	 foreach(QAbstractButton *b, cls->buttons())
 		 b->setShown(true);
 }
+
+void beamOverlay::setMat(int nr)
+{
+	filelist::instance().currentFile()->setMat(currentItem, nr);
+}
+
+void beamOverlay::setCs(int nr)
+{
+	filelist::instance().currentFile()->setProfile(currentItem, nr);
+}
+
 void beamOverlay::copy()
 {
 	toClipBoard();

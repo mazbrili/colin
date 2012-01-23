@@ -500,7 +500,6 @@ void detailPainter::drawBeamExtern(QPainter *p, const ColinStruct &t, int i, con
 
 void detailPainter::drawBeamIntern(QPainter *p, const ColinStruct &t, int i, const double &x, const QList<int> &cls)
 {
-	double scale = viewPortSettings::instance().resultsWidgetScale();
 
 	const ColinBeam &b = t.beam(i);
 

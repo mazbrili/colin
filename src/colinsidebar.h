@@ -5,7 +5,7 @@
 #include <QtGui/QPainter>
 
 #include "slidingstackedwidget.h"
-#include "printoverlaywidget.h"
+#include "printsidewidget.h"
 #include "treeview.h"
 #include "libsidebar.h"
 #include "colinhmultibutton.h"
@@ -44,7 +44,7 @@ class ColinSidebarContainer : public SlidingStackedWidget
 public:
 	explicit ColinSidebarContainer(QWidget *parent = 0);
 
-	printoverlayWidget *print;
+	printsideWidget *print;
 	treeView *tV;
 	libSidebar *library;
 	consoleWidget *console;

@@ -80,7 +80,7 @@ ColinSidebarContainer::ColinSidebarContainer(QWidget *parent) :
 	SlidingStackedWidget(parent)
 {
 
-	print = new printoverlayWidget(this);
+	print = new printsideWidget(this);
 	tV = new treeView(this);
 	library = new libSidebar(this);
 	console = new consoleWidget(this);

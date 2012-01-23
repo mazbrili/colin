@@ -34,13 +34,10 @@ QString colinIcons::icondir_ = QString();
 void colinIcons::load()
 {
     QSettings CSettings("clazzes.org", "Colin");
-    
-#ifdef WIN32
-    dark = CSettings.value("icons/dark", 1).toInt();
-#else
-    dark = CSettings.value("icons/dark", 0).toInt();
-#endif
-    node.addFile(icondir+"node.png");
+
+	dark = CSettings.value("icons/dark", true).toBool();
+
+	node.addFile(icondir+"node.png");
     beam.addFile(icondir+"beam.png");
     bearingH.addFile(icondir+"bearingH.png");
     bearingV.addFile(icondir+"bearingV.png");

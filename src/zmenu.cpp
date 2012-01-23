@@ -26,6 +26,9 @@
 
 #include "zmenu.h"
 
+#include <QtGui/QPushButton>
+#include <QtGui/QButtonGroup>
+
 zMenu::zMenu(QAction *a, QWidget *parent) :
     QMenu(parent)
 {

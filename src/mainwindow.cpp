@@ -73,7 +73,7 @@ void MainWindow::init()
 {
 	currentTw = NULL;
 
-	QIcon wIcon(icondir + "tooltip/vp_node.png");
+	QIcon wIcon(icondir + "tooltip/node_dark_64.png");
 
 	wIcon.addFile(icondir +"tooltip/node_dark_64.png", QSize(128, 128));
 
@@ -577,6 +577,15 @@ void MainWindow::initToolBar()
 	scS.addAction(action);
 	new lMenu(aGroup->actions().at(4), this);
 
+
+	scS.lastAction()->setWhatsThis(tr("<b>load tool</b> ")+
+								   tr("<a href=\"tool/load\">open manual</a><br /> <br />")+
+								   tr("Use this tool to add loads to the structure. ")+
+								   tr("To do so click on the designated beam or node an specify the force with a second on. <br />")+
+								   tr("If you want to add a temperature load to the structure, click on the designated beam and specify the temperature using the appearing thermometer. ")+
+								   tr("<b>Press the enter key to finish the procedure! </b>")+
+								   tr("To specify the type of load, keep the triangle beside the tool button pressed. "));
+
 	//cls
 	/*
 	action = new QAction("combined load sets", this);
@@ -662,16 +671,22 @@ void MainWindow::initToolBar()
 	scS.addAction(action, true);
 
 	scS.lastAction()->setWhatsThis(tr("<b>auto zoom tools</b> ")+
-								  tr("<a href=\"tool/setzoom\">open manual</a><br /> <br />")+
-								  tr("Use this tool to automatically adjust the zoom factor<br />")+
-								  tr("Keep the triangle beside the tool button pressed to get access to the zoom factors of results. ")+
-								  tr("An auto zoom function for the results can be found there too!"));
+								   tr("<a href=\"tool/setzoom\">open manual</a><br /> <br />")+
+								   tr("Use this tool to automatically adjust the zoom factor<br />")+
+								   tr("Keep the triangle beside the tool button pressed to get access to the zoom factors of results. ")+
+								   tr("An auto zoom function for the results can be found there too!"));
 
 
 	action = new QAction(tr("zoom"), this);
 	aGroup->addAction(action);
 	toolbar->addAction(action);
 	new zMenu(action, this);
+
+	action->setWhatsThis(tr("<b>zoom tools</b> ")+
+						 tr("<a href=\"tool/zoom\">open manual</a><br /> <br />")+
+						 tr("Use this tools to adjust the zoom. ")+
+						 tr("Keep the triangle beside the tool button pressed to get access to more tools, such as zoom in, soom out and zoom rectangle!"));
+
 
 
 

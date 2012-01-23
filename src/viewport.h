@@ -46,7 +46,6 @@
 #include "drawselectionwidget.h"
 #include "drawselectionwidget2.h"
 #include "viewporttooltip.h"
-#include "resultvisualwidget.h"
 #include "colinrubberband.h"
 
 
@@ -121,11 +120,6 @@ private:
     void addTemp(QPointF p);
     void addJoint(QPointF p);
     void addDoubleLoad(QPointF p);
-
-    void launchMenuNode(const int &i);
-    void launchMenuBeam(const int &i);
-    void launchMenuLoad(const int &i);
-    void launchMenuTemp(const int &i);
 
     void findMoveObject(QPointF p);
 

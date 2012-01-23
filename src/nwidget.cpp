@@ -44,8 +44,11 @@ nWidget::nWidget(QWidget *parent) :
     settingsB = new QPushButton(tr("settings"), this);
     libB = new QPushButton(tr("clear library"), this);
 
+	layout->setMargin(0);
 
     //layout->setColumnMinimumWidth(0, 20);
+	buttonbox->setMargin(10);
+	buttonbox->setSpacing(0);
     layout->addLayout(buttonbox, 0, 0, 1, 6, Qt::AlignTop);
     buttonbox->addWidget(newB);
     buttonbox->addWidget(openB);
@@ -72,6 +75,10 @@ nWidget::nWidget(QWidget *parent) :
     settingsB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     libB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
+	newB->setFlat(true);
+	openB->setFlat(true);
+	settingsB->setFlat(true);
+	libB->setFlat(true);
 
 	newB->setWhatsThis("<b>"+tr("new file")+"</b><br /><br />"+
 					   tr("Create a new empty file."));
@@ -137,10 +144,6 @@ nWidget::nWidget(QWidget *parent) :
 
 	setWallpaper = new QPushButton(tr("change wallpaper"), this);
 	setWallpaper->setFlat(true);
-
-	QFont miniFont = setWallpaper->font();
-	miniFont.setPointSize(7);
-	setWallpaper->setFont(miniFont);
 
 	eff = new QGraphicsDropShadowEffect(setWallpaper);
 	eff->setBlurRadius(10);
@@ -214,8 +217,10 @@ void nWidget::paintEvent(QPaintEvent *e)
 	p.drawPixmap(0, 0, back->width(), back->height(), *back);
 
 
-
-
-
-
+	QLinearGradient grad(0, 10, 0, 10+openB->geometry().bottom());
+	grad.setColorAt(0, palette().color(QPalette::Light));
+	grad.setColorAt(1, palette().color(QPalette::Window));
+	p.setPen(palette().color(QPalette::Dark));
+	p.setBrush(grad);
+	p.drawRect(QRect(0, 10, width(), openB->height()));
 }

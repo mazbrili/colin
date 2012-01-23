@@ -360,5 +360,5 @@ bool treeDelegate::eventFilter(QObject *obj, QEvent *event){
 			return true;
 		}
 	}
-//		return QItemDelegate::eventFilter(obj, event);
+		return QItemDelegate::eventFilter(obj, event);
 }

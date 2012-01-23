@@ -3,6 +3,7 @@
 #include "viewportsettings.h"
 
 #include <QtGui/QLayout>
+#include <QtGui/QPainter>
 
 abstractDrawSelectionWidget::abstractDrawSelectionWidget(QWidget *parent) :
     QWidget(parent)

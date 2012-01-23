@@ -33,6 +33,7 @@
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QLabel>
+#include <QtGui/QGroupBox>
 
 #include "viewportsettings.h"
 
@@ -74,22 +75,9 @@ abstractOverlay::abstractOverlay(QWidget *parent) :
 
 
 	QPalette pal = this->palette();
-	QColor bc = QColor(viewPortSettings::instance().color(Colin::C_Background));
-#ifdef OVERLAY_LINEAR
-	QLinearGradient grad(0, 0, 150, 500);
-	bc.setAlpha(180);
-	grad.setColorAt(0.4, bc);
-	bc.setAlpha(80);
-	grad.setColorAt(1, bc);
-#else
-	QRadialGradient grad(1000, 1500, 1500);
-	bc.setAlpha(0);
-	grad.setColorAt(0.9, bc);
-	bc.setAlpha(0);
-	grad.setColorAt(0.7, bc);
-#endif
-	pal.setBrush(QPalette::Window, QBrush(grad));
-	pal.setBrush(QPalette::Base, QBrush(grad));
+
+	pal.setBrush(QPalette::Window, QColor(0,0,0,0));
+	pal.setBrush(QPalette::Base, QColor(0,0,0,0));
 
 	this->setPalette(pal);
 
@@ -126,11 +114,7 @@ bool abstractOverlay::eventFilter(QObject *o, QEvent *e)
 
 void abstractOverlay::paintEvent(QPaintEvent *e)
 {
-	QPainter p(this);
-	foreach(QRect r, e->region().rects())
-	{
-		p.fillRect(r, QColor(255, 255, 255, 100));
-	}
+
 }
 
 void abstractOverlay::keyPressEvent(QKeyEvent *e)
@@ -188,4 +172,22 @@ void abstractOverlay::setCurrentItem(const int &i)
 void abstractOverlay::setTw(ColinStruct *tw)
 {
 	deleteLater();
+}
+
+void abstractOverlay::setBrushOnBoxes()
+{
+	QPalette pal = this->palette();
+	QColor bc = QColor(viewPortSettings::instance().color(Colin::C_Background));
+
+
+	bc.setAlpha(100);
+
+	pal.setBrush(QPalette::Window, QBrush(bc));
+	pal.setBrush(QPalette::Base, QBrush(bc));
+
+	foreach(QGroupBox *gb, this->findChildren<QGroupBox*>()){
+		gb->setPalette(pal);
+		gb->setAutoFillBackground(true);
+	}
+
 }

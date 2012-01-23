@@ -2,9 +2,9 @@
 #define ABSTRACTDRAWSELECTIONWIDGET_H
 
 #include <QtGui/QWidget>
-#include <QtGui/QPainter>
 #include <QtCore/QPropertyAnimation>
 
+class QPainter;
 
 class abstractDrawSelectionWidget : public QWidget
 {

@@ -25,12 +25,6 @@
  ***********************************************************/
 
 #include "viewport.h"
-#include "nodemenu.h"
-#include "beammenu.h"
-#include "loadmenu.h"
-#include "tempmenu.h"
-#include "nloadmenu.h"
-#include "momentmenu.h"
 #include "unitsettings.h"
 #include "colinmanual.h"
 #include "colinmanual.h"
@@ -1574,7 +1568,6 @@ void viewport::mouseMoveEvent(QMouseEvent *e)
 	//    setFocus(Qt::MouseFocusReason);
 
 
-	highlight old = highlightedObject;
 
 	if(lastMouseButtons == Qt::LeftButton)
 	{
@@ -2479,49 +2472,6 @@ void viewport::addDoubleLoad(QPointF p)
 	tw->setlastObjectBeam(-1);
 	tw->setlastObjectNode(-1);
 	}
-}
-
-void viewport::launchMenuNode(const int &i)
-{
-	nodeMenu::instance().set(i);
-	nodeMenu::instance().show();
-	nodeMenu::instance().move(QCursor::pos());
-}
-
-void viewport::launchMenuBeam(const int &i)
-{
-	beamMenu::instance().set(i);
-	beamMenu::instance().show();
-	beamMenu::instance().move(QCursor::pos());
-}
-
-void viewport::launchMenuLoad(const int &i)
-{
-	if(filelist::instance().currentFile()->load(i).typ() == ColinLoad::uniformlyDistibutedLoad ||
-	   filelist::instance().currentFile()->load(i).typ() == ColinLoad::decreasingLinearLoad    ||
-	   filelist::instance().currentFile()->load(i).typ() == ColinLoad::increasingLinearLoad    )
-	{
-		loadMenu::instance().set(i);
-		loadMenu::instance().show();
-		loadMenu::instance().move(QCursor::pos());
-	}
-	else if(filelist::instance().currentFile()->load(i).typ() == ColinLoad::nodeLoad)
-	{
-		nloadMenu::instance().set(i);
-		nloadMenu::instance().popup(QCursor::pos());
-	}/* not possible to click till now
-	else if(filelist::instance().currentFile()->load(i).typ() == wgv_load::moment)
-	{
-		momentMenu::instance().set(i);
-		momentMenu::instance().popup(QCursor::pos());
-	}*/
-}
-
-void viewport::launchMenuTemp(const int &i)
-{
-	tempMenu::instance().set(i);
-	tempMenu::instance().show();
-	tempMenu::instance().move(QCursor::pos());
 }
 
 void viewport::selectNearest(QPointF p)

@@ -59,8 +59,8 @@ public:
 public slots:
 	void extended(bool show);
 	void setCurrentItem(const int &i);
-	void setBasic();
-	void setSpring();
+	void setBasic(int nr);
+	void setSpring(int nr);
 	void setSpringConstants();
 
 private:
@@ -74,8 +74,7 @@ public:
 	enum mode{
 		externForces,
 		internForces,
-		functions
-	};
+};
 
 	explicit beamDetail(QWidget *parent);
 	void paintEvent(QPaintEvent *e);
@@ -100,6 +99,7 @@ class beamOverlay : public abstractOverlay
 	Q_OBJECT
 public:
 	explicit beamOverlay(QWidget *parent = 0);
+	~beamOverlay();
 signals:
 
 public slots:
@@ -114,6 +114,8 @@ public slots:
 	void nextItem();
 	void previousItem();
 	void clsChanged();
+	void setMat(int nr);
+	void setCs(int nr);
 
 	void copy();
 	void cut();
@@ -129,8 +131,8 @@ private:
 	QLabel *matlabel;
 	QLabel *cslabel;
 
-	QPushButton *mat;
-	QPushButton *cs;
+	QComboBox *mat;
+	QComboBox *cs;
 	hingeExtended *hinges;
 
 	ColinPushButtonPart *copyButton, *cutButton;
@@ -145,9 +147,18 @@ private:
 	QLabel *displacement;
 	QLabel *endforces;
 
+	QGroupBox *funs,
+			  *disp,
+			  *forces;
+
 	int currentItem;
 	double cuttedAt;
 
+
+	static bool showFunctions;
+	static bool showDisplacement;
+	static bool showForces;
+	static bool showHingesExtended;
 };
 
 #endif // BEAMOVERLAY_H

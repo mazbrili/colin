@@ -63,6 +63,28 @@ class ColinBeam : public ColinElement
 friend class wgv;
 public:
 
+	enum hingeForm{
+		NoHinge =	0x0,
+
+		Xleft =			0x1,
+		Zleft =			0x2,
+		Phileft =		0x4,
+
+		fxleft =		0x8		|	Xleft,
+		fzleft =		0x10	|	Zleft,
+		fphileft =		0x20	|	Phileft,
+
+		Xright =		0x40,
+		Zright =		0x80,
+		Phiright =		0x100,
+
+		fxright =		0x200	|	Xright,
+		fzright =		0x400	|	Zright,
+		fphiright =		0x800	|	Phiright
+	};
+
+	Q_DECLARE_FLAGS(hingeForms, hingeForm);
+
 	enum position{
 		Nl = 0,
 		Ql = 1,
@@ -71,6 +93,29 @@ public:
 		Qr = 4,
 		Mr = 5};
 
+	static inline hingeForms springfromPos(position p){
+		switch (p){
+		case Nl: return fxleft;
+		case Ql: return fzleft;
+		case Ml: return fphileft;
+		case Nr: return fxright;
+		case Qr: return fzright;
+		case Mr: return fphiright;
+		}
+		return NoHinge;
+	}
+
+	static inline hingeForms hingefromPos(position p){
+		switch (p){
+		case Nl: return Xleft;
+		case Ql: return Zleft;
+		case Ml: return Phileft;
+		case Nr: return Xright;
+		case Qr: return Zright;
+		case Mr: return Phiright;
+		}
+		return NoHinge;
+	}
 
 	ColinBeam(){par = 0; res=0; dirty = true;}
 	ColinBeam(ColinStruct *parent);
@@ -105,12 +150,12 @@ public:
 	const double &angle() const;
 	const double &l() const;
 
-	const inline bool &joint(const position& pos) const{return gel[pos];}
-	const inline bool &joint(const int& pos) const{return gel[pos];}
-	void joints(bool *bool_array_6);
+	inline bool joint(const position& pos) const{return (hinges&hingefromPos(pos))!=0;}
+	inline bool joint(const int& pos) const{return joint(position(pos));}
 	const inline double &spring(const position& pos) const {return spr[pos];}
 	const inline double &spring(const int& pos) const {return spr[pos];}
-	inline bool hasSpring(const int &pos) const {return spr[pos]!=0?true:false;}
+	inline bool hasSpring(const position& pos) const {return (hinges&springfromPos(pos))==springfromPos(pos);}
+	inline bool hasSpring(const int& pos) const {return hasSpring(position(pos));}
 	void springs(double *double_array_6);
 
 	double s(const int &i, const int& pos) const;
@@ -125,10 +170,10 @@ public:
 
 	inline bool hasJoints() const {return true;}
 
-	void setJoints(const bool *array);
+	void setJoints(hingeForms h);
 	void setSprings(const double *array);
-	void setJointsandSprings(const bool *barray, const double *darray);
 	void setJoint(const int& pos, const bool& thereIsAJoint);
+	void setHasSpring(const int& pos, const bool& thereIsAJoint);
 	void setSpring(const int& pos, const double& c_f);
 
 	inline double N(const int &i, const double &x) const {return res[i].N(x);}
@@ -178,7 +223,7 @@ private:
 	int node_r;
 	int mt;
 	int qs;
-	bool gel[6];
+	hingeForms hinges;
 	double spr[6];
 
 	mutable double len;
@@ -188,6 +233,8 @@ private:
 
 	beam_result *res;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(ColinBeam::hingeForms);
 
 
 

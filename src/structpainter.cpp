@@ -407,12 +407,12 @@ void structPainter::drawBeam(const ColinBeam &s, const int &i, const ColinStruct
 			p->drawEllipse(QPointF(gelMSize/2, 0), gelMSize/2, gelMSize/2);
 		}
 
-		if(s.spring(ColinBeam::Ml))
+		if(s.hasSpring(ColinBeam::Ml))
 		{
 			p->drawArc(0, -gelMSize, gelMSize*2, gelMSize*2, 0, 180*16);
 		}
 
-		if(s.spring(ColinBeam::Ql))
+		if(s.hasSpring(ColinBeam::Ql))
 		{
 			p->drawLine(xl, 0, xl, springQh);
 			p->drawLine(xl, springQh, xl+springQSize/2, springQh);
@@ -433,7 +433,7 @@ void structPainter::drawBeam(const ColinBeam &s, const int &i, const ColinStruct
 		   xl += gelQSize;
 		}
 
-		if(s.spring(ColinBeam::Nl) )
+		if(s.hasSpring(ColinBeam::Nl) )
 		{
 			p->drawLine(xl, 0, xl+springNSize/8., -springNh);
 			p->drawLine(xl+springNSize/8, -springNh, xl+springNSize*3/8., springNh);
@@ -455,12 +455,12 @@ void structPainter::drawBeam(const ColinBeam &s, const int &i, const ColinStruct
 			xr += gelMSize;
 			p->drawEllipse(QPointF(len-gelMSize/2, 0), gelMSize/2, gelMSize/2);
 		}
-		if(s.spring(ColinBeam::Mr) && len>gelMSize*4)
+		if(s.hasSpring(ColinBeam::Mr) && len>gelMSize*4)
 		{
 			p->drawArc(len-gelMSize*2, -gelMSize, gelMSize*2, gelMSize*2, 0, 180*16);
 		}
 
-		if(s.spring(ColinBeam::Qr))
+		if(s.hasSpring(ColinBeam::Qr))
 		{
 			p->drawLine(len-(xr), 0, len-(xr), springQh);
 			p->drawLine(len-(xr), springQh, len-(xr+springQSize/2), springQh);
@@ -481,7 +481,7 @@ void structPainter::drawBeam(const ColinBeam &s, const int &i, const ColinStruct
 			xr += gelQSize;
 		}
 
-		if(s.spring(ColinBeam::Nr) )
+		if(s.hasSpring(ColinBeam::Nr) )
 		{
 			p->drawLine(len-(xr), 0, len-(xr+springNSize/8), -springNh);
 			p->drawLine(len-(xr+springNSize/8), -springNh, len-(xr+springNSize*3/8), springNh);

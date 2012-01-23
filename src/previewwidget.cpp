@@ -83,6 +83,7 @@ previewWidget::previewWidget(QWidget *parent) :
 void previewWidget::resizeEvent(QResizeEvent *)
 {
 	QPixmap backLabelPix(size());
+	backLabelPix.fill(Qt::white);
 	QPainter p(&backLabelPix);
 	p.setClipRect(rect());
 	p.drawPixmap(QRect(mapFromParent(QPoint(0, 0)), QSize(nWidget::back->width(), nWidget::back->height())), *nWidget::back);

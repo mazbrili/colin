@@ -1776,15 +1776,16 @@ bool treeModel::setHinge(const QModelIndex & index, const QVariant & value)
 {
 	int id = index.parent().row();
 
+	int pos = index.column()-1+index.row()*3;
 	if(value.toString() == tr("hinge"))
-		t->setJoint(id, index.column()*(index.row()+1), true);
+		t->setJoint(id, pos, true);
 	else if(value.toString() == tr("no hinge"))
-		t->setJoint(id, index.column()*(index.row()+1), false);
+		t->setJoint(id, pos, false);
 	else{
 		bool ok;
 		double c = value.toString().toDouble(&ok);
 		if(ok)
-			t->setSpring(id, index.column()*(index.row()+1), c);
+			t->setSpring(id, pos, c);
 		else
 			return false;
 	}

@@ -91,6 +91,16 @@ supportExtended::supportExtended(QWidget *parent) :
 	v = new ColinPushButtonPart(colinIcons::instance().icon(Colin::drawBearingV), "");
 	m = new ColinPushButtonPart(colinIcons::instance().icon(Colin::drawBearingM), "");
 
+	h->setWhatsThis(tr("<b>Horizontal support</b> ")+
+					tr("<a href=\"menu/node\">open manual</a><br /><br />")+
+					tr("Check or uncheck to add or remove a support on this node!"));
+	v->setWhatsThis(tr("<b>Vertical support</b> ")+
+					tr("<a href=\"menu/node\">open manual</a><br /><br />")+
+					tr("Check or uncheck to add or remove a support on this node!"));
+	m->setWhatsThis(tr("<b>Torsion support</b> ")+
+					tr("<a href=\"menu/node\">open manual</a><br /><br />")+
+					tr("Check or uncheck to add or remove a support on this node!"));
+
 	ColinHMultiButton *supp = new ColinHMultiButton(this);
 	supp->addButton(h);
 	supp->addButton(v);
@@ -100,6 +110,11 @@ supportExtended::supportExtended(QWidget *parent) :
 
 
 	morebox = new QGroupBox(this);
+	morebox->setWhatsThis(tr("<b>Add springs</b> ")+
+						  tr("<a href=\"menu/node\">open manual</a><br /><br />")+
+						  tr("Click to enlarge! ")+
+						  tr("Here you can add springs to your supports.<br />")+
+						  tr("To do so, click on the spring button and insert the stiffness of the spring in the line right beside it!"));
 	layout->addWidget(morebox, 1, 0, 1, 3);
 	layout = new QGridLayout(morebox);
 	morebox->setLayout(layout);
@@ -378,12 +393,20 @@ nodeOverlay::nodeOverlay(QWidget *parent) :
 	cl->addWidget(x, 0, 1, 1, 1);
 	cl->addWidget(new QLabel("[m]", coords), 0, 2, 1, 1);
 
+	x->setWhatsThis(tr("<b>x</b> ")+
+					tr("<a href=\"menu/node\">open manual</a><br /><br />")+
+					tr("The horizontal coordinate of the node!"));
+
 	zlabel = new QLabel("z");
 	zlabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 	z = new QLineEdit();
 	cl->addWidget(zlabel, 1, 0, 1, 1);
 	cl->addWidget(z, 1, 1, 1, 1);
 	cl->addWidget(new QLabel("[m]", coords), 1, 2, 1, 1);
+
+	z->setWhatsThis(tr("<b>z</b> ")+
+					tr("<a href=\"menu/node\">open manual</a><br /><br />")+
+					tr("The vertical coordinate of the node!"));
 
 	philabel = new QLabel("phi");
 	philabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -392,6 +415,10 @@ nodeOverlay::nodeOverlay(QWidget *parent) :
 	cl->addWidget(phi, 2, 1, 1, 1);
 	cl->addWidget(new QLabel("[grad]", coords), 2, 2, 1, 1);
 
+	phi->setWhatsThis(tr("<b>phi</b> ")+
+					  tr("<a href=\"menu/node\">open manual</a><br /><br />")+
+					  tr("Use this to set the angle of supports attached to this node! <br />")+
+					  tr("<b>This is only availible if a support is already set!</b>"));
 
 	support = new supportExtended(this);
 	vl1->addWidget(support, Qt::AlignLeft | Qt::AlignVCenter);
@@ -406,6 +433,15 @@ nodeOverlay::nodeOverlay(QWidget *parent) :
 	copyButton = new ColinPushButtonPart(colinIcons::instance().icon(Colin::Copy), tr("copy"));
 	cutButton = new ColinPushButtonPart(colinIcons::instance().icon(Colin::Cut), tr("cut"));
 
+	copyButton->setWhatsThis(tr("<b>copy<b> ")+
+							 tr("<a href=\"menu/node\">open manual</a><br /><br />")+
+							 tr("Press to put a copy of the node and the connected support to the clipboard!"));
+
+
+	copyButton->setWhatsThis(tr("<b>cut<b> ")+
+							 tr("<a href=\"menu/node\">open manual</a><br /><br />")+
+							 tr("Press to put the node and the connected support to the clipboard and remove it from the current file!"));
+
 	hl = new QHBoxLayout(clipbox);
 	clipbox->setLayout(hl);
 	ColinHMultiButton *clip = new ColinHMultiButton(clipbox);
@@ -419,6 +455,10 @@ nodeOverlay::nodeOverlay(QWidget *parent) :
 	QGroupBox *detailbox = new QGroupBox(this);
 
 	detailbox->setTitle("["+tr("view")+"]");
+	detailbox->setWhatsThis(tr("<b>view</b> ")+
+						   tr("<a href=\"menu/node\">open manual</a><br /><br />")+
+						   tr("shows the current node and all releated forces!"));
+
 
 	QVBoxLayout *dl = new QVBoxLayout(detailbox);
 	detailbox->setLayout(dl);
@@ -451,6 +491,9 @@ nodeOverlay::nodeOverlay(QWidget *parent) :
 	disp->setLayout(labels);
 	displacement = new QLabel("N/A", disp);
 	displacement->setTextInteractionFlags(Qt::TextBrowserInteraction | Qt::TextSelectableByKeyboard);
+	disp->setWhatsThis(tr("<b>displacement</b> ")+
+					   tr("<a href=\"menu/node\">open manual</a><br /><br />")+
+					   tr("shows the displacement of the current node!"));
 	labels->addWidget(displacement);
 
 
@@ -465,6 +508,9 @@ nodeOverlay::nodeOverlay(QWidget *parent) :
 	reac->setLayout(labels);
 	reactions = new QLabel("N/A", reac);
 	reactions->setTextInteractionFlags(Qt::TextBrowserInteraction | Qt::TextSelectableByKeyboard);
+	reac->setWhatsThis(tr("<b>reaction forces</b> ")+
+						tr("<a href=\"menu/node\">open manual</a><br /><br />")+
+						tr("shows the reaction forces on the current node!"));
 	labels->addWidget(reactions);
 
 	beams = new QGroupBox(this);
@@ -472,6 +518,10 @@ nodeOverlay::nodeOverlay(QWidget *parent) :
 	beams->setTitle("["+tr("beam forces")+"]");
 	beams->setMinimumWidth(250);
 	beams->setCheckable(true);
+	beams->setWhatsThis(tr("<b>beam forces</b> ")+
+						tr("<a href=\"menu/node\">open manual</a><br /><br />")+
+						tr("shows the forces of all beams, conected to this node!"));
+
 
 
 	hl = new QHBoxLayout(beams);

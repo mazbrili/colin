@@ -28,11 +28,11 @@
 #define ZMENU_H
 
 #include <QtGui/QMenu>
-#include <QtGui/QPushButton>
-#include <QtGui/QButtonGroup>
 
 #include "viewportsettings.h"
 #include "colinicons.h"
+
+class QButtonGroup;
 
 class zMenu : public QMenu
 {

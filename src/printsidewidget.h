@@ -15,12 +15,12 @@
 #include "colinboolslider.h"
 #include "printpreview.h"
 
-class printoverlayWidget : public QWidget
+class printsideWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit printoverlayWidget(QWidget *parent = 0);
-	~printoverlayWidget();
+	explicit printsideWidget(QWidget *parent = 0);
+	~printsideWidget();
 
 	void addSlider(QLabel *label, ColinBoolSlider *slider, QString labelName, QGridLayout *vlayout);
 	void showEvent(QShowEvent *e);

@@ -832,7 +832,7 @@ void wgv::make_k()
 
 
 
-			if(beam(n).joint(0) && beam(n).spring(0)!=0)
+			if(beam(n).joint(0) && beam(n).hasSpring(0))
 			{
 				K[k_index[beam(n).leftNodeI()*3]][k_index[beam(n).leftNodeI()*3]] += cos_l *cos_l * beam(n).spring(0);
 				K[k_index[beam(n).leftNodeI()*3]][k_index[beam(n).leftNodeI()*3+1]] += cos_l * beam(n).spring(0) * sin_l;
@@ -847,7 +847,7 @@ void wgv::make_k()
 				K[k_index[u_indexed[6*n]]][k_index[u_indexed[6*n]]] += beam(n).spring(0);
 			}
 
-			if(beam(n).joint(1) && beam(n).spring(1)!=0)
+			if(beam(n).joint(1) && beam(n).hasSpring(1))
 			{
 				K[k_index[beam(n).leftNodeI()*3]][k_index[beam(n).leftNodeI()*3]] += sin_l *sin_l * beam(n).spring(1);
 				K[k_index[beam(n).leftNodeI()*3]][k_index[beam(n).leftNodeI()*3+1]] += -cos_l * beam(n).spring(1) * sin_l;
@@ -863,7 +863,7 @@ void wgv::make_k()
 
 			}
 
-			if(beam(n).joint(2) && beam(n).spring(2)!=0)
+			if(beam(n).joint(2) && beam(n).hasSpring(2))
 			{
 				K[k_index[beam(n).leftNodeI()*3+2]][k_index[beam(n).leftNodeI()*3+2]] +=beam(n).spring(2);
 				K[k_index[beam(n).leftNodeI()*3+2]][k_index[u_indexed[6*n+2]]] +=-beam(n).spring(2);
@@ -872,7 +872,7 @@ void wgv::make_k()
 				K[k_index[u_indexed[6*n+2]]][k_index[u_indexed[6*n+2]]] +=beam(n).spring(2);
 			}
 
-			if(beam(n).joint(3) && beam(n).spring(3)!=0)
+			if(beam(n).joint(3) && beam(n).hasSpring(3))
 			{
 				K[k_index[beam(n).rightNodeI()*3]][k_index[beam(n).rightNodeI()*3]] += cos_r *cos_r * beam(n).spring(3);
 				K[k_index[beam(n).rightNodeI()*3]][k_index[beam(n).rightNodeI()*3+1]] += cos_r * beam(n).spring(3) * sin_r;
@@ -887,7 +887,7 @@ void wgv::make_k()
 				K[k_index[u_indexed[6*n+3]]][k_index[u_indexed[6*n+3]]] += beam(n).spring(3);
 			}
 
-			if(beam(n).joint(4) && beam(n).spring(4)!=0)
+			if(beam(n).joint(4) && beam(n).hasSpring(4))
 			{
 				K[k_index[beam(n).rightNodeI()*3]][k_index[beam(n).rightNodeI()*3]] += sin_r *sin_r * beam(n).spring(4);
 				K[k_index[beam(n).rightNodeI()*3]][k_index[beam(n).rightNodeI()*3+1]] += -cos_r * beam(n).spring(4) * sin_r;
@@ -902,7 +902,7 @@ void wgv::make_k()
 				K[k_index[u_indexed[6*n+4]]][k_index[u_indexed[6*n+4]]] += beam(n).spring(4);
 			}
 
-			if(beam(n).joint(5) && beam(n).spring(5)!=0)
+			if(beam(n).joint(5) && beam(n).hasSpring(5))
 			{
 				K[k_index[beam(n).rightNodeI()*3+2]][k_index[beam(n).rightNodeI()*3+2]] +=beam(n).spring(5);
 				K[k_index[beam(n).rightNodeI()*3+2]][k_index[u_indexed[6*n+5]]] +=-beam(n).spring(5);

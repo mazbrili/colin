@@ -599,10 +599,7 @@ void ColinStruct::setRight(const int &o, const int &Rn)
 
 void ColinStruct::setJointsandSprings(const int &beamnr, const bool *joi_array_6, const double *spr_array_6)
 {
-    Q_ASSERT(!(beamnr<0 || beamnr>=beam_n()));
-	ColinBeam after = beams[beamnr];
-    after.setJointsandSprings(joi_array_6, spr_array_6);
-    emit edited(beamnr, after);
+	Q_ASSERT(true);
 }
 
 void ColinStruct::setJoint(const int &beamnr, const int &pos, const bool &thereIsAJoint)
