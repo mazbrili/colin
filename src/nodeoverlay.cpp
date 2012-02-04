@@ -61,6 +61,9 @@ nodeDetail::nodeDetail(QWidget *parent):
 void nodeDetail::paintEvent(QPaintEvent *e)
 {
 	QPainter p(this);
+	p.setBrush(QColor(255, 255, 255, 100));
+	p.setPen(palette().color(QPalette::Dark));
+	p.drawRoundedRect(rect().adjusted(0, 0, -1, -1), 4, 4);
 	if(currentItem<0)
 		return;
 	detailPainter dP;

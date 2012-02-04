@@ -118,13 +118,17 @@ void previewWidget::paintEvent(QPaintEvent *)
 
 	QPainter p(this);
 
-    p.setRenderHint(QPainter::Antialiasing, true);
+	p.setRenderHint(QPainter::Antialiasing, false);
 
 
 
-	//p.setBrush(QColor(255, 255, 255, 100));
-	p.setPen(QColor(0, 0, 0, 100));
-	p.drawRoundedRect(QRect(0, 0, width()-1, height()-1), 4, 4);
+	//p.setBrush(QColor(255, 255, 255, 50));
+	p.setPen(QColor(255, 255, 255, 200));
+	p.drawRoundedRect(QRect(0, 0, width()-1, height()-1),4,4);
+
+	p.setRenderHint(QPainter::Antialiasing, true);
+
+
 
 	p.drawImage(QRect(QPoint(2,18), QSize(size().width()-4, size().height()-20)), image, image.rect());
 

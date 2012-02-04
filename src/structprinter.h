@@ -38,21 +38,21 @@ class painterContent
 public:
 	enum section{
 		bls_in = 0x1,
-		node_in = 0x2,
-		beam_in = 0x4,
-		load_in = 0x8,
-		cls_all = 0x10,
-		cls_single = 0x20,
+		cls_single = 0x2,
+		cls_all = 0x4,
+		node_in = 0x8,
+		beam_in = 0x10,
+		load_in = 0x20,
 		node_res = 0x40,
 		beam_f = 0x80,
 		beam_val = 0x100,
 		fourPerPage = 0x200,
-		landscape = 0x400,
+		landscape = 0x400
 	};
 	Q_DECLARE_FLAGS(sections, section)
 
 
-	painterContent(){};
+	painterContent(){}
 	painterContent(sections s_, QFont f, int index_){s=s_; index_=index; font=f;}
 	sections s;
 	int index;
@@ -71,27 +71,27 @@ public:
 
 	painterContent getContentOfPage(QPrinter *printer, painterContent content, int pageNr);
 	int getPageOfContent(QPrinter *printer, painterContent all, painterContent content);
-	int requiredPages(QPrinter *printer, painterContent content, int* indizes = 0);
+	int requiredPages(QPrinter *printer, painterContent content, int* indizes = 0, int *perPage = 0);
 
 	void tableContent(int *indizes);
-	void decoratePage();
-	int blsPlot(int *pages, bool test = false);
-	int blsPlot(const int &i, const QRect &rect, bool test = false);
+	bool decoratePage();
+	void blsPlot(int startAt, int *pages, bool test = false, int *itemsPerPage = 0);
+	void blsPlot(int startAt, const int &i, const QRect &rect, bool test = false);
 
-	int clsPlot(int *pages, bool test = false);
-	int clsPlotall(int *pages, bool test = false);
+	void clsPlot(int startAt, int *pages, bool test = false, int *itemsPerPage = 0);
+	void clsPlotall(int startAt, int *pages, bool test = false, int *itemsPerPage = 0);
 
-	int nodeIn(int *pages, bool test = false);
+	void headerNodeIn(double *dh, double dw, double width);
+	void headerBeamIn(double *dh, double dw, double width);
+	void headerLoadIn(double *dh, double dw, double width);
 
-	int beamIn(int *pages, bool test = false);
+	void nodeIn(int startAt, int *pages, bool test = false, int *itemsPerPage = 0);
+	void beamIn(int startAt, int *pages, bool test = false, int *itemsPerPage = 0);
+	void loadIn(int startAt, int *pages, bool test = false, int *itemsPerPage = 0);
+	void nodeRes(int startAt, int *pages, bool test = false, int *itemsPerPage = 0);
+	void beamResF(int startAt, int *pages, bool test = false, int *itemsPerPage = 0);
+	void beamResVal(int startAt, int *pages, bool test = false, int *itemsPerPage = 0);
 
-	int loadIn(int *pages, bool test = false);
-
-	int nodeRes(int *pages, bool test = false);
-
-	int beamResF(int *pages, bool test = false);
-
-	int beamResVal(int *pages, bool test = false);
 
 	int usablePageHeight();
 	int lineHeight();
@@ -111,6 +111,7 @@ private:
     int pageCount;
 	int totalPageCount;
     int dx;
+	bool noNewPage;
 
 
 

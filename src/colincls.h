@@ -36,8 +36,8 @@
 class ColinCLS : public ColinElement
 {
 public:
-	ColinCLS(){};
-	explicit ColinCLS(QString name):name_(name){};
+	ColinCLS(){}
+	explicit ColinCLS(QString name):name_(name){}
 	inline int count()const {return bls_.size();}
 	const inline int &bls(const int &i)const{return bls_.at(i).bls;}
 	const inline double &fac(const int &i)const{return bls_.at(i).fac;}
@@ -47,6 +47,7 @@ public:
 	void removeBLS(const int &i){bls_.removeAt(i);}
 	void addBLS(const int &blsi, const double &fac){bls_.append(bls_fac(blsi, fac));}
 	void setFactorbyIndex(const int &blsi, const double &fac){bls_[blsi].fac=fac;}
+	void setBLSbyIndex(const int &blsi, const int &newBLS){bls_[blsi].bls = newBLS;}
 	bool contains(const int &blsi) const { for(int i=0; i<count(); i++){if(bls_.at(i).bls==blsi) return true;} return false;}
 
 private:

@@ -293,7 +293,9 @@ void loadOverlay::setUnits()
 		return;
 	ColinStruct &t = *filelist::instance().currentFile();
 
-	qDebug() << "setting Layout for tpye " << t.load(currentItem).typ();
+#ifdef OVERLAY_VERBOSE
+	qDebug() << "loadOverlay::setting Layout for tpye " << t.load(currentItem).typ();
+#endif
 	xL->show();
 	zL->show();
 	mL->show();
@@ -410,9 +412,29 @@ void loadOverlay::setUnits()
 
 void loadOverlay:: setType(int t)
 {
-	qDebug() << "setting Type to " << t;
+#ifdef OVERLAY_VERBOSE
+	qDebug() << "loadOverlay::setting Type to " << t;
+#endif
 	filelist::instance().currentFile()->setLoadTyp(currentItem, static_cast<ColinLoad::form>(t));
 }
+
+
+void loadOverlay::nextItem()
+{
+	if(currentItem == filelist::instance().currentFile()->load_n()-1)
+		setCurrentItem(0);
+	else
+		setCurrentItem(currentItem+1);
+}
+
+void loadOverlay::previousItem()
+{
+	if(currentItem == 0)
+		setCurrentItem(filelist::instance().currentFile()->load_n()-1);
+	else
+		setCurrentItem(currentItem-1);
+}
+
 
 void loadOverlay::clsChanged()
 {
@@ -429,7 +451,9 @@ void loadOverlay::clsChanged()
 void loadOverlay::setCurrentItem(const int &i)
 {
 
-	qDebug() << "setting currentItem to" << i;
+#ifdef OVERLAY_VERBOSE
+	qDebug() << "loadOverlay::setting currentItem to" << i;
+#endif
 	blockSignals(true);
 	item->setText(QString("#%1").arg(i));
 
@@ -457,7 +481,9 @@ void loadOverlay::setCurrentItem(const int &i)
 
 void loadOverlay::changed()
 {
-	qDebug() << "chaning load";
+#ifdef OVERLAY_VERBOSE
+	qDebug() << "loadOverlay::chaning load";
+#endif
 	bool ok;
 	if(sender() == pos)
 	{
@@ -504,16 +530,6 @@ void loadOverlay::loadChanged(int i)
 {
 	if(i==currentItem)
 		loadChanged();
-}
-
-void loadOverlay::nextItem()
-{
-
-}
-
-void loadOverlay::previousItem()
-{
-
 }
 
 void loadOverlay::copy()

@@ -198,8 +198,8 @@ void viewport::paintEvent(QPaintEvent *)
 
 	if(cursorpos.x() < 0 || cursorpos.y() < 0 ||
 	   cursorpos.x() > width()-1 || cursorpos.y() > height()-1){
-		if(structPainter::highlightMode & (catcher::CatchedNLine | catcher::CatchedULine | catcher::CatchedMLine | catcher::CatchedQLine))
-			structPainter::setHighlightedObject(catcher::CatchedNLine | catcher::CatchedULine | catcher::CatchedMLine | catcher::CatchedQLine);
+		if(sPainter.highlightMode & (catcher::CatchedNLine | catcher::CatchedULine | catcher::CatchedMLine | catcher::CatchedQLine))
+			sPainter.setHighlightedObject(catcher::CatchedNLine | catcher::CatchedULine | catcher::CatchedMLine | catcher::CatchedQLine);
 	}
 
 
@@ -384,7 +384,7 @@ void viewport::findHighLightedObject()
 	catcher::CatchCases &cC = highlightedObject.highlightingMode;
 
 
-	structPainter::setHighlightedObject(catcher::CatchCases(catcher::CatchedNothing), -1);
+	sPainter.setHighlightedObject(catcher::CatchCases(catcher::CatchedNothing), -1);
 
 /***********************************
  *  first we have to snap things   *
@@ -706,25 +706,25 @@ void viewport::findHighLightedObject()
 		tooltip->set(colinIcons::instance().icon(cC, true),
 			 tr("node # ")+ QString::number(first),
 			 extend);
-		structPainter::setHighlightedObject(cC, first);
+		sPainter.setHighlightedObject(cC, first);
 		break;
 	case catcher::CatchedBeam:
 		tooltip->set(colinIcons::instance().icon(cC, true),
 			 tr("beam # ")+ QString::number(first),
 			 extend);
-		structPainter::setHighlightedObject(cC, first);
+		sPainter.setHighlightedObject(cC, first);
 		break;
 	case catcher::CatchedLoadHotSpot:
 		tooltip->set(colinIcons::instance().icon(tw->load(first).typ(), true),
 			 tr("load # ")+ QString::number(first),
 			 extend);
-		structPainter::setHighlightedObject(cC, first);
+		sPainter.setHighlightedObject(cC, first);
 		break;
 	case catcher::CatchedLoad:
 		tooltip->set(colinIcons::instance().icon(tw->load(first).typ(), true),
 			 tr("load # ")+ QString::number(first),
 			 extend);
-		structPainter::setHighlightedObject(cC, first);
+		sPainter.setHighlightedObject(cC, first);
 		break;
 	case catcher::CatchedCrossing:
 		tooltip->set(colinIcons::instance().icon(cC, true),
@@ -736,13 +736,13 @@ void viewport::findHighLightedObject()
 		tooltip->set(colinIcons::instance().icon(cC, true),
 			 tr("beam # ")+ QString::number(first),
 						 "");
-		structPainter::setHighlightedObject(catcher::CatchedBeam, first);
+		sPainter.setHighlightedObject(catcher::CatchedBeam, first);
 		break;
 	case catcher::CatchedTemp:
 		tooltip->set(colinIcons::instance().icon(cC, true),
 					 tr("temperature # ")+ QString::number(first),
 					 extend);
-		structPainter::setHighlightedObject(cC, first);
+		sPainter.setHighlightedObject(cC, first);
 		break;
 	case catcher::CatchedOrthoGlob:
 		if(vS->toDraw() == Colin::drawBeam)
@@ -799,7 +799,7 @@ void viewport::findHighLightedObject()
 						 QString::number(first),
 						 tr("press Shift to draw moments!"));
 		}
-		structPainter::setHighlightedObject(catcher::CatchedBeam, first);
+		sPainter.setHighlightedObject(catcher::CatchedBeam, first);
 		break;
 	case catcher::CatchedNLine:
 		extend.clear();
@@ -812,7 +812,7 @@ void viewport::findHighLightedObject()
 					 QString::number(first)+ ":"+
 					 tw->cls(first).name(),
 					 extend);
-		structPainter::setHighlightedObject(cC, first);
+		sPainter.setHighlightedObject(cC, first);
 		break;
 	case catcher::CatchedQLine:
 		extend.clear();
@@ -825,7 +825,7 @@ void viewport::findHighLightedObject()
 					 QString::number(first)+ ":"+
 					 tw->cls(first).name(),
 					 extend);
-		structPainter::setHighlightedObject(cC, first);
+		sPainter.setHighlightedObject(cC, first);
 		break;
 	case catcher::CatchedMLine:
 		extend.clear();
@@ -837,7 +837,7 @@ void viewport::findHighLightedObject()
 					 tr("CLS ")+
 					 tw->cls(first).name(),
 					 extend);
-		structPainter::setHighlightedObject(cC, first);
+		sPainter.setHighlightedObject(cC, first);
 		break;
 	case catcher::CatchedULine:
 		extend.clear();
@@ -849,7 +849,7 @@ void viewport::findHighLightedObject()
 					 tr("CLS ")+
 					 tw->cls(first).name(),
 					 extend);
-		structPainter::setHighlightedObject(cC, first);
+		sPainter.setHighlightedObject(cC, first);
 		break;
 	}
 		//set resultVisualWidget
@@ -1450,7 +1450,7 @@ void viewport::mousePressEvent(QMouseEvent *e)
 			emit nodeRightClick(catcher::CatchedLoad, catched);
 			return;
 		default:
-			emit nodeRightClick(catcher::CatchedNothing, -1);
+			emit nodeRightClick(catcher::CatchedNothing, id());
 		}
 	}
 
@@ -1568,6 +1568,8 @@ void viewport::mouseMoveEvent(QMouseEvent *e)
 	//    setFocus(Qt::MouseFocusReason);
 
 
+	if(!tw)
+		return;
 
 	if(lastMouseButtons == Qt::LeftButton)
 	{
@@ -1722,9 +1724,13 @@ void viewport::keyPressEvent(QKeyEvent *e)
 {
 	if(e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return)
 	{
-		foreach(viewport *vp, parent()->findChildren<viewport*>()){
-			if(vp->isVisible())
-				vp->zoomRect(tw->view(vp->id()).mapRect(tw->boundingRect()), true);
+		QRectF boundRect = tw->boundingRect();
+		if(boundRect.isValid())
+		{
+			foreach(viewport *vp, parent()->findChildren<viewport*>()){
+				if(vp->isVisible())
+					vp->zoomRect(tw->view(vp->id()).mapRect(boundRect), true);
+			}
 		}
 	}
 	else if(e->key() == Qt::Key_Space)
@@ -1791,82 +1797,90 @@ void viewport::whatsThisEvent(QEvent *e)
 	switch(cC)
 	{
 	case catcher::CatchedNothing:
-		QWhatsThis::showText(mapToGlobal(pos.toPoint()), tr("view <a href=\"graphicsview\">more...</a>"), this);
+		QWhatsThis::showText(mapToGlobal(pos.toPoint()),
+							 tr("view <a href=\"graphicsview\">open manual</a><br /><br />")+
+							 tr("Right click to access to more tools!<br/>")+
+							 tr("Press <br />")+
+							 tr("<b>Escape</b> to abort the current action <br />")+
+							 tr("<b>Enter</b> to auto adjust the zoom, <br />")+
+							 tr("<b>Space</b> to show the currently selected view exclusivly or to show all views if only one is currently visible.<br />")+
+							 tr("<b>Arrow keys</b> to move the currently visile space.<br/>"),
+							 this);
 		return;
 	case catcher::CatchedNode:
 		QWhatsThis::showText(mapToGlobal(pos.toPoint()),
-							 tr("<b>nodes</b><br />")+
-							 tr("define the coordinates of the structure and connect beams with eatch other ")+
-							 tr("<a href=\"node\">more...</a><br />")+
-							 tr("you can draw them with the <b>node tool </b>")+
+							 tr("<b>node </b>")+
+							 tr("<a href=\"node\">open manual </a><br /><br />")+
+							 tr("Define the coordinates of the structure and connect beams with eatch other.<br />")+
+							 tr("You can draw them with the <b>node tool </b>")+
 							 tr("<a href=\"tool/node\">more...</a><br />")+
 							 tr("or the <b>beam tool </b>")+
 							 tr("<a href=\"tool/beam\">more...</a><br />")+
-							 tr("add supports to nodes with the <b>support tool </b>")+
+							 tr("Add supports to nodes with the <b>support tool </b>")+
 							 tr("<a href=\"tool/support\">more...</a><br />")+
-							 tr("add nodal loads to nodes with the <b>load tool </b>")+
+							 tr("Add nodal loads to nodes with the <b>load tool </b>")+
 							 tr("<a href=\"tool/load\">more...</a><br />")+
-							 tr("move them with the <b>move tool </b>")+
+							 tr("Move them with the <b>move tool </b>")+
 							 tr("<a href=\"tool/move\">more...</a><br />")+
-							 tr("right click on a node to edit it ")+
-							 tr("<a href=\"rightclick/node\">more...</a><br />"), this);
+							 tr("Right click on a node to edit it, including supports. ")+
+							 tr("<a href=\"rightclick/node\">more...</a>"), this);
 		return;
 	case catcher::CatchedBeam:
 		QWhatsThis::showText(mapToGlobal(pos.toPoint()),
-							 tr("<b>beams</b><br />")+
-							 tr("beams define the actual structure")+
-							 tr("<a href=\"beam\">more...</a><br />")+
-							 tr("you can draw them with the <b>beam tool </b>")+
+							 tr("<b>beam </b>")+
+							 tr("<a href=\"beam\">open manual</a><br /><br />")+
+							 tr("Beams define the actual structure. <br />")+
+							 tr("You can draw them with the <b>beam tool </b>")+
 							 tr("<a href=\"tool/beam\">more...</a><br />")+
-							 tr("add hinges to beams with the <b>hinge tool </b>")+
+							 tr("Add hinges to beams with the <b>hinge tool </b>")+
 							 tr("<a href=\"tool/hinges\">more...</a><br />")+
-							 tr("add loads to beams with the <b>load tool </b>")+
+							 tr("Add loads to beams with the <b>load tool </b>")+
 							 tr("<a href=\"tool/load\">more...</a><br />")+
-							 tr("right click on a beam to edit it ")+
-							 tr("<a href=\"rightclick/beam\">more...</a><br />"), this);
+							 tr("Right click on a beam to edit it including hinges. ")+
+							 tr("<a href=\"rightclick/beam\">more...</a>"), this);
 		return;
 	case catcher::CatchedLoad:
 		QWhatsThis::showText(mapToGlobal(pos.toPoint()),
-							 tr("<b>loads</b><br />")+
-							 tr("loads represent influence of gravitation, snow, wind, etc. on the structure")+
-							 tr("<a href=\"load\">more...</a><br />")+
-							 tr("you can draw them with the <b>load tool </b>")+
+							 tr("<b>load </b>")+
+							 tr("<a href=\"load\">open manual</a><br /><br />")+
+							 tr("Loads represent influence of gravity, snow, wind, etc. on the structure. <br />")+
+							 tr("You can draw them with the <b>load tool </b>")+
 							 tr("<a href=\"tool/load\">more...</a><br />")+
-							 tr("you can change their position and their values with the <b>move tool </b>")+
+							 tr("You can change their position and their values with the <b>move tool </b>")+
 							 tr("<a href=\"tool/move\">more...</a><br />")+
-							 tr("right click on a load to edit it ")+
-							 tr("<a href=\"rightclick/load\">more...</a><br />"), this);
+							 tr("Right click on a load to edit it ")+
+							 tr("<a href=\"rightclick/load\">more...</a>"), this);
 		return;
 	case catcher::CatchedLoadHotSpot:
 		QWhatsThis::showText(QCursor::pos(),
 							 tr("<b>change loads</b><br />")+
-							 tr("the circle attaced to loads can be used to change loads. ")+
-							 tr("keep the mouse pressed on the circle to do so! ")+
+							 tr("The circle attaced to loads can be used to change loads. ")+
+							 tr("Keep the mouse pressed on the circle to do so! ")+
 							 tr("<a href=\"load/hotspot\">more...</a><br />"), this);
 		return;
 	case catcher::CatchedTemp:
 		QWhatsThis::showText(mapToGlobal(pos.toPoint()),
 							 tr("<b>temeratures</b><br />")+
-							 tr("temperatures represent influence of temperatur changes and differences on the structure")+
+							 tr("Temperatures represent influence of temperatur changes and differences on the structure <br />")+
 							 tr("<a href=\"temp\">more...</a><br />")+
-							 tr("you can draw them with the <b>load tool </b>")+
+							 tr("You can draw them with the <b>load tool </b>")+
 							 tr("<a href=\"tool/load\">more...</a><br />")+
-							 tr("you can change their position with the <b>move tool </b>")+
+							 tr("You can change their position with the <b>move tool </b>")+
 							 tr("<a href=\"tool/move\">more...</a><br />")+
-							 tr("right click on a temperature to edit it ")+
+							 tr("Right click on a temperature to edit it ")+
 							 tr("<a href=\"rightclick/load\">more...</a><br />"), this);
 		return;
 	case catcher::CatchedMLine:
 		QWhatsThis::showText(mapToGlobal(pos.toPoint()),
 							 tr("<b>moment</b><br />")+
 							 tr("Moments represent forces witch lead to the rotation or the bending of an object. ")+
-							 tr("<a href=\"moment\">more...</a><br />")+
+							 tr("<a href=\"moment\">more...</a><br />"),
 							 /*	linking to hofstetter book
 								this could be done easy! but I need books on google witch are more
 								or less completly availible and availible in many languages
 							*/
-							 tr("Search online in <b>Mang and Hofstetter (2004)</b> ")+
-							 tr("<a href=\"cite/hofstetter/moment\">books.google</a><br />"),
+							 //tr("Search online in <b>Mang and Hofstetter (2004)</b> ")+
+							 //tr("<a href=\"cite/hofstetter/moment\">books.google</a><br />"),
 							 this);
 		return;
 	case catcher::CatchedQLine:
@@ -2535,9 +2549,11 @@ void viewport::zoomRect(const QRectF &r, bool keepSpace)
 	double zf = zoom;
 	grid::instance().gridmap(&zf);
 	zoom*=zf;
+#ifdef ZOOMRECT_VERBOSE
 	qDebug() << "globalMatrix" << globalMatrix();
 	qDebug() << "view " << id() << "zooming global Rect " << globR << (keepSpace?" with space":"without space");
 	qDebug() << "viewport Rect " << rect();
+#endif
 	if (zoom > minZoomfactor && zoom < maxZoomfactor)
 	{
 		//if(keepSpace)

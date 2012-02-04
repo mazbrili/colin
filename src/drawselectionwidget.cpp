@@ -338,7 +338,7 @@ QSize drawSelectionWidget::sizeHint() const
 
     if(mouseOver)
     {
-	return QSize(boundingSize.width()*4+4*offset(),
+	return QSize(boundingSize.width()*4+5*offset(),
 			 boundingSize.height()*2+3*offset());
     }
     else

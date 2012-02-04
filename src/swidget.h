@@ -37,23 +37,25 @@
 #include <QtGui/QButtonGroup>
 #include <QtGui/QPushButton>
 
+
 #include "colorsettingswidget.h"
 #include "shortcutsettingswidget.h"
 #include "miscsettingswidget.h"
+#include "slidingstackedwidget.h"
 
 class sWidget : public QWidget
 {
     Q_OBJECT
 public:
     explicit sWidget(QWidget *parent = 0);
-    //void paintEvent(QPaintEvent *);
+	void paintEvent(QPaintEvent *e);
 
 signals:
     void closeMe();
 public slots:
     void restore();
 private:
-    QStackedWidget *central;
+	SlidingStackedWidget *central;
     colorSettingsWidget *colors;
     shortcutSettingsWidget *shortcuts;
     miscSettingsWidget *misc;

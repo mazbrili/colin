@@ -34,10 +34,18 @@
 #include <QtGui/QListWidget>
 #include <QtGui/QGridLayout>
 #include <QtGui/QSlider>
+#include <QtGui/QDoubleSpinBox>
+#include <QtGui/QFileDialog>
 
 #include "previewrenderer.h"
 #include "colinpastebuffer.h"
 #include "pastepreviewwidget.h"
+
+
+bool generalOverlay::showPaste = true;
+bool generalOverlay::showPicture = true;
+bool generalOverlay::showCls = false;
+bool generalOverlay::showBls = false;
 
 generalOverlay::generalOverlay(QWidget *parent):
 	abstractOverlay(parent)
@@ -101,41 +109,112 @@ generalOverlay::generalOverlay(QWidget *parent):
 	vl1->addStretch(10000);
 
 
+	exportBox = new QGroupBox(this);
+	exportBox->setTitle("["+tr("export picture")+"]");
+	exportBox->setCheckable(true);
+	QGridLayout *exportLayout = new QGridLayout(exportBox);
+	exportBox->setLayout(exportLayout);
+	vl2->addWidget(exportBox);
 
 
-	QGroupBox *clsets = new QGroupBox(this);
+	vl2->addStretch(10000);
+
+	exportPreview = new QLabel(exportBox);
+	exportPreview->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+
+	saveB = new QPushButton(tr("save as picture"), exportBox);
+	leftMargin = new QDoubleSpinBox(exportBox);
+	rightMargin = new QDoubleSpinBox(exportBox);
+	topMargin = new QDoubleSpinBox(exportBox);
+	bottomMargin = new QDoubleSpinBox(exportBox);
+
+	QLabel *leftL = new QLabel(tr("left"), exportBox);
+	QLabel *rightL = new QLabel(tr("right"), exportBox);
+	QLabel *topL = new QLabel(tr("top"), exportBox);
+	QLabel *bottomL = new QLabel(tr("bottom"), exportBox);
+
+	leftL->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+	rightL->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+	topL->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+	bottomL->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+
+
+	xRes = new QDoubleSpinBox(exportBox);
+	yRes = new QDoubleSpinBox(exportBox);
+
+	QList <QDoubleSpinBox*> spinBoxes;
+	spinBoxes << leftMargin << rightMargin << topMargin << bottomMargin;
+	foreach(QDoubleSpinBox *sB, spinBoxes)
+	{
+		sB->setMinimum(-1000);
+		sB->setMaximum(1000);
+		sB->setSingleStep(0.1);
+	}
+
+	xRes->setMaximum(10000);
+	xRes->setMinimum(100);
+	yRes->setMaximum(10000);
+	yRes->setMinimum(100);
+
+
+	QLabel *xResL = new QLabel(tr("resolution (x)"), exportBox);
+	QLabel *yResL = new QLabel(tr("resolution (z)"), exportBox);
+
+	xResL->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+	yResL->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+
+	preScale = new QDoubleSpinBox(exportBox);
+
+	QLabel *preL = new QLabel(tr("scale text"), exportBox);
+	preL->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+
+	exportLayout->addWidget(exportPreview, 0, 0, 1, 4);
+
+	exportLayout->addWidget(leftL, 2, 0, 1, 1);
+	exportLayout->addWidget(rightL, 3, 0, 1, 1);
+	exportLayout->addWidget(topL, 4, 0, 1, 1);
+	exportLayout->addWidget(bottomL, 5, 0, 1, 1);
+	exportLayout->addWidget(leftMargin, 2, 1, 1, 1);
+	exportLayout->addWidget(rightMargin, 3, 1, 1, 1);
+	exportLayout->addWidget(topMargin, 4, 1, 1, 1);
+	exportLayout->addWidget(bottomMargin, 5, 1, 1, 1);
+
+	exportLayout->addWidget(xResL, 2, 2, 1, 1);
+	exportLayout->addWidget(yResL, 3, 2, 1, 1);
+	exportLayout->addWidget(xRes, 2, 3, 1, 1);
+	exportLayout->addWidget(yRes, 3, 3, 1, 1);
+
+	exportLayout->addWidget(preL, 4, 2, 1, 1);
+	exportLayout->addWidget(preScale, 4, 3, 1, 1);
+
+
+	exportLayout->addWidget(saveB, 5, 2, 1, 2);
+
+
+	clsets = new QGroupBox(this);
 	clsets->setTitle("["+tr("combined load sets")+"]");
 	clsets->setCheckable(true);
 	QHBoxLayout *clsetslayout = new QHBoxLayout(clsets);
 
 	clsView = new QListWidget(clsets);
+	clsView->setFrameStyle(QFrame::NoFrame);
 	clsetslayout->addWidget(clsView, 1);
-
-	QVBoxLayout *clsEditorWraperLayout = new QVBoxLayout();
-	clsEditor = new QWidget();
-	clsEditorLayout = new QGridLayout(clsEditor);
-	clsetslayout->addLayout(clsEditorWraperLayout, 4);
-	clsEditorWraperLayout->addWidget(clsEditor);
-	clsEditorWraperLayout->addStretch(1000);
+	vl3->addWidget(clsets);
 
 
-
-	vl2->addWidget(clsets);
-
-
-
-	QGroupBox *blsets = new QGroupBox(this);
+	blsets = new QGroupBox(this);
 	blsets->setTitle("["+tr("basic load sets")+"]");
 	blsets->setCheckable(true);
 	QHBoxLayout *blsetslayout = new QHBoxLayout(blsets);
 
 	blsView = new QListWidget(blsets);
+	blsView->setFrameStyle(QFrame::NoFrame);
 	blsetslayout->addWidget(blsView);
+	vl3->addWidget(blsets);
 
+	vl3->addStretch(10000);
 
-	vl2->addWidget(blsets);
-
-	vl2->addStretch(10000);
+	currentItem = -1;
 
 	clipBoardChanged();
 	clsChanged();
@@ -155,6 +234,33 @@ generalOverlay::generalOverlay(QWidget *parent):
 
 	connect(clsView,				SIGNAL(activated(QModelIndex)),
 			this,					SLOT(loadCLS(QModelIndex)));
+
+	connect(leftMargin,				SIGNAL(valueChanged(double)),
+			this,					SLOT(updatePicture()));
+
+	connect(rightMargin,			SIGNAL(valueChanged(double)),
+			this,					SLOT(updatePicture()));
+
+	connect(topMargin,				SIGNAL(valueChanged(double)),
+			this,					SLOT(updatePicture()));
+
+	connect(bottomMargin,			SIGNAL(valueChanged(double)),
+			this,					SLOT(updatePicture()));
+
+	connect(preScale,				SIGNAL(valueChanged(double)),
+			this,					SLOT(updatePicture()));
+
+	connect(xRes,					SIGNAL(valueChanged(double)),
+			this,					SLOT(updatePicture()));
+
+	connect(yRes,					SIGNAL(valueChanged(double)),
+			this,					SLOT(updatePicture()));
+
+	connect(saveB,					SIGNAL(clicked()),
+			this,					SLOT(savePicture()));
+
+	connect(exportBox,				SIGNAL(clicked(bool)),
+			this,					SLOT(hideMyChildren(bool)));
 
 	ColinStruct *tw = filelist::instance().currentFile();
 
@@ -176,9 +282,44 @@ generalOverlay::generalOverlay(QWidget *parent):
 	connect(tw,						SIGNAL(changedCLS(int)),
 			this,					SLOT(clsChanged()));
 
+	connect(tw,						SIGNAL(changedMScale(double)),
+			this,					SLOT(updatePicture()));
+
+	connect(tw,						SIGNAL(changedPScale(double)),
+			this,					SLOT(updatePicture()));
+
+	connect(tw,						SIGNAL(changedUScale(double)),
+			this,					SLOT(updatePicture()));
+
+	connect(&viewPortSettings::instance(),	SIGNAL(settingschanged()),
+			this,							SLOT(updatePicture()));
+
+	paste->setChecked(generalOverlay::showPaste);
+	exportBox->setChecked(generalOverlay::showPicture);
+	clsets->setChecked(generalOverlay::showCls);
+	blsets->setChecked(generalOverlay::showBls);
+
+	QList<QGroupBox*> boxes;
+	boxes << paste << exportBox << clsets << blsets;
+
+	foreach(QGroupBox *gb, boxes)
+	{
+		if(!gb->isChecked())
+		{
+			foreach(QWidget *w, gb->findChildren<QWidget* >())
+				w->setHidden(true);
+		}
+	}
 
 }
 
+generalOverlay::~generalOverlay()
+{
+	generalOverlay::showPaste = paste->isChecked();
+	generalOverlay::showPicture = exportBox->isChecked();
+	generalOverlay::showCls = clsets->isChecked();
+	generalOverlay::showBls = blsets->isChecked();
+}
 
 void generalOverlay::clipBoardChanged()
 {
@@ -204,31 +345,101 @@ void generalOverlay::loadCLS(QModelIndex clsIndex)
 
 void generalOverlay::loadCLS(int clsIndex)
 {
-	foreach(QWidget *w, clsEditor->findChildren<QWidget*>())
+
+}
+
+void generalOverlay::setCurrentItem(const int &i)
+{
+	QRectF bR = filelist::instance().currentFile()->boundingRect();
+	bR.adjust(-0.5, -0.5, 0.5, 0.5);
+
+	topMargin->setValue(bR.top());
+	leftMargin->setValue(bR.left());
+	rightMargin->setValue(bR.right());
+	bottomMargin->setValue(bR.bottom());
+
+	xRes->setValue(1000);
+	yRes->setValue(1000*bR.height()/bR.width());
+	preScale->setValue(1);
+
+	exporter = pictureExport(filelist::instance().currentFile(),
+							 viewPortSettings::instance().elements(i),
+							 bR,
+							 1,
+							 QSizeF(1000, 1000*bR.height()/bR.width()));
+	currentItem=i;
+
+	updatePicture();
+}
+
+void generalOverlay::updatePicture()
+{
+
+	if(currentItem==-1)
+		return;
+	xRes->blockSignals(true);
+	yRes->blockSignals(true);
+	QRectF bR = QRectF(leftMargin->value(),
+					   topMargin->value(),
+					   rightMargin->value()-leftMargin->value(),
+					   bottomMargin->value()-topMargin->value());
+
+	if(sender() == leftMargin	||
+	   sender() == rightMargin	||
+	   sender() == topMargin	||
+	   sender() == bottomMargin	)
 	{
-		w->deleteLater();
+		exporter.setBoundingRect(bR);
 	}
-	ColinStruct *tw = filelist::instance().currentFile();
-
-	const ColinCLS &cls = tw->cls(clsIndex);
-
-	QLabel *txt = new QLabel("<b>"+QString(tr("cls %1: %2")).arg(clsIndex).arg(cls.name())+"</b>", this);
-	clsEditorLayout->addWidget(txt, 0, 0, 1, 3);
-
-	for(int i=0; i<tw->cls(clsIndex).count(); i++)
+	else if(sender() == preScale)
 	{
-		QLabel *blsName = new QLabel(tw->bls(cls.bls(i)).name(), this);
-		QSlider *factor = new QSlider(this);
-		factor->setMinimum(0);
-		factor->setMaximum(10);
-		factor->setOrientation(Qt::Horizontal);
-		QPushButton *remove = new QPushButton(colinIcons::instance().icon(Colin::Close), "", this);
-		remove->setFlat(true);
-		clsEditorLayout->addWidget(blsName, i+1, 0, 1, 1);
-		clsEditorLayout->addWidget(factor, i+1, 1, 1, 1);
-		clsEditorLayout->addWidget(remove, i+1, 2, 1, 1);
-
+		exporter.setPreScale(preScale->value());
 	}
+	else if(sender() == xRes)
+	{
+		yRes->setValue(bR.height()/bR.width()*xRes->value());
+		exporter.setResolution(QSizeF(xRes->value(), yRes->value()));
+	}
+	else if(sender() == yRes)
+	{
+		xRes->setValue(1./bR.height()*bR.width()*yRes->value());
+		exporter.setResolution(QSizeF(xRes->value(), yRes->value()));
+	}
+
+	xRes->blockSignals(false);
+	yRes->blockSignals(false);
+
+	QPixmap pix = exporter.preview().scaledToWidth(exportPreview->width()-5);
+	QPainter p(&pix);
+	p.setPen(palette().color(QPalette::Dark));
+	p.drawRoundedRect(QRect(0, 0, pix.width()-1, pix.height()-1), 4, 4);
+
+#ifdef EXPORT_VERBOSE
+	qDebug() << "exportPreview->width() = "  << exportPreview->width();
+	qDebug() << "exportBox->width() = "  << exportBox->width();
+#endif
+
+	exportPreview->setPixmap(pix);
+
+}
+
+void generalOverlay::savePicture()
+{
+	QString selectedFilter;
+	QString filename = QFileDialog::getSaveFileName(this, tr("save picture"), QDir::homePath(), tr("Portable Network Graphics(*.png);; JPEG(*.jpg)"), &selectedFilter);
+
+	if(!filename.isEmpty()){
+		if(!filename.contains("png") && selectedFilter.contains("png"))
+			filename.append(".png");
+		if(!filename.contains("jpg") && selectedFilter.contains("jpg"))
+			filename.append(".jpg");
+		exporter.save(filename);
+	}
+}
+
+void generalOverlay::setTw(ColinStruct *tw)
+{
+	deleteLater();
 }
 
 void generalOverlay::clsChanged()

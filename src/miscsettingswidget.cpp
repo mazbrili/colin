@@ -42,8 +42,8 @@ miscSettingsWidget::miscSettingsWidget(QWidget *parent):
 
     QLabel *title = new QLabel(this);
 
-    QFont titleFont = title->font();
-    titleFont.setPointSize(40);
+	QFont titleFont = title->font();
+	titleFont.setBold(true);
 
     title->setFont(titleFont);
     title->setText("["+tr("language")+"]");
@@ -73,8 +73,8 @@ miscSettingsWidget::miscSettingsWidget(QWidget *parent):
     layout->addWidget(title, 0, 0, 1, 4);
     layout->addWidget(langIcon, 1, 0, 1, 1);
     layout->addWidget(langLab, 1, 2, 1, 1);
-    layout->addWidget(langBox, 1, 3, 1, 1);
-    layout->addWidget(langrestart, 1, 5, 1, 1);
+	layout->addWidget(langBox, 1, 4, 1, 1);
+	layout->addWidget(langrestart, 1, 5, 1, 1);
 
     QLabel *middleM;
 
@@ -106,7 +106,7 @@ miscSettingsWidget::miscSettingsWidget(QWidget *parent):
     QLabel *alt = new QLabel(this);
     alt->setPixmap(colinIcons::instance().icon(tr("Alt", "mousewheel modificator | Alt"), true));
 
-    layout->addWidget(ctrl, 3, 2, 1, 1);
+	layout->addWidget(ctrl, 3, 2, 1, 1);
     layout->addWidget(shift, 4, 2, 1, 1);
     layout->addWidget(alt, 5, 2, 1, 1);
     for(int i=0;i<3; i++)
@@ -164,7 +164,7 @@ miscSettingsWidget::miscSettingsWidget(QWidget *parent):
     EEhBox->addItem(QString("N/cm%1").arg(QChar(0x00B2)), unitSettings::N_cm2);
     //layout->addWidget(EIcon, 7, 0, 1, 1);
     layout->addWidget(EEhLab, 7, 2, 1, 1);
-    layout->addWidget(EEhBox, 7, 3, 1, 1);
+	layout->addWidget(EEhBox, 7, 4, 1, 1);
     for(int i=0; i<4; i++){
 	if(EEhBox->itemData(i, 32).toInt()==unitSettings::instance().EU())
 	    EEhBox->setCurrentIndex(i);}
@@ -181,7 +181,7 @@ miscSettingsWidget::miscSettingsWidget(QWidget *parent):
     IEhBox->addItem("mm", unitSettings::mm);
     //layout->addWidget(IIcon, 8, 0, 1, 1);
     layout->addWidget(IEhLab, 8, 2, 1, 1);
-    layout->addWidget(IEhBox, 8, 3, 1, 1);
+	layout->addWidget(IEhBox, 8, 4, 1, 1);
     for(int i=0; i<3; i++){
 	if(IEhBox->itemData(i, 32).toInt()==unitSettings::instance().IU())
 	    IEhBox->setCurrentIndex(i);}
@@ -199,7 +199,7 @@ miscSettingsWidget::miscSettingsWidget(QWidget *parent):
     PEhBox->addItem("kN, kN/m & kNcm", unitSettings::kNcm);
     //layout->addWidget(PIcon, 9, 0, 1, 1);
     layout->addWidget(PEhLab, 9, 2, 1, 1);
-    layout->addWidget(PEhBox, 9, 3, 1, 1);
+	layout->addWidget(PEhBox, 9, 4, 1, 1);
     for(int i=0; i<3; i++){
 	if(PEhBox->itemData(i, 32).toInt()==unitSettings::instance().PU())
 	    PEhBox->setCurrentIndex(i);}
@@ -215,7 +215,7 @@ miscSettingsWidget::miscSettingsWidget(QWidget *parent):
     Prec->setDecimals(0);
     Prec->setValue(unitSettings::instance().precison());
     layout->addWidget(PrecLab, 10, 2, 1, 1);
-    layout->addWidget(Prec, 10, 3, 1, 1);
+	layout->addWidget(Prec, 10, 4, 1, 1);
     connect(Prec,               SIGNAL(valueChanged(double)),
             this,               SLOT(precisonChanged(double)));
 
@@ -226,7 +226,7 @@ miscSettingsWidget::miscSettingsWidget(QWidget *parent):
     aaBox->setCurrentIndex(viewPortSettings::instance().antialiasing()? 0 : 1);
    // layout->addWidget(langIcon, 12, 0, 1, 1);
     layout->addWidget(aaLab, 12, 2, 1, 1);
-    layout->addWidget(aaBox, 12, 3, 1, 1);
+	layout->addWidget(aaBox, 12, 4, 1, 1);
     connect(aaBox,              SIGNAL(currentIndexChanged(int)),
             this,               SLOT(AAChanged(int)));
 
@@ -236,7 +236,7 @@ miscSettingsWidget::miscSettingsWidget(QWidget *parent):
     resultWScale->setValue(viewPortSettings::instance().resultsWidgetScale());
     //layout->addWidget(langIcon, 13, 0, 1, 1);
     layout->addWidget(resultWSLab, 13, 2, 1, 1);
-    layout->addWidget(resultWScale, 13, 3, 1, 1);
+	layout->addWidget(resultWScale, 13, 4, 1, 1);
     connect(resultWScale,       SIGNAL(valueChanged(double)),
             this,               SLOT(resultWChanged(double)));
 
@@ -247,7 +247,7 @@ miscSettingsWidget::miscSettingsWidget(QWidget *parent):
     mRLE->setValue(viewPortSettings::instance().MtoRad());
     //layout->addWidget(langIcon, 14, 0, 1, 1);
     layout->addWidget(momentRad, 14, 2, 1, 1);
-    layout->addWidget(mRLE, 14, 3, 1, 1);
+	layout->addWidget(mRLE, 14, 4, 1, 1);
     connect(mRLE,               SIGNAL(valueChanged(double)),
             this,               SLOT(mRadChanged(double)));
 
@@ -259,7 +259,7 @@ miscSettingsWidget::miscSettingsWidget(QWidget *parent):
     tooltip->addItem(tr("dark"));
     tooltip->setCurrentIndex(colinIcons::instance().darkIcons());
     layout->addWidget(tooltipLab, 15, 2, 1, 1);
-    layout->addWidget(tooltip, 15, 3, 1, 1);
+	layout->addWidget(tooltip, 15, 4, 1, 1);
     connect(tooltip,                SIGNAL(currentIndexChanged(int)),
             this,                   SLOT(tooltipColor(int)));
 
@@ -280,7 +280,7 @@ miscSettingsWidget::miscSettingsWidget(QWidget *parent):
     //resLay->addWidget(xxxx);
     //resLay->addWidget(yRes);
     //layout->addWidget(resLab, 15,2, 1, 1);
-    //layout->addLayout(resLay, 15,3, 1, 1);
+	//layout->addLayout(resLay, 15,4, 1, 1);
     //connect(xRes,               SIGNAL(valueChanged(double)),
     //        this,               SLOT(resChanged()));
 
@@ -290,8 +290,8 @@ miscSettingsWidget::miscSettingsWidget(QWidget *parent):
 
 
 
-    for(int i=0; i<7; i++)
-	layout->setRowMinimumHeight(i, 64);
+//    for(int i=0; i<7; i++)
+//	layout->setRowMinimumHeight(i, 64);
 
     layout->setContentsMargins(100, 50, 10, 10);
 

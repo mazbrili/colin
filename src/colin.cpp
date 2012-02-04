@@ -120,12 +120,17 @@ int main(int argc, char *argv[])
     QTranslator translator_colin;
     if (!langKey.isEmpty())
     {
-#ifdef WIN32
-          QString translations_dir_qt = a.applicationDirPath()+QDir::separator()+".."+QDir::separator()+"share"+QDir::separator()+"translations";
-          QString translations_dir_colin = a.applicationDirPath()+QDir::separator()+".."+QDir::separator()+"share"+QDir::separator()+"translations";
+#ifndef QT_NO_DEBUG
+		QString translations_dir_qt = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+		QString translations_dir_colin = a.applicationDirPath()+QDir::separator()+".."+QDir::separator()+"src";
 #else
-          QString translations_dir_qt = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
-          QString translations_dir_colin = "/usr/share/colin/translations";
+#ifdef WIN32
+		QString translations_dir_qt = a.applicationDirPath()+QDir::separator()+".."+QDir::separator()+"share"+QDir::separator()+"translations";
+		QString translations_dir_colin = a.applicationDirPath()+QDir::separator()+".."+QDir::separator()+"share"+QDir::separator()+"translations";
+#else
+		QString translations_dir_qt = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+		QString translations_dir_colin = "/usr/share/colin/translations";
+#endif
 #endif
         if (translator_qt.load(QString("%1/qt_%2.qm").arg(translations_dir_qt).arg(langKey)))
         {
@@ -149,14 +154,6 @@ int main(int argc, char *argv[])
     //show GUI
 	MainWindow w;
     w.showMaximized();
-
-#ifndef WIN32
-	QPalette palette = a.palette();
-	palette.setColor(QPalette::ToolTipBase, Qt::black);
-	palette.setColor(QPalette::Link, palette.color(QPalette::Link).lighter());
-	palette.setColor(QPalette::ToolTipText, palette.color(QPalette::Inactive, QPalette::ToolTipText));
-	a.setPalette(palette);
-#endif
 
 
     //run threads and event loop

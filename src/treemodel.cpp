@@ -204,9 +204,11 @@ Qt::ItemFlags treeModel::flags(const QModelIndex &index) const
 
 bool treeModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
+#ifdef TREEVERBOSE
 	qDebug() << "treeModel::setData(" << index << ") = " << value.toString() << "role = " << role;
 	qDebug() << "internalId = " << (index.internalId() & 0xF);
 	qDebug() << "index = " << listindex(index);
+#endif
 	switch(role){
 	case Qt::EditRole:
 		switch(index.internalId() & 0xF){
@@ -856,6 +858,7 @@ QVariant treeModel::blsItem(const QModelIndex &index, int role) const
 	switch(role)
 	{
 	case Qt::DisplayRole:
+	case Qt::EditRole:
 		switch(index.column())
 		{
 		case 0:						return QVariant(QString::number(id));
@@ -870,7 +873,6 @@ QVariant treeModel::blsItem(const QModelIndex &index, int role) const
 		case 2:						return QVariant(colinIcons::instance().icon(n.color()));
 		default:					return QVariant();
 		}
-	case Qt::EditRole:				return QVariant();
 	case Qt::ToolTipRole:
 		switch(index.column())
 		{
@@ -1696,7 +1698,11 @@ bool treeModel::setBLS(const QModelIndex & index, const QVariant & value)
 	switch(index.column())
 	{
 	case 1:
-		t->setBLSName(index.row(), value.toString());
+		if(t->bls(index.row()).name() != value.toString())
+		{
+			if(t->getBLSIDbyName(value.toString())==-1)
+				t->setBLSName(index.row(), value.toString());
+		}
 		return true;
 	case 2:
 		t->setBLSColor(index.row(), QColor(value.toString()));
@@ -1714,7 +1720,11 @@ bool treeModel::setCLS(const QModelIndex & index, const QVariant & value)
 	switch(index.column())
 	{
 	case 1:
-		t->setCLSName(index.row(), value.toString());
+		if(t->cls(index.row()).name() != value.toString())
+		{
+			if(t->getCLSIDbyName(value.toString())==-1)
+				t->setCLSName(index.row(), value.toString());
+		}
 		return true;
 	default:
 		return false;
@@ -1805,7 +1815,10 @@ bool treeModel::setCLSBLS(const QModelIndex & index, const QVariant & value)
 	switch(index.column())
 	{
 	case 1:
-		return false;
+		if(t->getBLSIDbyName(value.toString())==-1)
+			t->removeBLSbyIndex(id, index.row());
+		else
+			t->setBLSbyIndex(id, index.row(), t->getBLSIDbyName(value.toString()));
 	case 2:
 		val = value.toString().toDouble(&ok);
 		if(ok)
@@ -1819,7 +1832,9 @@ bool treeModel::setCLSBLS(const QModelIndex & index, const QVariant & value)
 
 bool treeModel::addNode(const QModelIndex & index, const QVariant & value)
 {
+#ifdef TREEVERBOSE
 	qDebug() << "treeModel::addNode, new value for " << index.column() << " = " << value.toString();
+#endif
 	newNodeBuffer[index.column()-1]=value.toString();
 	bool ok;
 	double x = newNodeBuffer[0].toDouble(&ok);
@@ -1841,7 +1856,9 @@ bool treeModel::addNode(const QModelIndex & index, const QVariant & value)
 
 bool treeModel::addBeam(const QModelIndex & index, const QVariant & value)
 {
+#ifdef TREEVERBOSE
 	qDebug() << "treeModel::addBeam, new value for " << index.column() << " = " << value.toString();
+#endif
 	newBeamBuffer[index.column()-1]=value.toString();
 	bool ok;
 	int l = newBeamBuffer[0].toInt(&ok);
@@ -1889,8 +1906,10 @@ bool treeModel::addBeam(const QModelIndex & index, const QVariant & value)
 
 bool treeModel::addLoad(const QModelIndex & index, const QVariant & value)
 {
+#ifdef TREEVERBOSE
 	qDebug() << "treeModel::addLoad, new value for " << index.column() << " = " << value.toString();
 	qDebug() << "loadtype = " << loadTypeDescription(newLoadFormBuffer);
+#endif
 	if(index.column() == 0){
 		newLoadFormBuffer = loadType(value.toString());
 		setLoadBuffer(newLoadBuffer, newLoadFormBuffer);
@@ -1901,8 +1920,9 @@ bool treeModel::addLoad(const QModelIndex & index, const QVariant & value)
 	int pos = newLoadBuffer[0].toInt(&ok);
 	if(!ok)
 		return true;
-	else
-		qDebug() << "pos = " << pos;
+#ifdef TREEVERBOSE
+	qDebug() << "pos = " << pos;
+#endif
 
 	int set;
 	double px, pz, m;
@@ -1915,10 +1935,14 @@ bool treeModel::addLoad(const QModelIndex & index, const QVariant & value)
 	case ColinLoad::uniformlyDistibutedLoad:
 		px = newLoadBuffer[1].toDouble(&ok);
 		if(!ok)	return true;
-		else qDebug() << "px = " << px;
+#ifdef TREEVERBOSE
+		qDebug() << "px = " << px;
+#endif
 		pz = newLoadBuffer[2].toDouble(&ok);
 		if(!ok) return true;
-		else qDebug() << "pz = " << pz;
+#ifdef TREEVERBOSE
+		qDebug() << "pz = " << pz;
+#endif
 		set = t->getBLSIDbyName(newLoadBuffer[4]);
 		t->addLoad(ColinLoad(static_cast<ColinLoad::form>(newLoadFormBuffer), pos, px, pz, 0, set));
 		setLoadBuffer(newLoadBuffer, newLoadFormBuffer);
@@ -1970,7 +1994,9 @@ bool treeModel::addLoad(const QModelIndex & index, const QVariant & value)
 
 bool treeModel::addBLS(const QModelIndex & index, const QVariant & value)
 {
+#ifdef TREEVERBOSE
 	qDebug() << "treeModel::addBLS: " << value.toString();
+#endif
 	if(index.column() == 1)
 	{
 		ColinBLS newBLS(value.toString());
@@ -1986,7 +2012,9 @@ bool treeModel::addBLS(const QModelIndex & index, const QVariant & value)
 
 bool treeModel::addCLS(const QModelIndex & index, const QVariant & value)
 {
+#ifdef TREEVERBOSE
 	qDebug() << "treeModel::addCLS: " << value.toString();
+#endif
 	if(index.column() == 1)
 	{
 		ColinCLS newCLS(value.toString());
@@ -1998,7 +2026,9 @@ bool treeModel::addCLS(const QModelIndex & index, const QVariant & value)
 
 bool treeModel::addCLSBLS(const QModelIndex & index, const QVariant & value)
 {
+#ifdef TREEVERBOSE
 	qDebug() << "treeModel::addBLSCLS: " << value.toString();
+#endif
 	if(index.column() == 1)
 	{
 		int blsId = t->getBLSIDbyName(value.toString());
@@ -2135,8 +2165,9 @@ void treeModel::setStruct(ColinStruct *tw)
 	}
 	t = tw;
 
-	qDebug() << "setStruct(...)";
-
+#ifdef TREEVERBOSE
+	qDebug() << "treeModel::setStruct(...)";
+#endif
 	if(t != 0)
 	{
 		connect(t,						SIGNAL(addedBeam(int)),
@@ -2192,7 +2223,6 @@ void treeModel::setStruct(ColinStruct *tw)
 
 void treeModel::changedNode(const int &i)
 {
-	qDebug() << "changed Node x= "<< t->node(i).x();
 	emit dataChanged(createIndex(i, 0, node), createIndex(i, 6, node));
 }
 

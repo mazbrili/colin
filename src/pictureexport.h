@@ -24,24 +24,35 @@
  *
  ***********************************************************/
 
-#ifndef DETAILPAINTER_H
-#define DETAILPAINTER_H
+#ifndef PICTUREEXPORT_H
+#define PICTUREEXPORT_H
 
-#include <QtCore/QList>
+#include <QtGui/QPixmap>
 
-#include "colinstruct.h"
+#include "colin_namespace.h"
 
-class detailPainter
+class ColinStruct;
+
+class pictureExport
 {
 public:
-	detailPainter();
-	void drawNode(QPainter *p, const ColinStruct &t, int i, const QList<int> &cls, QSize s = QSize());
-	void drawBeamExtern(QPainter *p, const ColinStruct &t, int i, const QList<int> &cls);
-	void drawBeamIntern(QPainter *p, const ColinStruct &t, int i, const double &x, const QList<int> &cls);
-	void drawLoads(QPainter *p, double N, double Q, double M);
-	void setFunctionGradient(QPainter *p, QColor c1, QColor c2);
+	pictureExport(){}
+	pictureExport(ColinStruct *tw, const Colin::Elements &toDraw, const QRectF &boundingRect, double prescale, const QSizeF &resolution);
+	void save(const QString &filename);
+	QPixmap preview();
+	void setElements(Colin::Elements toDraw);
+	void setStruct(ColinStruct *tw);
+	void setBoundingRect(const QRectF &boundingRect);
+	void setPreScale(double prescale);
+	void setResolution(const QSizeF &resolution);
 private:
-	double validAngle(double angle) const;
+	void draw(QPixmap *p, bool backG = false);
+	ColinStruct *tw;
+	Colin::Elements toDraw;
+	double prescale;
+	QRectF boundingRect;
+	QSizeF resolution;
+
 };
 
-#endif // DETAILPAINTER_H
+#endif // PICTUREEXPORT_H

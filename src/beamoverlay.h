@@ -73,7 +73,7 @@ class beamDetail : public quadWidget
 public:
 	enum mode{
 		externForces,
-		internForces,
+		internForces
 };
 
 	explicit beamDetail(QWidget *parent);

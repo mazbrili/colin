@@ -56,8 +56,8 @@ public:
 
 	void drawFunction(QPainter *p, const QList<const function*> &f, const double &l, const double &scale, const double &prefix);
 
-	static void setHighlightedObject(catcher::CatchCases c, int object);
-	static void setHighlightedObject(catcher::CatchCases c);
+	void setHighlightedObject(catcher::CatchCases c, int object);
+	void setHighlightedObject(catcher::CatchCases c);
 
     static void drawHSpring(QPainter *p, const QPointF &po, const double &d = 0);
     inline static void drawVSpring(QPainter *p, const QPointF &po, const double &d = 0){p->save(); p->translate(po); p->rotate(-90); drawHSpring(p, QPointF(0, 0), d); p->restore();}
@@ -89,8 +89,8 @@ public:
 	void setBLS(const QList<int> &blslist);
 
 
-	static catcher::CatchCases highlightMode;
-	static int highlight;
+	catcher::CatchCases highlightMode;
+	int highlight;
 
 private:
     QPainter *p;

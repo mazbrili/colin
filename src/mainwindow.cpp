@@ -35,6 +35,9 @@
 #include <QtGui/QToolButton>
 #include <QtGui/QWhatsThis>
 #include <QtScriptTools/QScriptEngineDebugger>
+#include <QtGui/QDesktopServices>
+#include <QtCore/QUrl>
+
 
 
 #include "historymenu.h"
@@ -465,6 +468,7 @@ void MainWindow::initMenu()
 //            aboutm->addAction(tr("documentation"),
 //                              this, SLOT(documentation()), QKeySequence::HelpContents));
 //    aboutm->addSeparator();
+	aboutm->addAction("manual", this, SLOT(manual()));
 	aboutm->addAction("Colin", this, SLOT(aboutMe()));
 	aboutm->addAction("Qt", this, SLOT(aboutQt()));
 	menuBar()->addMenu(aboutm);
@@ -1370,6 +1374,12 @@ void MainWindow::aboutMe()
 void MainWindow::aboutQt()
 {
 	QApplication::aboutQt();
+}
+
+void MainWindow::manual()
+{
+	QDesktopServices::openUrl(QUrl(tr("../manual/en/colin.pdf")));
+
 }
 
 void MainWindow::hideSideBars(const int &i)

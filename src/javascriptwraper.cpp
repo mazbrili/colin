@@ -9,7 +9,9 @@
 
 QScriptValue NodetoScriptValue(QScriptEngine *engine, const ColinNode &n)
 {
+#ifdef SCRIPTCONVERT_DEBUG
 	qDebug() << "node -> script";
+#endif
 	QScriptValue obj = engine->newObject();
 	obj.setProperty("x", n.x());
 	obj.setProperty("z", n.z());
@@ -46,7 +48,9 @@ QScriptValue NodetoScriptValue(QScriptEngine *engine, const ColinNode &n)
 
 void NodefromScriptValue(const QScriptValue &obj, ColinNode &n)
 {
+#ifdef SCRIPTCONVERT_DEBUG
 	qDebug() << "script -> node";
+#endif
 	n.setX(obj.property("x").toNumber());
 	n.setZ(obj.property("z").toNumber());
 	if(obj.property("support").isValid())
@@ -79,7 +83,9 @@ QScriptValue NodeCtor(QScriptContext *ctxt, QScriptEngine *eng)
 
 QScriptValue SupporttoScriptValue(QScriptEngine *engine, const ColinSupport &s)
 {
+#ifdef SCRIPTCONVERT_DEBUG
 	qDebug() << "support -> script";
+#endif
 	QScriptValue obj = engine->newObject();
 	obj.setProperty("x", s.x());
 	obj.setProperty("z", s.z());
@@ -113,7 +119,9 @@ QScriptValue SupporttoScriptValue(QScriptEngine *engine, const ColinSupport &s)
 
 void SupportfromScriptValue(const QScriptValue &obj, ColinSupport &s)
 {
+#ifdef SCRIPTCONVERT_DEBUG
 	qDebug() << "script -> support";
+#endif
 	s.setX(obj.property("x").toBool());
 	s.setZ(obj.property("z").toBool());
 	s.setPhi(obj.property("phi").toBool());
@@ -145,7 +153,9 @@ QScriptValue SupportCtor(QScriptContext *ctxt, QScriptEngine *eng)
 
 QScriptValue BeamtoScriptValue(QScriptEngine *engine, const ColinBeam &b)
 {
+#ifdef SCRIPTCONVERT_DEBUG
 	qDebug() << "beam -> script";
+#endif
 	QScriptValue obj = engine->newObject();
 	obj.setProperty("leftNode", b.leftNodeI());
 	obj.setProperty("rightNode", b.rightNodeI());
@@ -237,7 +247,9 @@ QScriptValue BeamtoScriptValue(QScriptEngine *engine, const ColinBeam &b)
 
 void BeamfromScriptValue(const QScriptValue &obj, ColinBeam &b)
 {
+#ifdef SCRIPTCONVERT_DEBUG
 	qDebug() << "script -> beam";
+#endif
 	b.setLeftNode(obj.property("leftNode").toInteger());
 	b.setRightNode(obj.property("rightNode").toInteger());
 	b.setMat(obj.property("material").toInteger());
@@ -269,7 +281,9 @@ QScriptValue BeamCtor(QScriptContext *ctxt, QScriptEngine *eng)
 
 QScriptValue LoadtoScriptValue(QScriptEngine *engine, const ColinLoad &l)
 {
+#ifdef SCRIPTCONVERT_DEBUG
 	qDebug() << "load -> script";
+#endif
 	QScriptValue obj = engine->newObject();
 	obj.setProperty("x", l.Px());
 	obj.setProperty("z", l.Pz());
@@ -285,7 +299,9 @@ QScriptValue LoadtoScriptValue(QScriptEngine *engine, const ColinLoad &l)
 
 void LoadfromScriptValue(const QScriptValue &obj, ColinLoad &l)
 {
+#ifdef SCRIPTCONVERT_DEBUG
 	qDebug() << "script -> load";
+#endif
 	l.setPx(obj.property("x").toBool());
 	l.setPz(obj.property("z").toBool());
 	l.setM(obj.property("m").toBool());
@@ -321,7 +337,9 @@ QScriptValue LoadCtor(QScriptContext *ctxt, QScriptEngine *eng)
 
 QScriptValue BLStoScriptValue(QScriptEngine *engine, const ColinBLS &bls)
 {
+#ifdef SCRIPTCONVERT_DEBUG
 	qDebug() << "bls -> script";
+#endif
 	QScriptValue obj = engine->newObject();
 	obj.setProperty("name", bls.name());
 	return obj;
@@ -329,7 +347,9 @@ QScriptValue BLStoScriptValue(QScriptEngine *engine, const ColinBLS &bls)
 
 void BLSfromScriptValue(const QScriptValue &obj, ColinBLS &bls)
 {
+#ifdef SCRIPTCONVERT_DEBUG
 	qDebug() << "script -> bls";
+#endif
 	bls.setName(obj.property("name").toString());
 }
 
@@ -353,7 +373,9 @@ QScriptValue BLSCtor(QScriptContext *ctxt, QScriptEngine *eng)
 
 QScriptValue CLStoScriptValue(QScriptEngine *engine, const ColinCLS &cls)
 {
+#ifdef SCRIPTCONVERT_DEBUG
 	qDebug() << "cls -> script";
+#endif
 	QScriptValue obj = engine->newObject();
 	obj.setProperty("name", cls.name());
 	QScriptValue bls = engine->newArray(cls.count());
@@ -370,7 +392,9 @@ QScriptValue CLStoScriptValue(QScriptEngine *engine, const ColinCLS &cls)
 
 void CLSfromScriptValue(const QScriptValue &obj, ColinCLS &cls)
 {
+#ifdef SCRIPTCONVERT_DEBUG
 	qDebug() << "script -> cls";
+#endif
 	cls.setName(obj.property("name").toString());
 	QScriptValue array = obj.property("child");
 	if(!array.isArray())

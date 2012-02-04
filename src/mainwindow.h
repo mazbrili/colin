@@ -105,6 +105,7 @@ public slots:
     void launchToolTip();
     void aboutMe();
     void aboutQt();
+	void manual();
 
     void selectAll();
     void invertSelection();

@@ -19,6 +19,54 @@
         <source>console</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&lt;a href=&quot;sidebar/tree&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show a tree representation of the current structure. &lt;br/&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can overview and edit the structure there in detail. Also you can create new items there.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;sidebar/lib&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show cross sections and materials. &lt;br/&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can overview and edit materials and cross sections used for the computation of your structures.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can edit existing onces or add new ones to the library. Deleting existing cross sections or materials is not possible.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;sidebar/print&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show printing settings and print or export to as pdf.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;sidebar/console&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show the JavaScript-console. &lt;br/&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can access the structure and edit it or use stress for further computations using the JavaScript language.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ColinStruct</name>
@@ -465,10 +513,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>copy the current selection to the clipboard </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&lt;b&gt;node tool&lt;/b&gt; </source>
         <translation type="unfinished"></translation>
     </message>
@@ -717,47 +761,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Colin %1
-named after Colin from &quot;mostly harmless&quot; by Douglas Adams.
-
-Build on %2.
-
-WARNING: this is the DEBUG build!
-
-Copyright (C) 2011 Matthias Rauter(matthias.rauter@student.uibk.ac.at)
-
-This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along with this program; if not, see http://www.gnu.org/licenses/.
-
-
-The icons are licensed under a Creative Commons Attribution-Noncommercial-Share Alike 3.0 License.
-
-See http://creativecommons.org/ for more information.
-
-Thanks to Pongo, Ben, Anouck, Neo and ibcl.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&lt;b&gt;copy tool&lt;/b&gt; </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;a href=&quot;tool/copy&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;copy with basepoint&lt;/b&gt; </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;a href=&quot;menu/copybasepoint&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>copy the current selection to the clipboard. You have to specify a point in the view. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -786,6 +790,238 @@ Thanks to Pongo, Ben, Anouck, Neo and ibcl.</source>
     </message>
     <message>
         <source>&lt;b&gt;cut&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;tool/copy&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>copy the current selection to the clipboard!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;menu/copybasepoint&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>copy the current selection to the clipboard. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You have to specify a point in the view. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;menu/cut tool&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>put the current selection to the clipboard and remove it from current file!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;cut with basepoint&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>put the current selection to the clipboard and remove it from current file! </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;paste tool&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;menu/paste tool&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add content from the clipboard to your current structure. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You have to specify the position where to inert the content in one of the views.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;select all&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;menu/selectall&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mark all objects of the current file as selected!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;invert selection&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;menu/invert selection&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mark all unmarked objects and unmark all markes objects!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;menu/deselect all&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>unmark all objects. No object will be selected afterwards!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;delete&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;menu/delete&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Removes the currently selected objects from structure!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;settings&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;menu/settings&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opens a Window where you can edit some settings! &lt;a href=&quot;settings&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>run script</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>debug script</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;load tool&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;tool/load&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt; &lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use this tool to add loads to the structure. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To do so click on the designated beam or node an specify the force with a second on. &lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If you want to add a temperature load to the structure, click on the designated beam and specify the temperature using the appearing thermometer. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Press the enter key to finish the procedure! &lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To specify the type of load, keep the triangle beside the tool button pressed. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;zoom tools&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;tool/zoom&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt; &lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use this tools to adjust the zoom. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keep the triangle beside the tool button pressed to get access to more tools, such as zoom in, soom out and zoom rectangle!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;calculate tools&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;tool/calculate&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt; &lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Press to calculate stress and dispalement of your structure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;snap tools&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;tool/snap&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt; &lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>When active, this tool helps you to draw. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>For some settings, keep the triangle beside the tool button pressed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;windows&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;tool/windows&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt; &lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Press to get access to a menu where you can specify the arrangement of views.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Colin %1
+named after Colin from &quot;mostly harmless&quot; by Douglas Adams.
+
+Build on %2.
+
+WARNING: this is the DEBUG build!
+
+Copyright (C) 2011 Matthias Rauter(matthias.rauter@student.uibk.ac.at)
+
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program; if not, see http://www.gnu.org/licenses/.
+
+
+The icons are licensed under a Creative Commons Attribution-Noncommercial-Share Alike 3.0 License.
+
+See http://creativecommons.org/ for more information.
+
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>../manual/en/colin.pdf</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>open *js file</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -821,7 +1057,7 @@ Thanks to Pongo, Ben, Anouck, Neo and ibcl.</source>
     </message>
     <message>
         <source>selection</source>
-        <translation>selezione</translation>
+        <translation type="obsolete">selezione</translation>
     </message>
     <message>
         <source>nodes referececonfiguration</source>
@@ -1131,78 +1367,160 @@ Line %2, column %3</source>
     </message>
 </context>
 <context>
+    <name>abstractOverlay</name>
+    <message>
+        <source>Press [Esc] to quit</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>beamMenu</name>
     <message>
         <source>beam</source>
-        <translation>trave</translation>
+        <translation type="obsolete">trave</translation>
     </message>
     <message>
         <source>left node</source>
-        <translation type="unfinished">linker Knoten</translation>
+        <translation type="obsolete">linker Knoten</translation>
     </message>
     <message>
         <source>right node</source>
-        <translation type="unfinished">rechter Knoten</translation>
+        <translation type="obsolete">rechter Knoten</translation>
     </message>
     <message>
         <source>cross section</source>
-        <translation type="unfinished">Querschnitt</translation>
+        <translation type="obsolete">Querschnitt</translation>
+    </message>
+    <message>
+        <source>material</source>
+        <translation type="obsolete">Material</translation>
+    </message>
+    <message>
+        <source>hinge</source>
+        <translation type="obsolete">Gelenk</translation>
+    </message>
+    <message>
+        <source>more joints</source>
+        <translation type="obsolete">mehr giunti</translation>
+    </message>
+    <message>
+        <source>u left</source>
+        <translation type="obsolete">u links</translation>
+    </message>
+    <message>
+        <source>w left</source>
+        <translation type="obsolete">w links</translation>
+    </message>
+    <message>
+        <source>left</source>
+        <translation type="obsolete">links</translation>
+    </message>
+    <message>
+        <source>u right</source>
+        <translation type="obsolete">u rechts</translation>
+    </message>
+    <message>
+        <source>w right</source>
+        <translation type="obsolete">w rechts</translation>
+    </message>
+    <message>
+        <source>right</source>
+        <translation type="obsolete">rechts</translation>
+    </message>
+    <message>
+        <source>copy</source>
+        <translation type="obsolete">Kopieren</translation>
+    </message>
+    <message>
+        <source>cut</source>
+        <translation type="obsolete">Ausschneiden</translation>
+    </message>
+    <message>
+        <source>delete</source>
+        <translation type="obsolete">cancella</translation>
+    </message>
+    <message>
+        <source>free</source>
+        <translation type="obsolete">frei</translation>
+    </message>
+    <message>
+        <source>locked</source>
+        <translation type="obsolete">gesperrt</translation>
+    </message>
+</context>
+<context>
+    <name>beamOverlay</name>
+    <message>
+        <source>nodes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>from</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>to</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>geometrie</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>properties</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>material</source>
         <translation type="unfinished">Material</translation>
     </message>
     <message>
-        <source>hinge</source>
-        <translation type="unfinished">Gelenk</translation>
+        <source>cross section</source>
+        <translation type="unfinished">Querschnitt</translation>
     </message>
     <message>
-        <source>more joints</source>
-        <translation type="unfinished">mehr giunti</translation>
-    </message>
-    <message>
-        <source>u left</source>
-        <translation type="unfinished">u links</translation>
-    </message>
-    <message>
-        <source>w left</source>
-        <translation type="unfinished">w links</translation>
-    </message>
-    <message>
-        <source>left</source>
-        <translation type="unfinished">links</translation>
-    </message>
-    <message>
-        <source>u right</source>
-        <translation type="unfinished">u rechts</translation>
-    </message>
-    <message>
-        <source>w right</source>
-        <translation type="unfinished">w rechts</translation>
-    </message>
-    <message>
-        <source>right</source>
-        <translation type="unfinished">rechts</translation>
+        <source>clipboard</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>copy</source>
-        <translation type="unfinished">Kopieren</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>cut</source>
-        <translation type="unfinished">Ausschneiden</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>delete</source>
-        <translation type="unfinished">cancella</translation>
+        <source>view</source>
+        <translation type="unfinished">visualizzazione</translation>
     </message>
     <message>
-        <source>free</source>
-        <translation type="unfinished">frei</translation>
+        <source>extern</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>locked</source>
-        <translation type="unfinished">gesperrt</translation>
+        <source>intern</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>functions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>displacement</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>beam forces</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;apha&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;length&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1241,6 +1559,26 @@ Line %2, column %3</source>
     <message>
         <source>colin structs</source>
         <translation type="unfinished">colin structs</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;tabbar&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;tabbar&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt; &lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Switch between opened files.&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;x&lt;/b&gt;: Close the file.&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;+&lt;/b&gt;: Create a new empty file.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1309,30 +1647,37 @@ Line %2, column %3</source>
     </message>
 </context>
 <context>
+    <name>delMenu</name>
+    <message>
+        <source>remove</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>dloadMenu</name>
     <message>
         <source>load</source>
-        <translation type="unfinished">Last</translation>
+        <translation type="obsolete">Last</translation>
     </message>
     <message>
         <source>beam</source>
-        <translation type="unfinished">Stab</translation>
+        <translation type="obsolete">Stab</translation>
     </message>
     <message>
         <source>end of beam</source>
-        <translation type="unfinished">Stabende</translation>
+        <translation type="obsolete">Stabende</translation>
     </message>
     <message>
         <source>copy</source>
-        <translation type="unfinished">Kopieren</translation>
+        <translation type="obsolete">Kopieren</translation>
     </message>
     <message>
         <source>cut</source>
-        <translation type="unfinished">Ausschneiden</translation>
+        <translation type="obsolete">Ausschneiden</translation>
     </message>
     <message>
         <source>delete</source>
-        <translation type="unfinished">löschen</translation>
+        <translation type="obsolete">löschen</translation>
     </message>
 </context>
 <context>
@@ -1482,6 +1827,80 @@ Line %2, column %3</source>
     </message>
 </context>
 <context>
+    <name>generalOverlay</name>
+    <message>
+        <source>general settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>paste</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>export picture</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>save as picture</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>left</source>
+        <translation type="unfinished">links</translation>
+    </message>
+    <message>
+        <source>right</source>
+        <translation type="unfinished">rechts</translation>
+    </message>
+    <message>
+        <source>top</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>bottom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>resolution (x)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>resolution (z)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>scale text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>combined load sets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>basic load sets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>save picture</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Portable Network Graphics(*.png);; JPEG(*.jpg)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>hingeExtended</name>
+    <message>
+        <source>hinges</source>
+        <translation type="unfinished">giunti</translation>
+    </message>
+    <message>
+        <source>more...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>libSidebar</name>
     <message>
         <source>material</source>
@@ -1496,31 +1915,106 @@ Line %2, column %3</source>
     <name>loadMenu</name>
     <message>
         <source>load</source>
-        <translation type="unfinished">Last</translation>
+        <translation type="obsolete">Last</translation>
     </message>
     <message>
         <source>beam</source>
-        <translation type="unfinished">Stab</translation>
+        <translation type="obsolete">Stab</translation>
     </message>
     <message>
         <source>copy</source>
-        <translation type="unfinished">Kopieren</translation>
+        <translation type="obsolete">Kopieren</translation>
     </message>
     <message>
         <source>cut</source>
-        <translation type="unfinished">Ausschneiden</translation>
+        <translation type="obsolete">Ausschneiden</translation>
     </message>
     <message>
         <source>delete</source>
-        <translation type="unfinished">löschen</translation>
+        <translation type="obsolete">löschen</translation>
     </message>
     <message>
         <source>load #%1</source>
-        <translation type="unfinished">Last #%1</translation>
+        <translation type="obsolete">Last #%1</translation>
+    </message>
+</context>
+<context>
+    <name>loadOverlay</name>
+    <message>
+        <source>position</source>
+        <translation type="unfinished">Position</translation>
+    </message>
+    <message>
+        <source>type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>nodal load</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>moment</source>
+        <translation type="unfinished">Moment</translation>
+    </message>
+    <message>
+        <source>increasing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>uniformly</source>
+        <translation type="unfinished">Gleichlast</translation>
+    </message>
+    <message>
+        <source>decreasing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>left Side</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>rightSide</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>difference</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>loads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>load set</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>set</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>cut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>on beam</source>
+        <translation type="unfinished">auf Stab</translation>
+    </message>
+    <message>
+        <source>on node</source>
+        <translation type="unfinished">auf Knoten</translation>
     </message>
     <message>
         <source>none</source>
@@ -1629,23 +2123,23 @@ Line %2, column %3</source>
     <name>momentMenu</name>
     <message>
         <source>moment</source>
-        <translation type="unfinished">Moment</translation>
+        <translation type="obsolete">Moment</translation>
     </message>
     <message>
         <source>node</source>
-        <translation type="unfinished">Knoten</translation>
+        <translation type="obsolete">Knoten</translation>
     </message>
     <message>
         <source>copy</source>
-        <translation type="unfinished">Kopieren</translation>
+        <translation type="obsolete">Kopieren</translation>
     </message>
     <message>
         <source>cut</source>
-        <translation type="unfinished">Ausschneiden</translation>
+        <translation type="obsolete">Ausschneiden</translation>
     </message>
     <message>
         <source>delete</source>
-        <translation type="unfinished">löschen</translation>
+        <translation type="obsolete">löschen</translation>
     </message>
 </context>
 <context>
@@ -1665,6 +2159,50 @@ Line %2, column %3</source>
     <message>
         <source>clear library</source>
         <translation type="unfinished">Leere elenco</translation>
+    </message>
+    <message>
+        <source>new file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create a new empty file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>open file</source>
+        <translation type="unfinished">apri file</translation>
+    </message>
+    <message>
+        <source>Open a file dialog. Specify the file to open there.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;settings&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Goto settings page.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;library&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove all materials and cross sections form the library. This can not be done while files are open to edit!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change wallpaper</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>open picture</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Images (*.png *.xpm *.jpg)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1736,58 +2274,50 @@ Line %2, column %3</source>
     <name>nloadMenu</name>
     <message>
         <source>nodal forces</source>
-        <translation type="unfinished">Knotenlast</translation>
+        <translation type="obsolete">Knotenlast</translation>
     </message>
     <message>
         <source>node</source>
-        <translation type="unfinished">Knoten</translation>
+        <translation type="obsolete">Knoten</translation>
     </message>
     <message>
         <source>copy</source>
-        <translation type="unfinished">Kopieren</translation>
+        <translation type="obsolete">Kopieren</translation>
     </message>
     <message>
         <source>cut</source>
-        <translation type="unfinished">Ausschneiden</translation>
+        <translation type="obsolete">Ausschneiden</translation>
     </message>
     <message>
         <source>delete</source>
-        <translation type="unfinished">löschen</translation>
+        <translation type="obsolete">löschen</translation>
     </message>
     <message>
         <source>load</source>
-        <translation type="unfinished">Last</translation>
-    </message>
-    <message>
-        <source>set</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>none</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Last</translation>
     </message>
 </context>
 <context>
     <name>nodeMenu</name>
     <message>
         <source>node</source>
-        <translation type="unfinished">Knoten</translation>
+        <translation type="obsolete">Knoten</translation>
     </message>
     <message>
         <source>copy</source>
-        <translation type="unfinished">Kopieren</translation>
+        <translation type="obsolete">Kopieren</translation>
     </message>
     <message>
         <source>cut</source>
-        <translation type="unfinished">Ausschneiden</translation>
+        <translation type="obsolete">Ausschneiden</translation>
     </message>
     <message>
         <source>delete</source>
-        <translation type="unfinished">löschen</translation>
+        <translation type="obsolete">löschen</translation>
     </message>
     <message>
         <source>node #%1</source>
-        <translation type="unfinished">Knoten #%1</translation>
+        <translation type="obsolete">Knoten #%1</translation>
     </message>
     <message>
         <source></source>
@@ -1795,7 +2325,183 @@ Line %2, column %3</source>
     </message>
 </context>
 <context>
+    <name>nodeOverlay</name>
+    <message>
+        <source>coordinates</source>
+        <translation type="unfinished">Koordinaten</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;x&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;menu/node&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The horizontal coordinate of the node!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;z&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The vertical coordinate of the node!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;phi&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use this to set the angle of supports attached to this node! &lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;This is only availible if a support is already set!&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>cut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;copy&lt;b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Press to put a copy of the node and the connected support to the clipboard!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;cut&lt;b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Press to put the node and the connected support to the clipboard and remove it from the current file!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>view</source>
+        <translation type="unfinished">visualizzazione</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;view&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>shows the current node and all releated forces!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>displacement</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;displacement&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>shows the displacement of the current node!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>reactions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;reaction forces&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>shows the reaction forces on the current node!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>beam forces</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;beam forces&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>shows the forces of all beams, conected to this node!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>only affects support</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>no bearing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>l</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>r</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>pastePreviewWidget</name>
+    <message>
+        <source>rendering in process...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>previewWidget</name>
+    <message>
+        <source>&lt;b&gt;recently used file&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;recused&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt; &lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shows one of the recently used files.&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;click&lt;/b&gt;: Open the file.&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;x&lt;/b&gt;: Remove this preview.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>printoverlayWidget</name>
+    <message>
+        <source>print</source>
+        <translation type="obsolete">stampa</translation>
+    </message>
+    <message>
+        <source>yes</source>
+        <translation type="obsolete">Ja</translation>
+    </message>
+    <message>
+        <source>no</source>
+        <translation type="obsolete">Nein</translation>
+    </message>
+</context>
+<context>
+    <name>printsideWidget</name>
     <message>
         <source>save as pdf</source>
         <translation type="unfinished"></translation>
@@ -1807,6 +2513,26 @@ Line %2, column %3</source>
     <message>
         <source>print</source>
         <translation type="unfinished">stampa</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;print/pdf&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saves a protocol of the current file as pdf after entering the desired filename.&lt;br/&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;print&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Prints the protocol of the current file without showing the print dialog.&lt;br/&gt;&lt;br/&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Prints the protocol of the current file. Shows a dialog with more settings before actually printing.&lt;br/&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>[print]</source>
@@ -1829,6 +2555,18 @@ Line %2, column %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>select printer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;print/select&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select the printer you want use to print the protocol.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>more</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1841,7 +2579,51 @@ Line %2, column %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>add plots of basic load sets</source>
+        <source>select layout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;print/layout&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select the layout of the printer such as:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;li&gt;paper size &lt;/li&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;li&gt;orientation &lt;/li&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;li&gt;margins &lt;/li&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>select font</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;print/font&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select the font which is used to print the protocol.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>basic load sets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;print/bls&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Activate to add a plot of loads to the protocol, one plot per basic load set.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1849,7 +2631,23 @@ Line %2, column %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>&lt;a href=&quot;print/allcls&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Activate to add a plot of all combined load sets including the results in a single plot.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>one plot per load set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;print/cls&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Activate to add a plot of the structure, one per combined load set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1857,7 +2655,23 @@ Line %2, column %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>&lt;a href=&quot;print/forperpage&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Activate to put four plots on a page.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>nodes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;print/nodes&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Activate to add a list of all nodes to the protocol.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1865,7 +2679,35 @@ Line %2, column %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>&lt;a href=&quot;print/beams&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Activate to add a list of all beams to the protocol.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>loads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;print/loads&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Activate to add a list of all loads to the protocol.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>node results</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;print/noderesults&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Activate to add displacement and reaction forces to the protocol.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1873,7 +2715,27 @@ Line %2, column %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>beam results - functions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;print/beamfunctions&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Activate to add all beam forces to the protocol in form of functions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>beams(values)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;print/beamvalues&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Activate to add all beam forces to the protocol in form of a table of values.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1928,104 +2790,104 @@ Line %2, column %3</source>
     <name>resultVisualWidget</name>
     <message>
         <source>show details</source>
-        <translation type="unfinished">zeige Details</translation>
+        <translation type="obsolete">zeige Details</translation>
     </message>
     <message>
         <source>show results</source>
-        <translation type="unfinished">zeige Ergebnisse</translation>
+        <translation type="obsolete">zeige Ergebnisse</translation>
     </message>
     <message>
         <source>show minimap</source>
-        <translation type="unfinished">Zeige Übersicht</translation>
+        <translation type="obsolete">Zeige Übersicht</translation>
     </message>
     <message>
         <source>hide</source>
-        <translation type="unfinished">minimieren</translation>
+        <translation type="obsolete">minimieren</translation>
     </message>
     <message>
         <source>spring</source>
-        <translation type="unfinished">Feder</translation>
+        <translation type="obsolete">Feder</translation>
     </message>
     <message>
         <source>locked
 </source>
-        <translation type="unfinished">gesperrt</translation>
+        <translation type="obsolete">gesperrt</translation>
     </message>
     <message>
         <source>free</source>
-        <translation type="unfinished">frei</translation>
+        <translation type="obsolete">frei</translation>
     </message>
     <message>
         <source>node</source>
-        <translation type="unfinished">Knoten</translation>
+        <translation type="obsolete">Knoten</translation>
     </message>
     <message>
         <source>left Node</source>
-        <translation type="unfinished">linker Knoten</translation>
+        <translation type="obsolete">linker Knoten</translation>
     </message>
     <message>
         <source>right Node</source>
-        <translation type="unfinished">rechter Knoten</translation>
+        <translation type="obsolete">rechter Knoten</translation>
     </message>
     <message>
         <source>lenght</source>
-        <translation type="unfinished">Länge</translation>
+        <translation type="obsolete">Länge</translation>
     </message>
     <message>
         <source>material</source>
-        <translation type="unfinished">Material</translation>
+        <translation type="obsolete">Material</translation>
     </message>
     <message>
         <source>cross section</source>
-        <translation type="unfinished">Querschnitt</translation>
+        <translation type="obsolete">Querschnitt</translation>
     </message>
     <message>
         <source>beam</source>
-        <translation type="unfinished">Stab</translation>
+        <translation type="obsolete">Stab</translation>
     </message>
     <message>
         <source>uniform load</source>
-        <translation type="unfinished">Gleichlast</translation>
+        <translation type="obsolete">Gleichlast</translation>
     </message>
     <message>
         <source>on beam</source>
-        <translation type="unfinished">auf Stab</translation>
+        <translation type="obsolete">auf Stab</translation>
     </message>
     <message>
         <source>increasing, linear load</source>
-        <translation type="unfinished">aufsteigende Dreieckslast</translation>
+        <translation type="obsolete">aufsteigende Dreieckslast</translation>
     </message>
     <message>
         <source>decreasing, linear load</source>
-        <translation type="unfinished">absteigende Dreieckslast</translation>
+        <translation type="obsolete">absteigende Dreieckslast</translation>
     </message>
     <message>
         <source>double load</source>
-        <translation type="unfinished">Doppellast</translation>
+        <translation type="obsolete">Doppellast</translation>
     </message>
     <message>
         <source>moment</source>
-        <translation type="unfinished">Moment</translation>
+        <translation type="obsolete">Moment</translation>
     </message>
     <message>
         <source>on node</source>
-        <translation type="unfinished">auf Knoten</translation>
+        <translation type="obsolete">auf Knoten</translation>
     </message>
     <message>
         <source>load on node</source>
-        <translation type="unfinished">Knotenlast</translation>
+        <translation type="obsolete">Knotenlast</translation>
     </message>
     <message>
         <source>temperature change</source>
-        <translation type="unfinished">Temperaturänderung</translation>
+        <translation type="obsolete">Temperaturänderung</translation>
     </message>
     <message>
         <source>temperature diffrence</source>
-        <translation type="unfinished">Temperaturgradient</translation>
+        <translation type="obsolete">Temperaturgradient</translation>
     </message>
     <message>
         <source>load</source>
-        <translation type="unfinished">Last</translation>
+        <translation type="obsolete">Last</translation>
     </message>
 </context>
 <context>
@@ -2115,7 +2977,7 @@ or simply characters divided with  &quot;+&quot; to change the shortcuts:
     </message>
     <message>
         <source>nodes</source>
-        <translation type="obsolete">Knoten</translation>
+        <translation type="unfinished">Knoten</translation>
     </message>
     <message>
         <source>coordinates</source>
@@ -2127,15 +2989,15 @@ or simply characters divided with  &quot;+&quot; to change the shortcuts:
     </message>
     <message>
         <source>locked</source>
-        <translation type="obsolete">gesperrt</translation>
+        <translation type="unfinished">gesperrt</translation>
     </message>
     <message>
         <source>free</source>
-        <translation type="obsolete">frei</translation>
+        <translation type="unfinished">frei</translation>
     </message>
     <message>
         <source>beams</source>
-        <translation type="obsolete">Stäbe</translation>
+        <translation type="unfinished">Stäbe</translation>
     </message>
     <message>
         <source>parameters</source>
@@ -2159,15 +3021,15 @@ or simply characters divided with  &quot;+&quot; to change the shortcuts:
     </message>
     <message>
         <source>cross section</source>
-        <translation type="obsolete">Querschnitt</translation>
+        <translation type="unfinished">Querschnitt</translation>
     </message>
     <message>
         <source>material</source>
-        <translation type="obsolete">Material</translation>
+        <translation type="unfinished">Material</translation>
     </message>
     <message>
         <source>loads</source>
-        <translation type="obsolete">Lasten</translation>
+        <translation type="unfinished">Lasten</translation>
     </message>
     <message>
         <source>nodal forces</source>
@@ -2302,35 +3164,190 @@ or simply characters divided with  &quot;+&quot; to change the shortcuts:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>contents</source>
+        <source>BLS #%1: </source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CLS #%1: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>supports</source>
+        <translation type="unfinished"> appoggi</translation>
+    </message>
+    <message>
+        <source>x[m]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>z[m]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>phi[grad]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>x[%1]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>z[%1]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>phi[%1]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>node #%1</source>
+        <translation type="unfinished">Knoten #%1</translation>
+    </message>
+    <message>
+        <source>hinges</source>
+        <translation type="unfinished">giunti</translation>
+    </message>
+    <message>
+        <source>left Node</source>
+        <translation type="unfinished">linker Knoten</translation>
+    </message>
+    <message>
+        <source>right Node</source>
+        <translation type="unfinished">rechter Knoten</translation>
+    </message>
+    <message>
+        <source>u_l</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>w_l</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>phi_l</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>u_r</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>w_r</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>phi_r</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>beam #%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Beam/Node</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Px[%1]/[%1/m]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pz[%1]/[%1/m]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>M[%1]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dT[K]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dTh[K]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>load #%1</source>
+        <translation type="unfinished">Last #%1</translation>
+    </message>
+</context>
+<context>
+    <name>supportExtended</name>
+    <message>
+        <source>support</source>
+        <translation type="unfinished"> appoggi</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Horizontal support&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;menu/node&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Check or uncheck to add or remove a support on this node!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Vertical support&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Torsion support&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Add springs&lt;/b&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click to enlarge! </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Here you can add springs to your supports.&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To do so, click on the spring button and insert the stiffness of the spring in the line right beside it!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>springs</source>
+        <translation type="unfinished">Federn</translation>
     </message>
 </context>
 <context>
     <name>tempMenu</name>
     <message>
         <source>temperature</source>
-        <translation type="unfinished">Temperatur</translation>
+        <translation type="obsolete">Temperatur</translation>
     </message>
     <message>
         <source>beam</source>
-        <translation type="unfinished">Stab</translation>
+        <translation type="obsolete">Stab</translation>
     </message>
     <message>
         <source>typ</source>
-        <translation type="unfinished">Typ</translation>
+        <translation type="obsolete">Typ</translation>
     </message>
     <message>
         <source>copy</source>
-        <translation type="unfinished">Kopieren</translation>
+        <translation type="obsolete">Kopieren</translation>
     </message>
     <message>
         <source>cut</source>
-        <translation type="unfinished">Ausschneiden</translation>
+        <translation type="obsolete">Ausschneiden</translation>
     </message>
     <message>
         <source>delete</source>
-        <translation type="unfinished">löschen</translation>
+        <translation type="obsolete">löschen</translation>
     </message>
 </context>
 <context>
@@ -2393,6 +3410,10 @@ or simply characters divided with  &quot;+&quot; to change the shortcuts:
     </message>
     <message>
         <source>no hinge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>delete</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2480,10 +3501,6 @@ or simply characters divided with  &quot;+&quot; to change the shortcuts:
     </message>
     <message>
         <source>&lt;b&gt;z&lt;/b&gt;=%3 m&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%4&lt;br /&gt;&lt;br /&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3394,6 +4411,10 @@ or simply characters divided with  &quot;+&quot; to change the shortcuts:
         <source>Combined load sets appear right in top of this line!&lt;br /&gt;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>%5&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>treeView</name>
@@ -3608,26 +4629,6 @@ or simply characters divided with  &quot;+&quot; to change the shortcuts:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>view &lt;a href=&quot;graphicsview&quot;&gt;more...&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;nodes&lt;/b&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>define the coordinates of the structure and connect beams with eatch other </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;a href=&quot;node&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>you can draw them with the &lt;b&gt;node tool &lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&lt;a href=&quot;tool/node&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3640,15 +4641,7 @@ or simply characters divided with  &quot;+&quot; to change the shortcuts:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>add supports to nodes with the &lt;b&gt;support tool &lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&lt;a href=&quot;tool/support&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>add nodal loads to nodes with the &lt;b&gt;load tool &lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3656,79 +4649,11 @@ or simply characters divided with  &quot;+&quot; to change the shortcuts:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>move them with the &lt;b&gt;move tool &lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&lt;a href=&quot;tool/move&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>right click on a node to edit it </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;a href=&quot;rightclick/node&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;beams&lt;/b&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>beams define the actual structure</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;a href=&quot;beam&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>you can draw them with the &lt;b&gt;beam tool &lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>add hinges to beams with the &lt;b&gt;hinge tool &lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&lt;a href=&quot;tool/hinges&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>add loads to beams with the &lt;b&gt;load tool &lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>right click on a beam to edit it </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;a href=&quot;rightclick/beam&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;loads&lt;/b&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>loads represent influence of gravitation, snow, wind, etc. on the structure</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;a href=&quot;load&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>you can draw them with the &lt;b&gt;load tool &lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>you can change their position and their values with the &lt;b&gt;move tool &lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>right click on a load to edit it </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3740,14 +4665,6 @@ or simply characters divided with  &quot;+&quot; to change the shortcuts:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>the circle attaced to loads can be used to change loads. </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>keep the mouse pressed on the circle to do so! </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&lt;a href=&quot;load/hotspot&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3756,19 +4673,7 @@ or simply characters divided with  &quot;+&quot; to change the shortcuts:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>temperatures represent influence of temperatur changes and differences on the structure</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&lt;a href=&quot;temp&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>you can change their position with the &lt;b&gt;move tool &lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>right click on a temperature to edit it </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3813,6 +4718,150 @@ or simply characters divided with  &quot;+&quot; to change the shortcuts:
     </message>
     <message>
         <source>&lt;a href=&quot;deformation&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>view &lt;a href=&quot;graphicsview&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right click to access to more tools!&lt;br/&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Press &lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Escape&lt;/b&gt; to abort the current action &lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Enter&lt;/b&gt; to auto adjust the zoom, &lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Space&lt;/b&gt; to show the currently selected view exclusivly or to show all views if only one is currently visible.&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Arrow keys&lt;/b&gt; to move the currently visile space.&lt;br/&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;node &lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;node&quot;&gt;open manual &lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Define the coordinates of the structure and connect beams with eatch other.&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can draw them with the &lt;b&gt;node tool &lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add supports to nodes with the &lt;b&gt;support tool &lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add nodal loads to nodes with the &lt;b&gt;load tool &lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move them with the &lt;b&gt;move tool &lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right click on a node to edit it, including supports. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;rightclick/node&quot;&gt;more...&lt;/a&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;beam &lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;beam&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Beams define the actual structure. &lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can draw them with the &lt;b&gt;beam tool &lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add hinges to beams with the &lt;b&gt;hinge tool &lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add loads to beams with the &lt;b&gt;load tool &lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right click on a beam to edit it including hinges. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;rightclick/beam&quot;&gt;more...&lt;/a&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;load &lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;load&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Loads represent influence of gravity, snow, wind, etc. on the structure. &lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can draw them with the &lt;b&gt;load tool &lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can change their position and their values with the &lt;b&gt;move tool &lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right click on a load to edit it </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;rightclick/load&quot;&gt;more...&lt;/a&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The circle attaced to loads can be used to change loads. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keep the mouse pressed on the circle to do so! </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Temperatures represent influence of temperatur changes and differences on the structure &lt;br /&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can change their position with the &lt;b&gt;move tool &lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right click on a temperature to edit it </source>
         <translation type="unfinished"></translation>
     </message>
 </context>

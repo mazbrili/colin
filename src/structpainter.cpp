@@ -50,15 +50,17 @@ const int alphaC = 100;
 
 
 
-catcher::CatchCases structPainter::highlightMode = catcher::CatchedNothing;
-int structPainter::highlight = -1;
-
 structPainter::structPainter()
 {
 	v = &viewPortSettings::instance();
 
 	ignoreSelection_=false;
 	ignoreHotSpots_=false;
+
+	highlightMode = catcher::CatchedNothing;
+	highlight = -1;
+
+	trm = 0;
 }
 
 
@@ -105,7 +107,7 @@ void structPainter::drawStruct(const ColinStruct &t, QPainter *painter, QTransfo
 		}
 		t.calculateShapes(clschildren, clsfactors);
 	}
-	else if(!cls.empty())
+	else if(cls.size()==1)
 	{
 		QList<int> clschildren;
 		QList<double> clsfactors;
@@ -365,13 +367,13 @@ void structPainter::drawBearing(const ColinSupport &b, const QPointF &po, bool r
 void structPainter::drawBeam(const ColinBeam &s, const int &i, const ColinStruct &tw, bool highlighted)
 {
 
-
-//	qDebug() << "highlight N " << highlightMode.testFlag(catcher::CatchedNLine);
-//	qDebug() << "highlight Q " << highlightMode.testFlag(catcher::CatchedQLine);
-//	qDebug() << "highlight M " << highlightMode.testFlag(catcher::CatchedMLine);
-//	qDebug() << "highlight U " << highlightMode.testFlag(catcher::CatchedULine);
-//	qDebug() << "highlight # " << highlight;
-
+#ifdef HIGHLIGHT_VERBOSE
+	qDebug() << "highlight N " << highlightMode.testFlag(catcher::CatchedNLine);
+	qDebug() << "highlight Q " << highlightMode.testFlag(catcher::CatchedQLine);
+	qDebug() << "highlight M " << highlightMode.testFlag(catcher::CatchedMLine);
+	qDebug() << "highlight U " << highlightMode.testFlag(catcher::CatchedULine);
+	qDebug() <*/< "highlight # " << highlight;
+#endif
 
 
 	if(s.isSelected()&& !ignoreSelection_)
@@ -1115,9 +1117,21 @@ void structPainter::drawFunction(QPainter *p, const QList<const function*> &f, c
 {
 	QPainterPath forces;
 	forces.setFillRule(Qt::WindingFill);
-	QTransform tran(trm->m11(),	0,					0,
-					0,			trm->m11()*scale,	0,
-					0,			0,					1);
+
+	QTransform tran;
+	if(trm!=0)
+	{
+		tran = QTransform(trm->m11(),	0,					0,
+						  0,			trm->m11()*scale,	0,
+						  0,			0,					1);
+	}
+	else
+	{
+		tran = QTransform(1,			0,					0,
+						  0,			scale,				0,
+						  0,			0,					1);
+	}
+
 	foreach(const function *fun, f){
 		QPainterPath add;
 		add.moveTo(0, 0);
@@ -1137,6 +1151,8 @@ void structPainter::drawFunction(QPainter *p, const QList<const function*> &f, c
 	forces = tran.map(forces);
 	p->fillPath(forces, p->brush());
 
+	if(prefix==0)
+		return;
 	double max0=0, maxl=0, min0=0, minl=0;
 	foreach(const function *fun, f){
 		max0 = qMax((*fun)(0), max0);
@@ -1167,7 +1183,7 @@ void structPainter::drawFunction(QPainter *p, const QList<const function*> &f, c
 				p->save();
 				if((*fun)(max) <= -showValueThres)
 				{
-					p->translate(max*trm->m11(), (*fun)(max)*scale*trm->m11()-6);
+					p->translate(max*tran.m11(), (*fun)(max)*scale*tran.m11()-6);
 					p->drawLine(0, 0, 0, 6);
 					p->rotate(-45);
 					p->drawLine(0, 0, 20, 0);
@@ -1175,7 +1191,7 @@ void structPainter::drawFunction(QPainter *p, const QList<const function*> &f, c
 				}
 				else if((*fun)(max) >= showValueThres)
 				{
-					p->translate(max*trm->m11(), (*fun)(max)*scale*trm->m11()+6);
+					p->translate(max*tran.m11(), (*fun)(max)*scale*tran.m11()+6);
 					p->drawLine(0, 0, 0, -6);
 					p->rotate(45);
 					p->drawLine(0, 0, 20, 0);
@@ -1189,7 +1205,7 @@ void structPainter::drawFunction(QPainter *p, const QList<const function*> &f, c
 	if(max0 >= showValueThres)
 	{
 		p->save();
-		p->translate(0, max0*scale*trm->m11()+6);
+		p->translate(0, max0*scale*tran.m11()+6);
 		p->drawLine(0, 0, 0, -6);
 		p->rotate(45);
 
@@ -1200,7 +1216,7 @@ void structPainter::drawFunction(QPainter *p, const QList<const function*> &f, c
 	if(maxl >= showValueThres)
 	{
 		p->save();
-		p->translate(l*trm->m11(), maxl*scale*trm->m11()+6);
+		p->translate(l*tran.m11(), maxl*scale*tran.m11()+6);
 		p->drawLine(0, 0, 0, -6);
 		p->rotate(45);
 
@@ -1211,7 +1227,7 @@ void structPainter::drawFunction(QPainter *p, const QList<const function*> &f, c
 	if(min0 <= -showValueThres)
 	{
 		p->save();
-		p->translate(0, min0*scale*trm->m11()-6);
+		p->translate(0, min0*scale*tran.m11()-6);
 		p->drawLine(0, 0, 0, 6);
 		p->rotate(-45);
 		p->drawLine(0, 0, 20, 0);
@@ -1221,7 +1237,7 @@ void structPainter::drawFunction(QPainter *p, const QList<const function*> &f, c
 	if(minl <= -showValueThres)
 	{
 		p->save();
-		p->translate(l*trm->m11(), minl*scale*trm->m11()-6);
+		p->translate(l*tran.m11(), minl*scale*tran.m11()-6);
 		p->drawLine(0, 0, 0, 6);
 		p->rotate(-45);
 		p->drawLine(0, 0, 20, 0);
@@ -1232,14 +1248,18 @@ void structPainter::drawFunction(QPainter *p, const QList<const function*> &f, c
 
 void structPainter::setHighlightedObject(catcher::CatchCases c, int object)
 {
+#ifdef HIGHLIGHT_VERBOSE
 	qDebug() << "highlighting " << c << ", objnr " << object;
+#endif
 	highlightMode=c;
 	highlight = object;
 }
 
 void structPainter::setHighlightedObject(catcher::CatchCases c)
 {
+#ifdef HIGHLIGHT_VERBOSE
 	qDebug() << "highlighting " << c;
+#endif
 	highlightMode=c;
 }
 

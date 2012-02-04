@@ -216,21 +216,20 @@ int filelist::tabcount() const
 bool filelist::openT(const QString &url)
 {
 #ifndef QT_NO_DEBUG
-    QTextStream debugS(stdout);
-    debugS << "open file \"" << url << "\""<< endl;
+	qDebug() << "filelist::open file \"" << url << "\""<< endl;
 #endif
     QFile f(url);
     if(!f.exists())
     {
 #ifndef QT_NO_DEBUG
-        debugS << "file does not exist! :(" << endl;
+		qDebug() << "filelist::file does not exist! :(" << endl;
 #endif
         return false;
     }
     if(!f.open(QIODevice::ReadOnly | QIODevice::Text))
     {
 #ifndef QT_NO_DEBUG
-        debugS << "can not open file" << endl;
+		qDebug() << "filelist::can not open file" << endl;
 #endif
         return false;
     }
@@ -240,7 +239,7 @@ bool filelist::openT(const QString &url)
         {
             this->changeCurrentTo(file.tw);
 #ifndef QT_NO_DEBUG
-            debugS << "file already open! switching to workspace" << endl;
+			qDebug() << "filelist::file already open! switching to workspace" << endl;
 #endif
             return false;
         }
@@ -263,9 +262,9 @@ bool filelist::openT(const QString &url)
 
 
 #ifndef QT_NO_DEBUG
-    debugS << endl << "erros while parsing/finished at:" << Xr.errors() << endl;
-    if(Xr.errorString().isEmpty())
-        debugS << "no errors" << endl;
+		qDebug() << "erros while parsing/finished at:" << Xr.errors();
+		if(Xr.errorString().isEmpty())
+			qDebug() << "no errors";
 #endif //QT_NO_DEBUG
 
         return false;
@@ -276,9 +275,9 @@ bool filelist::openT(const QString &url)
 
 
 #ifndef QT_NO_DEBUG
-    debugS << endl << "erros while parsing/finished at:" << Xr.errors() << endl;
+	qDebug() << endl << "erros while parsing/finished at:" << Xr.errors();
     if(Xr.errorString().isEmpty())
-        debugS << "no errors" << endl;
+		qDebug() << "no errors";
 #endif //QT_NO_DEBUG
 
 

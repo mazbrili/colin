@@ -226,7 +226,7 @@ void hingeExtended::setSpringConstants()
 				filelist::instance().currentFile()->setBeam(currentItem, b);
 			}
 			else
-				springCs[i]->setText(QString::number(filelist::instance().currentFile()->Beam(currentItem).spring(i)*pref, 'f', PRECISON));
+				springCs[i]->setText(QString::number(filelist::instance().currentFile()->beam(currentItem).spring(i)*pref, 'f', PRECISON));
 
 		}
 	}
@@ -253,6 +253,9 @@ beamDetail::beamDetail(QWidget *parent)
 void beamDetail::paintEvent(QPaintEvent *e)
 {
 	QPainter p(this);
+	p.setBrush(QColor(255, 255, 255, 100));
+	p.setPen(palette().color(QPalette::Dark));
+	p.drawRoundedRect(rect().adjusted(0, 0, -1, -1), 4, 4);
 	if(currentItem<0)
 		return;
 	detailPainter dP;
@@ -1182,12 +1185,14 @@ void beamOverlay::clsChanged()
 
 void beamOverlay::setMat(int nr)
 {
-	filelist::instance().currentFile()->setMat(currentItem, nr);
+	if(nr != filelist::instance().currentFile()->beam(currentItem).MatI())
+		filelist::instance().currentFile()->setMat(currentItem, nr);
 }
 
 void beamOverlay::setCs(int nr)
 {
-	filelist::instance().currentFile()->setProfile(currentItem, nr);
+	if(nr != filelist::instance().currentFile()->beam(currentItem).ProfileI())
+		filelist::instance().currentFile()->setProfile(currentItem, nr);
 }
 
 void beamOverlay::copy()

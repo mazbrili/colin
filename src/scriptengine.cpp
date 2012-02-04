@@ -86,7 +86,6 @@ scriptEngine::scriptEngine(QObject *parent) :
 
 void scriptEngine::eval(QString code)
 {
-
 	qDebug() << "evaluating " << code;
 
 	QScriptValue output = QScriptEngine::evaluate(code);

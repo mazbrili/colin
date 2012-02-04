@@ -89,29 +89,29 @@ public:
 	ColinStruct();
 
 
-	Q_INVOKABLE ColinNode Node(const int &i);
+	Q_INVOKABLE ColinNode getNode(const int &i);
 	Q_INVOKABLE void setNode(const int &k, const ColinNode &n);
 	Q_INVOKABLE int addNode(double x, double y);
 	Q_INVOKABLE int addNode(const ColinNode &n);
 	Q_INVOKABLE void removeNode(const int &o);
 	Q_INVOKABLE void setBearing(const int &k, const ColinSupport &b);
 
-	Q_INVOKABLE ColinBeam Beam(const int &i);
+	Q_INVOKABLE ColinBeam getBeam(const int &i);
 	Q_INVOKABLE void setBeam(const int &k, const ColinBeam &b);
 	Q_INVOKABLE int addBeam(const ColinBeam &n);
 	Q_INVOKABLE int addBeam(int left, int right);
 	Q_INVOKABLE void removeBeam(const int &o);
 
-	Q_INVOKABLE ColinLoad Load(const int &i);
+	Q_INVOKABLE ColinLoad getLoad(const int &i);
 	Q_INVOKABLE int addLoad(const ColinLoad &n);
 	Q_INVOKABLE void removeLoad(const int &i);
 
-	Q_INVOKABLE ColinBLS BLS(const int &i);
+	Q_INVOKABLE ColinBLS getBLS(const int &i);
 	Q_INVOKABLE void setBLS(const int &i, const ColinBLS &n);
 	Q_INVOKABLE int addBLS(const ColinBLS &n);
 	Q_INVOKABLE void removeBLS(const int &i);
 
-	Q_INVOKABLE ColinCLS CLS(const int &i);
+	Q_INVOKABLE ColinCLS getCLS(const int &i);
 	Q_INVOKABLE void setCLS(const int &i, const ColinCLS &n);
 	Q_INVOKABLE int addCLS(const ColinCLS &n);
 	Q_INVOKABLE void removeCLS(const int &i);
@@ -248,13 +248,14 @@ public:
 	void addBLStoCLS(const int &clsi, const int &blsi, const double &fac);
 	void removeBLSbyIndex(const int &clsi, const int &i);
 	void setFacbyIndex(const int &clsi, const int &i, const double &fac);
+	void setBLSbyIndex(const int &clsi, const int &i, const int newBLS);
 	int getCLSIDbyName(const QString &name) const;
 
 
 
 	void setActiveCLS(int clsI, bool active=true);
 	bool isActiveCLS(int clsI)const;
-	const QSet<int> &activeCLS()const;
+	QSet<int> activeCLS()const;
 	int activeCLS_n() const;
 
 
@@ -378,7 +379,6 @@ private:
 	QList<ColinCLS> combinedloadsets;
 
     QList<QTransform> views;
-	QSet<int> activeLS;
     double scale_p;
     double scale_m;
     double scale_u;

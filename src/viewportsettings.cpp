@@ -25,6 +25,8 @@
  ***********************************************************/
 
 #include "viewportsettings.h"
+#include <QtGui/QApplication>
+#include <QtGui/QPalette>
 
 viewPortSettings *viewPortSettings::instance_ = NULL;
 
@@ -37,13 +39,12 @@ void viewPortSettings::loadSettings()
     colors.append(settings.value("colors/bearing", QColor(0, 0, 0)).value<QColor>()); //2
     colors.append(settings.value("colors/load1", QColor(0, 170, 255)).value<QColor>()); //3
     colors.append(settings.value("colors/load2", QColor(0, 255, 255)).value<QColor>()); //4
-    colors.append(settings.value("colors/reaction", QColor(155, 255, 83)).value<QColor>()); //5
-    colors.append(settings.value("colors/background", QColor(230, 230, 220)).value<QColor>()); //6
-    colors.append(settings.value("colors/selection", QColor(255, 170, 0)).value<QColor>()); //7
+	colors.append(settings.value("colors/reaction", QColor(159, 0, 83)).value<QColor>()); //5
+	colors.append(settings.value("colors/background", QColor(250, 250, 250)).value<QColor>()); //6
     colors.append(settings.value("colors/node_ref", QColor(255, 184, 61)).value<QColor>()); //8
     colors.append(settings.value("colors/beam_ref", QColor(136, 136, 136)).value<QColor>()); //9
     colors.append(settings.value("colors/bearing_ref", QColor(136, 136, 136)).value<QColor>()); //10
-    colors.append(settings.value("colors/grid", QColor(140, 140, 140)).value<QColor>()); //13
+	colors.append(settings.value("colors/grid", QColor(240, 240, 240)).value<QColor>()); //13
     colors.append(settings.value("colors/N_p", QColor(0, 255, 0)).value<QColor>()); //16
     colors.append(settings.value("colors/Q_p", QColor(0, 85, 255)).value<QColor>()); //17
     colors.append(settings.value("colors/M_p", QColor(255, 0, 0)).value<QColor>()); //18
@@ -143,7 +144,6 @@ void viewPortSettings::saveSettings()
     settings.setValue("colors/load2", colors.at(i++));
     settings.setValue("colors/reaction", colors.at(i++));
     settings.setValue("colors/background", colors.at(i++));
-    settings.setValue("colors/selection", colors.at(i++));
     settings.setValue("colors/node_ref", colors.at(i++));
     settings.setValue("colors/beam_ref", colors.at(i++));
     settings.setValue("colors/bearing_ref", colors.at(i++));
@@ -187,6 +187,8 @@ void viewPortSettings::setClipBoard(Colin::clipboardAction a)
 
 const QColor &viewPortSettings::color(Colin::Color c) const
 {
+	if(c == Colin::C_Selection)
+		return QApplication::palette().color(QPalette::Highlight);
     return colors[static_cast<int>(c)];
 }
 

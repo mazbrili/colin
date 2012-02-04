@@ -47,10 +47,7 @@ public:
 	delMenu(int clsId, int blsId, QWidget *parent = 0);
 
 public slots:
-	void delBLS(){
-		filelist::instance().currentFile()->removeBLSbyIndex(clsId, blsId);
-		deleteLater();
-	}
+	void delBLS();
 private:
 	int clsId;
 	int blsId;

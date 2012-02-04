@@ -10,11 +10,15 @@
 void colinManual::launch(const QString &what)
 {
 
+#ifdef MANUAL_VERBOSE
 	qDebug() << "help: url request: " << what;
+#endif
 
 	if(what.contains("http"))
 	{
+#ifdef LIBRARY_VERBOSE
 		qDebug() << "launching webbrowser!";
+#endif
 		QDesktopServices::openUrl(what);
 		QWhatsThis::hideText();
 		return;
@@ -22,9 +26,13 @@ void colinManual::launch(const QString &what)
 
 	if(what.contains("cite"))
 	{
+#ifdef LIBRARY_VERBOSE
 		qDebug() << "cite in launch!";
+#endif
 		QStringList args = what.split("/");
+#ifdef LIBRARY_VERBOSE
 		qDebug() << "... with arguments " << args;
+#endif
 		if(args[1]=="hofstetter")
 			QDesktopServices::openUrl(QString("http://books.google.de/books?hl=de&id=3QcaavV-ENUC&q=%1#v=snippet&q=%2&f=false").arg(args[2]).arg(args[2]));
 		QWhatsThis::hideText();

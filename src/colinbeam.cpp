@@ -185,6 +185,7 @@ void ColinBeam::setJoint(const int &pos, const bool &thereIsAJoint)
 	if(thereIsAJoint)
 		hinges |= hingefromPos(position(pos));
 
+#ifdef HINGES_VERBOSE
 	qDebug() << hinges
 			 << (((hinges&Xleft)!=0)?((hinges&fxleft)!=0?"S":"H"):"-")
 			 << (((hinges&Zleft)!=0)?((hinges&fzleft)!=0?"S":"H"):"-")
@@ -192,6 +193,7 @@ void ColinBeam::setJoint(const int &pos, const bool &thereIsAJoint)
 			 << (((hinges&Xright)!=0)?((hinges&fxright)!=0?"S":"H"):"-")
 			 << (((hinges&Zright)!=0)?((hinges&fzright)!=0?"S":"H"):"-")
 			 << (((hinges&Phiright)!=0)?((hinges&fphiright)!=0?"S":"H"):"-");
+#endif
 }
 
 void ColinBeam::setHasSpring(const int& pos, const bool& thereIsAJoint)
@@ -200,6 +202,7 @@ void ColinBeam::setHasSpring(const int& pos, const bool& thereIsAJoint)
 	if(thereIsAJoint)
 		hinges |= springfromPos(position(pos));
 
+#ifdef HINGES_VERBOSE
 	qDebug() << hinges
 			 << (((hinges&Xleft)!=0)?((hinges&fxleft)!=0?"S":"H"):"-")
 			 << (((hinges&Zleft)!=0)?((hinges&fzleft)!=0?"S":"H"):"-")
@@ -207,6 +210,7 @@ void ColinBeam::setHasSpring(const int& pos, const bool& thereIsAJoint)
 			 << (((hinges&Xright)!=0)?((hinges&fxright)!=0?"S":"H"):"-")
 			 << (((hinges&Zright)!=0)?((hinges&fzright)!=0?"S":"H"):"-")
 			 << (((hinges&Phiright)!=0)?((hinges&fphiright)!=0?"S":"H"):"-");
+#endif
 }
 
 void ColinBeam::setSpring(const int &pos, const double &c_f)

@@ -69,6 +69,7 @@ bool ColinStruct::isCalculated()const
 
 void ColinStruct::CommandEditNode(const int &k, const ColinNode &n)
 {
+
 	resetResults();
     nodes[k]=n;
 	nodes[k].setStruct(this);
@@ -78,6 +79,10 @@ void ColinStruct::CommandEditNode(const int &k, const ColinNode &n)
             beam(i).setDirty();
     }
     emit changedNode(k);    
+
+#ifdef CHANGES_VERBOSE
+	qDebug() << "node " << k << " changed" ;
+#endif
 }
 
 void ColinStruct::CommandRemoveNode(const int &k)
@@ -114,6 +119,9 @@ void ColinStruct::CommandRemoveNode(const int &k)
     nodes.removeAt(k);
     if(lONode == k)lONode--;
     emit erasedNode(k);
+#ifdef CHANGES_VERBOSE
+	qDebug() << "node " << k << " removed" ;
+#endif
 }
 
 void ColinStruct::CommandInsertNode(const int &o, const ColinNode &n)
@@ -140,6 +148,9 @@ void ColinStruct::CommandInsertNode(const int &o, const ColinNode &n)
         }
     }
     emit addedNode(o);
+#ifdef CHANGES_VERBOSE
+	qDebug() << "beam " << o << " inserted" ;
+#endif
 }
 
 void ColinStruct::CommandEditBeam(const int &o, const ColinBeam &n)
@@ -148,9 +159,8 @@ void ColinStruct::CommandEditBeam(const int &o, const ColinBeam &n)
     beams[o]=n;
 	beams[o].setStruct(this);
     emit changedBeam(o);
-#ifndef QT_NO_DEBUG
-    QTextStream debugS(stdout);
-    debugS << "beam " << o << " changed" << endl;
+#ifdef CHANGES_VERBOSE
+	qDebug() << "beam " << o << " changed" ;
 #endif
 }
 
@@ -178,6 +188,10 @@ void ColinStruct::CommandRemoveBeam(const int &o)
     if(lOBeam == o)
         lOBeam--;
     emit erasedBeam(o);
+
+#ifdef CHANGES_VERBOSE
+	qDebug() << "beam " << o << " removed" ;
+#endif
 }
 
 void ColinStruct::CommandInsertBeam(const int &o,const ColinBeam &n)
@@ -198,6 +212,10 @@ void ColinStruct::CommandInsertBeam(const int &o,const ColinBeam &n)
 	beams[o].setStruct(this);
 
     emit addedBeam(o);
+
+#ifdef CHANGES_VERBOSE
+	qDebug() << "beam " << o << " changed" ;
+#endif
 }
 
 void ColinStruct::CommandEditLoad(const int &o, const ColinLoad &n)
@@ -206,6 +224,10 @@ void ColinStruct::CommandEditLoad(const int &o, const ColinLoad &n)
 	loads[o]=n;
 	loads[o].setStruct(this);
 	emit changedLoad(o);
+
+#ifdef CHANGES_VERBOSE
+	qDebug() << "load " << o << " changed" ;
+#endif
 }
 
 void ColinStruct::CommandRemoveLoad(const int &o)
@@ -213,6 +235,10 @@ void ColinStruct::CommandRemoveLoad(const int &o)
 	resetResults();
 	loads.removeAt(o);
 	emit erasedLoad(o);
+
+#ifdef CHANGES_VERBOSE
+	qDebug() << "load " << o << " removed" ;
+#endif
 }
 
 void ColinStruct::CommandInsertLoad(const int &o, const ColinLoad &n)
@@ -221,6 +247,10 @@ void ColinStruct::CommandInsertLoad(const int &o, const ColinLoad &n)
 	loads.insert(o, n);
 	loads[o].setStruct(this);
 	emit addedLoad(o);
+
+#ifdef CHANGES_VERBOSE
+	qDebug() << "load " << o << " inserted" ;
+#endif
 }
 
 void ColinStruct::CommandEditBLS(const int &o, const ColinBLS &n)
@@ -229,6 +259,10 @@ void ColinStruct::CommandEditBLS(const int &o, const ColinBLS &n)
 	basicloadsets[o]=n;
 	basicloadsets[o].setStruct(this);
 	emit changedBLS(o);
+
+#ifdef CHANGES_VERBOSE
+	qDebug() << "bls " << o << " edited" ;
+#endif
 }
 
 void ColinStruct::CommandRemoveBLS(const int &o)
@@ -236,6 +270,10 @@ void ColinStruct::CommandRemoveBLS(const int &o)
 	resetResults();
 	basicloadsets.removeAt(o);
 	emit erasedBLS(o);
+
+#ifdef CHANGES_VERBOSE
+	qDebug() << "bls " << o << " removed" ;
+#endif
 }
 
 void ColinStruct::CommandInsertBLS(const int &o, const ColinBLS &n)
@@ -244,6 +282,11 @@ void ColinStruct::CommandInsertBLS(const int &o, const ColinBLS &n)
 	basicloadsets.insert(o, n);
 	basicloadsets[o].setStruct(this);
 	emit addedBLS(o);
+
+
+#ifdef CHANGES_VERBOSE
+	qDebug() << "bls " << o << " inserted" ;
+#endif
 }
 
 void ColinStruct::CommandEditCLS(const int &o, const ColinCLS &n)
@@ -252,6 +295,10 @@ void ColinStruct::CommandEditCLS(const int &o, const ColinCLS &n)
 	combinedloadsets[o]=n;
 	combinedloadsets[o].setStruct(this);
 	emit changedCLS(o);
+
+#ifdef CHANGES_VERBOSE
+	qDebug() << "cls " << o << " edited" ;
+#endif
 }
 
 void ColinStruct::CommandRemoveCLS(const int &o)
@@ -259,15 +306,23 @@ void ColinStruct::CommandRemoveCLS(const int &o)
 	resetResults();
 	combinedloadsets.removeAt(o);
 	emit erasedCLS(o);
+
+#ifdef CHANGES_VERBOSE
+	qDebug() << "cls " << o << " removed" ;
+#endif
 }
 
 void ColinStruct::CommandInsertCLS(const int &o, const ColinCLS &n)
 {
 	resetResults();
 	combinedloadsets.insert(o, n);
+	combinedloadsets[o].select();
 	combinedloadsets[o].setStruct(this);
 	emit addedCLS(o);
-	activeLS.insert(o);
+
+#ifdef CHANGES_VERBOSE
+	qDebug() << "cls " << o << " inserted" ;
+#endif
 }
 
 void ColinStruct::resetResults()
@@ -282,7 +337,7 @@ void ColinStruct::resetResults()
 	b_res = 0;
 }
 
-ColinNode ColinStruct::Node(const int &i)
+ColinNode ColinStruct::getNode(const int &i)
 {
 	if(i<0 || i>=nodes.size())
 		return ColinNode();
@@ -337,7 +392,7 @@ void ColinStruct::setBearing(const int &k, const ColinSupport &b)
 
 }
 
-ColinBeam ColinStruct::Beam(const int &i)
+ColinBeam ColinStruct::getBeam(const int &i)
 {
 	if(i<0 || i>=nodes.size())
 		return ColinBeam();
@@ -381,7 +436,7 @@ void ColinStruct::removeBeam(const int &o)
 	emit endS();
 }
 
-ColinLoad ColinStruct::Load(const int &i)
+ColinLoad ColinStruct::getLoad(const int &i)
 {
 	if(i<0 || i>=load_n())
 		return ColinLoad();
@@ -402,7 +457,7 @@ void ColinStruct::removeLoad(const int &o)
 	emit removed(o, loads.at(o));
 }
 
-ColinBLS ColinStruct::BLS(const int &i)
+ColinBLS ColinStruct::getBLS(const int &i)
 {
 	if(i<0 || i>=bls_n())
 		return ColinBLS();
@@ -435,7 +490,7 @@ void ColinStruct::removeBLS(const int &i)
 	emit removeBLS(i);
 }
 
-ColinCLS ColinStruct::CLS(const int &i)
+ColinCLS ColinStruct::getCLS(const int &i)
 {
 	if(i<0 || i>=cls_n())
 		return ColinCLS();
@@ -779,6 +834,14 @@ void ColinStruct::setFacbyIndex(const int &clsi, const int &i, const double &fac
 	emit edited(clsi, c);
 }
 
+void ColinStruct::setBLSbyIndex(const int &clsi, const int &i, const int newBLS)
+{
+	Q_ASSERT(!(clsi<0 || clsi>=cls_n()));
+	ColinCLS c = cls(clsi);
+	c.setBLSbyIndex(i, newBLS);
+	emit edited(clsi, c);
+}
+
 int ColinStruct::getCLSIDbyName(const QString &name) const
 {
 	for(int i=0; i<cls_n(); i++)
@@ -791,32 +854,30 @@ int ColinStruct::getCLSIDbyName(const QString &name) const
 
 void ColinStruct::setActiveCLS(int clsI, bool active)
 {
-	if(active){
-		if(activeLS.contains(clsI))
-			return;
-		activeLS.insert(clsI);
-	}
-	else{
-		if(!activeLS.contains(clsI))
-			return;
-		activeLS.remove(clsI);
-	}
+	if(combinedloadsets[clsI].isSelected() == active)
+		return;
+	combinedloadsets[clsI].select(active);
 	emit changedActiveCLS();
 }
 
 bool ColinStruct::isActiveCLS(int clsI) const
 {
-	return activeLS.contains(clsI);
+	return cls(clsI).isSelected();
 }
 
-const QSet<int> &ColinStruct::activeCLS()const
+QSet<int> ColinStruct::activeCLS()const
 {
+	QSet<int> activeLS;
+	for(int i=0; i<cls_n(); i++){
+		if(cls(i).isSelected())
+			activeLS.insert(i);
+	}
 	return activeLS;
 }
 
 int ColinStruct::activeCLS_n() const
 {
-	return activeLS.count();
+	return activeCLS().count();
 }
 
 
@@ -931,50 +992,48 @@ double ColinStruct::nearestPointOnBeam(const QPointF &p, const int &i) const
 				 (1/m+m));
 	nearest.setY(m*nearest.x()+beam(i).leftNode().z()-m*beam(i).leftNode().x());
 
-/*
+#ifdef NEAREST_VERBOSE
 	qDebug() << "nearest point =" << nearest;
 	qDebug() << "nearest x = " << hypot(beam(i).leftNode().x()-nearest.x(), beam(i).leftNode().z()-nearest.y());
-*/
+#endif
 
 	return hypot(beam(i).leftNode().x()-nearest.x(), beam(i).leftNode().z()-nearest.y());
 }
 
 void ColinStruct::crossingBeams(const QPointF &p, const double &maxabs, int *first, int *second, QPointF *n) const
 {
-/*
-#ifndef QT_NO_DEBUG
-    QTextStream debugS(stdout);
-    debugS << "snap: crossings beams" << endl;
-    debugS << "&&&&&&&&&&&&&&&&&&&&&" << endl;
-    debugS << "MousePos = " << p.x() << ", " << p.y() << endl;
+#ifdef NEAREST_VERBOSE
+	qDebug() << "snap: crossings beams" ;
+	qDebug() << "&&&&&&&&&&&&&&&&&&&&&" ;
+	qDebug() << "MousePos = " << p.x() << ", " << p.y() ;
 #endif
-*/
 
-    QList<int> c;
-    for(int i=0; i<beam_n(); i++)
-    {
-	QRectF rect = beam(i).boundingRect().normalized();
-/*
-#ifndef QT_NO_DEBUG
-        debugS << "rect" << i << " = "  << rect.x() <<  ", "<< rect.y() << ", " << rect.width() << ", " << rect.height() << endl;
+	QList<int> c;
+	for(int i=0; i<beam_n(); i++)
+	{
+		QRectF rect = beam(i).boundingRect().normalized();
+
+#ifdef NEAREST_VERBOSE
+		qDebug() << "rect" << i << " = "  << rect.x() <<  ", "<< rect.y() << ", " << rect.width() << ", " << rect.height() ;
 #endif
-*/
-        rect.adjust(-maxabs, -maxabs, maxabs, maxabs);
-/*
-#ifndef QT_NO_DEBUG
-        debugS << "adjR" << i << " = "  << rect.x() <<  ", "<< rect.y() << ", " << rect.width() << ", " << rect.height() << endl;
+
+		rect.adjust(-maxabs, -maxabs, maxabs, maxabs);
+
+#ifdef NEAREST_VERBOSE
+		qDebug() << "adjR" << i << " = "  << rect.x() <<  ", "<< rect.y() << ", " << rect.width() << ", " << rect.height() ;
 #endif
-*/
-        if(rect.contains(p))
-	    c.append(i);
+
+		if(rect.contains(p))
+		c.append(i);
     }
-/*
-#ifndef QT_NO_DEBUG
-    debugS << "candidates" << endl;
+
+#ifdef NEAREST_VERBOSE
+
+	qDebug() << "candidates" ;
     foreach(int i, c)
-        debugS << "beam " << i << endl;
+		qDebug() << "beam " << i ;
 #endif
-*/
+
     double m[c.size()];
     double b[c.size()];
 
@@ -986,15 +1045,15 @@ void ColinStruct::crossingBeams(const QPointF &p, const double &maxabs, int *fir
 
 	b[i] = beam(c.at(i)).leftNode().z()-beam(c.at(i)).leftNode().x()*m[i];
     }
-/*
-#ifndef QT_NO_DEBUG
-    debugS << "vars:" << endl;
+
+#ifdef NEAREST_VERBOSE
+	qDebug() << "vars:" ;
     int j=0;
     foreach(int i, c){
-        debugS << "m_" << i << " = " << m[j] << " , b_" << i << " = " << b[j] << endl;
+		qDebug() << "m_" << i << " = " << m[j] << " , b_" << i << " = " << b[j] ;
         j++;}
 #endif
-*/
+
     for(int i=0; i<c.size(); i++)
     {
 	for(int j=i+1; j<c.size(); j++)
@@ -1236,9 +1295,8 @@ void ColinStruct::invertSelection()
 void ColinStruct::selectRect(const QRectF &r, bool keepSelect)
 {
 
-#ifndef QT_NO_DEBUG
-    QTextStream debugS(stdout);
-    debugS << "selection" << endl << "rect(l, r, t, b) = " << r.left() << ", " << r.y() << ", " << r.top() << ", " << r.bottom() << endl;
+#ifndef NEAREST_VERBOSE
+	qDebug() << "selection" << endl << "rect(l, r, t, b) = " << r.left() << ", " << r.y() << ", " << r.top() << ", " << r.bottom() ;
 #endif
 
     for(int i=0; i<node_n(); i++)
@@ -1256,11 +1314,11 @@ void ColinStruct::selectRect(const QRectF &r, bool keepSelect)
                 nodes[i].bearing_editable().select(keepSelect);
         }
     }
-/*
-#ifndef QT_NO_DEBUG
-            debugS << "selecting beams" << endl;
+
+#ifndef NEAREST_VERBOSE
+			qDebug() << "selecting beams" ;
 #endif
-*/
+
     for(int i=0; i<beam_n(); i++)
     {
 
@@ -1291,17 +1349,17 @@ void ColinStruct::selectRect(const QRectF &r, bool keepSelect)
                        (beams[i].rightNode().x()-beams[i].leftNode().x());
             double b =beams[i].leftNode().z()-beams[i].leftNode().x()*m;
             double y;
-/*
-#ifndef QT_NO_DEBUG
-            debugS << "beam " << i << "intersects with bounding rect" << endl;
-            debugS << "m = " << m << endl;
-            debugS << "b = " << b << endl;
-            debugS << "y1(left) = " << m*r.left()+b << endl;
-            debugS << "y2(right) = " << m*r.right()+b << endl;
-            debugS << "x1(top) = " << (r.top()-b)/m << endl;
-            debugS << "x2(bottm) = " << (r.bottom()-b)/m << endl;
+
+#ifndef NEAREST_VERBOSE
+			qDebug() << "beam " << i << "intersects with bounding rect" ;
+			qDebug() << "m = " << m ;
+			qDebug() << "b = " << b ;
+			qDebug() << "y1(left) = " << m*r.left()+b ;
+			qDebug() << "y2(right) = " << m*r.right()+b ;
+			qDebug() << "x1(top) = " << (r.top()-b)/m ;
+			qDebug() << "x2(bottm) = " << (r.bottom()-b)/m ;
 #endif
-*/
+
             //testing for crossing a side of the rectangle
             y = m*r.left()+b; //y=m*x+b
             if(y <= r.bottom() && y >= r.top()){
@@ -1380,11 +1438,8 @@ QRectF ColinStruct::boundingRect(const bool &alsoLoads) const
         return QRectF(0, 0, 0, 0);
     QRectF bound(node(0).toQPointF(), QSizeF(0.0001, 0.0001));
 	foreach(ColinNode n, nodes)
-    {
-        bound.setLeft(      qMin(      bound.left(),    n.x()));
-        bound.setRight(     qMax(      bound.right(),   n.x()));
-        bound.setTop(       qMin(      bound.top(),     n.z()));
-        bound.setBottom(    qMax(      bound.bottom(),  n.z()));
+	{
+		bound = bound.united(QRectF(n.x()-0.00001, n.z()-0.00001, 0.00002, 0.00002));
     }
     if(alsoLoads)
     {
@@ -1410,6 +1465,46 @@ QRectF ColinStruct::boundingRect(const bool &alsoLoads) const
                 bound.setBottom(    qMax(      bound.bottom(),  load(i).shape()[1].y()));
             }
         }
+		if(isCalculated())
+		{
+			foreach(ColinNode n, nodes)
+			{
+				for(int j = 0; j<qMax(1, cls_n()); j++){
+					bound = bound.united(QRectF(n.x()+n.u(j)*scaleU()-0.00001, n.z()+n.w(j)*scaleU()-0.00001, 0.00002, 0.00002));
+				}
+			}
+			for(int i=0; i<beam_n(); i++)
+			{
+				QTransform t = beam(i).transform();
+
+				for(int j = 0; j<qMax(1, cls_n()); j++){
+					for(int i=0; i<2; i++){
+						QPointF maxP = t.map(QPointF(beam(i).l()*i, beam(i).M(j, beam(i).l()*i)*scaleM()));
+						bound = bound.united(QRectF(maxP.x()-0.00001, maxP.y()-0.00001, 0.00002, 0.00002));
+					}
+					for(int i=0; i<2; i++){
+						QPointF maxP = t.map(QPointF(beam(i).Mconst(j).max(i), beam(i).M(j, beam(i).Mconst(j).max(i))*scaleM()));
+						bound = bound.united(QRectF(maxP.x()-0.00001, maxP.y()-0.00001, 0.00002, 0.00002));
+					}
+					for(int i=0; i<2; i++){
+						QPointF maxP = t.map(QPointF(beam(i).l()*i, beam(i).N(j, beam(i).l()*i)*scaleP()));
+						bound = bound.united(QRectF(maxP.x()-0.00001, maxP.y()-0.00001, 0.00002, 0.00002));
+					}
+					for(int i=0; i<1; i++){
+						QPointF maxP = t.map(QPointF(beam(i).Nconst(j).max(i), beam(i).N(j, beam(i).Nconst(j).max(i))*scaleP()));
+						bound = bound.united(QRectF(maxP.x()-0.00001, maxP.y()-0.00001, 0.00002, 0.00002));
+					}
+					for(int i=0; i<2; i++){
+						QPointF maxP = t.map(QPointF(beam(i).l()*i, beam(i).Q(j, beam(i).l()*i)*scaleP()));
+						bound = bound.united(QRectF(maxP.x()-0.00001, maxP.y()-0.00001, 0.00002, 0.00002));
+					}
+					for(int i=0; i<1; i++){
+						QPointF maxP = t.map(QPointF(beam(i).Qconst(j).max(i), beam(i).Q(j, beam(i).Qconst(j).max(i))*scaleP()));
+						bound = bound.united(QRectF(maxP.x()-0.00001, maxP.y()-0.00001, 0.00002, 0.00002));
+					}
+				}
+			}
+		}
     }
     return bound.normalized();
 }
@@ -1479,14 +1574,14 @@ void ColinStruct::deleteSelection()
     {
 #ifndef QT_NO_DEBUG
      QTextStream debugg(stdout);
-     debugg <<"load[" <<  i << (load(i).isSelected() ? "] is selected" : "] is not selected") << endl;
+	 debugg <<"load[" <<  i << (load(i).isSelected() ? "] is selected" : "] is not selected") ;
  #endif
 
 	if(load(i).isSelected())
 	{
 	    removeLoad(i);
 #ifndef QT_NO_DEBUG
-	    debugg <<"removed load[" << i << "]" << endl;
+		debugg <<"removed load[" << i << "]" ;
 #endif
 	}
 	else
@@ -1499,14 +1594,14 @@ void ColinStruct::deleteSelection()
     {
 #ifndef QT_NO_DEBUG
      QTextStream debugg(stdout);
-     debugg <<"beam[" <<  i << (beam(i).isSelected() ? "] is selected" : "] is not selected") << endl;
+	 debugg <<"beam[" <<  i << (beam(i).isSelected() ? "] is selected" : "] is not selected") ;
  #endif
 
 	if(beam(i).isSelected())
 	{
 	    removeBeam(i);
 #ifndef QT_NO_DEBUG
-	    debugg <<"removed beam[" << i << "]" << endl;
+		debugg <<"removed beam[" << i << "]" ;
 #endif
 	}
 	else
@@ -1514,7 +1609,7 @@ void ColinStruct::deleteSelection()
 	    i++;
 	}
 #ifndef QT_NO_DEBUG
-		    debugg <<"next beam = beam[" <<  i << "]" << endl;
+			debugg <<"next beam = beam[" <<  i << "]" ;
 #endif
     }
 
@@ -1522,14 +1617,14 @@ void ColinStruct::deleteSelection()
     {
 #ifndef QT_NO_DEBUG
      QTextStream debugg(stdout);
-     debugg <<"node[" <<  i << (node(i).isSelected() ? "] is selected" : "] is not selected") << endl;
+	 debugg <<"node[" <<  i << (node(i).isSelected() ? "] is selected" : "] is not selected") ;
  #endif
 
 	if(node(i).isSelected())
 	{
 	    removeNode(i);
 #ifndef QT_NO_DEBUG
-	    debugg <<"removed node[" << i << "]" << endl;
+		debugg <<"removed node[" << i << "]" ;
 #endif
 	}
 	else
@@ -1537,7 +1632,7 @@ void ColinStruct::deleteSelection()
 	    i++;
 	}
 #ifndef QT_NO_DEBUG
-		    debugg <<"next node = node[" <<  i << "]" << endl;
+			debugg <<"next node = node[" <<  i << "]" ;
 #endif
     }
     endS();

@@ -28,12 +28,14 @@
 #define GENERALOVERLAY_H
 
 
-#include "abstractoverlay.h"
 #include <QtGui/QClipboard>
+
+#include "abstractoverlay.h"
+#include "pictureexport.h"
 
 
 class ColinStruct;
-class QLineEdit;
+class QDoubleSpinBox;
 class QLabel;
 class QButtonGroup;
 class QComboBox;
@@ -47,6 +49,8 @@ class generalOverlay : public abstractOverlay
 	Q_OBJECT
 public:
 	explicit generalOverlay(QWidget *parent = 0);
+	~generalOverlay();
+
 signals:
 
 public slots:
@@ -54,6 +58,10 @@ public slots:
 	void clsChanged();
 	void loadCLS(QModelIndex clsIndex);
 	void loadCLS(int clsIndex);
+	void setCurrentItem(const int &i);
+	void updatePicture();
+	void savePicture();
+	void setTw(ColinStruct *tw);
 private:
 
 
@@ -61,8 +69,32 @@ private:
 	QListWidget *clsView;
 	QListWidget *blsView;
 
-	QGridLayout *clsEditorLayout;
-	QWidget *clsEditor;
+
+	QGroupBox *exportBox;
+
+	QLabel *exportPreview;
+	QPushButton *saveB;
+	QDoubleSpinBox *leftMargin,
+				   *rightMargin,
+				   *topMargin,
+				   *bottomMargin;
+	QDoubleSpinBox *xRes,
+				   *yRes;
+	QDoubleSpinBox *preScale;
+
+	int currentItem;
+
+	pictureExport exporter;
+
+	QGroupBox *clsets;
+	QGroupBox *blsets;
+
+	static bool showPaste;
+	static bool showPicture;
+	static bool showCls;
+	static bool showBls;
+
+
 };
 
 #endif // GENERALOVERLAY_H

@@ -66,6 +66,10 @@ void consoleWidget::docChanged(int position, int charsRemoved, int charsAdded)
 
 void consoleWidget::keyPressEvent(QKeyEvent *e)
 {
+	QTextCursor tc = textCursor();
+	tc.movePosition(QTextCursor::End);
+	setTextCursor(tc);
+
 	if(e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return)
 	{
 
@@ -93,11 +97,15 @@ void consoleWidget::keyPressEvent(QKeyEvent *e)
 		}
 		else
 			e->setAccepted(true);
-	}/*
+	}
 	else if(e->key() == Qt::Key_Up)
 	{
 		if(!history.empty())
 		{
+			for(int i=0; i<buffer.size(); i++)
+				textCursor().deletePreviousChar();
+			buffer = history.at(posInHist);
+			textCursor().insertText(buffer);
 			posInHist++;
 			if(posInHist>=history.size())
 				posInHist=0;
@@ -106,15 +114,18 @@ void consoleWidget::keyPressEvent(QKeyEvent *e)
 	}
 	else if(e->key() == Qt::Key_Down)
 	{
-		if(history.isEmpty())
+		if(!history.isEmpty())
 		{
-			posInHist++;
-			if(posInHist>=history.size())
-				posInHist=history.size()-1;
+			for(int i=0; i<buffer.size(); i++)
+				textCursor().deletePreviousChar();
 			buffer = history.at(posInHist);
+			textCursor().insertText(buffer);
+			posInHist--;
+			if(posInHist<0)
+				posInHist=history.size()-1;
 			e->setAccepted(true);
 		}
-	}*/
+	}
 	else
 	{
 		appendToBuffer=true;

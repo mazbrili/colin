@@ -42,7 +42,9 @@ class toolTipEater : public QObject
 protected:
 	bool eventFilter(QObject *obj, QEvent *event){
 		if(event->type() == QEvent::ToolTip && obj->inherits("QToolButton")){
+#ifdef TOOLTIPEATER_VERBOSE
 			qDebug() << "eat tooltip!";
+#endif
 			return true;
 		}
 		if(event->type() == QEvent::WhatsThisClicked){

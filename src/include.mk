@@ -105,7 +105,8 @@ MOCHEADERS= abstractcolintooltip.h \
 	generaloverlay.h \
 	detailpainter.h \
 	colinpastebuffer.h \
-	pastepreviewwidget.h
+	pastepreviewwidget.h \
+	pictureexport.h
 
 
 BUILDDATESOURCES=colinversion.cpp
@@ -190,7 +191,8 @@ SOURCES= bmenu.cpp \
 	generaloverlay.cpp \
 	detailpainter.cpp \
 	colinpastebuffer.cpp \
-	pastepreviewwidget.cpp
+	pastepreviewwidget.cpp \
+	pictureexport.cpp
 
 
 

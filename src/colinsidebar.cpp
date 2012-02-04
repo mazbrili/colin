@@ -36,6 +36,29 @@ ColinSidebarHeader::ColinSidebarHeader(QWidget *parent) :
 	print = new QPushButton(tr("print"), this);
 	console = new QPushButton(tr("console"), this);
 
+	tree->setWhatsThis("<b>"+tr("tree")+" </b>"+
+					   tr("<a href=\"sidebar/tree\">open manual</a><br /><br />")+
+					   tr("Show a tree representation of the current structure. <br/>")+
+					   tr("You can overview and edit the structure there in detail. Also you can create new items there."));
+
+	lib->setWhatsThis("<b>"+tr("library")+" </b>"+
+					  tr("<a href=\"sidebar/lib\">open manual</a><br /><br />")+
+					  tr("Show cross sections and materials. <br/>")+
+					  tr("You can overview and edit materials and cross sections used for the computation of your structures.")+
+					  tr("You can edit existing onces or add new ones to the library. Deleting existing cross sections or materials is not possible."));
+
+	print->setWhatsThis("<b>"+tr("print")+" </b>"+
+						tr("<a href=\"sidebar/print\">open manual</a><br /><br />")+
+						tr("Show printing settings and print or export to as pdf."));
+
+	console->setWhatsThis("<b>"+tr("console")+" </b>"+
+						  tr("<a href=\"sidebar/console\">open manual</a><br /><br />")+
+						  tr("Show the JavaScript-console. <br/>")+
+						  tr("You can access the structure and edit it or use stress for further computations using the JavaScript language."));
+
+
+
+
 	tree->setFlat(true);
 	lib->setFlat(true);
 	print->setFlat(true);

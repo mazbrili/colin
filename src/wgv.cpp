@@ -149,10 +149,10 @@ void wgv::run()
 
 
 
-#ifndef QT_NO_DEBUG
+#ifdef WGV_VERBOSE
     QTime t;
     t.start();
-#endif //QT_NO_DEBUG
+#endif //WGV_VERBOSE
 
     u_formal();                   //create a formal u-vector
     make_k();
@@ -193,16 +193,16 @@ void wgv::run()
     writeResultsBeams();
 
 
-#ifndef QT_NO_DEBUG
+#ifdef WGV_VERBOSE
 	qDebug() << endl << QString("time elapsed: %1 ms").arg(t.elapsed()) << endl;
-#endif //QT_NO_DEBUG
+#endif //WGV_VERBOSE
 
 }
 
 
 void wgv::writeBack()
 {
-#ifndef QT_NO_DEBUG
+#ifdef WGV_VERBOSE
 	qDebug() << "copy results to GUI thread";
 #endif
 
@@ -239,9 +239,11 @@ void wgv::writeBack()
 	tw->a_res = a_r;
 	tw->b_res = b_r;
 
+#ifdef WGV_VERBOSE
 	qDebug() << "maximum of Moment " << globalMMax;
 	qDebug() << "maximum of Force " << globalPMax;
 	qDebug() << "maximum of Displacement " << globalUMax;
+#endif
 
 	tw->emitSelectionChanged();
     tw->emitCalculationFinished();
@@ -306,7 +308,7 @@ void wgv::writeResultsNodes()
 				nodes[i].results()[ls].phi = u[j++];
 			}
 
-#ifndef QT_NO_DEBUG
+#ifdef WGV_VERBOSE
 			qDebug() << "u = " << nodes[i].u(ls) << ", w = " << nodes[i].w(ls) << ", phi = " << nodes[i].phi(ls);
 #endif
 
@@ -372,7 +374,7 @@ void wgv::writeResultsNodes()
 				globalPMax = qMax(globalUMax, nodes[i].bearing_results()[ls].z);
 				globalMMax = qMax(globalMMax, nodes[i].bearing_results()[ls].m);
 
-#ifndef QT_NO_DEBUG
+#ifdef WGV_VERBOSE
 			qDebug() << "Node has support";
 			qDebug() << "Ax = " << nodes[i].Ax(ls) << ", Az = " << nodes[i].Az(ls) << ", M = " << nodes[i].Am(ls);
 #endif
@@ -414,12 +416,12 @@ void wgv::writeResultsBeams()
 		double* &dT = this->dT[ls];
 		double* &dTz = this->dTz[ls];
 
-#ifndef QT_NO_DEBUG
+#ifdef WGV_VERBOSE
 		qDebug() << "creating beam functions for cls #" << ls;
 #endif
 		for(int n=0; n<beam_n; n++)
 		{
-#ifndef QT_NO_DEBUG
+#ifdef WGV_VERBOSE
 			qDebug() << "beam #" << n;
 #endif
 			if(!beam(n).joint(0))
@@ -485,7 +487,7 @@ void wgv::writeResultsBeams()
 
 			beams[n].w(ls) = beams[n].phi(ls)*DiffOp::dx + w0;
 
-#ifndef QT_NO_DEBUG
+#ifdef WGV_VERBOSE
 			qDebug() << "N = " << beams[n].N(ls).toString(1, 'f', 3);
 			qDebug() << "Q = " << beams[n].Q(ls).toString(1, 'f', 3);
 			qDebug() << "M = " << beams[n].M(ls).toString(1, 'f', 3);
@@ -499,10 +501,12 @@ void wgv::writeResultsBeams()
 			beams[n].Q(ls).calcMax();
 			beams[n].M(ls).calcMax();
 
+#ifdef WGV_VERBOSE
 			qDebug() << "N(x=" << beams[n].N(ls).max(0) <<")=" << beams[n].N(ls, beams[n].N(ls).max(0));
 			qDebug() << "Q(x=" << beams[n].Q(ls).max(0) <<")=" << beams[n].Q(ls, beams[n].Q(ls).max(0));
 			qDebug() << "M(x=" << beams[n].M(ls).max(0) <<")=" << beams[n].M(ls, beams[n].M(ls).max(0));
 			qDebug() << "M(x=" << beams[n].M(ls).max(1) <<")=" << beams[n].M(ls, beams[n].M(ls).max(1));
+#endif
 
 			if(beams[n].M(ls).max(0)<beams[n].l() && beams[n].M(ls).max(0)>0)
 				globalMMax= qMax(globalMMax, fabs(beams[n].M(ls, beams[n].M(ls).max(0))));
@@ -595,7 +599,7 @@ void wgv::u_formal()
 
 
 
-#ifndef QT_NO_DEBUG
+#ifdef WGV_VERBOSE
 	qDebug() << endl << "building formal u-vektor";
 	qDebug() << "degree of freedoms =" <<  f_n;
 	qDebug() << "locked degree of freedoms =" <<  a_n;
@@ -926,9 +930,9 @@ void wgv::make_k()
 			}
 		}
 
-#ifndef QT_NO_DEBUG
-		QTextStream debugS(stderr);
-		debugS << endl << "global KMatrix #" << ls << endl << K << endl;
+#ifdef WGV_VERBOSE
+		QTextStream sD;
+		sD << endl << "global KMatrix #" << ls << endl << K << endl;
 #endif
 	}
 }
@@ -1091,7 +1095,7 @@ void wgv::make_s0()
 }
 
 /*
-#ifndef QT_NO_DEBUG
+#ifdef WGV_VERBOSE
     QTextStream debugS(stdout);
     debugS << endl << "s0" << endl << s0_ << endl;
 #endif

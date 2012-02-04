@@ -40,7 +40,9 @@ ColinPasteBuffer *ColinPasteBuffer::_instance = 0;
 ColinPasteBuffer::ColinPasteBuffer() :
 	QThread()
 {
+#ifdef PASTE_VERBOSE
 	qDebug() << "init PasteBuffer";
+#endif
 	board = QApplication::clipboard();
 	killYourSelf = false;
 
@@ -62,23 +64,30 @@ ColinPasteBuffer::~ColinPasteBuffer()
 void ColinPasteBuffer::changed(QClipboard::Mode mode)
 {
 	QMutexLocker lock(&lockStructs);
+#ifdef PASTE_VERBOSE
 	qDebug() << "pasteBuffer changed!";
+#endif
 	if(mode != QClipboard::QClipboard::Clipboard){
+#ifdef PASTE_VERBOSE
 		qDebug() << "not in clipboard mode";
+#endif
 		return;
 	}
 	if(board->mimeData()->data("text/colinfile").isEmpty()){
+#ifdef PASTE_VERBOSE
 		qDebug() << "no colinfile";
+#endif
 		return;
 	}
 
 	ColinStruct *tw = new ColinStruct();
 	tw->setParent(this);
 	XmlReader reader(tw);
-	if(!reader.read(board->mimeData()->data("text/colinfile"))
-)
+	if(!reader.read(board->mimeData()->data("text/colinfile")))
 	{
+#ifdef PASTE_VERBOSE
 		qDebug() << "no valid colinfile!";
+#endif
 		delete tw;
 		return;
 	}
@@ -86,10 +95,12 @@ void ColinPasteBuffer::changed(QClipboard::Mode mode)
 	if(structs.size()>10)
 		delete structs.takeLast();
 	emit changedBuffer();
+#ifdef PASTE_VERBOSE
 	qDebug() << "readed file from clipboard";
 	qDebug() << tw->node_n() << " nodes";
 	qDebug() << tw->beam_n() << " beams";
 	qDebug() << tw->load_n() << " loads";
+#endif
 
 }
 
@@ -125,7 +136,9 @@ void ColinPasteBuffer::copy(int i, ColinStruct *target)
 void ColinPasteBuffer::renderPreview(QSize size, int i)
 {
 	QMutexLocker lock(&lockStructs);
+#ifdef PASTE_VERBOSE
 	qDebug() << "ColinPasteBuffer::render struct " << i;
+#endif
 	this->size_ = size;
 	this->toDo_.append(i);
 	lock.unlock();
@@ -136,7 +149,9 @@ void ColinPasteBuffer::run()
 {
 	int current;
 	QSize size;
+#ifdef PASTE_VERBOSE
 	qDebug() << "ColinPasteBuffer::run";
+#endif
 
 	forever
 	{
@@ -148,7 +163,9 @@ void ColinPasteBuffer::run()
 		current = toDo_.first();
 		toDo_.removeFirst();
 		size = size_;
+#ifdef PASTE_VERBOSE
 		qDebug() << "ColinPasteBuffer::rendering struct" << current;
+#endif
 
 		if(structs.size()<=current)
 			continue;

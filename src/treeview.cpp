@@ -33,9 +33,19 @@
 #include "treemodel.h"
 
 delMenu::delMenu(int clsId, int blsId, QWidget *parent) : QMenu(parent){
-	addAction(colinIcons::instance().icon(Colin::Close), tr("remove from combination"), this, SLOT(delBLS()));
+	addAction(colinIcons::instance().icon(Colin::Close), tr("remove"), this, SLOT(delBLS()));
 	this->clsId = clsId;
 	this->blsId = blsId;
+}
+
+void delMenu::delBLS(){
+	if(clsId<0)
+		filelist::instance().currentFile()->removeBLS(blsId);
+	else if(blsId<0)
+		filelist::instance().currentFile()->removeCLS(clsId);
+	else
+		filelist::instance().currentFile()->removeBLSbyIndex(clsId, blsId);
+		deleteLater();
 }
 
 treeView::treeView(QWidget *parent) :
@@ -101,8 +111,10 @@ void treeView::mousePressEvent(QMouseEvent *e)
 	if(e->buttons().testFlag(Qt::RightButton))
 	{
 		QModelIndex index = indexAt(e->pos());
+#ifdef TREEVIEW_VERBOSE
 		qDebug() << "treeView::rightClick on " << index;
 		qDebug() << "internal id " << int(treeModel::Id(index.internalId()));
+#endif
 		switch(treeModel::Id(index.internalId())){
 		case treeModel::node:
 			emit rightClick(catcher::CatchedNode, index.row());
@@ -118,6 +130,12 @@ void treeView::mousePressEvent(QMouseEvent *e)
 			return;
 		case treeModel::load:
 			emit rightClick(catcher::CatchedLoad, index.row());
+			return;
+		case treeModel::cls:
+			popupDelMenu(index.row(), -1);
+			return;
+		case treeModel::bls:
+			popupDelMenu(-1, index.row());
 			return;
 		case treeModel::clsbls:
 			popupDelMenu(index.parent().row(), index.row());
@@ -248,7 +266,9 @@ void treeView::firstColumn(const QModelIndex &index)
 
 void treeView::popupDelMenu(int clsId, int blsId)
 {
+#ifdef TREEVIEW_VERBOSE
 	qDebug() << "popup";
+#endif
 	delMenu *Menu = new delMenu(clsId, blsId);
 	Menu->popup(QCursor::pos());
 }

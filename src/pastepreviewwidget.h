@@ -29,7 +29,7 @@
 
 #include <QtGui/QWidget>
 
-class ColinPushButtonPart;
+class QPushButton;
 
 
 class pastePreviewWidget : public QWidget
@@ -39,6 +39,8 @@ public:
 	explicit pastePreviewWidget(int nr, QWidget *parent = 0);
 	void paintEvent(QPaintEvent *e);
 	int heightForWidth(int w) const;
+	void mousePressEvent(QMouseEvent *e);
+	void resizeEvent(QResizeEvent *e);
 
 signals:
 	void pasteRequest();
@@ -47,8 +49,7 @@ public slots:
 	void paste();
 	void remove();
 private:
-	ColinPushButtonPart *removeButton;
-	ColinPushButtonPart *pasteButton;
+	QPushButton *removeButton;
 	int index;
 	QImage image;
 

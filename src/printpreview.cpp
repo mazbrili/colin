@@ -2,14 +2,17 @@
 
 
 #include <QtGui/QMouseEvent>
+#include <QtGui/QGraphicsDropShadowEffect>
+
 
 const int pageSpacing = 5;
 printPreview::printPreview(QWidget *parent) :
     QScrollArea(parent)
 {
 
+	mouseoverpage = -1;
 	pages = new QLabel(this);
-	page = new QLabel();
+	page = new QLabel(this->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget()); //uff
 	page->setWindowFlags(Qt::FramelessWindowHint);
 	this->setWidget(pages);
 	pages->setMinimumWidth(50);
@@ -19,6 +22,11 @@ printPreview::printPreview(QWidget *parent) :
 	pages->setFocusPolicy(Qt::NoFocus);
 	page->setAttribute(Qt::WA_TransparentForMouseEvents);
 	page->setFocusPolicy(Qt::NoFocus);
+	QGraphicsDropShadowEffect *eff = new QGraphicsDropShadowEffect(page);
+	eff->setXOffset(5);
+	eff->setYOffset(5);
+	eff->setBlurRadius(20);
+	page->setGraphicsEffect(eff);
 
 	setMinimumWidth(60);
 	page->hide();
@@ -64,9 +72,9 @@ void printPreview::update(QPrinter *p, const painterContent &c)
 	int pageheight;
 
 	if(c.s.testFlag(painterContent::landscape))
-		pageheight = pagewidth * M_SQRT2;
-	else
 		pageheight = pagewidth / M_SQRT2;
+	else
+		pageheight = pagewidth * M_SQRT2;
 	QPixmap device(QSize(pages->width(), pageCount*pageheight+(pageCount-1)*pageSpacing+4));
 	device.fill(QColor(palette().color(QPalette::Background)));
 	QPainter painter(&device);
@@ -88,8 +96,8 @@ void printPreview::update(QPrinter *p, const painterContent &c)
 void printPreview::updateHighlight(QPrinter *p, const painterContent &c)
 {
 	QSize s;
-	QPoint ViewGeo=parentWidget()->parentWidget()->parentWidget()->mapToGlobal(parentWidget()->parentWidget()->parentWidget()->rect().topRight());
-	s.setHeight(parentWidget()->parentWidget()->parentWidget()->size().height());
+	QPoint ViewGeo=page->parentWidget()->mapFromGlobal(parentWidget()->parentWidget()->parentWidget()->mapToGlobal(parentWidget()->parentWidget()->parentWidget()->rect().topRight()));
+	s.setHeight(parentWidget()->parentWidget()->parentWidget()->height());
 	s.setWidth(s.height()*p->pageRect().width()/p->pageRect().height());
 	QPixmap device(s);
 

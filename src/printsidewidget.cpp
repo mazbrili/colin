@@ -35,7 +35,17 @@ printsideWidget::printsideWidget(QWidget *parent) :
 	printDia = new ColinPushButtonPart(tr("print"), this);
 
 
+	save->setWhatsThis("<b>"+tr("save as pdf")+" </b>"+
+					   tr("<a href=\"print/pdf\">open manual</a><br /><br />")+
+					   tr("Saves a protocol of the current file as pdf after entering the desired filename.<br/>"));
 
+	print->setWhatsThis("<b>"+tr("print quick")+" </b>"+
+						tr("<a href=\"print\">open manual</a><br /><br />")+
+					   tr("Prints the protocol of the current file without showing the print dialog.<br/><br/>"));
+
+	printDia->setWhatsThis("<b>"+tr("print")+" </b>"+
+						   tr("<a href=\"print\">open manual</a><br /><br />")+
+						   tr("Prints the protocol of the current file. Shows a dialog with more settings before actually printing.<br/>"));
 
 	ColinHMultiButton *hbutton = new ColinHMultiButton(this);
 
@@ -80,6 +90,11 @@ printsideWidget::printsideWidget(QWidget *parent) :
 	printerLabel = new QLabel(tr("printer"), this);
 	printerSelection = new QComboBox(this);
 
+	printerSelection->setWhatsThis("<b>"+tr("select printer")+" </b>"+
+								   tr("<a href=\"print/select\">open manual</a><br /><br />")+
+								   tr("Select the printer you want use to print the protocol."));
+
+
 	sliderBox->addWidget(printerLabel, sliderBox->rowCount(), 0, 1, 1);
 	sliderBox->addWidget(printerSelection, sliderBox->rowCount()-1, 1, 1, 1);
 
@@ -98,6 +113,20 @@ printsideWidget::printsideWidget(QWidget *parent) :
 	morePrinter = new ColinPushButtonPart(tr("layout"), this);
 	fontSetter = new ColinPushButtonPart(tr("font"), this);
 
+	morePrinter->setWhatsThis("<b>"+tr("select layout")+" </b>"+
+							  tr("<a href=\"print/layout\">open manual</a><br /><br />")+
+							  tr("Select the layout of the printer such as:")+
+							  "<ul>"+
+							  tr("<li>paper size </li>")+
+							  tr("<li>orientation </li>")+
+							  tr("<li>margins </li>")+
+							  "</ul>");
+
+	fontSetter->setWhatsThis("<b>"+tr("select font")+" </b>"+
+							 tr("<a href=\"print/font\">open manual</a><br /><br />")+
+							 tr("Select the font which is used to print the protocol."));
+
+
 	hbutton = new ColinHMultiButton(this);
 	hbutton->addButton(morePrinter);
 	hbutton->addButton(fontSetter);
@@ -114,19 +143,31 @@ printsideWidget::printsideWidget(QWidget *parent) :
 
 	addBLSLabel = new QLabel(this);
 	addBLS = new ColinBoolSlider(this);
-	addSlider(addBLSLabel, addBLS, tr("add plots of basic load sets"), sliderBox);
+	addSlider(addBLSLabel, addBLS, tr("basic load sets"), sliderBox);
+	addBLS->setWhatsThis("<b>"+tr("basic load sets")+" </b>"+
+						 tr("<a href=\"print/bls\">open manual</a><br /><br />")+
+						 tr("Activate to add a plot of loads to the protocol, one plot per basic load set."));
 
 	allCLSLabel = new QLabel(this);
 	allCLS = new ColinBoolSlider(this);
 	addSlider(allCLSLabel, allCLS, tr("all combined load sets together"), sliderBox);
+	allCLS->setWhatsThis("<b>"+tr("all combined load sets together")+" </b>"+
+						 tr("<a href=\"print/allcls\">open manual</a><br /><br />")+
+						 tr("Activate to add a plot of all combined load sets including the results in a single plot."));
 
 	onePerCLSLabel = new QLabel(this);
 	onePerCLS = new ColinBoolSlider(this);
 	addSlider(onePerCLSLabel, onePerCLS, tr("one plot per load set"), sliderBox);
+	onePerCLS->setWhatsThis("<b>"+tr("one plot per load set")+" </b>"+
+							tr("<a href=\"print/cls\">open manual</a><br /><br />")+
+							tr("Activate to add a plot of the structure, one per combined load set"));
 
 	fourPerPageLabel = new QLabel(this);
 	forPerPage = new ColinBoolSlider(this);
 	addSlider(fourPerPageLabel, forPerPage, tr("4 pictures per page"), sliderBox);
+	forPerPage->setWhatsThis("<b>"+tr("4 pictures per page")+" </b>"+
+							 tr("<a href=\"print/forperpage\">open manual</a><br /><br />")+
+							 tr("Activate to put four plots on a page."));
 
 	sliderBox->addWidget(input, sliderBox->rowCount(), 0, 1, 2);
 
@@ -134,14 +175,23 @@ printsideWidget::printsideWidget(QWidget *parent) :
 	nodes_inputLabel = new QLabel(this);
 	nodes_input = new ColinBoolSlider(this);
 	addSlider(nodes_inputLabel, nodes_input, tr("nodes"), sliderBox);
+	nodes_input->setWhatsThis("<b>"+tr("nodes")+" </b>"+
+							  tr("<a href=\"print/nodes\">open manual</a><br /><br />")+
+							  tr("Activate to add a list of all nodes to the protocol."));
 
 	beams_inputLabel = new QLabel(this);
 	beams_input = new ColinBoolSlider(this);
 	addSlider(beams_inputLabel, beams_input, tr("beams"), sliderBox);
+	beams_input->setWhatsThis("<b>"+tr("beams")+" </b>"+
+							  tr("<a href=\"print/beams\">open manual</a><br /><br />")+
+							  tr("Activate to add a list of all beams to the protocol."));
 
 	loads_inputLabel = new QLabel(this);
 	loads_input = new ColinBoolSlider(this);
 	addSlider(loads_inputLabel, loads_input, tr("loads"), sliderBox);
+	loads_input->setWhatsThis("<b>"+tr("loads")+" </b>"+
+							  tr("<a href=\"print/loads\">open manual</a><br /><br />")+
+							  tr("Activate to add a list of all loads to the protocol."));
 
 
 	sliderBox->addWidget(results, sliderBox->rowCount(), 0, 1, 2);
@@ -149,14 +199,23 @@ printsideWidget::printsideWidget(QWidget *parent) :
 	nodes_resLabel = new QLabel(this);
 	nodes_res = new ColinBoolSlider(this);
 	addSlider(nodes_resLabel, nodes_res, tr("nodes"), sliderBox);
+	nodes_res->setWhatsThis("<b>"+tr("node results")+" </b>"+
+							tr("<a href=\"print/noderesults\">open manual</a><br /><br />")+
+							tr("Activate to add displacement and reaction forces to the protocol."));
 
 	beam_funLabel = new QLabel(this);
 	beam_fun = new ColinBoolSlider(this);
 	addSlider(beam_funLabel, beam_fun, tr("beams(functions)"), sliderBox);
+	beam_fun->setWhatsThis("<b>"+tr("beam results - functions")+" </b>"+
+						   tr("<a href=\"print/beamfunctions\">open manual</a><br /><br />")+
+						   tr("Activate to add all beam forces to the protocol in form of functions."));
 
 	beam_valLabel = new QLabel(this);
 	beam_val = new ColinBoolSlider(this);
 	addSlider(beam_valLabel, beam_val, tr("beams(values)"), sliderBox);
+	beam_val->setWhatsThis("<b>"+tr("beam results - functions")+" </b>"+
+						   tr("<a href=\"print/beamvalues\">open manual</a><br /><br />")+
+						   tr("Activate to add all beam forces to the protocol in form of a table of values."));
 
 
 
@@ -326,6 +385,9 @@ void printsideWidget::printDialog()
 	{
 		pContent.s &= (~painterContent::landscape);
 	}
+
+	preview->update(printer, pContent);
+
 }
 
 void printsideWidget::savePdfDialog()

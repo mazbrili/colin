@@ -39,7 +39,9 @@ treeDelegate::treeDelegate(QObject *parent) :
 
 QWidget *treeDelegate::createEditor( QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
+#ifdef TREEDELEGATE_VERBOSE
 	qDebug() << "treeDelegate: Editor requested for Index: " << index;
+#endif
 	lastIndex = index;
 	commitOnFocusLoss = true;
 	if(index.data(Qt::UserRole).toInt() == ColinStruct::NodalLoadTyp)
@@ -189,6 +191,7 @@ QWidget *treeDelegate::createEditor( QWidget *parent, const QStyleOptionViewItem
 		for(int i=0; i<tw->bls_n(); i++){
 			combo->addItem(tw->bls(i).name());
 		}
+		combo->addItem(colinIcons::instance().icon(Colin::Close), tr("delete"));
 
 		connect(combo,				SIGNAL(activated(int)),
 				this,				SLOT(emitCommitData()));
@@ -301,7 +304,9 @@ bool treeDelegate::eventFilter(QObject *obj, QEvent *event){
 		QFocusEvent *e = static_cast<QFocusEvent*>(event);
 		if(e->reason() != Qt::PopupFocusReason &&
 		   e->reason() != Qt::OtherFocusReason){
+#ifdef TREEDELEGATE_VERBOSE
 			qDebug() << "commiting Data on FocusReason " << e->reason();
+#endif
 			if(commitOnFocusLoss){
 				commitData(static_cast<QWidget*>(obj));
 				obj->deleteLater();
@@ -313,7 +318,9 @@ bool treeDelegate::eventFilter(QObject *obj, QEvent *event){
 	{
 		if(static_cast<QKeyEvent*>(event)->key() == Qt::Key_Tab )
 		{
+#ifdef TREEDELEGATE_VERBOSE
 			qDebug() << "commiting Data on keyPressEvent Tab";
+#endif
 			commitOnFocusLoss = false;
 			commitData(static_cast<QWidget*>(obj));
 			emit openNext(lastIndex);
@@ -321,7 +328,9 @@ bool treeDelegate::eventFilter(QObject *obj, QEvent *event){
 		}
 		else if(static_cast<QKeyEvent*>(event)->key() == Qt::Key_Backtab)
 		{
+#ifdef TREEDELEGATE_VERBOSE
 			qDebug() << "commiting Data on keyPressEvent Backtab";
+#endif
 			commitOnFocusLoss = false;
 			commitData(static_cast<QWidget*>(obj));
 			emit openPrevious(lastIndex);
@@ -329,7 +338,9 @@ bool treeDelegate::eventFilter(QObject *obj, QEvent *event){
 		}
 		else if(static_cast<QKeyEvent*>(event)->key() == Qt::Key_Down)
 		{
+#ifdef TREEDELEGATE_VERBOSE
 			qDebug() << "commiting Data on keyPressEvent Down";
+#endif
 			commitOnFocusLoss = false;
 			commitData(static_cast<QWidget*>(obj));
 			emit openNextItem(lastIndex);
@@ -337,7 +348,9 @@ bool treeDelegate::eventFilter(QObject *obj, QEvent *event){
 		}
 		else if(static_cast<QKeyEvent*>(event)->key() == Qt::Key_Up)
 		{
+#ifdef TREEDELEGATE_VERBOSE
 			qDebug() << "commiting Data on keyPressEvent Up";
+#endif
 			commitOnFocusLoss = false;
 			commitData(static_cast<QWidget*>(obj));
 			emit openPreviousItem(lastIndex);
@@ -345,7 +358,9 @@ bool treeDelegate::eventFilter(QObject *obj, QEvent *event){
 		}
 		else if(static_cast<QKeyEvent*>(event)->key() == Qt::Key_Return)
 		{
+#ifdef TREEDELEGATE_VERBOSE
 			qDebug() << "commiting Data on keyPressEvent Return";
+#endif
 			commitOnFocusLoss = false;
 			commitData(static_cast<QWidget*>(obj));
 			emit openFirstColumn(lastIndex);
@@ -353,7 +368,9 @@ bool treeDelegate::eventFilter(QObject *obj, QEvent *event){
 		}
 	else if(static_cast<QKeyEvent*>(event)->key() == Qt::Key_Escape)
 		{
+#ifdef TREEDELEGATE_VERBOSE
 			qDebug() << "returning from Delegate on Escape press";
+#endif
 			commitOnFocusLoss = false;
 //#warning restore in treeView
 			obj->deleteLater();

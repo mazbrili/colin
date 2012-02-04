@@ -27,7 +27,11 @@
 #include "ctabbar.h"
 
 #include <QtGui/QMessageBox>
+#include <QtGui/QMainWindow>
 #include <QtGui/QFileDialog>
+
+#include "nwidget.h"
+
 cTabBar::cTabBar(QWidget *parent) :
     QToolBar(parent)
 {
@@ -158,9 +162,9 @@ void cTabBar::paintEvent(QPaintEvent *)
 
     //startertab
     if(files.newVisible())
-    {
+	{/*
         if(files.currentIndex()!=-1)
-            p.drawPath(tab);
+			p.drawPath(tab);*/
         p.translate(dwtab(), 0);
     }
 
@@ -220,7 +224,20 @@ void cTabBar::paintEvent(QPaintEvent *)
     p.setPen(QColor(100, 100, 100));
 
     grad.setColorAt(1, static_cast<QWidget*>(parent())->palette().color(QPalette::Light));
-    p.setBrush(QBrush(grad));
+	if(files.currentIndex()<0){
+		QBrush back(*nWidget::back);
+		QTransform t;
+		QMainWindow *mW = qobject_cast<QMainWindow*>(parentWidget());
+		int aditionalOffset=0;
+		if(mW)
+			aditionalOffset = mW->centralWidget()->pos().y();
+		t.translate(-p.transform().dx(), geometry().y()-aditionalOffset);
+		t.scale(1, -1);
+		back.setTransform(t);
+		p.setBrush(back);
+	}
+	else
+		p.setBrush(QBrush(grad));
 
     p.drawPath(tab);
 

@@ -28,31 +28,72 @@
 #include "unitsettings.h"
 #include "viewportsettings.h"
 #include "shortcutsettings.h"
+#include "nwidget.h"
+
+#include <QtGui/QGraphicsDropShadowEffect>
+#include <QtGui/QGraphicsBlurEffect>
+
 
 sWidget::sWidget(QWidget *parent) :
     QWidget(parent)
 {
     group = new QButtonGroup(this);     //these two together kick asses!!!1!11
-    central = new QStackedWidget(this);
+	central = new SlidingStackedWidget(this);
 
+
+	central->setAnimation(QEasingCurve::Linear);
+	central->setSpeed(200);
+
+
+	QPalette pal = this->palette();
+	pal.setColor(QPalette::Base, QColor(255, 255, 255, 50));
+	pal.setColor(QPalette::Window, QColor(255, 255, 255, 50));
+
+
+	QPalette pal2 = this->palette();
+	pal2.setColor(QPalette::Base, QColor(255, 255, 255, 0));
+	pal2.setColor(QPalette::Window, QColor(255, 255, 255, 0));
+
+	//QGraphicsDropShadowEffect *eff = new QGraphicsDropShadowEffect();
+	//eff->setBlurRadius(20);
+	//eff->setColor(Qt::white);
+	//eff->setOffset(0);
     colors = new colorSettingsWidget(this);
+	//colors->setGraphicsEffect(eff);
+	colors->setPalette(pal2);
     QPushButton *colorB = new QPushButton(tr("colors"), this);
     QScrollArea *scrollArea = new QScrollArea(this);
     scrollArea->setWidget(colors);
-    scrollArea->setWidgetResizable(true);
-    group->addButton(colorB, central->addWidget(scrollArea));
+	scrollArea->setWidgetResizable(true);
+	group->addButton(colorB, central->addWidget(scrollArea));
+	scrollArea->setPalette(pal);
 
-    shortcuts = new shortcutSettingsWidget(this);
+	//eff = new QGraphicsDropShadowEffect();
+	//eff->setBlurRadius(20);
+	//eff->setColor(Qt::white);
+	//eff->setOffset(0);
+	shortcuts = new shortcutSettingsWidget(this);
+	//shortcuts->setGraphicsEffect(eff);
 	QPushButton *shortcutB = new QPushButton(tr("tools"), this);
     scrollArea = new QScrollArea(this);
+	scrollArea->setPalette(pal);
     scrollArea->setWidget(shortcuts);
     group->addButton(shortcutB, central->addWidget(scrollArea));
+	shortcuts->setPalette(pal2);
 
+
+	//eff = new QGraphicsDropShadowEffect();
+	//eff->setBlurRadius(20);
+	//eff->setColor(Qt::white);
+	//eff->setOffset(0);
     misc = new miscSettingsWidget(this);
+	//misc->setGraphicsEffect(eff);
     QPushButton *miscB = new QPushButton(tr("miscellaneous"), this);
     scrollArea = new QScrollArea(this);
+	scrollArea->setPalette(pal);
     scrollArea->setWidget(misc);
     group->addButton(miscB, central->addWidget(scrollArea));
+	misc->setPalette(pal2);
 
 
     QPushButton *restoreB = new QPushButton(tr("restore Settings"), this);
@@ -66,15 +107,20 @@ sWidget::sWidget(QWidget *parent) :
     colorB->setChecked(true);
     central->setCurrentIndex(0);
 
+	colorB->setFlat(true);
+	shortcutB->setFlat(true);
+	miscB->setFlat(true);
+	restoreB->setFlat(true);
+
     connect(group,                  SIGNAL(buttonClicked(int)),
-            central,                SLOT(setCurrentIndex(int)));
+			central,                SLOT(slideInIdx(int)));
 
     connect(restoreB,		    SIGNAL(clicked()),
 	    this,		    SLOT(restore()));
 
     QGridLayout *layout = new QGridLayout(this);
 
-
+	layout->setMargin(10);
     layout->addWidget(colorB, 0, 0, 1, 1);
     layout->addWidget(shortcutB, 0, 1, 1, 1);
     layout->addWidget(miscB, 0, 2, 1, 1);
@@ -83,31 +129,33 @@ sWidget::sWidget(QWidget *parent) :
     layout->addWidget(central, 1, 0, 1, 4);
 
 
-
 }
 
-/*
-void sWidget::paintEvent(QPaintEvent *)
+void sWidget::paintEvent(QPaintEvent *e)
 {
-    //set painter & pen
-    QPainter p(this);
-    QFont f = p.font();
-    f.setPixelSize(60);
-    p.setFont(f);
-    QLinearGradient grad;
-    grad.setStart(0, height()-15-128);
-    grad.setFinalStop(0, height()-15);
-    grad.setColorAt(0, QColor(30, 30, 30));
-    grad.setColorAt(1, QColor(90, 90, 90));
-    p.setPen(QPen(QBrush(grad), 2));
 
-    //draw Icon and text
-    QIcon i("./icons/settings_128.png");
-    i.paint(&p, QRect(15, height()-15-128, 128, 128));
-    p.drawText(QRect(15+128, height()-15-128,  width(), 128),
-               "["+tr("settings")+"]", Qt::AlignVCenter | Qt::AlignLeft );
+	const QPixmap *back = nWidget::back;
+	const QPushButton *colorB = qobject_cast<QPushButton*>(group->button(0));
+	if(!colorB)
+		return;
 
-}*/
+	QPainter p(this);
+	p.setRenderHint(QPainter::Antialiasing, true);
+	p.setPen(Qt::NoPen);
+
+	p.setClipRegion(e->region());
+	p.drawPixmap(0, 0, back->width(), back->height(), *back);
+
+
+	QLinearGradient grad(0, 10, 0, 10+colorB->geometry().bottom());
+	grad.setColorAt(0, palette().color(QPalette::Light));
+	grad.setColorAt(1, palette().color(QPalette::Window));
+	p.setPen(palette().color(QPalette::Dark));
+	p.setBrush(grad);
+	p.drawRect(QRect(0, 10, width(), colorB->height()));
+
+
+}
 
 void sWidget::restore()
 {

@@ -51,14 +51,14 @@ public slots:
 	void setTw(ColinStruct *t);
 	void loadChanged();
 	void loadChanged(int i);
-	void nextItem();
-	void previousItem();
 
 	void copy();
 	void cut();
 	void toClipBoard();
 	void setUnits();
 	void setType(int t);
+	void nextItem();
+	void previousItem();
 	void clsChanged();
 
 private:

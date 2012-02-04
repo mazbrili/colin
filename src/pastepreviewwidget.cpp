@@ -36,7 +36,7 @@
 
 
 pastePreviewWidget::pastePreviewWidget(int nr, QWidget *parent) :
-    QWidget(parent)
+	QWidget(parent)
 {
 
 	setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
@@ -45,18 +45,14 @@ pastePreviewWidget::pastePreviewWidget(int nr, QWidget *parent) :
 	setSizePolicy(sPolicy);
 
 
-	removeButton = new ColinPushButtonPart(colinIcons::instance().icon(Colin::Close), tr("remove"), this);
-	pasteButton = new ColinPushButtonPart(colinIcons::instance().icon(Colin::Paste), tr("paste"), this);
-
-	ColinHMultiButton *button = new ColinHMultiButton(this);
-	button->addButton(removeButton);
-	button->addButton(pasteButton);
+	removeButton = new QPushButton(QIcon(colinIcons::instance().icon(Colin::Close).pixmap(12, QIcon::Normal, QIcon::On)), "", this);
+	removeButton->setFlat(true);
+	removeButton->setFixedSize(12, 12);
+	removeButton->move(width()-16, 4);
 
 	index = nr;
 	image = QImage(QSize(1, 1), QImage::Format_RGB32);
 
-	connect(pasteButton,								SIGNAL(pressed()),
-			this,										SLOT(paste()));
 
 	connect(removeButton,								SIGNAL(pressed()),
 			this,										SLOT(remove()));
@@ -70,6 +66,19 @@ int pastePreviewWidget::heightForWidth(int w) const
 {
 	return 0.75*w;
 }
+
+void pastePreviewWidget::mousePressEvent(QMouseEvent *e)
+{
+	if(e->buttons().testFlag(Qt::LeftButton))
+		paste();
+}
+
+void pastePreviewWidget::resizeEvent(QResizeEvent *e)
+{
+	removeButton->move(width()-16, 4);
+	QWidget::resizeEvent(e);
+}
+
 void pastePreviewWidget::paintEvent(QPaintEvent *e)
 {
 	QPainter p(this);
@@ -80,11 +89,9 @@ void pastePreviewWidget::paintEvent(QPaintEvent *e)
 	}
 	else
 	{
-		p.setRenderHint(QPainter::Antialiasing, true);
 		p.setBrush(QColor(255, 255, 255, 100));
-		p.setPen(QColor(0, 0, 0, 100));
+		p.setPen(palette().color(QPalette::Dark));
 		p.drawRoundedRect(QRect(0, 0, width()-1, height()-1), 4, 4);
-		p.setRenderHint(QPainter::Antialiasing, false);
 		p.drawImage(0, 0, image);
 	}
 }

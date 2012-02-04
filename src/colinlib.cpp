@@ -32,7 +32,9 @@ ColinLibrary *ColinLibrary::instance_ = NULL;
 
 ColinLibrary::ColinLibrary()
 {
+#ifdef LIBRARY_VERBOSE
 	qDebug() << "creating library instance";
+#endif
 
     connect(qApp,           SIGNAL(aboutToQuit()),
             this,           SLOT(dump()));
@@ -77,8 +79,10 @@ ColinLibrary::ColinLibrary()
 
     }
 
+#ifdef LIBRARY_VERBOSE
 	qDebug() << profiles.count() << " cross sections";
 	qDebug() << mats.count() << " materials";
+#endif
 }
 
 
