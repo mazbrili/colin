@@ -67,7 +67,9 @@ void nodeDetail::paintEvent(QPaintEvent *e)
 	if(currentItem<0)
 		return;
 	detailPainter dP;
-	dP.drawNode(&p, *filelist::instance().currentFile(), currentItem, QList<int>() << currentCLS);
+	QList<int> cls = filelist::instance().currentFile()->activeCLS().toList();
+	if(cls.isEmpty()) cls << 0;
+	dP.drawNode(&p, *filelist::instance().currentFile(), currentItem, cls);
 }
 
 void nodeDetail::setCurrentItem(const int &i)
@@ -467,11 +469,6 @@ nodeOverlay::nodeOverlay(QWidget *parent) :
 	detailbox->setLayout(dl);
 	vl2->addWidget(detailbox);
 
-	clsButton = new ColinHMultiButton(this);
-	cls = new QButtonGroup(this);
-	cls->setExclusive(true);
-	dl->addWidget(clsButton);
-	clsButton->hide();
 
 	detailWidget = new nodeDetail(this);
 	detailWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -556,8 +553,6 @@ nodeOverlay::nodeOverlay(QWidget *parent) :
 	connect(phi,			SIGNAL(editingFinished()),
 			this,			SLOT(changed()));
 
-	connect(cls,			SIGNAL(buttonClicked(int)),
-			detailWidget,	SLOT(setCurrentCLS(int)));
 
 	connect(copyButton,		SIGNAL(clicked()),
 			this,			SLOT(copy()));
@@ -909,34 +904,7 @@ void nodeOverlay::previousItem()
 void nodeOverlay::clsChanged()
 {
 
-
-	ColinStruct &t = *filelist::instance().currentFile();
-
-	int current = cls->checkedId();
-	if(!(current>-1 && current<t.cls_n()))
-		current = 0;
-
-	clsButton->clear();
-
-
-	if(t.cls_n()==0)
-	{
-		clsButton->hide();
-		return;
-	}
-
-	for(int i=0; i<t.cls_n(); i++)
-	{
-		ColinPushButtonPart *b = new ColinPushButtonPart(colinIcons::instance().icon(Colin::CLS), t.cls(i).name(), clsButton);
-		b->setCheckable(true);
-		if(i==current)
-			b->setChecked(true);
-		cls->addButton(b, i);
-		clsButton->addButton(b);
-	}
-	 clsButton->show();
-	 foreach(QAbstractButton *b, cls->buttons())
-		 b->setShown(true);
+	this->update();
 }
 
 void nodeOverlay::copy()

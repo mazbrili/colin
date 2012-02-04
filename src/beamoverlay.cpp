@@ -259,13 +259,15 @@ void beamDetail::paintEvent(QPaintEvent *e)
 	if(currentItem<0)
 		return;
 	detailPainter dP;
+	QList<int> cls = filelist::instance().currentFile()->activeCLS().toList();
+	if (cls.isEmpty()) cls << 0;
 	switch(toDraw)
 	{
 	case externForces:
-		dP.drawBeamExtern(&p, *filelist::instance().currentFile(), currentItem, QList<int>() << currentCLS);
+		dP.drawBeamExtern(&p, *filelist::instance().currentFile(), currentItem, cls);
 		return;
 	case internForces:
-		dP.drawBeamIntern(&p, *filelist::instance().currentFile(), currentItem, xVal, QList<int>() << currentCLS);
+		dP.drawBeamIntern(&p, *filelist::instance().currentFile(), currentItem, xVal, cls);
 		return;
 	}
 
@@ -446,12 +448,6 @@ beamOverlay::beamOverlay(QWidget *parent) :
 	detailbox->setLayout(dl);
 	vl2->addWidget(detailbox);
 
-	clsButton = new ColinHMultiButton(this);
-	cls = new QButtonGroup(this);
-	cls->setExclusive(true);
-	dl->addWidget(clsButton);
-	clsButton->hide();
-
 	ColinHMultiButton *modeButton = new ColinHMultiButton(detailbox);
 	modeExtern = new ColinPushButtonPart(tr("extern"), modeButton);
 	modeIntern = new ColinPushButtonPart(tr("intern"), modeButton);
@@ -526,9 +522,6 @@ beamOverlay::beamOverlay(QWidget *parent) :
 
 	connect(modeGroup,		SIGNAL(buttonClicked(int)),
 			detailWidget,	SLOT(setMode(int)));
-
-	connect(cls,			SIGNAL(buttonClicked(int)),
-			detailWidget,	SLOT(setCurrentCLS(int)));
 
 	connect(funs,			SIGNAL(clicked(bool)),
 			this,			SLOT(hideMyChildren(bool)));
@@ -1153,34 +1146,7 @@ void beamOverlay::previousItem()
 
 void beamOverlay::clsChanged()
 {
-
-	ColinStruct &t = *filelist::instance().currentFile();
-
-	int current = cls->checkedId();
-	if(!(current>-1 && current<t.cls_n()))
-		current = 0;
-
-	clsButton->clear();
-
-
-	if(t.cls_n()==0)
-	{
-		clsButton->hide();
-		return;
-	}
-
-	for(int i=0; i<t.cls_n(); i++)
-	{
-		ColinPushButtonPart *b = new ColinPushButtonPart(colinIcons::instance().icon(Colin::CLS), t.cls(i).name(), clsButton);
-		b->setCheckable(true);
-		if(i==current)
-			b->setChecked(true);
-		cls->addButton(b, i);
-		clsButton->addButton(b);
-	}
-	 clsButton->show();
-	 foreach(QAbstractButton *b, cls->buttons())
-		 b->setShown(true);
+	update();
 }
 
 void beamOverlay::setMat(int nr)

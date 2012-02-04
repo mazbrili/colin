@@ -111,8 +111,6 @@ private:
 
 
 	ColinPushButtonPart *copyButton, *cutButton;
-	ColinHMultiButton *clsButton;
-	QButtonGroup *cls;
 	nodeDetail *detailWidget;
 
 	QLabel *reactions;

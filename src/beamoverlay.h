@@ -136,8 +136,6 @@ private:
 	hingeExtended *hinges;
 
 	ColinPushButtonPart *copyButton, *cutButton;
-	ColinHMultiButton *clsButton;
-	QButtonGroup *cls;
 	ColinPushButtonPart *modeExtern, *modeIntern;
 	QButtonGroup *modeGroup;
 	beamDetail *detailWidget;
