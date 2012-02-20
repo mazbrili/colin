@@ -29,9 +29,9 @@
 \newcommand{\Colin}[0]{\textsc{Colin }}
 
 \pagenumbering{roman}
-\geometry{a4paper,left=25mm,right=20mm, top=20mm, bottom=20mm} 
+\geometry{a4paper,left=25mm,right=25mm, top=20mm, bottom=20mm} 
 
-\linespread {1.25}
+\linespread {1.5}
 
 \let\oldsqrt\sqrt
 \def\sqrt{\mathpalette\DHLhksqrt}
@@ -84,6 +84,7 @@ You should have received a copy of the GNU General Public License along with thi
 \clearpage
 
 \tableofcontents
+\listoffigures
 
 
 \clearpage
@@ -123,6 +124,7 @@ Besides, \Colin offers the following additional features for an easy handling:
 
 I started coding Colin with the aim to create an application which can be used imeadetly after installation. Some advanced features as meterials and cross sections (unused when calculating statically determinated structrues as done a long period at our university), springs as supports or rotated supports, load sets, etc. can be ignored completly and should not disturb.\\
 Of course this means also Colin does not contain any stupid, crapy, bullshit-register-here-activate-there-digital-rights-managment\footnote{\url{http://www.defectivebydesign.org/}}. 
+
 
 \section{getting started on Linux}
 \label{sec:startLinux}
@@ -255,7 +257,7 @@ Figure~\ref{pic:workspace} shows the elements of the workspace:
 
 \section{Menubar}
 \label{sec:menubar}
-The menubar is placed on top of the Mainwindow on most operation systems. The \textit{file} menu contains some basic actions to organize, such as \textit{open} and \textit{save} (see figure~\ref{pic:filemenu}). The \texitit{edit} menu contains some additional actions to manipulate the current file (see figure~\ref{pic:editmenu}) which are not present in the toolbar (see section~\ref{sec:toolbar}. You can activate these action by pressing the shortcut. It's visible next to the corresponding action.
+The menubar is placed on top of the Mainwindow on most operation systems. The \textit{file} menu contains some basic actions to organize, such as \textit{open} and \textit{save} (see figure~\ref{pic:filemenu}). The \textit{edit} menu contains some additional actions to manipulate the current file (see figure~\ref{pic:editmenu}) which are not present in the toolbar (see section~\ref{sec:toolbar}. You can activate these action by pressing the shortcut. It's visible next to the corresponding action.
 
 \begin{minipage}[b]{\textwidth/2}
 \begin{figure}[H]
@@ -285,7 +287,7 @@ Here a quick overview over the action present in this menu:
 	\item \textit{open}: open a file on your computer
 	\item \textit{print}: launches the print dialog
 	\item \textit{save}: saves the current file. Overwrites any other version. If the file was not saved before, a dialog appears where you can enter the designated filename
-	\item \texit{save as}: saves the current file. Asks for a filename.
+	\item \textit{save as}: saves the current file. Asks for a filename.
 	\item \textit{close tab}: closes the current tab. Asks for saving the file has been edited.
 	\item \textit{quit}: closes the application. Asks for saving before.
 \end{itemize}
@@ -597,14 +599,371 @@ After a click on the window tool button the menu in figure~\ref{pic:windowtoolba
 The four rectangles in this menu can be used to chose the visilbe GraphicViews. The GraphicViews are explaned in depth in section~\ref{sec:graphical}. You can click on a single rectangle to show the related GraphicsView. The currently visilbe GraphicViews are highlighted as the GraphicsView on the button left in figure~\ref{pic:windowtoolbar2}. The notations whitin the rectangles shows the data visulized in the related GraphicsView. You can also select more of them as shown in figure~\ref{pic:windowtoolbar2}. To do so, click on a Point in the area. A rectangle appears. Keep the mouse pressed and move the mouse until the rectanlge covers all GraphicViews you want to be shown. After releasing the mousebutton, a selection as in figure~\ref{pic:windowtoolbar2} would show the two GraphicsViews on the top. 
 \end{minipage}
 
+
 \section{GraphicView}
 \label{sec:graphical}
+
+Some text!!!!
+
+
+\subsection{Right Click Widgets}
+\label{sec:rightclickwidgets}
+
+A right click will show you a widget with more information about the item clicked. Depending on the item clicked, one of the following widgets will appear:
+\begin{trivlist}
+	\leftskip=1cm
+	\item[] \includegraphics[scale = 0.5]{../../icons/grid.png} \textbf{background}: A widget for overall inforamtion, see section~\ref{sec:nodedetail}.
+	\item[] \includegraphics[scale = 0.5]{../../icons/node.png} \textbf{nodes}: The widget for nodes, see section~\ref{sec:nodedetail}.
+	\item[] \includegraphics[scale = 0.5]{../../icons/beam.png} \textbf{beams}: The widget for beams, see section~\ref{sec:nodedetail}.
+	\item[] \includegraphics[scale = 0.5]{../../icons/load.png} \textbf{loads}: The widget for loadss, see section~\ref{sec:nodedetail}.
+	
+\end{trivlist}
+
+
+
+These widgets are all organised in toolboxes. You can hide and show most of the toolboxes of these widgets by clicking on the corresponding checkbox in the top right of the toolbox. Some very important sections will always be shown and are not hideable.\\
+All widgets can be closed pressing the \textif{Escape} key or pressing the red cross in the upper right corner of the widget. \\
+Those widgets, which are related to a specific element of the structure, contain 3 buttons as shown in figure~\ref{pic:overlayheader}. Press "\textit{<}" or "\textit{>}" to switch to another element (of the same type). The number and icon in the middle marks the currently shown item.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../pictures/overlayheader.png}
+\caption{header item of a right click widget}
+\label{pic:overlayheader}
+\end{center}
+\end{figure}
+
+
+\subsection{Structure proerties}
+\label{sec:structdetail}
+
+
+\begin{figure}[H]
+\centering{
+\includegraphics[width=\textwidth]{../pictures/generaloverlay.png}
+\caption{structure properties}
+}
+\label{pic:generaloverlay}
+\end{figure}
+
+This view appears after a \textbf{right click} on the background of the view widget. It shows some basic overall information. 
+
+\paragraph{paste}
+This element (placed on the left side of the screen, see also figure~\ref{pic:generaloverlay}) shows an overview over all parts which have been copied by any instance of \Colin. This can be nodes (with the corresponding support), beams (with the corresponding nodes and their properties), loads (including their basic load set) or many items. You can remove them from the temporary memory by clicking on the red cross in the upper right corner of the preview. You can insert them to your current file by clicking on the preview. This view will disappear immediately to allow you to specify the position where the copied elements should be insert. Click on the designated position to finish the procedure. The copied parts are now part of your current file. 
+
+\paragraph{export}
+This element (placed in the middle of the screen, see also figure~\ref{pic:generaloverlay}) allows you to export a picture of your current view on the structure. The picture contains the same elements and functions as the view you picked to launch this menu. The zoomfactor of all loads and functions matches also to those in the viewports.
+The picture on top shows a preview of the exported file. Below, you can set some properties to make sure the picture matched to your needs:
+\begin{trivlist}
+	\leftskip=1cm
+	\item[]\textbf{left}: The left boundary of the rectangle which is exported in global coordinates (meters).
+	\item[]\textbf{right}: The right boundary of the rectangle which is exported in global coordinates (meters).
+	\item[]\textbf{top}: The top boundary of the rectangle which is exported in global coordinates (meters).
+	\item[]\textbf{botton}: The top boundary of the rectangle which is exported in global coordinates (meters).
+	\item[]\textbf{resolution (x)}: The horizontal resolution of the resulting image in pixel
+	\item[]\textbf{resolution (z)}: The vertical resolution of the resulting image in pixel
+	\item[]\textbf{scale text}: Used to scale up or down text and elements or symbols with a fixed pixel size, such as supports and hinges.
+\end{trivlist}
+
+\paragraph{combined load sets}
+Shows the combined load sets this structure contains.
+
+\paragraph{basic load sets}
+Shows the basic load sets this structure contains.
+
+\subsection{Detail/Edit View for nodes}
+\label{sec:nodedetail}
+
+
+
+\begin{figure}[H]
+\centering{
+\includegraphics[width=\textwidth]{../pictures/nodeoverlay.png}
+\caption{structure properties}
+\label{pic:generaloverlay}
+}
+\end{figure}
+
+This view appears after a \textbf{right click} on a node. It shows all properties of the node and allows edition (left row). Also, this view offers a detailed view to results for this node (center and right row).
+
+\paragraph{coordinates}
+Set the coordinates of the node:
+\begin{trivlist}
+	\leftskip=1cm
+	\item[]\textbf{x}: horizontal coordinate of the node in meters
+	\item[]\textbf{z}: vertical coordinate of the node in meters
+	\item[]\textbf{phi}: the angle of the local coordinate system of the node. Editing is disabled if no support is set for this node. The local coordinate system affects only nodes with supports. Counterclockwise angles are positive!
+\end{trivlist}
+
+\paragraph{support}
+The first three buttons allow to set the support for this note:
+\begin{trivlist}
+	\leftskip=1cm
+	\item[]\includegraphics[scale = 0.5]{../../icons/bearingH.png} Horizontal support: toggle to set/remove
+	\item[]\includegraphics[scale = 0.5]{../../icons/bearingV.png} Vertical support: toggle to set/remove
+	\item[]\includegraphics[scale = 0.5]{../../icons/bearingM.png} Moment support: toggle to set/remove
+\end{trivlist}
+
+
+
+
+
+\begin{minipage}[h]{6.5cm}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=6cm]{../pictures/supportextended.png}
+\caption{setting springs}
+\label{pic:supportextended}
+\end{center}
+\end{figure}
+\end{minipage}
+\begin{minipage}[h]{\textwidth-7cm}
+You can also set springs by checking the \textif{springs} ckeckbox. An extended toolbox as in figure~\ref{pic:supportextended} appears. To add a spring to your node, press the \includegraphics[scale=0.5]{../../icons/spring.png} button next to the designated direction. The textbox next to the button will be activated and allow entering of a spring constant. The unit is shown at the end of the row (it can be set in the settings part, see also section~\ref{ssec:miscsettings}) 
+\end{minipage}
+
+
+\paragraph{clipboard}
+Use the \includegraphics[scale=0.5]{../../icons/spring.png} \textit{copy} or \includegraphics[scale=0.5]{../../icons/spring.png} \textit{cut} button to copy the current node to the clipboard. The support gets copied too. Therefore, this feature can be used to assign supports very quickly to your nodes.
+
+\paragraph{view}
+Shows a detailed view on the current node. Colors are the same as in the viewport. Beside reaction forces, the graphic shows all forces in beams connected to this node. If you are using load set and combined load sets, the same CLS as in the viewport are shown here.
+
+\paragraph{displacement}
+Shows the displacement of the node. If you are using load sets and the value is the zero for all load sets, only one value is shown (labeled with $_{\max}$). Otherwise, all values are shown, below the maximum absolute value (labeled with $_{\max}$).
+\textbf{You can select this text and copy it to your clipboard!} The index in the notation is the index of the CLS which leads to the respective displacement (for example, $u_{\max} = \text{absolute maximum of horizontal displacement}$, $u_{i} = \text{horizontal displacement of CLS i}$).
+
+\paragraph{reactions}
+Shows the reaction forces of the node. As for the displacement, the absolute maximum is shown on the top. Also, only one value is shown if all reaction forces of this direction are zero. They will not be listed if there is no support for the respective degree of freedom. Of course, this text can be copied to clipboard too.
+
+\paragraph{beam forces}
+Lists the forces in all beams connected to the note at the position where it is connected to the note. Only minimal and maximum value are shown if you are using CLS. Can also be copied.
+
+\subsection{Detail/Edit View for beams}
+\label{sec:beamdetail}
+
+
+
+\begin{figure}[H]
+\centering{
+\includegraphics[width=\textwidth]{../pictures/beamoverlay.png}
+\caption{structure properties}
+\label{pic:beamoverlay}
+}
+\end{figure}
+
+This view appears after a \textbf{right click} on a beam. It shows all properties of the beam and allows edition (left row). Also, this view offers a detailed view to results for this beam (center and right row).
+
+\paragraph{nodes}
+Here you can view and set the nodes which define the geometry of the beam:
+\begin{trivlist}
+	\leftskip=1cm
+	\item[]\textbf{from}: The left node of the beam
+	\item[]\textbf{to}: The right node of the beam
+\end{trivlist}
+
+\paragraph{geometry}
+Shows additional geometry information, calculated by the application:
+\begin{trivlist}
+	\leftskip=1cm
+	\item[]\textbf{alpha}: the angle between the beam and the global x axis. Counterclockwise angles are positive!
+	\item[]\textbf{length}: the length of the beam
+\end{trivlist}
+
+\paragraph{hinges}
+The two basic buttons allow to add ordinary hinges (setting the moment at the designated position to zero), left button for a hinge between left end of the beam and the left node, the right button for a hinge between right end of the bean and the right node.\\
+\begin{minipage}[h]{6.5cm}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=6cm]{../pictures/hingesextended.png}
+\caption{extended hinge options}
+\label{pic:hingesextended}
+\end{center}
+\end{figure}
+\end{minipage}
+\begin{minipage}[h]{\textwidth-7cm}
+You can toogle the \textit{more...} checkbox to get access to a much more features as shown in figure~\ref{pic:hingesextended}. In addition to the basic option, this toolbox offers the posibility to add hinges for all degree of freedoms and springs for all hinges! This toolbox contains six rows. Every row represents one degree of freedom in the following order: $u_l$, $w_l$, $\varphi_l$, $u_r$, $w_r$, $\varphi_r$. Springs can be set the same way as for supports (see section~\ref{sec:nodedetail}).
+\end{minipage}
+
+
+\paragraph{properties}
+\begin{trivlist}
+	\leftskip=1cm
+	\item[]\textbf{material}: the material assigned to this beam
+	\item[]\textbf{cross section}: the cross section assigned to this beam
+\end{trivlist}
+
+\paragraph{clipboard}
+Use the \includegraphics[scale=0.5]{../../icons/spring.png} \textit{copy} or \includegraphics[scale=0.5]{../../icons/spring.png} \textit{cut} button to copy the current beam to the clipboard. Nodes and hinges related to this beam are copied too.
+
+
+
+\begin{minipage}[h]{0.5\textwidth-0.5cm}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../pictures/externforcesdetail.png}
+\caption{extern forces of the beam}
+\label{pic:externforces}
+\end{center}
+\end{figure}
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.5\textwidth-0.5cm}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../pictures/internforcesdetail.png}
+\caption{intern forces of the beam}
+\label{pic:internforces}
+\end{center}
+\end{figure}
+\end{minipage}
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Detail/Edit View for loads}
+\label{sec:loaddetail}
 
 \section{Sidebar}
 \label{sec:sidebar}
 
 \subsection{Tree Representation}
 \label{ssec:tree}
+
+
+\begin{figure}
+\centering{
+\includegraphics[width=0.8\textwidth]{../pictures/tree.png}
+\caption{tree widget}
+}
+\label{pic:tree}
+\end{figure}
+
+
+The tree representation allows a detailed view and editing of the current file. 
+
+\paragraph{Navigation}
+You can move throw the tree with the following keys (should be the same as in most spreadsheet applications):
+\begin{trivlist}
+	\leftskip=1cm
+	\item[] \textbf{Tab}: next row or the first row in the next column if the end of the column was reached
+	\item[] \textbf{Backtab}: previous row or the last row in the previous column if the beginning of the column was reached
+	\item[] \textbf{Left}(arrow key): move backward within the current cell
+	\item[] \textbf{Right}(arrow key): move forward within the current cell
+	\item[] \textbf{Up}(arrow key): same property of the item above or the same property of the last item if the beginning of the row was reached
+	\item[] \textbf{Down}(arrow key): same property of the item below or the same property of first item if the end of the row was reached
+	\item[] \textbf{F2}: enter editing mode: opens an editor for the currently selected value
+	\item[] \textbf{Enter}: Finish editing
+	\item[] \textbf{Esc}: Abort editing
+\end{trivlist}
+
+
+All values can also be edited by clicking on them and entering the designated value.\\
+
+\paragraph{Organization}
+
+The tree contains 5 top level entries. All of them can be expanded to show their respective items. Some underlying entries can by expanded as well by clicking on the triangle on the left side.\\
+
+Some entries are also marked with a green plus. This indicated that this entry can be used to add new items to the structure.
+
+
+\begin{trivlist}
+	\item[] \includegraphics[scale = 0.5]{../../icons/node.png} \textbf{nodes}: Contains all nodes. Each row shows one node, the last row shows a void entry which can be used to add nodes to the structure. A new node is added to the structure, when the coordinates have been set. All other properties can be set afterwards. Each column shows on the following properties:
+	\begin{trivlist}
+		\leftskip=1cm
+		\item[]\textbf{x}: shows the x coordinate of the node
+		\item[]\textbf{z}: shows the z coordinate of the node
+		\item[]\textbf{phi}: shows the angle of the local coordinate system of the node. A node has only a local coordinate system if a support is set for the node.
+	\end{trivlist}
+	node entrys can be expanded to show: 
+	\begin{trivlist}
+		\leftskip=1cm
+		\item[] \includegraphics[scale = 0.5]{../../icons/bearing.png} \textbf{supports}: Each column shows one of the following:
+		\begin{trivlist}
+		\leftskip=2cm
+		\item[]\textbf{x}: shows the support of the node in x direction. This value can be \textit{free} or \textit{locked}. Also, you can add a numeric value to force \colin to add a spring as support to this node. The sprin constand will be the entered value.
+		\item[]\textbf{z}: shows the support of the node in y direction. Same usage as for x direction.
+		\item[]\textbf{phi}: shows the support of the node against rotation. Same usage as for x direction.
+		\end{trivlist}
+	\end{trivlist}
+	\item[] \includegraphics[scale = 0.5]{../../icons/beam.png} \textbf{beams}: Contains all beams. Each row shows one beam, the last row shows a void entry which can be used to add beams. A new beam is added to the structure, when the nodes which define it's geometry have been set. All other properties can be set afterwards. Each column shows one of the following properties:
+	\begin{trivlist}
+		\leftskip=1cm		
+		\item[]\textbf{from}: the left node of the beam
+		\item[]\textbf{to}: the right node of the beam
+		\item[]\textbf{material}: the material of the beam. Can be chosen in a list when clicking on the parameter
+		\item[]\textbf{cross section}: the cross section of the beam. Can be chosen in a list when clicking on the parameter
+	\end{trivlist}
+	beam entries can be expanded to show:
+	\begin{trivlist}
+		\leftskip=1cm
+		\item[] \includegraphics[scale = 0.5]{../../icons/joint.png} \textbf{hinges}: The first column shows the hinge of the left side, the second column shows the hinge of the right side. Each column stands for a degree of freedom of the respective side of the beam:
+		\begin{trivlist}
+		\leftskip=2cm
+		\item[] \textbf{x}: The hinge parallel to the beam axis (the local x axis). Entries can be set the same way as for supports: \textit{free} marks a hinge (normal force will be 0), while \textit{locked} marks a connection (the displacement between node an beam end will be 0)to the respective node. Entering a numeric value leads to a spring between node and beam in the structure.
+		\item[] \textbf{z}: The hinge normal to the beam axis (the local z axis). Usage as for x direction: \textit{free} for a hinge (shear force will be 0), \textit{locked} for a direct connection and a numeric value to add a spring.
+		\item[] \textbf{phi}: An ordinary hinge. \textit{free} to mark a hinge (moment will be 0), \textit{locked} for a torsionally stiff connection or a numeric value for a spring.
+		\end{trivlist}
+	\end{trivlist}
+	
+	\item[] \includegraphics[scale = 0.5]{../../icons/load.png} \textbf{loads}: Contains all loads. Each row shows one load, the last row can again be used to add loads. A single load item contains following parameters:
+		\begin{trivlist}
+		\leftskip=1cm
+		\item[] \includegraphics[scale = 0.5]{../../icons/ustload.png}: the first row contains an icon, which shows the type of the load. Click it to change the type. You can change between the following groups of loads:
+		\begin{trivlist}
+		\leftskip=2cm
+		\item[] distributed loads: \includegraphics[scale = 0.5]{../../icons/dstload.png}, \includegraphics[scale = 0.5]{../../icons/istload.png} and \includegraphics[scale = 0.5]{../../icons/ustload.png}
+		\item[] double loads: \includegraphics[scale = 0.5]{../../icons/doubleL.png} change placement between left and right side of the beam
+		\item[] temperature loads: \includegraphics[scale = 0.5]{../../icons/tempDiff.png} and \includegraphics[scale = 0.5]{../../icons/tempChange.png}
+		\item[] nodal loads: \includegraphics[scale = 0.5]{../../icons/load.png} and \includegraphics[scale = 0.5]{../../icons/moment.png}
+		\end{trivlist}
+		While using the last entry to add a load to your structure, you can switch between all types!
+		\item[] \textbf{position}: The beam (for \includegraphics[scale = 0.5]{../../icons/dstload.png}, \includegraphics[scale = 0.5]{../../icons/istload.png}, \includegraphics[scale = 0.5]{../../icons/ustload.png}, \includegraphics[scale = 0.5]{../../icons/tempDiff.png}, \includegraphics[scale = 0.5]{../../icons/tempChange.png}, \includegraphics[scale = 0.5]{../../icons/doubleL.png})or node (for \includegraphics[scale = 0.5]{../../icons/load.png} and \includegraphics[scale = 0This is the only value for the moment. Also, this row might represent the .5]{../../icons/moment.png}) where the load is placed on.
+		\item[] \textbf{x}: The horizontal value of the load. It represents the temperature change for temperature changes and the load in global x direction for all other loads. The unit shown can be changed in the settings (see section~\ref{ssec:miscsettings}).
+		\item[] \textbf{z}: The vertical value of the load. It represents the temperature difference between upper and lower part of a beam or the load in global z direction for all loads. Unit as x direction.
+		\item[] \textbf{phi}: The value which leads to rotation. This is the only value for the moment. 
+		\item[] \textbf{set}: Loads can be grouped to sets. This row can be used to do so. Click on the current value to get access to a list of possible values. You can also chose \textit{none}. Please note that if you do so, the load will not be considered during calculation when calculating combinations of load sets.
+		\end{trivlist}
+	\item[] \includegraphics[scale = 0.5]{../../icons/bls.png} \textbf{loadsets}: Contains all loadsets. Each row shows one load set, the last row can again be used to add loads set. A single load set item contains following parameters:
+	\begin{trivlist}
+		\leftskip=1cm
+		\item[]\textbf{name}: The name of the load set. Will be used to reference this set when assigning loads to it or create combined load sets.
+		\item[]\textbf{color}: The color of loads assigned to this set.
+	\end{trivlist}
+	\item[] \includegraphics[scale = 0.5]{../../icons/cls.png} \textbf{combined load sets}: Contains all combined load sets. Each row contains one of the following parameters:
+	\begin{trivlist}
+		\leftskip=1cm
+		\item[]\textbf{name}: The name of the combined load set. 
+		\item[]\textbf{active}: Shows weather the results for this set are shown in the view beside.
+	\end{trivlist}
+	All CLS items can be expanded to show the combination of load sets they consist of:
+	\begin{trivlist}
+		\leftskip=1cm
+		\item[] \includegraphics[scale = 0.5]{../../icons/bls.png} \textbf{parts of CLS}: Each of them represents a BLS added to this CLS, one per row. Data in columns shows one of the following:
+		\begin{trivlist}
+			\leftskip=2cm
+			\item[]\textbf{name}: the name of the BLS added to this CLS. After a click on a name, a list with all BLS appers. Select one of them to replace the BLS. Select \textit{delete} to remove this entry from your combination. Also a right click on an item enables you to remove the BLS from the combination.
+			\item[]\textbf{active/factor}: All loads of the BLS are multiplied with the factor when calculating forces in the structure.
+		\end{trivlist}
+		To add a BLS to the combination, use the last row, marked with a green plus. Once you entered a name, the load set is added with factor one to the combination. Of course this factor can be changed afterwards. If you enter a name witch already exists, a number is appended to the name.
+	\end{trivlist}
+\end{trivlist}
+
+\paragraph{Menus}
+You can also launch dialogs from this view. To do so \textbf{right click} on the designated item. 
+
+
+
+
+
 
 \subsection{Library Widget}
 \label{ssec:library}
@@ -644,6 +1003,10 @@ Here you can change the colors used to draw the Structure in the GraphicView. Cl
 \caption{color settings}
 \label{pic:colorsettings}
 \end{figure}
+
+
+
+
 
 
 \subsection{ShortCut Settings}
