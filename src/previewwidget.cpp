@@ -176,8 +176,8 @@ void previewWidget::giefPix(const QString &url, const QImage &pix)
         return;
 	backG->show();
 	image = pix;
-    hasPreview = true;
-    repaint();
+	hasPreview = true;
+	repaint();
 }
 
 

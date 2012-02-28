@@ -47,6 +47,7 @@ public:
 
 	void hideToolTips();
 
+	bool eventFilter(QObject *o, QEvent *e);
 signals:
     void viewChanged();
 	void basePoint(QPointF p);

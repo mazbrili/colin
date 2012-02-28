@@ -181,7 +181,7 @@ private:
 	//bool historyShown;
 	//bool libShown;
 
-    bool removeSelectionAfterCopy;
+	bool removeSelectionAfterCopy;
 
 };
 

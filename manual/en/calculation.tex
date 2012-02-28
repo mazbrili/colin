@@ -1,0 +1,506 @@
+\Colin uses the matrix stiffness method to calculate forces and displacement of a structure. I tried out a lot of different variations and ended with this one.\\
+Some free literature can be found on Dr. Colin\footnote{Even if this application has his name, he is not in touch with this project.} Capranis Homepage\footnote{\url{http://www.colincaprani.com/}} which I would recommend to read: 
+\begin{itemize}
+	\item[\textbf{Virtual Work: Compound Structures}] \\\url{www.colincaprani.com/files/notes/SAIV/2%20-%20Virtual%20Work%20-%20Compound%20Structures.pdf}
+	\item[\textbf{Virtual Work: Advanced Examples}] \\\url{www.colincaprani.com/files/notes/SAIV/3%20-%20Virtual%20Work%20-%20Advanced%20Examples.pdf}
+	\item[\textbf{Matrix Stiffness Method}] \\\url{www.colincaprani.com/files/notes/SAIV/4%20-%20Matrix%20Stiffness%20Method.pdf}
+\end{itemize}
+
+This section will give some basic introduction to the stiffness method and show the way \Colin performs it. If you are interested in the implementation look up the file \texttt{wgv.cpp} in our repository.
+
+
+\section{Notations}
+
+In this section i will use the following notations:\\
+\begin{minipage}[h]{0.5\textwidth-0.5cm}
+\begin{align*}
+n &\dots \text{index of node}\\
+i &\dots \text{index of beams}\\
+m &\dots \text{index of loads}\\
+u &\dots \text{translation in x direction}\\
+w &\dots \text{translation in z direction}\\
+\varphi &\dots \text{rotation}\\
+N &\dots \text{normal force}\\
+Q &\dots \text{shear force}\\
+M &\dots \text{moment}\\
+A_x &\dots \text{reaction force in x direction}\\
+A_z &\dots \text{reaction force in x direction}\\
+M &\dots \text{reaction moment}\\
+P &\dots \text{nodal loads}\\
+p &\dots \text{distributed loads}
+\end{align*}
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.5\textwidth-0.5cm}
+\begin{align*}
+T &\dots \text{thermal expansion coefficient}\\
+E &\dots \text{tensile modulus}\\
+c &\dots \text{spring constants}\\
+\alpha_T &\dots \text{coefficient}\\
+h &\dots \text{height of cross section}\\
+A &\dots \text{area of cross section}\\
+I &\dots \text{second moment area}\\
+\vec{u}&\dots \text{vector of node displacement}\\
+\vec{v}&\dots \text{vector of beamnode displacement}\\
+\vec{s}&\dots \text{vector of beam forces at ends}\\
+\vec{p}&\dots \text{vector of nodal loads}\\
+\vec{s_0}&\dots \text{vector of beam loads}\\
+\textbf{k}&\dots \text{matrix of stiffness (LCS)}\\
+\textbf{K}&\dots \text{matrix of stiffness (GCS)}\\
+\textbf{A}&\dots \text{transformation matrix (LCS to GCS)}
+\end{align*}
+\end{minipage}\\
+
+I won't take in consideration load sets, which lead only to a multiplication of loads with scale factors and repeating the calculation for each set.
+
+\section{Degrees of Freedom and Transformation}
+
+First we have to define the degree of freedoms (DoF) of the structure we want to calculate. The vector which contains all DoF for one node:
+
+\begin{align}
+\vec{u_n} &= \left(u_n, w_n, \varphi_n\right)^T
+\end{align}
+
+The degrees of freedom for a beam can be written as:
+
+\begin{align}
+\vec{v_i} &= \left(u_{l, i} , w_{l, i} , \varphi_{l, i} , u_{r, i} , w_{r, i} , \varphi_{r, i}\right)^T
+\end{align}
+
+
+Which leads to a vector of all our \textbf{possible} degrees of freedom of:
+
+\begin{align}
+\vec{u} &= \left(\vec{u_0}^T, \vec{u_1}^T, \dots, \vec{u_n}^T, \vec{v_0}^T, \vec{v_1}^T, \dots, \vec{v_i}^T\right)^T
+\end{align}
+
+and all our beam freedoms of:
+
+\begin{align}
+\vec{u} &= \left(\vec{v_0}^T, \vec{v_1}^T, \dots, \vec{v_i}^T\right)^T
+\end{algin}
+Not actually all of these are DoF. To separate the real onces from the other we have to take a look at our supports and hinges.
+
+\section{Local Stiffness Matrix for Beams}
+
+We now search a transformation matrix between the local beam coordinate system and the local node coordinate system. To transform the x and z axis, we can use an ordinary transformation matrix. All rotation related values will keep the same:
+\begin{align}
+\left(\begin{array}{r}x_g\\z_g\\\varphi_g\end{array}\right) &= \left[\begin{array}{rrr} \cos(\alpha) & -\sin(\alpha) &0\\
+									\sin(\alpha) & \cos(\alpha)&0\\
+									0&0&1\end{array}\right]\cdot \left(\begin{array}{r}x_l\\z_l\\\varphi_l\end{array}\right)
+\end{align}
+We have to take consideration, that nodes have their own coordinate system. Thus we have to differ between the angle between beam LCS and the angle of the left or right coordinate system properly. This matrix will connect our vector in nodal coordinates $\vec{u}$ with our vectors in beam coordinates $\vec{v}_i$. For each beam such a Matrix looks as follows:
+\begin{align}
+\vec{v}_i &= \left[\begin{array}{ccc c ccc}
+\cos(\Delta \alpha_l) & -\sin(\Delta \alpha_l) & 0 & \dots & 0 & 0 & 0\\
+\sin(\Delta \alpha_l) &  \cos(\Delta \alpha_l) & 0 & \dots & 0 & 0 & 0\\
+0		      & 0                      & 1 & \dots & 0 & 0 & 0\\
+0 & 0 & 0 & \dots & \cos(\Delta \alpha_r) & -\sin(\Delta \alpha_r) & 0\\
+0 & 0 & 0 & \dots & \sin(\Delta \alpha_r) &  \cos(\Delta \alpha_r) & 0\\
+0 & 0 & 0 & \dots & 0		      & 0                      & 1\\
+\end{array}\right] \cdot \vec{u}
+\end{align}
+with
+\begin{align*}
+\Delta \alpha_l &\dots \text{Angle between the beams LCS and the beams left node LCS}\\
+\Delta \alpha_r &\dots \text{Angle between the beams LCS and the beams left right LCS}
+\end{align*}
+This matrix can be used if there are no hinges. Otherwise we have to take in consideration those too. If there is a hinge at any position, the appropriate DoF of the beam will not be connected to the DoF of the appropriate node. The end of beams can be found in both vectors $\vec{u}$ and $\vec{v}$. The part connecting them with each other is simply filled by a diagonal of ones. Not all of them are necessary (only those where a hinge is placed on) but we can remove them afterwards!
+
+\begin{align}
+\vec{v}_i &= \left(\begin{array}{cccccc}u_{l, i}&w_{l, i}&\varphi_{l, i}&u_{r, i}&w_{r, i}&\varphi_{r, i}\end{array}\right)^T\nonumber\\ &= \textbf{A}_i \cdot \vec{u} \nonumber\\ &=
+\left[ \begin{array}{cccccccccccccccc}
+\dots & h_1\cdot c_l & -h_1\cdot s_l & 0 & \dots & 0 & 0 & 0 & \dots & 1 & 0 & 0 & 0 & 0 & 0 & \dots\\
+\dots & h_2\cdot s_l &  h_2\cdot c_l & 0 & \dots & 0 & 0 & 0 & \dots & 0 & 1 & 0 & 0 & 0 & 0 & \dots\\
+\dots & 0                    & 0         & h_3 & \dots & 0 & 0 & 0 & \dots & 0 & 0 & 1 & 0 & 0 & 0 & \dots\\
+\dots & 0 & 0 & 0 & \dots & h_4\cdot c_r & -h_4\cdot s_r & 0 & \dots & 0 & 0 & 0 & 1 & 0 & 0 & \dots\\
+\dots & 0 & 0 & 0 & \dots & h_5\cdot s_r &   h_5\cdot c_r & 0 & \dots & 0 & 0 & 0 & 0 & 1 & 0 & \dots\\
+\dots & 0 & 0 & 0 & \dots & 0                & 0 & h_6 & \dots & 0 & 0 & 0 & 0 & 0 & 1 & \dots
+\end{array}\right] \nonumber\\
+&\hspace{5pt}\cdot \left(\begin{array}{cccccccccccccccc}\dots & u_{n, l} & w_{n, l} & \varphi_{n,l} &\dots & u_{n, r} & w_{n, r} & \varphi_{n, r} & \dots & u_{l, i} & w_{l, i} & \varphi_{l, i} & u_{r, i} & w_{r, i} & \varphi_{r, i} & \dots\end{array}\right)^T
+\end{align}
+with 
+\begin{align*}
+u_{l,i}, w_{l,i}, \varphi_{l,i} &\dots \text{beams left end degree of freedoms}\\
+u_{r,i}, w_{r,i}, \varphi_{r,i} &\dots \text{beams right end degree of freedoms}\\
+u_{n,l}, w_{n,l}, \varphi_{n,l} &\dots \text{degree of freedoms of the node the beams left end is connected}\\
+u_{n,r}, w_{n,r}, \varphi_{n,r} &\dots \text{degree of freedoms of the node the beams right end is connected}\\
+h_n &= \left\{\begin{array}{rrr} 0 &\text{if} & \text{hinge at position n}\\
+				1 &\text{if} & \text{otherwise}\end{array}\right.\\
+&\begin{array}{cc}
+c_l = \cos\left(\Delta \alpha_l\right)& s_l = \sin\left(\Delta \alpha_l\right)\\
+c_r = \cos\left(\Delta \alpha_r\right)& s_r = \sin\left(\Delta \alpha_r\right)
+\end{array}
+\end{align*}
+which connects the vectors $\vec{u}$ and $\vec{v}$ as follows:
+
+\begin{align}
+\vec{v} &= \left[\begin{array}{r}\textbf{A}_0\\\textbf{A}_1\\\vdots\\\textbf{A}_n\end{array}\right] \cdot \vec{u}
+\end{align}
+This matrix takes in consideration all kind of possible hinges, however, it still contains unused degrees of freedom. We will remove them afterwards. Also, it determinant of the transformation matrix is not one! After removing unused degree of freedoms it will be one and can be used as a transformation matrix!
+
+\section{Local Stiffness Matrix for Springs}
+
+The springs on supports do not need any transformation matrix since they are already given in the nodal coordinate system.
+Springs between beams and their nodes are given in the local coordinate system of the beam. This leads to the following transformation matrix for our springs:\\
+
+\begin{align}
+\vec{v}_s &= \left(\begin{array}{cccccc}u_{l, i}&w_{l, s}&\varphi_{l, s}&u_{r, s}&w_{r, s}&\varphi_{r, s}\end{array}\right)^T\nonumber\\ 
+&= \textbf{A}_s \cdot \vec{u}\nonumber\\
+&= \left[\begin{array}{ccccccccc}
+\dots & \cos(\Delta\alpha_{l/r}) & -\sin(\Delta\alpha_{l/r}) & 0 & \dots & 0 & 0 & 0& \dots \\
+\dots & \sin(\Delta\alpha_{l/r}) &  \cos(\Delta\alpha_{l/r}) & 0 & \dots & 0 & 0 & 0 & \dots \\
+\dots & 0 & 0 & 1 & \dots & 0 & 0 & 0 & \dots\\
+\dots & 0 & 0 & 0 & \dots & 1 & 0 & 0 & \dots\\
+\dots & 0 & 0 & 0 & \dots & 0 & 1 & 0 & \dots\\
+\dots & 0 & 0 & 0 & \dots & 0 & 0 & 1 & \dots
+\end{array}\right]\nonumber\\
+&\hspace{5pt}\cdot\left(\begin{array}{ccccccccc}\dots&u_{l/r, i}&w_{l/r, s}&\varphi_{l/r, s}&\dots&u_{n}&w_{n}&\varphi_{n}&\dots\end{array}\right)^T
+\end{align}
+with
+\begin{align}
+u_{l, i},w_{l, s},\varphi_{l, s} &\dots \text{DoF of the spring, left side}\\
+u_{r, i},w_{r, s},\varphi_{r, s} &\dots \text{DoF of the spring, right side}\\
+_{l/r, i},w_{l/r, s},\varphi_{l/r, s} &\dots \text{Dof of the beam this spring is placed on (left or right side)}\\
+_{l/r, i},w_{l/r, s},\varphi_{l/r, s} &\dots \text{Dof of the node this spring is connected to}\\
+\Delta \alpha_{r/l} &\dots \text{the angle between the left/right node LCS and the beams LCS}
+\end{align}
+
+
+
+\section{Local Element Stiffness}
+
+\subsection{for beams}
+
+The local stiffness matrix of a beam gives us the connection between the beam forces at it's end and it's displacement at it's end. To get this correlation we imagine a beam of with no degrees of freedom. In a first step we deform this beam in a way so that the left node moves $u_l$ along the beams local x axis.
+
+\begin{figure}[h]
+\begin{center}
+\input{../graphics/stiffness1.tex}
+\caption{deformed beam with displacement of the left node by $u_l$}
+\end{center}
+\end{figure}
+
+This leads to the following forces:
+
+\begin{minipage}[h]{0.5\textwidth}
+\begin{align*}
+N_{l} &= \dfrac{AI}{l} \cdot u_l\\
+Q_{l} &= 0\\
+M_{l} &= 0
+\end{align*}
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.5\textwidth}
+\begin{align*}
+N_{r} &= -\dfrac{AI}{l}  \cdot u_l\\
+Q_{r} &= 0\\
+M_{r} &= 0
+\end{align*}
+\end{minipage}\\
+
+We repeat the step for a movement of $w_l$ of the left node in local z direction:
+
+\begin{figure}[h]
+\begin{center}
+\input{../graphics/stiffness2.tex}
+\caption{deformed beam with displacement of the left node by $w_l$}
+\end{center}
+\end{figure}
+
+
+\begin{minipage}[h]{0.5\textwidth}
+\begin{align*}
+N_{l} &= 0\\
+Q_{l} &= \dfrac{12EI}{l^3} \cdot w_l\\
+M_{l} &= \dfrac{6EI}{l^2} \cdot w_l
+\end{align*}
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.5\textwidth}
+\begin{align*}
+N_{r} &= 0\\
+Q_{r} &= -\dfrac{12EI}{l^3} \cdot w_l\\
+M_{r} &= -\dfrac{6EI}{l^2} \cdot w_l
+\end{align*}
+\end{minipage}\\
+
+and the rotation of the left node of $\varphi_l$:
+\begin{figure}[h]
+\begin{center}
+\input{../graphics/stiffness3.tex}
+\caption{deformed beam with rotation of the left node by $\varphi_l$}
+\end{center}
+\end{figure}
+
+
+\begin{minipage}[h]{0.5\textwidth}
+\begin{align*}
+N_{l} &= 0\\
+Q_{l} &= \dfrac{6EI}{l^2} \cdot \varphi_l\\
+M_{l} &= \dfrac{4EI}{l} \cdot \varphi_l
+\end{align*}
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.5\textwidth}
+\begin{align*}
+N_{r} &= 0\\
+Q_{r} &= -\dfrac{6EI}{l^2} \cdot \varphi_l\\
+M_{r} &= -\dfrac{4EI}{l} \cdot \varphi_l
+\end{align*}
+\end{minipage}\\
+
+
+
+It is not required to repeat the same steps for $u_r$, $w_r$ and $\varphi_r$ because of the symmetry of the beam. We can combine all our results in a single matrix which leads to:
+
+\begin{align}
+\vec{s}_i &= \left(\begin{array}{cccccc}N_{l, i}&Q_{l, i}&M_{l, i}&N_{r, i}&Q_{r, i}&M_{r, i}\end{array}\right)^T\nonumber\\ 
+&= \textbf{k}_i \cdot \textbf{v}_i \nonumber\\
+&= \left[ \begin{array}{cccccc}
+\dfrac{A_iI_i}{l_i} & 0 & 0 & -\dfrac{A_iI_i}{l_i} & 0 & 0 \\
+0 & \dfrac{12E_iI_i}{l_i^3} & \dfrac{6E_iI_i}{l_i^2} & 0 & -\dfrac{12E_iI_i}{l_i^3} & -\dfrac{6E_iI_i}{l_i^2}\\
+0 & \dfrac{6E_iI_i}{l_i^2} & \dfrac{4E_iI_i}{l_i} & 0 & -\dfrac{6E_iI_i}{l_i^2} & -\dfrac{4E_iI_i}{l_i}\\
+-\dfrac{A_iI_i}{l_i} & 0 & 0 & \dfrac{A_iI_i}{l_i} & 0 & 0 \\
+0 & -\dfrac{12E_iI_i}{l_i^3} & -\dfrac{6E_iI_i}{l_i^2} & 0 & \dfrac{12E_iI_i}{l_i^3} & \dfrac{6E_iI_i}{l_i^2}\\
+0 & -\dfrac{6E_iI_i}{l_i^2} & -\dfrac{4E_iI_i}{l_i} & 0 & \dfrac{6E_iI_i}{l_i^2} & \dfrac{4E_iI_i}{l_i}\\
+\end{array}\right] \cdot \left(\begin{array}{c}u_{l, i}&w_{l, i}&\varphi_{l, i}&u_{r, i}&w_{r, i}&\varphi_{r, i}\end{array}\right)
+\end{align}
+
+\subsection{for spring supports}
+
+The spring is already given in the coordinate system of the node. So the stiffness matrix contains only one elements which should be added to the right position in our global stiffness matrix.
+
+\begin{align}
+\textbf{K}_s &= \left[\begin{array}{ccccc}
+0 & \dots & 0 & \dots & 0\\
+\vdots & \ddots & \vdots & \ddots & \vdots\\
+0 & \dots & c_f & \dots & 0\\
+\vdots & \ddots & \vdots & \ddots & \vdots\\
+0 & \dots & 0 & \dots & 0\\
+\end{array}\right]
+\end{align}
+
+\subsection{for springs on beamends}
+
+The following spring matrix contains all possible forms of springs between beams and nodes.
+\begin{align}
+	\textbf{k}_s &= \left[\begin{array}{cccccc}
+	c_u & 0 & 0 & -c_u & 0 & 0 \\
+	0 & c_w & 0 & 0 & -c_w & 0 \\
+	0 & 0 & c_\varphi & 0 & 0 & -c_\varphi \\
+	-c_u & 0 & 0 & c_u & 0 & 0 \\
+	0 & -c_w & 0 & 0 & c_w & 0 \\
+	0 & 0 & -c_\varphi & 0 & 0 & c_\varphi
+	\end{array}\right]
+\end{align}
+with
+\begin{align*}
+c_u &\dots \text{stiffness for a spring in local x direction of the beam}\\
+c_w &\dots \text{stiffness for a spring in local z direction of the beam}\\
+c_\varphi &\dots \text{stiffness for a rotational spring}
+\end{align*}
+
+
+
+\section{Global Stiffness}
+
+Out global stiffness matrix can be seen as the summation of all stiffness matrices of springs and beams:
+
+\begin{align}
+\textbf{K} &= \sum\limits_{i} \textbf{K}_i
+\end{align}
+
+We have to make sure that all local stiffness matrices are transformed to the right coordinate system, the one of the nodes. To do so, we multiply each local stiffness matrix $\textbf{k}_i$ with the proper transformation matrix $\textbf{A}_i$ from left and from right:
+
+\begin{align}
+\textbf{K}_i &= \textbf{A}_i^T \cdot \textbf{k}_i \cdot \textbf{A}_i
+\end{align}
+
+This matrix connects our displacement vector $\vec{u}$ with a vector of all extern loads to our structure $\vec{p}$:
+\begin{align}
+\vec{p} &= \textbf{K} \cdot \vec{u}
+\end{align}
+
+The stiffness matrices from springs are already in the right coordinate system. We can simply add it to our global one.
+
+\textbf{Now we remove those DoF we do not use: All the DoF of beams were no hinge is placed.} We can get rid of them by removing the proper row and column in the matrix.\\
+Also we have to reorder our Matrix and put all DoF which are locked by a support to the end! Now we can split our global striffness matrix in 4 parts:
+
+\begin{align}
+\left(\begin{array}{c}\vec{p}\\\hline\vec{p}_a\end{array}\right) &= \left[\begin{array}{c|c}
+\textbf{K} & \textbf{K}_a \\
+\hline
+\textbf{K}_a^T & \textbf{K}_{aa}
+\end{array}\right] \cdot \left(\begin{array}{c}\vec{u}\\\hline\vec{u}_a\end{array}\right)\label{eq:stiffnessmethod}
+\end{align}
+with
+\begin{align*}
+\vec{p} &\dots \text{the vector of all loads not placed directly on a support}\\
+\vec{p}_a &\dots \text{the vector of difference between loads placed directiyl on supports and reaction forces}\\
+\vec{u}_a &\dots \text{vector of all forced displacement}\\
+\vec{u} &\dots \text{vector of all displacement}\\
+\textbf{K}, \textbf{K}_a, \textbf{K}_{aa} &\dots \text{parts of the stiffness matrix}
+\end{align*}
+During calculation, $\vec{u}_a$, $\vec{p}$, and all parts of the stiffness matrix are known. Unknown parts of this equation are  $\vec{u}$ and $\vec{p}_a$. We can use the following variation of equation~\ref{eq:stiffnessmethod} to solve for them.
+\begin{align}
+\vec{p} &= \textbf{K} \cdot \vec{u} + \textbf{K}_a \cdot \vec{u}_a \label{eq:stiffmain}\\
+\vec{p}_a &= \textbf{K}_a^T \cdot \vec{u} + \textbf{K}_{aa} \cdot \vec{u}_a \label{eq:stiffby}
+\end{align}
+Using the principle of superposition, we can split equation~\ref{eq:stiffmain} even more,
+\begin{align}
+\vec{p}_d &= \textbf{K}_a \cdot \vec{u}_a\label{eq:stiffd}
+\end{align}
+where $\vec{p}_d$ is an imaginary load which enables us to take in consideration forced displacement. All thats left is to solve the equation (get this equation by subtraction of equation~\ref{eq:stiffd} from equation~\ref{eq:stiffmain})
+\begin{align}
+\vec{p}-\vec{p}_d &= \textbf{K} \cdot \vec{u}
+\end{align}
+to get the nodal displacement $\vec{u}$. Reaction forces can then be calculated using equation~\ref{eq:stiffby}. \Colin currently can not calculate forces displacement. However, I wan't to have in the manual since I'm looking forward to implement it as soon as i got some free minutes ;).
+
+\section{Load vectors}
+
+We still need our load vector $\vec{p}$. We will build this vector separate for the beamloads $\vec{p}_e$ and nodal loads $\vec{p}_n$. First we need to calculate node forces equivalent to our forces distributed on beams. The vector $\vec{s}$ contains all forces at the beam ends, equivalent to the the degrees of freedom in $\vec{v}$:
+
+\begin{align}
+\left(\begin{array}{c}
+\vec{s}_1\\
+\vec{s}_2\\
+\vdots\\
+\vec{s}_i
+\end{array}
+\right)
+ &= \left[\begin{array}{cccc}
+\textbf{k}_1 & \textbf{0} & \dots & \textbf{0}\\
+\textbf{0} & \textbf{k}_2 &  & \textbf{0}\\
+\vdots & &\ddots &\vdots\\
+\textbf{0} & \textbf{0} & \dots & \textbf{k}_i
+\end{array}
+\right] \cdot
+\left(\begin{array}{c}
+\vec{v}_1\\
+\vec{v}_2\\
+\vdots\\
+\vec{v}_i
+\end{array}
+\right) +
+\left(\begin{array}{c}
+\vec{s}_{0,1}\\
+\vec{s}_{0,2}\\
+\vdots\\
+\vec{s}_{0,i}
+\end{array}
+\right)
+\end{align}
+Where the vecot $\vec{s}_0$ is the contribution of beam loads to the forces.
+
+
+\begin{figure}[h]
+\begin{center}
+\input{../graphics/loads1.tex}
+\caption{equivalent forces for our beam forces}
+\end{center}
+\end{figure}
+
+Starting with the function $p(x)$ for our distribution function and the boundary properties of our beam, we can calculate equivalent forces:
+
+\begin{align}
+Q(x) &= \int_0^x p_z(x') + Q_0\\
+M(x) &= \int_0^x Q(x') + M_0\\
+\varphi(x) &= \int_0^x \dfrac{M(x')}{E(x)I(x)} + \varphi_0\\
+w(x) &= \int_0^x \varphi + w_0
+\end{align}
+
+\begin{align}
+N(x) &= \int_0^x p_x(x') + N_0\\
+u(x) &= \int_0^x \dfrac{N(x)}{A(x)I(x)} + u_0
+\end{align}
+
+Solve for $N(0)$, $Q(0)$, $M(0)$, $N(l)$, $Q(l)$ and $M(l)$ to get the equivalent forces in the beams local coordinate system. This leads to the following results for $EA = const.$ and $EI = const$:
+
+
+\begin{figure}[h]
+\begin{center}
+\input{../graphics/const.tex}
+\caption{Distributed loads in \Colin}
+\end{center}
+\end{figure}
+
+
+
+\begin{minipage}[h]{0.3\textwidth}
+\begin{align*}
+\text{for\hspace{20pt}} p(x) &= p\\
+N_l &= p_x \cdot \dfrac{l}{2}\\
+Q_l &= p_z \cdot \dfrac{l}{2}\\
+M_l &= p_z \cdot \dfrac{l^2}{12}\\
+N_r &= p_x \cdot \dfrac{l}{2}\\
+Q_r &= p_z \cdot \dfrac{l}{2}\\
+M_r &= p_z \cdot \dfrac{l^2}{12}
+\end{align*}
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.3\textwidth}
+\begin{align*}
+\text{for\hspace{20pt}} p(x) &= p \cdot \dfrac{x}{l}\\
+N_l &= p_x \cdot \dfrac{l\cdot 3}{20}\\
+Q_l &= p_z \cdot \dfrac{l\cdot 3}{20}\\
+M_l &= p_z \cdot \dfrac{l^2}{30}\\
+N_r &= p_x \cdot \dfrac{l\cdot 7}{20}\\
+Q_r &= p_z \cdot \dfrac{l\cdot 7}{20}\\
+M_r &= p_z \cdot \dfrac{l^2}{20}
+\end{align*}
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.3\textwidth}
+\begin{align*}
+\text{for\hspace{20pt}} p(x) &= p \cdot \left(1-\dfrac{x}{l}\right)\\
+N_l &= p_x \cdot \dfrac{l\cdot 7}{20}\\
+Q_l &= p_z \cdot \dfrac{l\cdot 7}{20}\\
+M_l &= p_z \cdot \dfrac{l^2}{2}\\
+N_r &= p_x \cdot \dfrac{l\cdot 3}{20}\\
+Q_r &= p_z \cdot \dfrac{l\cdot 3}{20}\\
+M_r &= p_z \cdot \dfrac{l^2}{30}
+\end{align*}
+\end{minipage}\\
+and as the contribution to $\vec{s}_0$:
+\begin{align}
+\left(\begin{array}{ccccc}
+\dots & \vec{0} & \vec{s}_{i,l} &\vec{0}&\dots
+\end{array}\right)
+&= \left(\begin{array}{cccccccc} \dots & N_l & Q_l & M_l & N_r & Q_r & M_r & \dots\end{array}\right)^T
+\end{align}
+where $i$ is the beam this load is placed on.
+Temperature changes and differences must be taken in account too. A temperature change leads to the following forces on the beam end:
+
+\begin{align}
+N_l &= T \cdot \alpha_T \cdot EA\\
+N_r &= -T \cdot \alpha_T \cdot EA\\
+\intertext{and as vector}
+\vec{s}_{0,l} &= \left(\begin{array}{cccccccc} \dots & N_l & 0 & 0 & N_r & 0 & 0 & \dots\end{array}\right)^T 
+\end{align}
+
+and for a temperatur difference between upper and lower side of the beam:
+
+\begin{align}
+M_l &= T \cdot \alpha_T \cdot EI\\
+M_r &= -T \cdot \alpha_T \cdot EI\\
+\intertext{and as vector}
+\vec{s}_{0,l} &= \left(\begin{array}{cccccccc} \dots & 0 & 0 & M_l & 0 & 0 & M_r & \dots\end{array}\right)^T 
+\end{align}
+
+The final vector $\vec{s}_0$ can be build as the summation of all $\vec{s}_{0, l}$:
+
+\begin{align}
+\vec{s}_0 &= \sum\limits_{l} \vec{s}_{0,l}
+\end{align}
+
+We need the contribution of beam loads in our node coordinate system. To get it, we can transform $\vec{s}_0$ with \textbf{A}:
+\begin{align}
+p_e &= \textbf{A}\cdot \vec{s}_0
+\end{align}
+
+
+\section{Solving for Nodal Displacement}
+
+
+\section{Results and Functions}

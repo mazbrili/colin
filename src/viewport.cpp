@@ -177,6 +177,9 @@ void viewport::setTw(ColinStruct* t)
 		connect(tw,             SIGNAL(changedMScale(double)),
 				this,           SLOT(update()));
 
+		connect(tw,				SIGNAL(changedActiveCLS()),
+				this,			SLOT(update()));
+
 		globalMatrix_exact = globalMatrix();
 		update();
 
@@ -1251,7 +1254,7 @@ void viewport::wheelEvent(QWheelEvent *e)
 	   (globalMatrix().m11()>maxZoomfactor && e->delta()>0))
 		return;
 
-	QPointF po = globalMatrix().inverted().map(QPointF(e->pos()));
+	QPointF po = globalMatrix().inverted().map(QPointF(mapFromGlobal(e->globalPos())));
 
 	int d = e->delta();
 	d/=(15*8);
@@ -1266,7 +1269,7 @@ void viewport::wheelEvent(QWheelEvent *e)
 							 -1.0/(zoomfactor*double(e->delta()/(15*8))));
 	}
 
-	po = globalMatrix().inverted().map(QPointF(e->pos())) - po;
+	po = globalMatrix().inverted().map(QPointF((mapFromGlobal(e->globalPos())))) - po;
 	globalMatrix().translate(po.x(),po.y());
 
 	update();

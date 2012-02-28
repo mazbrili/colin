@@ -205,6 +205,7 @@ void drawSelectionWidget2::setTw(ColinStruct *tw)
 {
 	disconnect(this,				SLOT(addedCLS()));
 	disconnect(this,				SLOT(removedCLS()));
+	disconnect(this,				SLOT(activeCLSChanged()));
 
 	if(tw){
 		if(tw->cls_n()){
@@ -219,6 +220,9 @@ void drawSelectionWidget2::setTw(ColinStruct *tw)
 
 		connect(tw,					SIGNAL(removed(int,ColinCLS)),
 				this,				SLOT(removedCLS()));
+
+		connect(tw,					SIGNAL(changedCLS(int)),
+				this,				SLOT(activeCLSChanged()));
 	}
 	else
 		hide();
@@ -230,14 +234,20 @@ void drawSelectionWidget2::setTw(ColinStruct *tw)
 void drawSelectionWidget2::addedCLS()
 {
 	if(allowedShowing) show();
+	requestResize(sizeHint());
 }
 
 void drawSelectionWidget2::removedCLS()
 {
 	if(!filelist::instance().currentFile()->cls_n())
 		hide();
+	requestResize(sizeHint());
 }
 
+void drawSelectionWidget2::activeCLSChanged()
+{
+	requestResize(sizeHint());
+}
 
 void drawSelectionWidget2::allowToShow(bool show)
 {

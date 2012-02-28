@@ -63,25 +63,25 @@ public:
         return *instance_;
     }
 
-	ColinStruct *currentFile();
+	Q_INVOKABLE ColinStruct *currentFile();
 	ColinStruct *file(const int &i) const {return files.at(i).tw;}
-    const int &currentIndex() const;
-    QString filename(const int &i) const;
-    QString filepath(const int &i) const;
+	Q_INVOKABLE const int &currentIndex() const;
+	Q_INVOKABLE QString filename(const int &i) const;
+	Q_INVOKABLE QString filepath(const int &i) const;
 
 	void append(ColinStruct *f, QString name = "", QString path = "");
 
-    void removeAt(int i);
+	Q_INVOKABLE void closeFile(int i);
 
-    int filecount() const;
-    int tabcount() const;
-    const inline bool &newVisible() const { return newVisible_;}
-    const inline bool &settingsVisible() const {return settingsVisible_;}
+	Q_INVOKABLE int filecount() const;
+	Q_INVOKABLE int tabcount() const;
+	Q_INVOKABLE const inline bool &newVisible() const { return newVisible_;}
+	Q_INVOKABLE const inline bool &settingsVisible() const {return settingsVisible_;}
 
     QUndoGroup *undoGroup(){return g;}
 
-    QString recUsedFileName(const int &i) const;
-    void removeRecUsedFile(const int &i);
+	Q_INVOKABLE QString recUsedFileName(const int &i) const;
+	Q_INVOKABLE void removeRecUsedFile(const int &i);
 
 signals:
 	void currentChanged(ColinStruct*);
@@ -89,6 +89,7 @@ signals:
     void deleteSWid();
     void recUsedCanged();
     void fileClosed();
+	void fileOpened();
 
 
 public slots:

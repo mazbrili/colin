@@ -39,6 +39,7 @@
 const int titleSize = 3;
 const int alignLeft = 3;
 
+QColor structPrinter_gray = QColor(200, 200, 200);
 
 structPrinter::structPrinter(ColinStruct *t, QPrinter *printer, const painterContent &content)
 {
@@ -444,7 +445,14 @@ bool structPrinter::decoratePage()
 	qDebug()  << "structPrinter::decoratePage(...)" << " pageNr: " << pageCount;
 #endif
 
+	painter->save();
+	painter->resetTransform();
+	painter->setFont(c.font);
+	painter->scale(double(painter->device()->width())/double(p->paperRect(QPrinter::DevicePixel).width()),
+				   double(painter->device()->height())/double(p->paperRect(QPrinter::DevicePixel).height()));
 
+
+	painter->setPen(QPen(Qt::black, 0));
 	QRect pr = p->pageRect(QPrinter::DevicePixel).toRect();
 	QRect bR;
 
@@ -483,6 +491,7 @@ bool structPrinter::decoratePage()
 	if(!noNewPage)
 		p->newPage();
 
+	painter->restore();
 	return !noNewPage;
 }
 
@@ -496,9 +505,20 @@ int structPrinter::lineHeight()
 	return ((c.font.pixelSize()>0)?c.font.pixelSize():c.font.pointSizeF())*1.5;
 }
 
-int structPrinter::needLine(int i)
+int structPrinter::needLine(int i, bool *ok)
 {
-	dx += i*lineHeight();
+	bool newPage = true;
+	if(dx+lineHeight()*i > p->pageRect().height())
+	{
+		newPage = decoratePage();
+		dx = p->pageRect().top();
+	}
+	else
+	{
+		dx += i*lineHeight();
+	}
+	if(ok) *ok = newPage;
+
 	return dx;
 }
 
@@ -816,40 +836,54 @@ void structPrinter::nodeIn(int startAt, int *pages, bool test, int *itemsPerPage
 	for(int i=startAt; i<tw->node_n(); i++)
 	{
 		int j=0;
-		painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString(tr("node #%1").arg(i)), &bRect);
-		painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString::number(tw->node(i).x(), 'f', PRECISON), &bRect);
-		painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString::number(tw->node(i).z(), 'f', PRECISON), &bRect);
+		painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width),
+						  Qt::AlignLeft | Qt::AlignTop, QString(tr("node #%1").arg(i)), &bRect);
+		painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width),
+						  Qt::AlignLeft | Qt::AlignTop, QString::number(tw->node(i).x(), 'f', PRECISON), &bRect);
+		painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width),
+						  Qt::AlignLeft | Qt::AlignTop, QString::number(tw->node(i).z(), 'f', PRECISON), &bRect);
 
 		if(tw->node(i).hasbearing())
 		{
-			painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString::number(tw->node(i).bearing().phi(), 'f', PRECISON), &bRect);
+			painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width),
+							  Qt::AlignLeft | Qt::AlignTop, QString::number(tw->node(i).bearing().phi(), 'f', PRECISON), &bRect);
 
 			if(tw->node(i).bearing().x())
-				painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, tr("locked"), &bRect);
+				painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width),
+								  Qt::AlignLeft | Qt::AlignTop, tr("locked"), &bRect);
 			else if(tw->node(i).bearing().xf())
-				painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString::number(tw->node(i).bearing().c_x()), &bRect);
+				painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width),
+								  Qt::AlignLeft | Qt::AlignTop, QString::number(tw->node(i).bearing().c_x()), &bRect);
 			else
-				painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, tr("free"), &bRect);
+				painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width),
+								  Qt::AlignLeft | Qt::AlignTop, tr("free"), &bRect);
 
 			if(tw->node(i).bearing().z())
-				painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, tr("locked"), &bRect);
+				painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width),
+								  Qt::AlignLeft | Qt::AlignTop, tr("locked"), &bRect);
 			else if(tw->node(i).bearing().zf())
-				painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString::number(tw->node(i).bearing().c_z()), &bRect);
+				painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width),
+								  Qt::AlignLeft | Qt::AlignTop, QString::number(tw->node(i).bearing().c_z()), &bRect);
 			else
-				painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, tr("free"), &bRect);
+				painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width),
+								  Qt::AlignLeft | Qt::AlignTop, tr("free"), &bRect);
 
 			if(tw->node(i).bearing().phi())
-				painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, tr("locked"), &bRect);
+				painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width),
+								  Qt::AlignLeft | Qt::AlignTop, tr("locked"), &bRect);
 			else if(tw->node(i).bearing().phif())
-				painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString::number(tw->node(i).bearing().c_phi()), &bRect);
+				painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width),
+								  Qt::AlignLeft | Qt::AlignTop, QString::number(tw->node(i).bearing().c_phi()), &bRect);
 			else
-				painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, tr("free"), &bRect);
+				painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width),
+								  Qt::AlignLeft | Qt::AlignTop, tr("free"), &bRect);
 
 
 		}
 		else
 		{
-			painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString::number(0, 'f', PRECISON), &bRect);
+			painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width),
+							  Qt::AlignLeft | Qt::AlignTop, QString::number(0, 'f', PRECISON), &bRect);
 		}
 
 		if((dh+2*lineHeight() > p->pageRect().bottom()) || i == tw->node_n()-1){
@@ -892,11 +926,16 @@ void structPrinter::beamIn(int startAt, int *pages, bool test, int *itemsPerPage
 	for(int i=startAt; i<tw->beam_n(); i++)
 	{
 		int j=0;
-		painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString(tr("beam #%1").arg(i)), &bRect);
-		painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString::number(tw->beam(i).leftNodeI()), &bRect);
-		painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString::number(tw->beam(i).rightNodeI()), &bRect);
-		painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, tw->beam(i).Mat().name(), &bRect);
-		painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, tw->beam(i).Profile().name(), &bRect);
+		painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width),
+						  Qt::AlignLeft | Qt::AlignTop, QString(tr("beam #%1").arg(i)), &bRect);
+		painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width),
+						  Qt::AlignLeft | Qt::AlignTop, QString::number(tw->beam(i).leftNodeI()), &bRect);
+		painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width),
+						  Qt::AlignLeft | Qt::AlignTop, QString::number(tw->beam(i).rightNodeI()), &bRect);
+		painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width),
+						  Qt::AlignLeft | Qt::AlignTop, tw->beam(i).Mat().name(), &bRect);
+		painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width),
+						  Qt::AlignLeft | Qt::AlignTop, tw->beam(i).Profile().name(), &bRect);
 
 
 		if((dh+2*bRect.height() > p->pageRect().bottom()) || i == tw->beam_n()-1){
@@ -937,35 +976,46 @@ void structPrinter::loadIn(int startAt, int *pages, bool test, int *itemsPerPage
 	for(int i=startAt; i<tw->load_n(); i++)
 	{
 		int j=0;
-		painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString(tr("load #%1").arg(i)), &bRect);
-		painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString::number(tw->load(i).at()), &bRect);
+		painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width),
+						  Qt::AlignLeft | Qt::AlignTop, QString(tr("load #%1").arg(i)), &bRect);
+		painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width),
+						  Qt::AlignLeft | Qt::AlignTop, QString::number(tw->load(i).at()), &bRect);
 		switch(tw->load(i).typ())
 		{
 		case ColinLoad::nodeLoad:
 		case ColinLoad::moment:
 		case ColinLoad::doubleLoadLeft:
 		case ColinLoad::doubleLoadRight:
-			painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString::number(tw->load(i).Px()*PPREFIX), &bRect);
-			painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString::number(tw->load(i).Pz()*PPREFIX), &bRect);
-			painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString::number(tw->load(i).M()*MPREFIX), &bRect);
+			painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width),
+							  Qt::AlignLeft | Qt::AlignTop, QString::number(tw->load(i).Px()*PPREFIX), &bRect);
+			painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width),
+							  Qt::AlignLeft | Qt::AlignTop, QString::number(tw->load(i).Pz()*PPREFIX), &bRect);
+			painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width),
+							  Qt::AlignLeft | Qt::AlignTop, QString::number(tw->load(i).M()*MPREFIX), &bRect);
 			break;
 		case ColinLoad::decreasingLinearLoad:
 		case ColinLoad::increasingLinearLoad:
 		case ColinLoad::uniformlyDistibutedLoad:
-			painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString::number(tw->load(i).Px()*PPREFIX), &bRect);
-			painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString::number(tw->load(i).Pz()*PPREFIX), &bRect);
-			painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString::number(tw->load(i).M()*MPREFIX), &bRect);
+			painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width),
+							  Qt::AlignLeft | Qt::AlignTop, QString::number(tw->load(i).Px()*PPREFIX), &bRect);
+			painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width),
+							  Qt::AlignLeft | Qt::AlignTop, QString::number(tw->load(i).Pz()*PPREFIX), &bRect);
+			painter->drawText(QRectF(dw+width*j++, dh, p->pageRect().width(), width),
+							  Qt::AlignLeft | Qt::AlignTop, QString::number(tw->load(i).M()*MPREFIX), &bRect);
 			break;
 		case ColinLoad::tempChange:
-			painter->drawText(QRectF(dw+width*5, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString::number(tw->load(i).Px()), &bRect);
+			painter->drawText(QRectF(dw+width*5, dh, p->pageRect().width(), width),
+							  Qt::AlignLeft | Qt::AlignTop, QString::number(tw->load(i).Px()), &bRect);
 			break;
 		case ColinLoad::tempDiffrence:
-			painter->drawText(QRectF(dw+width*6, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString::number(tw->load(i).Pz()), &bRect);
+			painter->drawText(QRectF(dw+width*6, dh, p->pageRect().width(), width),
+							  Qt::AlignLeft | Qt::AlignTop, QString::number(tw->load(i).Pz()), &bRect);
 			break;
 		}
 
 		if(tw->load(i).set()>-1)
-			painter->drawText(QRectF(dw+width*7, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, tw->bls(tw->load(i).set()).name(), &bRect);
+			painter->drawText(QRectF(dw+width*7, dh, p->pageRect().width(), width),
+							  Qt::AlignLeft | Qt::AlignTop, tw->bls(tw->load(i).set()).name(), &bRect);
 
 		if((dh+2*bRect.height() > p->pageRect().bottom()) || i == tw->load_n()-1){
 			if(!decoratePage())
@@ -985,10 +1035,11 @@ void structPrinter::nodeRes(int startAt, int *pages, bool test, int *itemsPerPag
 {
 	if(test)
 	{
-		int requiredHeight = lineHeight()*(tw->node_n()*qMin(tw->cls_n(), 10));
-		int required = requiredHeight/usablePageHeight()+1;
+		int requiredHeight = lineHeight()*(qMax(tw->cls_n()+2, 11));
+		int perPage = floor(usablePageHeight()/requiredHeight);
+		int required = ceil(double(tw->node_n())/double(perPage));
+		if(itemsPerPage) *itemsPerPage = perPage;
 		(*pages)+=required;
-		if(itemsPerPage) *itemsPerPage = (double)(p->pageRect().height()-10)/(double)(lineHeight()*4)-2;
 		return;
 	}
 
@@ -1007,22 +1058,40 @@ void structPrinter::nodeRes(int startAt, int *pages, bool test, int *itemsPerPag
 	{
 		cls << i;
 	}
+	QFont f = painter->font();
+	f.setBold(true);
+	f.setPointSize(f.pointSize()*2);
 	for(int i=startAt; i<tw->node_n(); i++)
 	{
 		int beamCount =0;
 		painter->save();
 		painter->translate(dw-40, dh-40);
+
+		painter->save();
+		painter->setFont(f);
+		painter->setPen(structPrinter_gray);
+		painter->drawText(40, 70, QString(tr("#%1")).arg(i));
+		painter->restore();
+
 		detailPainter dP;
 		dP.drawNode(painter, *tw, i, cls, QSize(lineHeight()*10+80, lineHeight()*10+80));
 		painter->restore();
 
+		double dth = dh;
+
 		int j=0;
-		painter->drawText(QRectF(dw+40+lineHeight()*10+width*j++, dh-2, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString(tr("Ax[%1]")).arg(unitSettings::instance().Peh()), &bRect);
-		painter->drawText(QRectF(dw+40+lineHeight()*10+width*j++, dh-2, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString(tr("Az[%1]")).arg(unitSettings::instance().Peh()), &bRect);
-		painter->drawText(QRectF(dw+40+lineHeight()*10+width*j++, dh-2, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString(tr("M[%1]")).arg(unitSettings::instance().Meh()), &bRect);
-		painter->drawText(QRectF(dw+40+lineHeight()*10+width*j++, dh-2, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString(tr("u[m]")), &bRect);
-		painter->drawText(QRectF(dw+40+lineHeight()*10+width*j++, dh-2, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString(tr("w[m]")), &bRect);
-		painter->drawText(QRectF(dw+40+lineHeight()*10+width*j++, dh-2, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString(tr("phi[grad]")), &bRect);
+		painter->drawText(QRectF(dw+40+lineHeight()*10+width*j++, dh-2, p->pageRect().width(), width),
+						  Qt::AlignLeft | Qt::AlignTop, QString(tr("Ax[%1]")).arg(unitSettings::instance().Peh()), &bRect);
+		painter->drawText(QRectF(dw+40+lineHeight()*10+width*j++, dh-2, p->pageRect().width(), width),
+						  Qt::AlignLeft | Qt::AlignTop, QString(tr("Az[%1]")).arg(unitSettings::instance().Peh()), &bRect);
+		painter->drawText(QRectF(dw+40+lineHeight()*10+width*j++, dh-2, p->pageRect().width(), width),
+						  Qt::AlignLeft | Qt::AlignTop, QString(tr("M[%1]")).arg(unitSettings::instance().Meh()), &bRect);
+		painter->drawText(QRectF(dw+40+lineHeight()*10+width*j++, dh-2, p->pageRect().width(), width),
+						  Qt::AlignLeft | Qt::AlignTop, QString(tr("u[m]")), &bRect);
+		painter->drawText(QRectF(dw+40+lineHeight()*10+width*j++, dh-2, p->pageRect().width(), width),
+						  Qt::AlignLeft | Qt::AlignTop, QString(tr("w[m]")), &bRect);
+		painter->drawText(QRectF(dw+40+lineHeight()*10+width*j++, dh-2, p->pageRect().width(), width),
+						  Qt::AlignLeft | Qt::AlignTop, QString(tr("phi[grad]")), &bRect);
 
 		dh+=lineHeight();
 
@@ -1031,20 +1100,27 @@ void structPrinter::nodeRes(int startAt, int *pages, bool test, int *itemsPerPag
 			{
 				j=0;
 				if(tw->node(i).hasbearing()){
-					painter->drawText(QRectF(dw+40+lineHeight()*10+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString::number(tw->node(i).bearing().a_x(c)*PPREFIX, 'f', PRECISON), &bRect);
-					painter->drawText(QRectF(dw+40+lineHeight()*10+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString::number(tw->node(i).bearing().a_z(c)*PPREFIX, 'f', PRECISON), &bRect);
-					painter->drawText(QRectF(dw+40+lineHeight()*10+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString::number(tw->node(i).bearing().a_m(c)*MPREFIX, 'f', PRECISON), &bRect);
+					painter->drawText(QRectF(dw+40+lineHeight()*10+width*j++, dh, p->pageRect().width(), width),
+									  Qt::AlignLeft | Qt::AlignTop, QString::number(tw->node(i).bearing().a_x(c)*PPREFIX, 'f', PRECISON), &bRect);
+					painter->drawText(QRectF(dw+40+lineHeight()*10+width*j++, dh, p->pageRect().width(), width),
+									  Qt::AlignLeft | Qt::AlignTop, QString::number(tw->node(i).bearing().a_z(c)*PPREFIX, 'f', PRECISON), &bRect);
+					painter->drawText(QRectF(dw+40+lineHeight()*10+width*j++, dh, p->pageRect().width(), width),
+									  Qt::AlignLeft | Qt::AlignTop, QString::number(tw->node(i).bearing().a_m(c)*MPREFIX, 'f', PRECISON), &bRect);
 				}
 				else
 					j+=3;
-				painter->drawText(QRectF(dw+40+lineHeight()*10+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString::number(tw->node(i).u(c)), &bRect);
-				painter->drawText(QRectF(dw+40+lineHeight()*10+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString::number(tw->node(i).w(c)), &bRect);
-				painter->drawText(QRectF(dw+40+lineHeight()*10+width*j++, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, QString::number(tw->node(i).phi(c)*ANGLEPREFIX), &bRect);
+				painter->drawText(QRectF(dw+40+lineHeight()*10+width*j++, dh, p->pageRect().width(), width),
+								  Qt::AlignLeft | Qt::AlignTop, QString::number(tw->node(i).u(c)), &bRect);
+				painter->drawText(QRectF(dw+40+lineHeight()*10+width*j++, dh, p->pageRect().width(), width),
+								  Qt::AlignLeft | Qt::AlignTop, QString::number(tw->node(i).w(c)), &bRect);
+				painter->drawText(QRectF(dw+40+lineHeight()*10+width*j++, dh, p->pageRect().width(), width),
+								  Qt::AlignLeft | Qt::AlignTop, QString::number(tw->node(i).phi(c)*ANGLEPREFIX), &bRect);
 				dh+=lineHeight();
 			}
 			if(tw->cls_n()==0)
 			{
-				painter->drawText(QRectF(dw+40+lineHeight()*10+width*0, dh, p->pageRect().width(), width), Qt::AlignLeft | Qt::AlignTop, tr("beam forces:"), &bRect);
+				painter->drawText(QRectF(dw+40+lineHeight()*10+width*0, dh, p->pageRect().width(), width),
+								  Qt::AlignLeft | Qt::AlignTop, tr("beam forces:"), &bRect);
 				dh+=lineHeight();
 				for(int b=0; b<tw->beam_n(); b++)
 				{
@@ -1106,17 +1182,20 @@ void structPrinter::nodeRes(int startAt, int *pages, bool test, int *itemsPerPag
 					}
 				}
 			}
-			if(tw->cls_n()<10)
-			{
-				dh+=lineHeight()*(10-tw->cls_n());
-			}
+			//if(tw->cls_n()<10)
+			//{
+			//	dh+=lineHeight()*(10-tw->cls_n());
+			//}
 		}
-		else{
-			dh+=lineHeight()*qMax(10,tw->cls_n());
-		}
+		//else{
+		//	dh+=lineHeight()*qMax(10, tw->cls_n());
+		//}
+		dh = dth;
+
+		dh +=lineHeight()*qMax(11, tw->cls_n());
 		painter->drawLine(dw, dh+2-lineHeight(), dw+p->pageRect().width(), dh+2-lineHeight());
 
-		if(dh+lineHeight()*qMax(10, tw->cls_n())>p->pageRect().bottom() || i == tw->node_n()-1){
+		if(dh+lineHeight()*qMax(11, tw->cls_n())>p->pageRect().bottom() || i == tw->node_n()-1){
 			if(!decoratePage())
 				return;
 			dh = p->pageRect().top();
@@ -1130,57 +1209,134 @@ void structPrinter::beamResF(int startAt, int *pages, bool test, int *itemsPerPa
 {
 	if(test)
 	{
-		int requiredHeight = lineHeight()*(8*tw->beam_n()*tw->cls_n());
-		int required = requiredHeight/usablePageHeight()+1;
-		requiredHeight = requiredHeight%usablePageHeight();
+		int requiredLines = tw->beam_n()*(qMax(1, tw->cls_n())+1);
+		int required = ceil(double(requiredLines*lineHeight())/double(usablePageHeight()));
 		(*pages)+=required;
+		if(itemsPerPage) *itemsPerPage = floor(usablePageHeight()*(qMax(1, tw->cls_n())/(qMax(1, tw->cls_n())+1))/lineHeight());
 		return;
 	}
 
-
-	double dh = p->pageRect().y();
+	dx = p->pageRect().y();
 	double dw = p->pageRect().x();
 
-	painter->setRenderHint(QPainter::Antialiasing, true);
-
-	QRectF bRect;
 
 	int width = (p->pageRect().width()-lineHeight()*10-40)/6;
 
+	QFont f = painter->font();
+	f.setBold(true);
+	f.setPointSize(f.pointSize()*2);
 
-	for(int i=startAt; i<tw->beam_n(); i++)
+
+	for(int i=floor(startAt/qMax(tw->cls_n(),1)); i<tw->beam_n(); i++)
 	{
 		painter->save();
-		painter->translate(dw, dh+lineHeight()*5);
+
+
+		painter->translate(dw, dx+lineHeight()*5);
+
+		painter->save();
+		painter->setFont(f);
+		painter->setPen(structPrinter_gray);
+		painter->drawText(0, -lineHeight()*5+30, QString(tr("#%1")).arg(i));
+		painter->restore();
+
 		painter->drawLine(0, 0, lineHeight()*10, 0);
 		structPainter sP;
+
+		painter->setRenderHint(QPainter::Antialiasing, true);
 
 		QTransform tran = QTransform(double(lineHeight()*10)/tw->beam(i).l(), 0, 0,
 									 0, double(lineHeight()*10)/tw->beam(i).l(), 0,
 									 0, 0, 1);
 		sP.trm = &tran;
 
-		QList<const function*> funs;
-		for(int j=0; j<qMax(1, tw->cls_n()); j++)
-			funs << &tw->beam(i).Nconst(j);
-		painter->setPen(viewPortSettings::instance().color(Colin::C_Np));
-		sP.drawFunction(painter, funs, tw->beam(i).l(), tw->scaleP()/5, 0);
 
-		funs.clear();
-		for(int j=0; j<qMax(1, tw->cls_n()); j++)
-			funs << &tw->beam(i).Qconst(j);
-		painter->setPen(viewPortSettings::instance().color(Colin::C_Qp));
-		sP.drawFunction(painter, funs, tw->beam(i).l(), tw->scaleP()/5, 0);
+		bool keepWriting;
+		if(tw->isCalculated())
+		{
+			QList<const function*> funs;
+			for(int j=0; j<qMax(1, tw->cls_n()); j++)
+				funs << &tw->beam(i).Nconst(j);
+			painter->setPen(viewPortSettings::instance().color(Colin::C_Np));
+			sP.drawFunction(painter, funs, tw->beam(i).l(), tw->scaleP()/2, 0);
+
+			funs.clear();
+			for(int j=0; j<qMax(1, tw->cls_n()); j++)
+				funs << &tw->beam(i).Qconst(j);
+			painter->setPen(viewPortSettings::instance().color(Colin::C_Qp));
+			sP.drawFunction(painter, funs, tw->beam(i).l(), tw->scaleP()/2, 0);
 
 
-		funs.clear();
-		for(int j=0; j<qMax(1, tw->cls_n()); j++)
-			funs << &tw->beam(i).Mconst(j);
-		painter->setPen(viewPortSettings::instance().color(Colin::C_Mp));
-		sP.drawFunction(painter, funs, tw->beam(i).l(), tw->scaleM()/5, 0);
+			funs.clear();
+			for(int j=0; j<qMax(1, tw->cls_n()); j++)
+				funs << &tw->beam(i).Mconst(j);
+			painter->setPen(viewPortSettings::instance().color(Colin::C_Mp));
+			sP.drawFunction(painter, funs, tw->beam(i).l(), tw->scaleM()/2, 0);
 
-		painter->restore();
-		dh += 10*lineHeight();
+			painter->restore();
+
+			painter->setPen(Qt::black);
+			for(int j=0; j<qMax(1, tw->cls_n()); j++){
+				painter->drawText(QRectF(dw+40+lineHeight()*10, dx, p->pageRect().width(), width),
+								  Qt::AlignLeft | Qt::AlignTop,
+								  QString(tr("u(x)[m] = %1")
+										  .arg(tw->beam(i).uconst(j).toString(1, 'g', PRECISON))));
+				this->needLine(1, &keepWriting); if(!keepWriting) return;;
+			}
+			dx+=lineHeight();
+			for(int j=0; j<qMax(1, tw->cls_n()); j++){
+				painter->drawText(QRectF(dw+40+lineHeight()*10, dx, p->pageRect().width(), width),
+								  Qt::AlignLeft | Qt::AlignTop,
+								  QString(tr("w(x)[m] = %1")
+										  .arg(tw->beam(i).wconst(j).toString(1, 'g', PRECISON))));
+				this->needLine(1, &keepWriting); if(!keepWriting) return;;
+			}
+			dx+=lineHeight();
+			for(int j=0; j<qMax(1, tw->cls_n()); j++){
+				painter->drawText(QRectF(dw+40+lineHeight()*10, dx, p->pageRect().width(), width),
+								  Qt::AlignLeft | Qt::AlignTop,
+								  tr("phi(x)[grad] = %1")
+								  .arg(tw->beam(i).phiconst(j).toString(ANGLEPREFIX, 'g', PRECISON)));
+				this->needLine(1, &keepWriting); if(!keepWriting) return;;
+			}
+			dx+=lineHeight();
+			painter->setPen(viewPortSettings::instance().color(Colin::C_Np));
+			for(int j=0; j<qMax(1, tw->cls_n()); j++){
+				painter->drawText(QRectF(dw+40+lineHeight()*10, dx, p->pageRect().width(), width),
+								  Qt::AlignLeft | Qt::AlignTop,
+								  tr("N(x)[%1] = %2")
+								  .arg(unitSettings::instance().Peh())
+								  .arg(tw->beam(i).Nconst(j).toString(PPREFIX, 'f', PRECISON)));
+				this->needLine(1, &keepWriting); if(!keepWriting) return;;
+			}
+			dx+=lineHeight();
+			painter->setPen(viewPortSettings::instance().color(Colin::C_Qp));
+			for(int j=0; j<qMax(1, tw->cls_n()); j++){
+				painter->drawText(QRectF(dw+40+lineHeight()*10, dx, p->pageRect().width(), width),
+								  Qt::AlignLeft | Qt::AlignTop,
+								  tr("Q(x)[%1] = %2")
+								  .arg(unitSettings::instance().Peh())
+								  .arg(tw->beam(i).Qconst(j).toString(PPREFIX, 'f', PRECISON)));
+				this->needLine(1, &keepWriting); if(!keepWriting) return;;
+			}
+			dx+=lineHeight();
+			painter->setPen(viewPortSettings::instance().color(Colin::C_Mp));
+			for(int j=0; j<qMax(1, tw->cls_n()); j++){
+				painter->drawText(QRectF(dw+40+lineHeight()*10, dx, p->pageRect().width(), width),
+								  Qt::AlignLeft | Qt::AlignTop,
+								  tr("M(x)[%1] = %2")
+								  .arg(unitSettings::instance().Meh())
+								  .arg(tw->beam(i).Mconst(j).toString(MPREFIX, 'f', PRECISON)));
+				this->needLine(1, &keepWriting); if(!keepWriting) return;;
+			}
+			this->needLine(1, &keepWriting); if(!keepWriting) return;;
+
+
+		}
+		else
+			painter->restore();
+		painter->setPen(Qt::black);
+		painter->drawLine(dw, dx-lineHeight()/2, p->pageRect().width(), dx-lineHeight()/2);
 	}
 }
 

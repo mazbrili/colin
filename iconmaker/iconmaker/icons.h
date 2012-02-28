@@ -11,11 +11,12 @@ class iconMaker{
 public:
 	enum icon{
 		placeholder,
-		whatsThis
+		whatsThis,
+		measure
 	};
 
 	static iconMaker *create(icon i);
-	iconMaker(){};
+	iconMaker(){}
 	static QString iconName(icon i);
 	static iconMaker::icon fromString(QString s);
 

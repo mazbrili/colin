@@ -144,9 +144,33 @@ void treeView::mousePressEvent(QMouseEvent *e)
 			return;
 		}
 	}
+
+	if(indexAt(e->pos()).flags().testFlag(Qt::ItemIsUserCheckable))
+	{
+		QModelIndex mI = indexAt(e->pos());
+
+		if(static_cast<Qt::CheckState>(model()->itemData(mI)[Qt::CheckStateRole].toUInt()) == Qt::Unchecked)
+		{
+			model()->setData(mI, 1, Qt::CheckStateRole);
+		}
+		else
+		{
+			model()->setData(mI, 0, Qt::CheckStateRole);
+		}
+		return;
+	}
+
 	QTreeView::mousePressEvent(e);
 }
 
+void treeView::mouseReleaseEvent(QMouseEvent *e)
+{
+	if(indexAt(e->pos()).flags().testFlag(Qt::ItemIsUserCheckable))
+	{
+		return;
+	}
+	QTreeView::mouseReleaseEvent(e);
+}
 
 void treeView::popupEditor(const QModelIndex &index)
 {
@@ -194,21 +218,32 @@ void treeView::previousColumn(const QModelIndex &index)
 	if(index.isValid())
 	{
 		closePersistentEditor(index);
-		QModelIndex newIndex = index.parent().child(index.row(), model()->columnCount(index.parent())-1);
+		QModelIndex newIndex = index.parent().child(index.row(), index.column()-1);
 		if(newIndex.isValid() &&
-		   model()->columnCount(newIndex.parent())>newIndex.column() &&
+		   newIndex.column()>0 &&
+		   newIndex.row()>-1 &&
 		   model()->flags(newIndex).testFlag(Qt::ItemIsEditable))
 		{
 			popupEditor(newIndex);
 			return;
 		}
-		for(int i=1; i<2; i++){
-			newIndex = index.parent().child(index.row()-i, model()->columnCount(index.parent())-1);
-			if(newIndex.isValid() &&
-			   model()->flags(newIndex).testFlag(Qt::ItemIsEditable))
-			{
-				popupEditor(newIndex);
-			}
+		newIndex =index.parent().child(index.row()-1, model()->columnCount(index.parent())-1);
+		if(newIndex.isValid() &&
+		   newIndex.column()>0 &&
+		   newIndex.row()>-1 &&
+		   model()->flags(newIndex).testFlag(Qt::ItemIsEditable))
+		{
+			popupEditor(newIndex);
+			return;
+		}
+		newIndex = index.parent().child(model()->rowCount(index.parent())-1, model()->columnCount(index.parent())-1);
+		if(newIndex.isValid() &&
+		   newIndex.column()>0 &&
+		   newIndex.row()>-1 &&
+		   model()->flags(newIndex).testFlag(Qt::ItemIsEditable))
+		{
+			popupEditor(newIndex);
+			return;
 		}
 	}
 }
@@ -220,8 +255,17 @@ void treeView::nextItem(const QModelIndex &index)
 		closePersistentEditor(index);
 		QModelIndex newIndex = index.parent().child(index.row()+1, index.column());
 		if(newIndex.isValid() &&
-				model()->columnCount(newIndex.parent())>newIndex.column() &&
-				model()->rowCount(newIndex.parent())>newIndex.row() &&
+		   model()->columnCount(newIndex.parent())>newIndex.column() &&
+		   model()->rowCount(newIndex.parent())>newIndex.row() &&
+		   model()->flags(newIndex).testFlag(Qt::ItemIsEditable))
+		{
+			popupEditor(newIndex);
+			return;
+		}
+		newIndex = index.parent().child(0, index.column());
+		if(newIndex.isValid() &&
+		   model()->columnCount(newIndex.parent())>newIndex.column() &&
+		   model()->rowCount(newIndex.parent())>newIndex.row() &&
 		   model()->flags(newIndex).testFlag(Qt::ItemIsEditable))
 		{
 			popupEditor(newIndex);
@@ -236,6 +280,15 @@ void treeView::previousItem(const QModelIndex &index)
 	{
 		closePersistentEditor(index);
 		QModelIndex newIndex = index.parent().child(index.row()-1, index.column());
+		if(newIndex.isValid() &&
+		   model()->columnCount(newIndex.parent())>newIndex.column() &&
+		   newIndex.row()>=0 &&
+		   model()->flags(newIndex).testFlag(Qt::ItemIsEditable))
+		{
+			popupEditor(newIndex);
+			return;
+		}
+		newIndex = index.parent().child(model()->rowCount(index.parent())-1, index.column());
 		if(newIndex.isValid() &&
 		   model()->columnCount(newIndex.parent())>newIndex.column() &&
 		   model()->rowCount(newIndex.parent())>newIndex.row() &&

@@ -18,9 +18,11 @@ TEMPLATE = app
 SOURCES += main.cpp \
     widget.cpp \
     icons.cpp \
-    whatsthismaker.cpp
+    whatsthismaker.cpp \
+    measuremaker.cpp
 
 HEADERS += \
     widget.h \
     icons.h \
-    whatsthismaker.h
+    whatsthismaker.h \
+    measuremaker.h

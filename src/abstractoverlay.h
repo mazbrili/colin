@@ -39,7 +39,7 @@ class quadWidget: public QWidget
 {
 	Q_OBJECT
 public:
-	explicit quadWidget(QWidget *parent = 0):QWidget(parent){};
+	explicit quadWidget(QWidget *parent = 0):QWidget(parent){}
 	int heightForWidth(int w) const {return 0.99*w;}
 };
 

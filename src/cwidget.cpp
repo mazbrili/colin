@@ -223,6 +223,34 @@ void cWidget::hideToolTips()
 	}
 }
 
+bool cWidget::eventFilter(QObject *o, QEvent *e)
+{
+	abstractOverlay *aO = qobject_cast<abstractOverlay*>(o);
+	if(!aO)
+		return false;
+
+	QPoint gPos;
+	if(e->type() == QEvent::Wheel)
+		gPos = static_cast<QWheelEvent*>(e)->globalPos();
+
+
+	QWidget *child = aO->childAt(aO->mapFromGlobal(gPos));
+	if(child && static_cast<QWheelEvent*>(e)->modifiers() == Qt::NoModifier)
+		return false;
+
+
+
+	foreach(viewport *v, views){
+		if(v->rect().contains(v->mapFromGlobal(gPos)))
+		{
+			v->wheelEvent(static_cast<QWheelEvent*>(e));
+			return true;
+		}
+	}
+
+	return false;
+}
+
 void cWidget::showSideBar(bool show)
 {
 	if(show)
@@ -248,6 +276,7 @@ void cWidget::showMenu(catcher::CatchCases cC, const int &i)
 	menu->raise();
 	menu->setFocus(Qt::PopupFocusReason);
 	menu->setCurrentItem(i);
+	menu->installEventFilter(this);
 	viewContainer->installEventFilter(menu);
 
 	foreach(viewport *v, views)

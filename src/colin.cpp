@@ -66,9 +66,9 @@ void MyOutputHandler(QtMsgType type, const char *msg) {
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    toolTipEater NomNomMampfMampf;
-    a.installEventFilter(&NomNomMampfMampf); //disable tooltips
-    a.setAttribute(Qt::AA_DontShowIconsInMenus, false); //enable icons
+	toolTipEater NomNomMampfMampf;
+	a.installEventFilter(&NomNomMampfMampf); //disable tooltips
+	a.setAttribute(Qt::AA_DontShowIconsInMenus, false); //enable icons
 
 
 #ifndef QT_NO_DEBUG

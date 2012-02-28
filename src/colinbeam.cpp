@@ -34,6 +34,8 @@ ColinBeam::ColinBeam(ColinStruct *parent):
 	ColinElement()
 {
 	par=parent;
+	node_l = 0;
+	node_r = 0;
 	hinges = NoHinge;
 	for(int i=0; i<6; i++){spr[i]=0;}
 	mt = 0;
@@ -82,10 +84,18 @@ ColinBeam::ColinBeam(const ColinBeam &other)
 	node_r=other.rightNodeI();
 	mt=other.mt;
 	qs=other.qs;
-	len = other.l();
-	alp = other.angle();
+	if(!other.dirty){
+		len = other.l();
+		alp = other.angle();
+		dirty = false;
+	}
+	else
+	{
+		len = 0;
+		alp = 0;
+		dirty = true;
+	}
 	res=other.res;
-	dirty = false;
 }
 
 ColinBeam &ColinBeam::operator=(const ColinBeam &other)
@@ -100,9 +110,17 @@ ColinBeam &ColinBeam::operator=(const ColinBeam &other)
 	node_r=other.rightNodeI();
 	mt=other.mt;
 	qs=other.qs;
-	len = other.l();
-	alp = other.angle();
-	dirty = false;
+	if(!other.dirty){
+		len = other.l();
+		alp = other.angle();
+		dirty = false;
+	}
+	else
+	{
+		len = 0;
+		alp = 0;
+		dirty = true;
+	}
 	res=other.res;
 	return *this;
 }

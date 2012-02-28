@@ -66,7 +66,7 @@ public:
         nFPhi =     (0xFFFFFFFF & ~Phi) & ~fphi,
         nF =        ((0xFFFFFFFF & ~fx) & ~fz) & ~fphi
     };
-    Q_DECLARE_FLAGS(bearings, bearing);
+	Q_DECLARE_FLAGS(bearings, bearing)
 
 	static Colin::Actions enumToEnum(const ColinSupport::bearings &b){
         Colin::Actions a;
@@ -111,7 +111,7 @@ public:
     const inline double &angle() const {return alp;}
 
 	inline void setForm(const ColinSupport::bearings b_){b=b_;}
-    inline void setX(const bool& Xn) {(Xn)?b|=X:b&=nFX; setCx(0);}
+	inline void setX(const bool& Xn) {(Xn)?b|=X:b&=nFX; setCx(0);}
     inline void setZ(const bool& Zn) {(Zn)?b|=Z:b&=nFZ; setCz(0);}
     inline void setPhi(const bool& Phin) {(Phin)?b|=Phi:b&=nFPhi; setCphi(0);}
 
@@ -150,6 +150,6 @@ private:
 	bearing_result *res;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(ColinSupport::bearings);
+Q_DECLARE_OPERATORS_FOR_FLAGS(ColinSupport::bearings)
 
 #endif // WGV_BEARING_H

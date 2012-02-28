@@ -161,6 +161,8 @@ QScriptValue BeamtoScriptValue(QScriptEngine *engine, const ColinBeam &b)
 	obj.setProperty("rightNode", b.rightNodeI());
 	obj.setProperty("material", b.MatI());
 	obj.setProperty("crossSection", b.ProfileI());
+	obj.setProperty("l", b.l());
+	obj.setProperty("angle", b.angle());
 	QScriptValue hing = engine->newArray(6);
 	for(int i=0; i<6; i++)
 		hing.setProperty(i, b.joint(i));
@@ -302,9 +304,9 @@ void LoadfromScriptValue(const QScriptValue &obj, ColinLoad &l)
 #ifdef SCRIPTCONVERT_DEBUG
 	qDebug() << "script -> load";
 #endif
-	l.setPx(obj.property("x").toBool());
-	l.setPz(obj.property("z").toBool());
-	l.setM(obj.property("m").toBool());
+	l.setPx(obj.property("x").toNumber());
+	l.setPz(obj.property("z").toNumber());
+	l.setM(obj.property("m").toNumber());
 	l.setTyp(static_cast<ColinLoad::form>(obj.property("type").toInt32()));
 	l.setSet(obj.property("set").toInt32());
 	if(l.isOnBeam())
@@ -322,7 +324,14 @@ QScriptValue LoadCtor(QScriptContext *ctxt, QScriptEngine *eng)
 	else {
 		obj = eng->newObject();
 
-		if(ctxt->argumentCount() == 5)
+		if(ctxt->argumentCount() ==5)
+			obj = LoadtoScriptValue(eng, ColinLoad(static_cast<ColinLoad::form>(ctxt->argument(0).toInt32()),
+												   ctxt->argument(1).toInt32(),
+												   ctxt->argument(2).toNumber(),
+												   ctxt->argument(3).toNumber(),
+												   ctxt->argument(4).toNumber(),
+												   -1));
+		else if(ctxt->argumentCount() == 6)
 			obj = LoadtoScriptValue(eng, ColinLoad(static_cast<ColinLoad::form>(ctxt->argument(0).toInt32()),
 												   ctxt->argument(1).toInt32(),
 												   ctxt->argument(2).toNumber(),
@@ -378,6 +387,7 @@ QScriptValue CLStoScriptValue(QScriptEngine *engine, const ColinCLS &cls)
 #endif
 	QScriptValue obj = engine->newObject();
 	obj.setProperty("name", cls.name());
+	obj.setProperty("active", cls.isSelected());
 	QScriptValue bls = engine->newArray(cls.count());
 	for(int i=0; i<cls.count(); i++)
 	{
@@ -386,7 +396,7 @@ QScriptValue CLStoScriptValue(QScriptEngine *engine, const ColinCLS &cls)
 		item.setProperty("factor", cls.fac(i));
 		bls.setProperty(i, item);
 	}
-	obj.setProperty("child", bls);
+	obj.setProperty("children", bls);
 	return obj;
 }
 
@@ -396,7 +406,8 @@ void CLSfromScriptValue(const QScriptValue &obj, ColinCLS &cls)
 	qDebug() << "script -> cls";
 #endif
 	cls.setName(obj.property("name").toString());
-	QScriptValue array = obj.property("child");
+	cls.select(obj.property("active").toBool());
+	QScriptValue array = obj.property("children");
 	if(!array.isArray())
 		return;
 	int length = array.property("length").toInt32();
@@ -416,7 +427,10 @@ QScriptValue CLSCtor(QScriptContext *ctxt, QScriptEngine *eng)
 	else {
 		obj = eng->newObject();
 
-		obj = CLStoScriptValue(eng, ColinCLS());
+		if(ctxt->argumentCount() == 1)
+			obj = CLStoScriptValue(eng, ColinCLS(ctxt->argument(0).toString()));
+		else
+			obj = CLStoScriptValue(eng, ColinCLS());
 		obj.setPrototype(ctxt->callee().property("prototype"));
 	}
 	return obj;

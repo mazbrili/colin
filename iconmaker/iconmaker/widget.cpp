@@ -30,6 +30,7 @@ widget::widget(QWidget *parent) :
 	this->setLayout(new QGridLayout());
 
 	sizing = new QComboBox(this);
+	sizing->addItem("24");
 	sizing->addItem("32");
 	sizing->addItem("64");
 	sizing->addItem("128");

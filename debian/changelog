@@ -1,15 +1,26 @@
 colin (0.2.0-0) any; urgency=low
 
-  * added Basic Load Sets
-  * added Combined Load Sets
-  * fixed some problems with the tooltips
-  * using native selection rectangles
-  * added a dialog for printing of the protocol
-  * renewed the sidebar
-  * added javscript engine
+  * added basic load sets
+  * added combined load sets
+  * added hover effects
+  * added javscript engine (think of VBA in Excel)
   * added a console
+  * added interactive help
+  * added user manual and documentation
+  * added buffer for structs in the clipboard and preview
+  * added the possibility to export of pictures
+  * added a dialog for printing of the protocol including preview
+  * added keyboard controls to the viewports
+  * using native selection rectangles
+  * using native highlight color for selection
+  * changed the implementation of the treeview to a model-view.pattern
+  * replaced right click dialogs with transparent widgets, show now aditional information
+  * removed the widget in the right bottom corner (content moved to right click widgets)
+  * changed the style of the start and settings page
+  * changed the style of the sidebar
   * added some animations to the GUI
-  * complete reimplementation of treeview
+  * improved autozoom
+  * improved tooltips
 
  -- Matthias Rauter <matthias.rauter@student.uibk.ac.at>  Mon, 13 Dec 2011 00:00:01 +0100
 

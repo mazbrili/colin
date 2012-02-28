@@ -268,6 +268,33 @@ void ColinStruct::CommandEditBLS(const int &o, const ColinBLS &n)
 void ColinStruct::CommandRemoveBLS(const int &o)
 {
 	resetResults();
+	for(int i=0; i<load_n(); i++)
+	{
+		if(load(i).set()==o)
+		{
+			ColinLoad l = load(i);
+			l.setSet(-1);
+			emit edited(i, l);
+		}
+		else if(load(i).set()>o)
+		{
+			loads[i].setSet(load(i).set()-1);
+		}
+	}
+	for(int i=0; i<cls_n(); i++)
+	{
+		if(cls(i).contains(o))
+		{
+			ColinCLS c = cls(i);
+			c.removeBLS(o);
+			emit edited(i, c);
+		}
+		for(int j=0; j<cls(i).count(); j++)
+		{
+			if(cls(i).bls(j)>o)
+				combinedloadsets[i].setBLSbyIndex(j, cls(i).bls(j)-1);
+		}
+	}
 	basicloadsets.removeAt(o);
 	emit erasedBLS(o);
 
@@ -281,6 +308,21 @@ void ColinStruct::CommandInsertBLS(const int &o, const ColinBLS &n)
 	resetResults();
 	basicloadsets.insert(o, n);
 	basicloadsets[o].setStruct(this);
+	for(int i=0; i<load_n(); i++)
+	{
+		if(!(load(i).set()<o))
+		{
+			loads[i].setSet(load(i).set()+1);
+		}
+	}
+	for(int i=0; i<cls_n(); i++)
+	{
+		for(int j=0; j<cls(i).count(); j++)
+		{
+			if(!(cls(i).bls(j)<o))
+				combinedloadsets[i].setBLSbyIndex(j, cls(i).bls(j)+1);
+		}
+	}
 	emit addedBLS(o);
 
 
@@ -379,7 +421,7 @@ void ColinStruct::removeNode(const int &o)
 	emit endS();
 }
 
-void ColinStruct::setBearing(const int &k, const ColinSupport &b)
+void ColinStruct::setSupport(const int &k, const ColinSupport &b)
 {
 	if(k<0 || k>=node_n())
 		return;
@@ -390,6 +432,13 @@ void ColinStruct::setBearing(const int &k, const ColinSupport &b)
 		after.setBearing(b);
 	emit edited(k, after);
 
+}
+
+ColinSupport ColinStruct::getSupport(const int &i)
+{
+	if(i<0 || i>=node_n())
+		return ColinSupport();
+	return nodes.at(i).bearing();
 }
 
 ColinBeam ColinStruct::getBeam(const int &i)
@@ -443,9 +492,27 @@ ColinLoad ColinStruct::getLoad(const int &i)
 	return loads.at(i);
 }
 
+void ColinStruct::setLoad(const int &i, const ColinLoad &l)
+{
+	if(i<0 || i>=load_n())
+		return;
+	if(l.typ()<0 || l.typ()>9)
+		return;
+	if(l.isOnBeam() && (l.at()>=beam_n() || l.at()<0))
+		return;
+	else if(l.at()>=node_n() || l.at()<0)
+		return;
+	editLoad(i, l);
+}
+
 int ColinStruct::addLoad(const ColinLoad &n)
 {
-	Q_ASSERT(n.typ()>=0 && n.typ()<9);
+	if(n.typ()<0 || n.typ()>9)
+		return -1;
+	if(n.isOnBeam() && (n.at()>=beam_n() || n.at()<0))
+		return -1;
+	else if(n.at()>=node_n() || n.at()<0)
+		return -1;
 	emit appended(n);
 	return load_n()-1;
 }
@@ -487,7 +554,9 @@ void ColinStruct::removeBLS(const int &i)
 {
 	if(i<0 || i>=bls_n())
 		return;
-	emit removeBLS(i);
+	beginScript(tr("remove bls %1").arg(i));
+	emit removed(i, bls(i));
+	endScript();
 }
 
 ColinCLS ColinStruct::getCLS(const int &i)
@@ -499,7 +568,13 @@ ColinCLS ColinStruct::getCLS(const int &i)
 
 int ColinStruct::addCLS(const ColinCLS &n)
 {
-	emit appended(n);
+	QString clsname = n.name();
+	int nr = 1;
+	ColinCLS nn = n;
+	while(getCLSIDbyName(nn.name())!=-1){
+		nn.setName(clsname + " ("+QString::number(nr++)+")");
+	}
+	emit appended(nn);
 	return cls_n()-1;
 }
 
@@ -811,8 +886,10 @@ void ColinStruct::setCLSName(const int &i, const QString &name)
 
 void ColinStruct::addBLStoCLS(const int &clsi, const int &blsi, const double &fac)
 {
-	Q_ASSERT(!(clsi<0 || clsi>=cls_n()));
-	Q_ASSERT(!(blsi<0 || blsi>=bls_n()));
+	if(clsi<0 || clsi>=cls_n())
+		return;
+	if(blsi<0 || blsi>=bls_n())
+		return;
 	ColinCLS c =cls(clsi);
 	c.addBLS(blsi, fac);
 	emit edited(clsi, c);
@@ -857,6 +934,7 @@ void ColinStruct::setActiveCLS(int clsI, bool active)
 	if(combinedloadsets[clsI].isSelected() == active)
 		return;
 	combinedloadsets[clsI].select(active);
+	emit changedCLS(clsI);
 	emit changedActiveCLS();
 }
 
@@ -1478,28 +1556,28 @@ QRectF ColinStruct::boundingRect(const bool &alsoLoads) const
 				QTransform t = beam(i).transform();
 
 				for(int j = 0; j<qMax(1, cls_n()); j++){
-					for(int i=0; i<2; i++){
-						QPointF maxP = t.map(QPointF(beam(i).l()*i, beam(i).M(j, beam(i).l()*i)*scaleM()));
+					for(int m=0; m<2; m++){
+						QPointF maxP = t.map(QPointF(beam(i).l()*m, beam(i).M(j, beam(i).l()*m)*scaleM()));
 						bound = bound.united(QRectF(maxP.x()-0.00001, maxP.y()-0.00001, 0.00002, 0.00002));
 					}
-					for(int i=0; i<2; i++){
-						QPointF maxP = t.map(QPointF(beam(i).Mconst(j).max(i), beam(i).M(j, beam(i).Mconst(j).max(i))*scaleM()));
+					for(int m=0; m<2; m++){
+						QPointF maxP = t.map(QPointF(beam(i).Mconst(j).max(m), beam(i).M(j, beam(i).Mconst(j).max(m))*scaleM()));
 						bound = bound.united(QRectF(maxP.x()-0.00001, maxP.y()-0.00001, 0.00002, 0.00002));
 					}
-					for(int i=0; i<2; i++){
-						QPointF maxP = t.map(QPointF(beam(i).l()*i, beam(i).N(j, beam(i).l()*i)*scaleP()));
+					for(int m=0; m<2; m++){
+						QPointF maxP = t.map(QPointF(beam(i).l()*m, beam(i).N(j, beam(i).l()*m)*scaleP()));
 						bound = bound.united(QRectF(maxP.x()-0.00001, maxP.y()-0.00001, 0.00002, 0.00002));
 					}
-					for(int i=0; i<1; i++){
-						QPointF maxP = t.map(QPointF(beam(i).Nconst(j).max(i), beam(i).N(j, beam(i).Nconst(j).max(i))*scaleP()));
+					for(int m=0; m<1; m++){
+						QPointF maxP = t.map(QPointF(beam(i).Nconst(j).max(m), beam(i).N(j, beam(i).Nconst(j).max(m))*scaleP()));
 						bound = bound.united(QRectF(maxP.x()-0.00001, maxP.y()-0.00001, 0.00002, 0.00002));
 					}
-					for(int i=0; i<2; i++){
-						QPointF maxP = t.map(QPointF(beam(i).l()*i, beam(i).Q(j, beam(i).l()*i)*scaleP()));
+					for(int m=0; m<2; m++){
+						QPointF maxP = t.map(QPointF(beam(i).l()*m, beam(i).Q(j, beam(i).l()*m)*scaleP()));
 						bound = bound.united(QRectF(maxP.x()-0.00001, maxP.y()-0.00001, 0.00002, 0.00002));
 					}
-					for(int i=0; i<1; i++){
-						QPointF maxP = t.map(QPointF(beam(i).Qconst(j).max(i), beam(i).Q(j, beam(i).Qconst(j).max(i))*scaleP()));
+					for(int m=0; m<1; m++){
+						QPointF maxP = t.map(QPointF(beam(i).Qconst(j).max(m), beam(i).Q(j, beam(i).Qconst(j).max(m))*scaleP()));
 						bound = bound.united(QRectF(maxP.x()-0.00001, maxP.y()-0.00001, 0.00002, 0.00002));
 					}
 				}
@@ -1799,7 +1877,7 @@ void ColinStruct::mergeWith(ColinStruct *tw, QPointF dp)
                                 bear.setPhi(false);
                         }
                         else
-                            setBearing(j, tw->node(i).bearing());
+                            setSupport(j, tw->node(i).bearing());
                     }
                     n.insert(i, j);
                     break;

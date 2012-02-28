@@ -156,6 +156,9 @@ void MainWindow::init()
 	connect(calcInfoHider,                      SIGNAL(timeout()),
 			calcInfo,                           SLOT(hide()));
 
+	connect(&filelist::instance(),				SIGNAL(fileOpened()),
+			this,								SLOT(zoomAll()));
+
 	connect(nextTab,                            SIGNAL(triggered()),
 			&filelist::instance(),              SLOT(nextTab()));
 
@@ -981,7 +984,7 @@ void MainWindow::closeTab()
 			}
 		}
 	}
-	filelist::instance().removeAt(filelist::instance().currentIndex());
+	filelist::instance().closeFile(filelist::instance().currentIndex());
 }
 
 void MainWindow::settings()
@@ -1416,6 +1419,9 @@ void MainWindow::zoomAll()
 	if(filelist::instance().currentFile() == NULL)
 		return;
 	QRectF bR = filelist::instance().currentFile()->boundingRect();
+
+	if(!bR.isValid() || bR.isEmpty() || bR.isNull())
+		return;
 
 	for(int i=0; i<centralWidget->viewCount(); i++)
 		centralWidget->zoomRect(i, bR);

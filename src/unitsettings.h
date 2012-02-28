@@ -39,7 +39,7 @@
 #define HPREFIX unitSettings::instance().hprefix()
 #define PPREFIX unitSettings::instance().Pprefix()
 #define MPREFIX unitSettings::instance().Mprefix()
-#define ANGLEPREFIX (180/M_PI)
+#define ANGLEPREFIX (-180./M_PI)
 #define PRECISON unitSettings::instance().precison()
 #define UNIT unitSettings::instance()
 

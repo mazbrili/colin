@@ -222,6 +222,12 @@ bool treeModel::setData(const QModelIndex & index, const QVariant & value, int r
 		case clsbls:					return setCLSBLS(index, value);
 		default:						return false;
 		}
+	case Qt::CheckStateRole:
+		switch(index.internalId() & 0xF){
+		case cls:						return setCLS(index, value);
+		default:						return false;
+		}
+
 	default:
 		return false;
 	}
@@ -614,7 +620,7 @@ QVariant treeModel::beamItem(const QModelIndex &index, int role) const
 													.arg(n.leftNodeI())
 													.arg(n.rightNodeI())
 													.arg(n.l(), 0, 'f', PRECISON)
-													.arg(-n.angle()*ANGLEPREFIX, 0, 'f', PRECISON)
+													.arg(n.angle()*ANGLEPREFIX, 0, 'f', PRECISON)
 													.arg(n.Mat().name())
 													.arg(n.Profile().name()));
 		case 1:						return QVariant(QString(tr("<b>left node</b>: #%1 <br />(%2m, %3m)<br />")+
@@ -1626,11 +1632,13 @@ bool treeModel::setBeam(const QModelIndex & index, const QVariant & value)
 	switch(index.column()){
 		case 1:
 			val = value.toString().toInt(&ok);
-			if(ok)			t->setLeft(index.row(), val);
+			if(ok && val>0 && val <=t->node_n())
+				t->setLeft(index.row(), val);
 			return ok;
 		case 2:
 			val = value.toString().toInt(&ok);
-			if(ok)			t->setRight(index.row(), val);
+			if(ok && val>0 && val <=t->node_n())
+				t->setRight(index.row(), val);
 			return ok;
 		case 3:
 			t->setMat(index.row(), value.toString());
@@ -1663,8 +1671,20 @@ bool treeModel::setLoad(const QModelIndex & index, const QVariant & value)
 		}
 	case 1:
 		ival = value.toInt(&ok);
-		if(ok)
+		if(ok){
+			switch(t->load(index.row()).typ()){
+			case ColinLoad::nodeLoad:
+			case ColinLoad::moment:
+				if(ival<0 || ival >= t->node_n())
+					return false;
+				break;
+			default:
+				if(ival<0 || ival >= t->beam_n())
+					return false;
+				break;
+			}
 			t->setPos(index.row(), ival);
+		}
 		return ok;
 	case 2:
 		val = value.toDouble(&ok);
@@ -1714,6 +1734,7 @@ bool treeModel::setBLS(const QModelIndex & index, const QVariant & value)
 
 bool treeModel::setCLS(const QModelIndex & index, const QVariant & value)
 {
+	qDebug() << "treeModel::setCLS(" << index << ", " << value << ")";
 	if(index.row()==t->cls_n())
 		return addCLS(index, value);
 
@@ -1724,6 +1745,16 @@ bool treeModel::setCLS(const QModelIndex & index, const QVariant & value)
 		{
 			if(t->getCLSIDbyName(value.toString())==-1)
 				t->setCLSName(index.row(), value.toString());
+		}
+		return true;
+	case 2:
+		if(static_cast<Qt::CheckState>(value.toUInt())==Qt::Unchecked)
+		{
+			t->setActiveCLS(index.row(), false);
+		}
+		else
+		{
+			t->setActiveCLS(index.row(), true);
 		}
 		return true;
 	default:
@@ -1751,7 +1782,7 @@ bool treeModel::setSupport(const QModelIndex & index, const QVariant & value)
 			else
 				n.setX(false);
 		}
-		t->setBearing(nr, n);
+		t->setSupport(nr, n);
 		return true;
 	case 2:
 		if(value.toString() == tr("locked"))
@@ -1763,7 +1794,7 @@ bool treeModel::setSupport(const QModelIndex & index, const QVariant & value)
 			else
 				n.setZ(false);
 		}
-		t->setBearing(nr, n);
+		t->setSupport(nr, n);
 		return true;
 	case 3:
 		if(value.toString() == tr("locked"))
@@ -1775,7 +1806,7 @@ bool treeModel::setSupport(const QModelIndex & index, const QVariant & value)
 			else
 				n.setPhi(false);
 		}
-		t->setBearing(nr, n);
+		t->setSupport(nr, n);
 		return true;
 	default:
 		return false;
@@ -1890,6 +1921,10 @@ bool treeModel::addBeam(const QModelIndex & index, const QVariant & value)
 		}
 	}
 
+	if(l>=t->node_n() || l<0)
+		return false;
+	if(r>=t->node_n() || r<0)
+		return false;
 	t->addBeam(	ColinBeam(t, l, r, matId, csId));
 
 
@@ -1923,6 +1958,18 @@ bool treeModel::addLoad(const QModelIndex & index, const QVariant & value)
 #ifdef TREEVERBOSE
 	qDebug() << "pos = " << pos;
 #endif
+
+	switch(newLoadFormBuffer){
+	case ColinLoad::nodeLoad:
+	case ColinLoad::moment:
+		if(pos>=t->node_n() || pos < 0)
+			return true;
+		break;
+	default:
+		if(pos>=t->beam_n() || pos < 0)
+			return true;
+		break;
+	}
 
 	int set;
 	double px, pz, m;

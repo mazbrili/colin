@@ -71,8 +71,8 @@ public:
 public slots:
 	void extended(bool show);
 	void setCurrentItem(const int &i);
-	void setBasic();
-	void setSpring();
+	void setBasic(int nr);
+	void setSpring(int nr);
 	void setSpringConstants();
 
 private:

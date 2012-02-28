@@ -35,8 +35,8 @@
 class ColinBLS : public ColinElement
 {
 public:
-	ColinBLS(){};
-	explicit ColinBLS(const QString &name):_name(name){};
+	ColinBLS(){}
+	explicit ColinBLS(const QString &name):_name(name){}
 	const QString &name()const {return _name;}
 	const QColor &color() const {return _color;}
 	void setName(const QString &namen){_name=namen;}

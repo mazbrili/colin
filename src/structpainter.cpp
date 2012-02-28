@@ -81,6 +81,9 @@ void structPainter::drawStruct(const ColinStruct &t, QPainter *painter, QTransfo
 
 
 	p->setRenderHint(QPainter::Antialiasing, viewPortSettings::instance().antialiasing());
+	QPen pen = p->pen();
+	pen.setCosmetic(true);
+	p->setPen(pen);
 
 
 

@@ -44,8 +44,8 @@
 
 bool generalOverlay::showPaste = true;
 bool generalOverlay::showPicture = true;
-bool generalOverlay::showCls = false;
-bool generalOverlay::showBls = false;
+bool generalOverlay::showCls = true;
+bool generalOverlay::showBls = true;
 
 generalOverlay::generalOverlay(QWidget *parent):
 	abstractOverlay(parent)

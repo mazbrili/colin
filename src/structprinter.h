@@ -95,7 +95,7 @@ public:
 
 	int usablePageHeight();
 	int lineHeight();
-	int needLine(int i);
+	int needLine(int i, bool *ok = 0);
 
 	void printStruct(const QRect &rect, Colin::Elements, QList<int> cls);
 	void printStructBLS(const QRect &rect, Colin::Elements, QList<int> bls);

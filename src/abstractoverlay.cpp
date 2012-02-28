@@ -92,6 +92,7 @@ abstractOverlay::abstractOverlay(QWidget *parent) :
 	connect(quit,				SIGNAL(clicked()),
 			this,				SLOT(deleteLater()));
 
+
 }
 
 abstractOverlay::~abstractOverlay()

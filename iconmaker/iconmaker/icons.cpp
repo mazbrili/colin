@@ -1,6 +1,7 @@
 #include "icons.h"
 
 #include "whatsthismaker.h"
+#include "measuremaker.h"
 #include "math.h"
 
 double iconMaker::lineWidth = 1;
@@ -15,6 +16,8 @@ iconMaker *iconMaker::create(icon i)
 	{
 	case whatsThis:
 		return new whatsThisMaker();
+	case measure:
+		return new measureMaker();
 	default:
 		return new iconMaker();
 	}
@@ -26,6 +29,8 @@ QString iconMaker::iconName(icon i)
 	{
 	case placeholder:
 		return "placeholder";
+	case measure:
+		return "measure";
 	case whatsThis:
 		return "whatsThis";
 	default:

@@ -94,7 +94,8 @@ public:
 	Q_INVOKABLE int addNode(double x, double y);
 	Q_INVOKABLE int addNode(const ColinNode &n);
 	Q_INVOKABLE void removeNode(const int &o);
-	Q_INVOKABLE void setBearing(const int &k, const ColinSupport &b);
+	Q_INVOKABLE void setSupport(const int &k, const ColinSupport &b);
+	Q_INVOKABLE ColinSupport getSupport(const int &i);
 
 	Q_INVOKABLE ColinBeam getBeam(const int &i);
 	Q_INVOKABLE void setBeam(const int &k, const ColinBeam &b);
@@ -103,6 +104,7 @@ public:
 	Q_INVOKABLE void removeBeam(const int &o);
 
 	Q_INVOKABLE ColinLoad getLoad(const int &i);
+	Q_INVOKABLE void setLoad(const int &i, const ColinLoad &l);
 	Q_INVOKABLE int addLoad(const ColinLoad &n);
 	Q_INVOKABLE void removeLoad(const int &i);
 
@@ -115,6 +117,8 @@ public:
 	Q_INVOKABLE void setCLS(const int &i, const ColinCLS &n);
 	Q_INVOKABLE int addCLS(const ColinCLS &n);
 	Q_INVOKABLE void removeCLS(const int &i);
+	Q_INVOKABLE void addBLStoCLS(const int &clsi, const int &blsi, const double &fac);
+
 
 
     enum VarName{
@@ -245,7 +249,6 @@ public:
 
 	void editCLS(const int &o, const ColinCLS &n);
 	void setCLSName(const int &i, const QString &name);
-	void addBLStoCLS(const int &clsi, const int &blsi, const double &fac);
 	void removeBLSbyIndex(const int &clsi, const int &i);
 	void setFacbyIndex(const int &clsi, const int &i, const double &fac);
 	void setBLSbyIndex(const int &clsi, const int &i, const int newBLS);

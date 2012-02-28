@@ -358,7 +358,7 @@ void cTabBar::mousePressEvent(QMouseEvent *e)
                         return;
                     }
                 }
-                files.removeAt(i);
+                files.closeFile(i);
                 return;
             }
             crossrect = QRect(dwtab()*i, 0, dwtab(), height());

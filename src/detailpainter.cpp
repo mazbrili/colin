@@ -417,102 +417,107 @@ void detailPainter::drawBeamExtern(QPainter *p, const ColinStruct &t, int i, con
 	p->drawLine(-l/2, -1.5, l/2, -1.5);
 
 
-	QLineF loadLine;
-	QTransform forLine;
-	forLine.rotate(-b.angle()*180./M_PI);
-	for(int j=0; j<(t.cls_n()?t.cls(cls.at(0)).count():1); j++)
+	foreach(int c, cls)
 	{
-		double fac;
-		if(t.cls_n())
-			fac = t.cls(cls.at(0)).fac(j)*t.scaleP()*scale;
-		else
-			fac = t.scaleP()*scale;
-		for(int l=0; l<t.load_n(); l++)
+		QLineF loadLine;
+		QTransform forLine;
+		forLine.rotate(-b.angle()*180./M_PI);
+		for(int j=0; j<(t.cls_n()?t.cls(cls.at(c)).count():1); j++)
 		{
-			if((t.load(l).set() == (t.cls_n()?t.cls(cls.at(0)).bls(j):-1) && t.load(l).at() == i))
+			double fac;
+			if(t.cls_n())
+				fac = t.cls(cls.at(c)).fac(j)*t.scaleP()*scale;
+			else
+				fac = t.scaleP()*scale;
+			for(int l=0; l<t.load_n(); l++)
 			{
-				if(t.load(l).typ() == ColinLoad::uniformlyDistibutedLoad)
+				if((t.load(l).set() == (t.cls_n()?t.cls(cls.at(c)).bls(j):-1) && t.load(l).at() == i))
 				{
-					loadLine.setP1(loadLine.p1()+forLine.map(QPointF(-t.load(l).Px()*fac, -t.load(l).Pz()*fac)));
-					loadLine.setP2(loadLine.p2()+forLine.map(QPointF(-t.load(l).Px()*fac, -t.load(l).Pz()*fac)));
+					if(t.load(l).typ() == ColinLoad::uniformlyDistibutedLoad)
+					{
+						loadLine.setP1(loadLine.p1()+forLine.map(QPointF(-t.load(l).Px()*fac, -t.load(l).Pz()*fac)));
+						loadLine.setP2(loadLine.p2()+forLine.map(QPointF(-t.load(l).Px()*fac, -t.load(l).Pz()*fac)));
+					}
+					else if(t.load(l).typ() == ColinLoad::increasingLinearLoad)
+					{
+						loadLine.setP2(loadLine.p2()+forLine.map(QPointF(-t.load(l).Px()*fac, -t.load(l).Pz()*fac)));
+					}
+					else if(t.load(l).typ() == ColinLoad::decreasingLinearLoad)
+					{
+						loadLine.setP1(loadLine.p1()+forLine.map(QPointF(-t.load(l).Px()*fac, -t.load(l).Pz()*fac)));
+					}
+					else
+						continue;
+	#ifdef DETAIL_VERBOSE
+					qDebug() << "adding load " << l << " * " << fac << " to line";
+					qDebug() << "line = " << loadLine;
+	#endif
 				}
-				else if(t.load(l).typ() == ColinLoad::increasingLinearLoad)
-				{
-					loadLine.setP2(loadLine.p2()+forLine.map(QPointF(-t.load(l).Px()*fac, -t.load(l).Pz()*fac)));
-				}
-				else if(t.load(l).typ() == ColinLoad::decreasingLinearLoad)
-				{
-					loadLine.setP1(loadLine.p1()+forLine.map(QPointF(-t.load(l).Px()*fac, -t.load(l).Pz()*fac)));
-				}
-				else
-					continue;
-#ifdef DETAIL_VERBOSE
-				qDebug() << "adding load " << l << " * " << fac << " to line";
-				qDebug() << "line = " << loadLine;
-#endif
 			}
 		}
+		loadLine.setP1(loadLine.p1()+QPointF(-l/2, 0));
+		loadLine.setP2(loadLine.p2()+QPointF(l/2, 0));
+
+		QColor lcolor = viewPortSettings::instance().color(Colin::C_Load1);
+		p->setPen(QPen(lcolor, p->pen().widthF()));
+		lcolor.setAlpha(80);
+		p->setBrush(lcolor);
+
+		QPainterPath loads;
+
+
+		loads.moveTo(-l/2, 0);
+
+		loads.lineTo(loadLine.p1());
+
+		loads.lineTo(loadLine.p2());
+		loads.lineTo(l/2, 0);
+
+		p->drawPath(loads);
+
+
+		QPolygonF arrow(3);
+
+		arrow[0] = QPointF(0, 0);
+		arrow[1] = QPointF(-5, -10);
+		arrow[2] = QPointF(5, -10);
+
+		arrow = forLine.map(arrow);
+
+		p->save();
+		p->setBrush(lcolor);
+
+		const int ac = 5;
+
+		p->setClipPath(loads);
+		p->setBrush(p->pen().color());
+
+		for(int arr=0; arr<=ac; arr++)
+		{
+			QLineF sl(QPointF(-l/2+l*arr/ac, 0), loadLine.pointAt(double(arr)/double(ac)));
+			p->drawLine(sl);
+			QTransform forarrow;
+			forarrow.translate(-l/2+l*arr/ac, 0);
+			forarrow.rotate(-sl.angle()+b.angle()*180./M_PI+90);
+			p->drawPolygon(forarrow.map(arrow));
+		}
+
+		p->restore();
 	}
-	loadLine.setP1(loadLine.p1()+QPointF(-l/2, 0));
-	loadLine.setP2(loadLine.p2()+QPointF(l/2, 0));
-
-	QColor lcolor = viewPortSettings::instance().color(Colin::C_Load1);
-	p->setPen(QPen(lcolor, p->pen().widthF()));
-	lcolor.setAlpha(80);
-	p->setBrush(lcolor);
-
-	QPainterPath loads;
-
-
-	loads.moveTo(-l/2, 0);
-
-	loads.lineTo(loadLine.p1());
-
-	loads.lineTo(loadLine.p2());
-	loads.lineTo(l/2, 0);
-
-	p->drawPath(loads);
-
-
-	QPolygonF arrow(3);
-
-	arrow[0] = QPointF(0, 0);
-	arrow[1] = QPointF(-5, -10);
-	arrow[2] = QPointF(5, -10);
-
-	arrow = forLine.map(arrow);
-
-	p->save();
-	p->setBrush(lcolor);
-
-	const int ac = 5;
-
-	p->setClipPath(loads);
-	p->setBrush(p->pen().color());
-
-	for(int arr=0; arr<=ac; arr++)
-	{
-		QLineF sl(QPointF(-l/2+l*arr/ac, 0), loadLine.pointAt(double(arr)/double(ac)));
-		p->drawLine(sl);
-		QTransform forarrow;
-		forarrow.translate(-l/2+l*arr/ac, 0);
-		forarrow.rotate(-sl.angle()+b.angle()*180./M_PI+90);
-		p->drawPolygon(forarrow.map(arrow));
-	}
-
-	p->restore();
 
 	if(b.getStruct()->isCalculated())
 	{
-		p->save();
-		p->translate(-l/2, 0);
-		p->scale(-1, 1);
-		drawLoads(p, b.N(cls.at(0), 0), -b.Q(cls.at(0), 0), b.M(cls.at(0), 0));
-		p->restore();
-		p->save();
-		p->translate(l/2, 0);
-		drawLoads(p, b.N(cls.at(0), b.l()), b.Q(cls.at(0), b.l()), b.M(cls.at(0), b.l()));
-		p->restore();
+		foreach(int c, cls){
+			p->save();
+			p->translate(-l/2, 0);
+			p->scale(-1, 1);
+			drawLoads(p, b.N(cls.at(c), 0), -b.Q(cls.at(c), 0), b.M(cls.at(c), 0));
+			p->restore();
+			p->save();
+			p->translate(l/2, 0);
+			drawLoads(p, b.N(cls.at(c), b.l()), b.Q(cls.at(c), b.l()), b.M(cls.at(c), b.l()));
+			p->restore();
+		}
 	}
 }
 
@@ -537,20 +542,23 @@ void detailPainter::drawBeamIntern(QPainter *p, const ColinStruct &t, int i, con
 
 	if(b.getStruct()->isCalculated())
 	{
-		p->save();
-		drawLoads(p, b.N(cls.at(0), x),
-					 b.Q(cls.at(0), x),
-					 b.M(cls.at(0), x));
-		p->restore();
+		foreach(int c, cls)
+		{
+			p->save();
+			drawLoads(p, b.N(cls.at(c), x),
+						 b.Q(cls.at(c), x),
+						 b.M(cls.at(c), x));
+			p->restore();
 
-		p->translate(l/1.5, 0);
-		p->scale(-1, 1);
+			p->translate(l/1.5, 0);
+			p->scale(-1, 1);
 
-		p->save();
-		drawLoads(p, b.N(cls.at(0), x),
-					-b.Q(cls.at(0), x),
-					 b.M(cls.at(0), x));
-		p->restore();
+			p->save();
+			drawLoads(p, b.N(cls.at(c), x),
+						-b.Q(cls.at(c), x),
+						 b.M(cls.at(c), x));
+			p->restore();
+		}
 	}
 }
 

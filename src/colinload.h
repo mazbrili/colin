@@ -50,7 +50,7 @@ public:
 //        defomation              = 9
     };
 
-	ColinLoad(){ _Px = 0; _Pz = 0; _M = 0; _at = -1; _set = -1;}
+	ColinLoad(){ _Px = 0; _Pz = 0; _M = 0; _at = -1; _set = -1; _typ = nodeLoad;}
 	ColinLoad(const form& typn, const int& atn, const double& Pxn, const double& Pzn, const double& Mn, const int & set){
 		_typ=typn; _at=atn; _Px=Pxn; _Pz=Pzn; _M=Mn; _set=set;}
 	ColinLoad(const ColinLoad &other);

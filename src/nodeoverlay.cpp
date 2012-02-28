@@ -200,13 +200,13 @@ supportExtended::supportExtended(QWidget *parent) :
 			this,				SLOT(extended(bool)));
 
 	connect(basicsupport,		SIGNAL(buttonClicked(int)),
-			this,				SLOT(setBasic()));
+			this,				SLOT(setBasic(int)));
 
 	connect(basicsupport2,		SIGNAL(buttonClicked(int)),
-			this,				SLOT(setBasic()));
+			this,				SLOT(setBasic(int)));
 
 	connect(springsupport,		SIGNAL(buttonClicked(int)),
-			this,				SLOT(setSpring()));
+			this,				SLOT(setSpring(int)));
 
 	connect(hc,					SIGNAL(editingFinished()),
 			this,				SLOT(setSpringConstants()));
@@ -229,7 +229,7 @@ void supportExtended::extended(bool show)
 
 void supportExtended::setCurrentItem(const int &i)
 {
-
+	qDebug() << "supportExtended::setCurrentItem(" << i << ")";
 	currentItem = i;
 	ColinSupport::bearings sf;
 	if(filelist::instance().currentFile()->node(i).hasbearing())
@@ -271,29 +271,31 @@ void supportExtended::setCurrentItem(const int &i)
 }
 
 
-void supportExtended::setBasic()
+void supportExtended::setBasic(int nr)
 {
+	qDebug() << "supportExtended::setBasic(...)";
 	QButtonGroup *group = qobject_cast<QButtonGroup*>(sender());
 	if(!group)
 		return;
+
+	bool checked = group->button(nr)->isChecked();
 
 	ColinSupport su;
 	if(filelist::instance().currentFile()->node(currentItem).hasbearing())
 		su = filelist::instance().currentFile()->node(currentItem).bearing();
 
-	foreach(QAbstractButton *b, group->buttons())
-	{
-		if(b->isChecked())
-			su.setForm( ColinSupport::bearings(su.form() | group->id(b)));
-		else
-			su.setForm( su.form() & (~group->id(b)));
+	switch(nr){
+	case ColinSupport::X:		su.setX(checked);	break;
+	case ColinSupport::Z:		su.setZ(checked);	break;
+	case ColinSupport::Phi:		su.setPhi(checked);	break;
 	}
 
-	filelist::instance().currentFile()->setBearing(currentItem, su);
+	filelist::instance().currentFile()->setSupport(currentItem, su);
 }
 
-void supportExtended::setSpring()
+void supportExtended::setSpring(int nr)
 {
+	qDebug() << "supportExtended::setSpring(...)";
 	ColinSupport su;
 	if(filelist::instance().currentFile()->node(currentItem).hasbearing())
 		su = filelist::instance().currentFile()->node(currentItem).bearing();
@@ -315,18 +317,19 @@ void supportExtended::setSpring()
 
 
 	if(mspring->isChecked())
-		su.setForm(ColinSupport::bearings((su.form() | ColinSupport::fx)& (~ColinSupport::Phi)));
+		su.setForm(ColinSupport::bearings((su.form() | ColinSupport::fphi)& (~ColinSupport::Phi)));
 	else{
 		su.setForm( su.form() & (~ColinSupport::fphi));
 		su.setCphi(0);
 	}
 
-	filelist::instance().currentFile()->setBearing(currentItem, su);
+	filelist::instance().currentFile()->setSupport(currentItem, su);
 
 }
 
 void supportExtended::setSpringConstants()
 {
+	qDebug() << "supportExtended::setSpringConstants()";
 	bool ok;
 	double val = qobject_cast<QLineEdit*>(sender())->text().toDouble(&ok);
 	if(!ok)
@@ -561,6 +564,22 @@ nodeOverlay::nodeOverlay(QWidget *parent) :
 			this,			SLOT(cut()));
 
 
+	if(filelist::instance().currentFile()){
+		ColinStruct &t = *filelist::instance().currentFile();
+		connect(&t,					SIGNAL(changedNode(int)),
+				this,				SLOT(nodeChanged(int)));
+
+		connect(&t,					SIGNAL(calculationFinished()),
+				this,				SLOT(nodeChanged()));
+
+		connect(&t,					SIGNAL(addedCLS(int)),
+				this,				SLOT(clsChanged()));
+
+		connect(&t,					SIGNAL(erasedCLS(int)),
+				this,				SLOT(clsChanged()));
+
+	}
+
 	reac->setChecked(nodeOverlay::showReactions);
 	disp->setChecked(nodeOverlay::showDisplacement);
 	beams->setChecked(nodeOverlay::showBeamForces);
@@ -592,6 +611,8 @@ nodeOverlay::~nodeOverlay()
 
 void nodeOverlay::setCurrentItem(const int &i)
 {
+
+	qDebug() << "nodeOverlay::setCurrentItem(" << i << ")";
 	this->setFocusPolicy(Qt::StrongFocus);
 	currentItem = i;
 	detailWidget->setCurrentItem(i);
@@ -602,25 +623,11 @@ void nodeOverlay::setCurrentItem(const int &i)
 
 	ColinStruct &t = *filelist::instance().currentFile();
 
-	if(filelist::instance().currentFile()){
-		connect(&t,					SIGNAL(changedNode(int)),
-				this,				SLOT(nodeChanged(int)));
-
-		connect(&t,					SIGNAL(calculationFinished()),
-				this,				SLOT(nodeChanged()));
-
-		connect(&t,					SIGNAL(addedCLS(int)),
-				this,				SLOT(clsChanged()));
-
-		connect(&t,					SIGNAL(erasedCLS(int)),
-				this,				SLOT(clsChanged()));
-
-	}
 	x->setText(QString::number(t.node(i).x(), 'f', PRECISON));
 	z->setText(QString::number(t.node(i).z(), 'f', PRECISON));
 
 	if(t.node(i).hasbearing()){
-		phi->setText(QString::number(t.node(i).bearing().angle(), 'f', PRECISON));
+		phi->setText(QString::number(t.node(i).bearing().angle()*ANGLEPREFIX, 'f', PRECISON));
 		phi->setEnabled(true);
 	}
 	else{
@@ -841,6 +848,7 @@ void nodeOverlay::setCurrentItem(const int &i)
 
 void nodeOverlay::changed()
 {
+	qDebug() << "nodeOverlay::changed()";
 	if(sender() == x)
 	{
 		bool ok;
@@ -863,7 +871,7 @@ void nodeOverlay::changed()
 		double phival = phi->text().toDouble(&ok);
 		if(!ok)
 			return;
-		filelist::instance().currentFile()->setAngle(currentItem, phival);
+		filelist::instance().currentFile()->setAngle(currentItem, phival/ANGLEPREFIX);
 	}
 
 }
@@ -871,16 +879,21 @@ void nodeOverlay::changed()
 
 void nodeOverlay::setTw(ColinStruct *t)
 {
+	qDebug() << "nodeOverlay::setTW(...)";
+
 	this->deleteLater();
 }
 
 void nodeOverlay::nodeChanged()
 {
+	qDebug() << "nodeOverlay::nodeChanged()";
 	nodeChanged(currentItem);
 }
 
 void nodeOverlay::nodeChanged(int i)
 {
+	qDebug() << "nodeOverlay::nodeChanged(" << i << ")";
+
 	if(i==currentItem)
 		this->setCurrentItem(i);
 }

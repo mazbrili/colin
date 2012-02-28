@@ -517,6 +517,12 @@ beamOverlay::beamOverlay(QWidget *parent) :
 	cuttedAt = -1;
 
 
+	connect(leftN,			SIGNAL(textEdited(QString)),
+			this,			SLOT(changed()));
+
+	connect(rightN,			SIGNAL(textEdited(QString)),
+			this,			SLOT(changed()));
+
 	connect(detailWidget,	SIGNAL(showForcesAt(double)),
 			this,			SLOT(showForcesAt(double)));
 
@@ -1100,7 +1106,21 @@ void beamOverlay::fillLabels(double x)
 
 void beamOverlay::changed()
 {
+	ColinStruct *t = filelist::instance().currentFile();
 
+	bool ok;
+	if(sender() == leftN)
+	{
+		int n = leftN->text().toInt(&ok);
+		if(ok && n>0 && n<t->node_n())
+			t->setLeft(currentItem, n);
+	}
+	if(sender() == rightN)
+	{
+		int n = rightN->text().toInt(&ok);
+		if(ok && n>0 && n<t->node_n())
+			t->setRight(currentItem, n);
+	}
 }
 
 void beamOverlay::setTw(ColinStruct *t)
@@ -1164,14 +1184,14 @@ void beamOverlay::setCs(int nr)
 void beamOverlay::copy()
 {
 	toClipBoard();
-	filelist::instance().currentFile()->selectNode(currentItem, false);
+	filelist::instance().currentFile()->selectBeam(currentItem, false);
 	this->deleteLater();
 
 }
 void beamOverlay::cut()
 {
 	toClipBoard();
-	filelist::instance().currentFile()->removeNode(currentItem);
+	filelist::instance().currentFile()->removeBeam(currentItem);
 	this->deleteLater();
 }
 
@@ -1182,8 +1202,16 @@ void beamOverlay::toClipBoard()
 	QMimeData *mimeData = new QMimeData();
 	XmlWriter writer(&data);
 	ColinStruct *tw = filelist::instance().currentFile();
-	tw->selectNode(currentItem, true);
-	writer.writeSelection(*tw, tw->node(currentItem).toQPointF());
+	tw->deselectAll();
+	tw->selectBeam(currentItem, true);
+	for(int i=0; i<tw->load_n(); i++){
+		if(tw->load(i).at() == currentItem)
+		{
+			if(tw->load(i).isOnBeam())
+				tw->selectLoad(i, true);
+		}
+	}
+	writer.writeSelection(*tw, tw->beam(currentItem).leftNode().toQPointF());
 	mimeData->setData("text/colinfile", data);
 	clipboard->setMimeData(mimeData);
 	return;

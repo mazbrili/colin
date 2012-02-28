@@ -170,10 +170,13 @@ If you are using an OS for witch no packages are provided, you can download the 
 A version for OS/2 has already been compiled by some else. You can find it at ecomstation.it\footnote{\url{http://www.ecomstation.it/ecsoft2/prog.php?progid=1795&name=Colin&sys=os2+ecomstation}}. Please note that i don't keep this build up-to-date.
 
 
-\chapter{Objects}
+\chapter{Objects and Basic Definitions}
 \label{cha:objects}
 
-This chapter gives a quick overview over the objects in \Colin.
+This chapter gives a quick overview over the objects in \Colin and basic definitions you might want to know about!
+
+
+
 
 \section{Struct}
 This object defines structures. It contains all Nodes, Beams, Loads, etc. 
@@ -219,6 +222,198 @@ The material defines material properties of beams, \textit{stiffness} E and \tex
 
 \section{Cross Section}
 Cross Sections define the geometry of beams in their local y-z plane,  \textit{height} h, \textit{area} A and \textit{second moment of area} I.
+
+
+\section{Coordinate system}
+\subsection{global coordinate system (GCS)}
+\begin{minipage}[h]{6.5cm}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../pictures/coordsys.png}
+\caption{Coordinate system in \Colin}
+\label{pic:coordsystem}
+\end{center}
+\end{figure}
+\end{minipage}
+\hfill
+\begin{minipage}[h]{\textwidth-7.5cm}
+\Colin can handle two dimensional structures. Figure~\ref{pic:coordsystem} shows the x axis (horizontal dimension) in green, the z axis (vertical dimension) in red and the orientation of a positive angle in blue of the Cartesian coordinate system. As you can see, a positive angle is rotating counterclockwise, this is the same for every angle related value in \Colin such as moments, rotations entered by the user and resulting rotations\footnotemark. The unit for length is \textit{meter}, the unit for angles is \textit{grad} $[^\circ]$ ($180^\circ = \pi \cdot \text{rad}$) \footnotemark. 
+\end{minipage}
+\addtocounter{footnote}{-1}
+\footnotetext{Except coil spring constants. We are using rad instead of grad, because of the homework at our university!;)}
+\stepcounter{footnote}
+\footnotetext{Internally this is actually handled otherwise. A clockwise angle is internally represented as a negative value. Also, the unit used internally is \textit{rad}. This was chosen due to definitions in the Qt framwork and the mathematik library.}
+
+\subsection{local coordinate system (LCS)}
+
+\begin{minipage}[h]{6.5cm}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../pictures/localsys_raw.png}
+\caption{local coordinate system}
+\label{pic:localcoordsystem}
+\end{center}
+\end{figure}
+\end{minipage}
+\hfill
+\begin{minipage}[h]{\textwidth-7.5cm}
+The local coordinate system of a beam is shown in figure~\ref{pic:localcoordsystem}. The center of the local coordinate system of a beam is placed in it's left node. The beam axis is the local x axis, the z axis is normal to the x axis. Positive angles and moments are orientated the same as in the global coordinate system. All results will be drawn as x-z pairs in the local coordinate system. Also nodes might have a local coordinate system. This has been implemented to allow usage of rotated springs. This does not affect any results or loads related to this node(always given in global coordinates).
+\end{minipage}
+
+
+\subsection{coordinate system of results}
+The results are displayed and listed as follows:
+
+\paragraph{reaction forces} follows form the load or constraint due to temperature changes. will always be displayed and listed in the global coordinate system, even if the node has been rotated (see figure~\ref{pic:reactionrotated})!. Since reactions exist in the same coordinate system as loads, a positive load or moment will lead to a negative reaction force or reaction moment!
+
+
+
+\begin{minipage}[h]{0.3\textwidth}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../pictures/reactionforce.png}
+\caption{positive force and reaction}
+\label{pic:reactionforce}
+\end{center}
+\end{figure}
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.3\textwidth}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../pictures/reactionmoment.png}
+\caption{positive moment and reaction}
+\label{pic:reactionmoment}
+\end{center}
+\end{figure}
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.3\textwidth}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../pictures/reactionrotated.png}
+\caption{rotated node and reaction}
+\label{pic:reactionrotated}
+\end{center}
+\end{figure}
+\end{minipage}
+
+
+\paragraph{nodal displacement} follows form the load or temperature changes. will always be displayed and listed in the global coordinate system in meter, even if the node has been rotated and has a local coordinate system!. The nodal displacement will be listed in form of three values:
+\begin{align*}
+u &\dots \text{displacement in x direction}\\
+w &\dots \text{displacement in z direction}\\
+\varphi &\dots \text{rotation}
+\end{align*}
+To display the displacement, it is multiplied with a factor $s_u$ because it will be mostly (hopefully ;) ) be much more smaller than the dimensions of your structure. This leads to a deformed position in figures as follows:
+\begin{align}
+\left(\begin{array}{r} x_d\\ y_d \end{array} \right) &= s_u \cdot \left(\begin{array}{r} u\\ w \end{array} \right) + \left(\begin{array}{r} x \\ y \end{array}\right)
+\end{align}
+with
+\begin{align*}
+x_d, y_d &\dots \text{position of the node in deformed configuration}\\
+s_u &\dots \text{scaling for displacement}\\
+x, y &\dots \text{coordinates of the left node in reference configuration}
+\end{align*}
+
+\paragraph{beam forces} will always be displayed in the local coordinate system of the beam as shown in figures \ref{pic:normalbeamforce}, \ref{pic:shearbeamforce} and \ref{pic:momentbeamforce}.
+
+
+\begin{minipage}[h]{0.3\textwidth}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../pictures/normalforceresults.png}
+\caption{normal forces in the beam}
+\label{pic:normalbeamforce}
+\end{center}
+\end{figure}
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.3\textwidth}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../pictures/shearforcesresults.png}
+\caption{shear forces in the beam}
+\label{pic:shearbeamforce}
+\end{center}
+\end{figure}
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.3\textwidth}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../pictures/momentsresults.png}
+\caption{moments in the beam}
+\label{pic:momentbeamforce}
+\end{center}
+\end{figure}
+\end{minipage}
+
+The conversation from the local coordinate system to the figures global coordinate system is done by
+
+\begin{align}
+\left(\begin{array}{r} x_f(x)\\ y_f(x) \end{array} \right) &= \left[\begin{array}{rr} \cos\alpha & -\sin\alpha \\ \sin\alpha & \cos\alpha\end{array}\right] \cdot \left( s_{P/M} \cdot  \left(\begin{array}{r} 0 \\ f(x) \end{array}\right) + \left(\begin{array}{r} x \\ 0 \end{array}\right) \right) + \left(\begin{array}{r} x_l \\ y_l \end{array}\right)
+\end{align}
+with
+\begin{align*}
+x &\dots \text{x coordinate in LCS}\\
+x_f(x), y_f(x) &\dots \text{a point of the function as appearing in the figure}\\
+f(x) &\dots \text{function depending on local x}\\
+s_{P/M} &\dots \text{scaling for forces $s_P$ or moments $s_M$}\\
+\alpha &\dots \text{angle of the beam}\\
+x_l, y_l &\dots \text{coordinates of the left node (center of the local coordinate system)}
+\end{align*}
+
+
+\paragraph{beam displacement} will be expressed in form of the three functions:
+\begin{align*}
+u(x) &\dots \text{displacement in local x direction at position x}\\
+w(x) &\dots \text{displacement in local z direction at position x}\\
+\varphi(x) &\dots \text{rotation at position x}
+\end{align*}
+The deformed beam is shown in form of the bending line (see figure~\ref{pic:beningline}). This leads to the following function for the visualized of the deformed beam:
+
+\begin{align}
+\left(\begin{array}{r} x_d(x)\\ y_d(x) \end{array} \right) &= \left[\begin{array}{rr} \cos\alpha & -\sin\alpha \\ \sin\alpha & \cos\alpha\end{array}\right] \cdot \left( s_u \cdot \vec{u}_\text{local}(x) + \left(\begin{array}{r} x \\ 0 \end{array}\right) \right) + \left(\begin{array}{r} x_l \\ y_l \end{array}\right)
+\end{align}
+with
+\begin{align*}
+x &\dots \text{x coordinate in LCS}\\
+x_d(x), y_d(x) &\dots \text{position of the deformed beam (bening line) in the figure for beam position x}\\
+\vec{u}_\text{local}(x) &\dots \text{function for displacement in local coodinate system}\\
+s_u &\dots \text{scaling for displacement}\\
+\alpha &\dots \text{angle of the beam}\\
+x_l, y_l &\dots \text{coordinates of the left node (center of the local coordinate system)}
+\end{align*}
+
+The functions you will see for the displacement is actually the local displacement 
+\section{Units}
+
+Here are the most common used units in \Colin. Some of them can be changed (see section~\ref{ssec:miscsettings}):
+\begin{itemize}
+	\item [] \textbf{length}: meter [m]
+	\item [] \textbf{angle}: grad [$^\circ$]
+	\item [] \textbf{temperature}: kelvin [K]
+	\item [] \textbf{force}: newton [N], Kilonewton [kN]
+	\item [] \textbf{force per length}: newton per meter $\left[\frac{N}{m}\right]$, kilonewton per meter $\left[\frac{kN}{m}\right]$
+	\item [] \textbf{moment}: newton meter [Nm], kilonewton meter [kNm]
+	\item [] \textbf{length} (related to cross section dimensions): meter [m], centimeter [cm], millimeter [mm]
+	\item [] \textbf{area}: meter [m], centimeter [cm], millimeter [mm]
+	\item [] \textbf{second moment of area}: $\text{meter}^4$ $\left[m^4\right]$, $\text{centimeter}^4$ $\left[cm^4\right]$, $\text{millimeter}^4$ $\left[mm^4\right]$
+	\item [] \textbf{stress, tensile modulus}: newton per square meter $\left[\frac{N}{m^2}\right]$\footnote{$1\frac{N}{m^2} = 1 Pa $ (1 Pascal)}, kilo newton per square meter $\left[\frac{kN}{m^2}\right]$, kilo newton per square centimeter $\left[\frac{N}{cm^2}\right]$, kilonewton per square centimeter $\left[\frac{kN}{cm^2}\right]$
+	\item [] \textbf{coefficient of thermal expansion}: one per kelvin $\left[\frac{1}{K}\right]$
+	\item [] \textbf{spring constant}: newton per meter $\left[\frac{N}{m}\right]$, kilo newton per meter $\left[\frac{kN}{m}\right]$
+	\item [] \textbf{coil springs constant}: newton per \textbf{radiant} $\left[\frac{Nm}{rad}\right]$, kilo newton per \textbf{radiant} $\left[\frac{kNm}{rad}\right]$
+	
+\end{itemize}
+
+
+\textbf{note:}
+\begin{center}
+\textbf{Internally \Colin uses always the SI units meter, newton and kelvin and rad for angles. This units will also be used in the javascript engine.}
+\end{center}
+
+
 
 \chapter{Graphical User Interface}
 
@@ -330,10 +525,32 @@ The toolbar contains the most used actions. Icons with a triangle besides them a
 
 Here the actions in the toolbar from left to right.
 \subsection{Nodes}
+\begin{minipage}[h]{4cm}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.6]{../pictures/nodetoolbar.png}
+\caption{Nodes}
+\label{pic:nodetoolbar}
+\end{center}
+\end{figure}
+\end{minipage}
+\begin{minipage}[h]{\textwidth-4cm}
 When activated, you can draw Nodes by clicking on the designated position in the GraphicsView. When you click on a beam, the beam gets spitted at the clicked position, when clicking on 2 crossing beams, the get both splitted and connected with a new node.
+\end{minipage}
 
 \subsection{Beams}
+\begin{minipage}[h]{4cm}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.6]{../pictures/beamtoolbar.png}
+\caption{Beams}
+\label{pic:beamtoolbar}
+\end{center}
+\end{figure}
+\end{minipage}
+\begin{minipage}[h]{\textwidth-4cm}
 When activated, you can draw Beams, by clicking on the designated nodes in the GraphicView. If you do not click on a node, a new node will be created. Material and cross section are chosen automatically. You can set the material and cross section of beams created like this in the library widget (see section~\ref{ssec:library}). You can edit them afterwards too. This is shown in section~\ref{sec:graphical} (by using the GraphicView) and in section~\ref{ssec:tree} (by using the tree representation).
+\end{minipage}
 
 \subsection{Supports}
 \begin{minipage}[h]{4cm}
@@ -352,7 +569,7 @@ When activated, you can add supports to nodes by clicking on the in the Graphics
 	\item[] \includegraphics[scale = 0.5]{../../icons/bearing.png} vertical support: the vertical displacement of the node will be zero
 	\item[] \includegraphics[scale = 0.5]{../../icons/bearingM.png} rotational support: the rotation of the node will be zero
 \end{trivlist}
-You can choose any combination of these 3 basic supports. To use springs as supports and for rotated supports see section~\ref{ssec:tree}.
+You can choose any combination of these 3 basic supports. To use springs as supports and for rotated supports see section~\ref{ssec:tree} (editing in tree representation) or section~\ref{sec:nodedetail} (edit in detail view).
 \end{minipage}
 
 \subsection{Hinges}
@@ -373,7 +590,7 @@ When activated, you can add hinges to beams. Click on a beam to add a hinge at t
 	\item[] \includegraphics[scale = 0.5]{../../icons/jointQ.png} shear force on the respective position will be zero.
 	\item[] \includegraphics[scale = 0.5]{../../icons/joint.png} moment on the respective position will be zero.
 \end{trivlist}
-If you want a sprint between the left and right side of a hinge take a look in section~\ref{ssec:tree}.
+If you want a sprint between the left and right side of a hinge take a look in section~\ref{ssec:tree} (edit in tree representation) or section~\ref{sec:beamdetail} (edit in detail view).
 \end{minipage}
 
 \subsection{Loads}
@@ -455,7 +672,7 @@ When activated you can add loads to the structure. Most of the actions here need
 \end{minipage}
 
 \subsection{Move}
-
+\label{ssec:toolmove}
 \begin{minipage}[h]{4cm}
 \begin{figure}[H]
 \begin{center}
@@ -496,6 +713,7 @@ You can also span a rectangle by clicking on a position in the GraphicView and k
 
 
 \subsection{Autozoom and scaling}
+\label{ssec:toolscale}
 \begin{minipage}[h]{7cm}
 \begin{figure}[H]
 \begin{center}
@@ -511,6 +729,7 @@ Keep the mouse button pressed to get access to the menu shown in figure~\ref{pic
 \end{minipage}
 
 \subsection{Zoom}
+\label{ssec:toolzoom}
 
 \begin{minipage}[h]{4cm}
 \begin{figure}[H]
@@ -529,6 +748,41 @@ The zoom tool can be used to adjust the general scaling of the GraphicViews. Kee
 	\item[] \includegraphics[scale = 0.5]{../../icons/zoom_out.png} Zoom out: Click on the Graphicsview to zoom out.
 \end{trivlist}
 \end{minipage}
+
+
+
+\subsection{What's this?}
+
+\begin{minipage}[h]{4cm}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.6]{../pictures/whatsthistool.png}
+\caption{What's this?}
+\label{pic:whatsthistoolbar}
+\end{center}
+\end{figure}
+\end{minipage}
+\begin{minipage}[h]{\textwidth-4cm}
+Once the \textit{What's this?} tool has been activated (indicated by the mouse cursor which will become a question mark), you can further information and help about any element of \Colin (this includes toolbars, menus, lists, figures, buttons, etc.) by clicking on it. This also includes single elements of a structure in figures. 
+
+\begin{minipage}[h]{0.5\textwidth-0.25cm}
+Figure~\ref{pic:whatsthis} shows an example for such a help window with information about the element clicked on and hints about the controls. Links in this windows appear as blue underlined text. You can click them to launch additional information, such as this manual.
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.5\textwidth-0.25cm}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../pictures/whatsthis.png}
+\caption{What's this?}
+\label{pic:whatsthis}
+\end{center}
+\end{figure}
+\end{minipage}
+
+
+\end{minipage}
+
+
 
 \subsection{Calculate}
 
@@ -600,11 +854,143 @@ The four rectangles in this menu can be used to chose the visilbe GraphicViews. 
 \end{minipage}
 
 
-\section{GraphicView}
+\section{Figure View}
 \label{sec:graphical}
 
-Some text!!!!
+This is the central widget of \Colin. Most stuff can be created and edited here in a graphical mode. Also, you can right click most elements to get a detailed view and edit your file in detail. There can be up to four figures shown at the same time. You can set the results and details of the structure visualized there for each separated. You can also set the visualized combined load sets for all figures together.
 
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../pictures/figure_main.png}
+\caption{figures}
+\label{pic:figure_main}
+\end{center}
+\end{figure}
+
+Beside your current structure, this view will show some widgets:
+
+\paragraph{active CLS} Here you can chose the combined load sets, of which the results are shown in the figures and detailed views. Click on an active CLS to turn it off and vise versa. This widget will show a maximum of 3 sets and only the active ones. When moving the mouse over the widget, it will be expanded and show all combined load sets to chose from.
+
+\paragraph{active elements} You can use this widget to chose the visualized type of results (normal force, shear force, moment and figure in the displaced configuration) and the visualized elements (loads, hinges, etc. ) of the structure. This widget will only show the type of results currently shown. To show hidden types of data or elements put your mouse cursor over the widget. The expanded widget is shown in figure~\ref{pic:activeelements}.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[]{../pictures/activeelements.png}
+\caption{active elements}
+\label{pic:activeelements}
+\end{center}
+\end{figure}
+
+The four symbols in the first row represent the type of results to show:
+\begin{trivlist}
+	\leftskip=1cm
+	\item[]\textbf{u}: the structure in displaced configuration.
+	\item[]\textbf{\textcolor{green}{N}}: normal force.
+	\item[]\textbf{\textcolor{blue}{Q}}: shear force.
+	\item[]\textbf{\textcolor{red}{M}}: moment.
+\end{trivlist}
+The four symbols in the second row represent some additional elements:
+\begin{trivlist}
+	\leftskip=1cm
+	\item[] \includegraphics[scale = 0.5]{../../icons/node.png} \textbf{nodes}: show odes in displaced configuration
+	\item[] \includegraphics[scale = 0.5]{../../icons/load.png} \textbf{loads}: show loads in the figure
+	\item[] \includegraphics[scale = 0.5]{../../icons/bearingHV.png} \textbf{reaction forces}: show reaction forces
+	\item[] \includegraphics[scale = 0.5]{../../icons/joint.png} \textbf{hinges}: show hinges on beams
+\end{trivlist}
+
+
+\paragraph{window arrangement} In the upper right corner of every figure you will find some of those widgets, depending on the current layout of figures:
+\begin{trivlist}
+\leftskip=1cm
+\item[] \includegraphics[scale = 0.5]{../../icons/windows.png} \textbf{show all}: A click on this symbol will show all four viewports beside each other. If this icon is visible, you can press the \textbf{space} key to trigger it's function.
+\item[] \includegraphics[scale = 0.5]{../../icons/zoom_all.png} \textbf{show this}: A click on this symbol will hide all figures but this. If this icon is visible, you can press the \textbf{space} key to trigger it's function.
+\item[] \includegraphics[scale = 0.5]{../../icons/close.png} \textbf{hide this}: A click on this symbol will hide this figure. The still visible figures will take it's place.
+\end{trivlist}
+
+
+\subsection{Navigation}
+
+\paragraph{navigation tools}
+The navigation includes a lot of tools. Here in short the tools to navigate in figures. For a detailed view you should check out section~\ref{sec:toolbar}
+\begin{trivlist}
+	\leftskip=1cm
+	\item[] \includegraphics[scale = 0.5]{../../icons/move.png}: Move the viewports (section~\ref{ssec:toolmove})
+	\item[] \includegraphics[scale = 0.5]{../../icons/zoom_all.png}: Autoscale (section~\ref{ssec:toolscale})
+	\item[] \includegraphics[scale = 0.5]{../../icons/zoom_rect.png}: Zoom rect, zoom in and zoom out (section~\ref{ssec:toolzoom})
+\end{trivlist}
+
+\paragraph{use the mouse wheel} You can use the mouse wheel anytime (no matter which tool is currently selected) to change all kind of zoom factors. Using the mouse wheel without any modifiers will change the overall zoom. Using modifiers will modify zoom factors of loads, and results. The basic settings are as follows:
+\begin{trivlist}
+	\item[]\textbf{Mousewheel + Ctrl}: Zoom forces, this includes loads, normal forces, shear forces and reaction forces.
+	\item[]\textbf{Mousewheel + Shift}: Zoom deformations.
+	\item[]\textbf{Mousewheel + Alt}: Zoom moments, this includes loads, moments in beams and reaction forces.
+\end{trivlist}
+These modifiers can be set by the user in the settings. See also section~\ref{ssec:miscsettings}.
+
+\textbf{note:}
+\begin{center}
+\textbf{\Colin will alway zoom around the current position of the mouse cursor. This means you can also move the viewport without selecting the move tool by repeatedly zooming in and out moving the mouse cursor.}
+\end{center}
+
+\paragraph{use the keyboard}
+You can also use the keyboard to navigate trough the graphical representation of your structure. Beside the shortcuts for navigation actions such as \textit{zoom in} (Ctrl++ in standardsettings), \textit{zoom out} (Ctrl+-) and \textit{zoom all} (Ctrl+E) some other keys have a functionality:
+\begin{trivlist}
+	\leftskip=1cm
+	\item[]\textbf{up arrow}: move the current point of view upwards
+	\item[]\textbf{down arrow}: move the current point of view downwards
+	\item[]\textbf{left arrow}: move the current point of view leftwards
+	\item[]\textbf{right arrow}: move the current point of view rightwards
+	\item[]\textbf{Enter}: Fit the current structure into all views
+	\item[]\textbf{Space}: Switch between showing all and showing one figure
+\end{trivlist}
+Keys will always affect the currently highlighted view. You can identify it by it's colored boundary.
+
+\subsection{Move}
+Here a detailed view on the move tool (see also section ~\ref{ssec:toolmove}). This is the standard tool. Aborting other actions (pressing \textbf{Escape}) will always lead to an activation of this tool. Because of this and the high relation to the graphical interaction, particular attention to this tool is given in this chapter.\\
+To move something, press the mouse above the item and move the mouse while keeping the mouse button pressed. Depending on what you clicked an item is moved or also changed:
+\begin{trivlist}
+	\leftskip=1cm
+	\item[]\includegraphics[scale = 0.5]{../../icons/grid.png} \textbf{background}: If you clicked the background, you will move the current point of view.
+	\item[] \includegraphics[scale = 0.5]{../../icons/node.png} \textbf{nodes}: Change position of the node. 
+	\item[] \includegraphics[scale = 0.5]{../../icons/load.png} \textbf{loads}: If you press the move button above a load, you can move it to another beam or node, depending on it's type. Also, some loads got a circle on their end, as shown in figure~\ref{pic:nloadbubble} for nodal loads and figure~\ref{pic:sloadbubble} for distributed loads.
+\end{trivlist}
+
+
+
+\begin{minipage}[h]{0.5\textwidth-0.5cm}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[height=4.5cm]{../pictures/nloadbubble.png}
+\caption{press the circle to change amount of load}
+\label{pic:nloadbubble}
+\end{center}
+\end{figure}
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.5\textwidth-0.5cm}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[height=4.5cm]{../pictures/sloadbubble.png}
+\caption{press the circle to change amount of load}
+\label{pic:sloadbubble}
+\end{center}
+\end{figure}
+\end{minipage}
+
+
+\subsection{Tooltips and Hovereffekts}
+
+The tooltips are very usefull while drawing items. These tooltips tell you if the snap has found an object (to connect beams to already existing beams for example), a point in the grid (grid snap) or an angle orthogonal to an existing object (to draw loads normal to beams for example). The found object will also be highlighted. The tooltip contains also the index of the object found which help to identify items.\\
+If you are using load sets, moving your mouse over a function will highlight it in the current figure. All other functions related to the same CLS as the highlighted function get highlighted in all other views. Also reaction forces will only be visible if your mouse touches an function. \textbf{All loads will be shown scaled such as set CLS.} The tooltip will show you the CLS which lead to this forces. Figure~\ref{pic:clshighlighted} shows the highlighted functions, the scaled loads, the reaction forces and the tooltip. See figure~\ref{pic:figure_main} for a normal view on the same file.
+
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../pictures/clshighlighted.png}
+\caption{Function highlighting, reaction forces and "real" loads}
+\label{pic:clshighlighted}
+\end{center}
+\end{figure}
 
 \subsection{Right Click Widgets}
 \label{sec:rightclickwidgets}
@@ -632,6 +1018,8 @@ Those widgets, which are related to a specific element of the structure, contain
 \label{pic:overlayheader}
 \end{center}
 \end{figure}
+
+You can still use the mouse wheel together with the modifiers \textit{Alt}, \texit{Strg} and \textit{Shift} to change the zoom factors of the underlying widget. This affects also the visualization of figures such as the detailed view on nodes and beams Using the moue wheel without any modifier will not affect the underlying widget.
 
 
 \subsection{Structure proerties}
@@ -793,7 +1181,18 @@ You can toogle the \textit{more...} checkbox to get access to a much more featur
 \end{trivlist}
 
 \paragraph{clipboard}
-Use the \includegraphics[scale=0.5]{../../icons/spring.png} \textit{copy} or \includegraphics[scale=0.5]{../../icons/spring.png} \textit{cut} button to copy the current beam to the clipboard. Nodes and hinges related to this beam are copied too.
+Use the \includegraphics[scale=0.5]{../../icons/copy.png} \textit{copy} or \includegraphics[scale=0.5]{../../icons/cut.png} \textit{cut} button to copy the current beam to the clipboard. Nodes and hinges related to this beam are copied too.
+
+\paragraph{view}
+
+This box offers a detailed view on the beam and all related forces. You can chose between two views: 
+
+\begin{trivlist}
+\leftskip=1cm
+\item[] \textbf{extern}: Visualizes all extern forces, see figure~\ref{pic:externforces}. Beneath all distributed loads, this contains also the forces at the ends of the beam. If you are using load sets and combined load sets, all active load sets are shown together. 
+\item[] \textbf{intern}: Visualizes all intern forces at a specific position. You can set this position by using the small box in the upper left corner of the picture. You can enter a value between zero and the beamlength. The beam will appear cutted at this position in the picture.
+\end{trivlist}
+
 
 
 
@@ -817,20 +1216,168 @@ Use the \includegraphics[scale=0.5]{../../icons/spring.png} \textit{copy} or \in
 \end{figure}
 \end{minipage}
 
+\textbf{note:}
+\begin{center}
+\textbf{Switching between the visualization of extern an intern forces and changing the position for which the results are shown will also lead to different information shown in other toolboxes. This affects the boxes for displacement and beam forces.}
+\end{center}
+
+
+\paragraph{functions}
+Shows results such as displacement or forces for the current beam as functions.\\
+
+\begin{minipage}[h]{0.5\textwidth-0.5cm}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../pictures/functionsextended.png}
+\caption{extern forces of the beam}
+\label{pic:externforces}
+\end{center}
+\end{figure}
+\end{minipage}
+\hspace{1cm}
+\begin{minipage}[h]{0.5\textwidth-0.5cm}
+This toolbox shows normal force, shear force, moment, displacement and rotation in form of an analytical function, depending on $x$, where $x$ is the position in local beam coordinates. All functions shown are valid for the current beam. The index shows the combined load sets to which the results match (only when you are using load sets, otherwise no indexes will be there). All text can be selected and copied to clipboard. The unit in which results appear in this widget can be changed in the settings as well as the precision of numeric values.
+\end{minipage}
 
 
 
 
+\paragraph{displacement}
+Depending on the selected mode (see view toolbox) one of the following will be listed here:
+\begin{trivlist}
+\leftskip=1cm
+\item[] \textbf{extern}: Shows the displacement and rotation in the local coordinate system of the beam for each CLS. The minimum and maximum value for the property are shown bold and marked with $\min$ and $\max$ respectively.
+\item[] \textbf{intern}: Shows the displacement and rotation at a specific position. The position matches to those set for the view.
+\end{trivlist}
 
 
+\paragraph{beam forces}
 
-
+Depending on the selected mode (see view toolbox) one of the following will be listed here:
+\begin{trivlist}
+\leftskip=1cm
+\item[] \textbf{extern}: Shows all extern beam forces in the local coordinate system of the beam for each CLS. The minimum and maximum value for the property are shown bold and marked with $\min$ and $\max$ respectively.
+\item[] \textbf{intern}: Shows the intern beam forces at a specific position. The position matches to those set for the view.
+\end{trivlist}
 
 
 
 
 \subsection{Detail/Edit View for loads}
 \label{sec:loaddetail}
+
+This view can be used for detailed view and editing of loads. It appears after right clicking a load (in a figure or in a list). This view will be slightly different for different groups of load types. They will look like this:
+
+\begin{minipage}[h]{0.5\textwidth-0.5cm}
+\begin{figure}[H]
+\centering{
+\includegraphics[width=\textwidth]{../pictures/loadnmenu.png}
+\caption{detailed view on nodal loads}
+}
+\label{pic:loadnmenu}
+\end{figure}
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.5\textwidth-0.5cm}
+\begin{figure}[H]
+\centering{
+\includegraphics[width=\textwidth]{../pictures/loadmmenu.png}
+\caption{detailed view on moments}
+}
+\label{pic:loadmmenu}
+\end{figure}
+\end{minipage}
+
+
+\begin{minipage}[h]{0.5\textwidth-0.5cm}
+\begin{figure}[H]
+\centering{
+\includegraphics[width=\textwidth]{../pictures/loadsmenu.png}
+\caption{detailed view on beam loads}
+}
+\label{pic:loadnmenu}
+\end{figure}
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.5\textwidth-0.5cm}
+\begin{figure}[H]
+\centering{
+\includegraphics[width=\textwidth]{../pictures/loaddmenu.png}
+\caption{detailed view on double loads}
+}
+\label{pic:loadmmenu}
+\end{figure}
+\end{minipage}
+
+
+\begin{minipage}[h]{0.5\textwidth-0.5cm}
+\begin{figure}[H]
+\centering{
+\includegraphics[width=\textwidth]{../pictures/loadtmenu.png}
+\caption{detailed view on temperature loads}
+}
+\label{pic:loadnmenu}
+\end{figure}
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.5\textwidth-0.5cm}
+
+\end{minipage}
+
+
+
+The following parameters can be changed here:
+
+\paragraph{position} Contains only the position where the load is placed on. It is actually the index of a node for moments and nodal loads, or the index of a beam for distributed loads, temperature loads and double loads.
+
+\paragraph{type} This section is useful to change the type of loads. As in the tree representation this is limited to changes within groups:
+\begin{trivlist}
+	\leftskip=1cm
+	\item[] \textbf{distributed loads}: Change between all forms of distributed loads.
+	\item[] \textbf{temperature loads}: Change between temperature changes and temperature differences.
+	\item[] \textbf{double loads}: Chose the position at the beam, left or right side
+\end{trivlist}
+The type of nodal loads and moments can not be changed.
+\end{trivlist}
+
+\paragraph{loads} This toolbox contains all values for the load. Different for each type of load:
+\begin{trivlist}
+	\leftskip=1cm
+	\item[] \textbf{nodal loads}:
+		\begin{trivlist}
+			\leftskip=2cm
+			\item[] $P_x$ : horizontal part of the load (GCS)
+			\item[] $P_z$ : vertical part of the load (GCS)
+		\end{trivlist}
+	\item[] \textbf{moments}:
+		\begin{trivlist}
+			\leftskip=2cm
+			\item[] $M$ : moment
+		\end{trivlist}
+	\item[] \textbf{distributed loads}:
+		\begin{trivlist}
+			\leftskip=2cm
+			\item[] $P_x$ : horizontal part of the load (GCS)
+			\item[] $P_z$ : vertical part of the load (GCS)
+		\end{trivlist}
+	\item[] \textbf{double loads}:
+		\begin{trivlist}
+			\leftskip=2cm
+			\item[] $P_x$ : horizontal part of the load (LCS)
+			\item[] $P_z$ : vertical part of the load (LCS)
+			\item[] $M$ : vertical part of the load
+		\end{trivlist}
+	\item[] \textbf{temperature loads}:
+		\begin{trivlist}
+			\leftskip=2cm
+			\item[] $T$ : the temperature change or the temperature difference
+		\end{trivlist}
+\end{trivlist}
+
+\paragraph{load set} Contains the set, which this load is assigned to. Click the combobox to get and select the desired set there.
+
+\paragraph{clipboard}
+Use the \includegraphics[scale=0.5]{../../icons/copy.png} \textit{copy} or \includegraphics[scale=0.5]{../../icons/cut.png} \textit{cut} button to copy the current load to the clipboard. No beam or node related to this load will be copied within. When pasting you can select the new position (beam or node) by clicking it in one of the figures. The set which contains this load will be copied as well. When pasting this load, the set will be added to the structure, unless it contains a set with the same name. 
 
 \section{Sidebar}
 \label{sec:sidebar}
@@ -839,7 +1386,7 @@ Use the \includegraphics[scale=0.5]{../../icons/spring.png} \textit{copy} or \in
 \label{ssec:tree}
 
 
-\begin{figure}
+\begin{figure}[H]
 \centering{
 \includegraphics[width=0.8\textwidth]{../pictures/tree.png}
 \caption{tree widget}
@@ -984,7 +1531,7 @@ This page is the first you see when you start \Colin. Also, this page pops up wh
 \caption{startpage}
 \label{pic:startpage}
 \end{figure}
-Here you find the last opened files as previews. Click on the previews to open the corresponding files or to change to the corresponding tab when the file is already open. Click on the cross (top, right) to remove this preview from the startpage. You can also create new files (Button \textit{new}), open files (Button \textit{open}) access the settings (Button \textit{settings}) and clear the library when no file is open (Button \textit{clear library}).
+Here you find the last opened files as previews. Click on the previews to open the corresponding files or to change to the corresponding tab when the file is already open. Click on the cross (top, right) to remove this preview from the startpage. You can also create new files (Button \textit{new}), open files (Button \textit{open}) access the settings (Button \textit{settings}) and clear the library when no file is open (Button \textit{clear library}). You can also change the background by clicking \textit{change wallpaper} at the bottom\footnote{The initially set wallpaper (figure~\ref{pic:startpage} shows it too) is \textit{Spaceflare} Copyright (c) 2011 Jakub Steiner \href{jimmac@gmail.com}{jimmac@gmail.com}, Licensed under Creative Commons Attribution-ShareAlike 3.0 License. }. 
 
 \section{Settings}
 \label{sec:settings}
@@ -1009,14 +1556,16 @@ Here you can change the colors used to draw the Structure in the GraphicView. Cl
 
 
 
-\subsection{ShortCut Settings}
+\subsection{Tool Settings}
 Here you can change the shortcuts of all actions. Click the Button \textit{change} to edit a shortcut. A line with an editable text should appear as in figure~\ref{pic:editshortcut}.\\
 You can now enter the new shortcut. Use "+" to combine more keys. Use \texttt{Ctrl} for Control key, \texttt{Shift} for Shift key, \texttt{Alt} for Alt key, \texttt{Tab} for Tab key, \texttt{Space} for the Spacebar. Press \textit{Enter} to finish the editing.\\
-You can restore the previous shortcut with the Button \textit{restore} besides the action.
+You can restore the previous shortcut with the Button \textit{restore} besides the action. 
+
+
 
 \begin{figure}[H]
 \includegraphics[width=\textwidth]{../pictures/settings_shortcuts.png}
-\caption{shortcut settings}
+\caption{tool settings}
 \label{pic:shortcutsettings}
 \end{figure}
 
@@ -1025,6 +1574,30 @@ You can restore the previous shortcut with the Button \textit{restore} besides t
 \caption{edit shortcut}
 \label{pic:editshortcut}
 \end{figure}
+
+
+At the top you can also find a switch. You can chose weather additional menus are triggered by a long mouse press or a button right beside the tool button. Figure~\ref{pic:menusintool} shows no extra menu button (initial setting), figure~\ref{pic:menusbesidetool} shows extra buttons to trigger additional menus.
+
+
+\begin{minipage}[h]{0.5\textwidth-0.5cm}
+\begin{figure}[H]
+\centering{
+\includegraphics[width=\textwidth]{../pictures/menusintool.png}
+\caption{menus in tool buttons, triggered by long mouse press}
+}
+\label{pic:menusintool}
+\end{figure}
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.5\textwidth-0.5cm}
+\begin{figure}[H]
+\centering{
+\includegraphics[width=\textwidth]{../pictures/menusbesidetool.png}
+\caption{menus beside tool buttons, triggered by their own button}
+}
+\label{pic:menusbesidetool}
+\end{figure}
+\end{minipage}
 
 \subsection{Miscellaneous Settings}
 \label{ssec:miscsettings}
@@ -1040,6 +1613,51 @@ Here you gain access to other settings:
 \caption{miscellaneous settings}
 \label{pic:miscsettings}
 \end{figure}
+
+
+\section{Backup your Settings}
+
+For some people it might be interesting to backup their settings and probably restore them on an other PC. You can restore the following:
+
+\begin{itemize}
+	\item snapsettings
+	\item shortcuts
+	\item window geometry
+	\item library
+	\item console history
+	\item print settings
+	\item colors 
+	\item view settings 
+	\item modifiers for mousewheel
+	\item draw settings
+	\item unitsettings
+	\item recently used files
+	\item path to wallpaper
+\end{itemize}
+
+
+\subsection{Linux}
+
+You can find your settings in \texttt{$\sim$/.config/clazzes.org/Colin.conf}\footnote{/$\sim$ is your home directory (\texttt{/home/user})!}. Save this file and restore it in the same folder.
+
+\subsection{Windows}
+
+
+
+\begin{minipage}[h]{0.5\textwidth-1.5cm}
+\begin{figure}[H]
+\includegraphics[width=\textwidth]{../pictures/regedit.png}
+\caption{backup in registry editor}
+\label{pic:regedit}
+\end{figure}
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.5\textwidth+0.5cm}
+\Colin writes it's settings to the Windows registry. You will need \textit{regedit}, the Windows registry editor to backup your files. To get into \textit{regedit} search for \texttt{regedit} in the Windows 7 startermenu. On Windows XP select \textit{Run...} in the startmenu. Enter \texttt{regedit} there and launch it.\\
+Now safe all keyes for \begin{center}{\texttt{HKEY\_CURRENT\_USER/Software/clazzes.org/Colin}\end{center}\\
+by right clicking the folder and selection \textit{Export...} as shown in figure~\ref{pic:regedit}. Chose a filename and save it. To restore, double click the saved file and add all keys to the registry.
+\end{minipage}
+
 
 \chapter{Script Engine}
 \label{cha:scripting}

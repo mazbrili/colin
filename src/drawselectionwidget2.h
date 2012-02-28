@@ -64,6 +64,7 @@ public slots:
 	void setTw(ColinStruct *tw);
 	void addedCLS();
 	void removedCLS();
+	void activeCLSChanged();
 public:
 private:
 	bool mousePressed;

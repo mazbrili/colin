@@ -10,7 +10,6 @@ INCLUDEPATH += . src
 # Input
 HEADERS += src/abstractcolintooltip.h \
            src/abstractdrawselectionwidget.h \
-           src/beammenu.h \
            src/bmenu.h \
            src/catcher.h \
            src/closedialog.h \
@@ -27,7 +26,6 @@ HEADERS += src/abstractcolintooltip.h \
            src/ctabbar.h \
            src/ctoolbar.h \
            src/cwidget.h \
-           src/dloadmenu.h \
            src/drawselectionwidget.h \
            src/drawselectionwidget2.h \
            src/editmaterialdialog.h \
@@ -37,28 +35,21 @@ HEADERS += src/abstractcolintooltip.h \
            src/jmenu.h \
            src/libsidebar.h \
            src/lmenu.h \
-           src/loadmenu.h \
            src/mainwindow.h \
            src/matrix.h \
            src/miscsettingswidget.h \
-           src/momentmenu.h \
            src/newmaterialdialog.h \
            src/newprofiledialog.h \
-           src/nloadmenu.h \
-           src/nodemenu.h \
            src/nwidget.h \
            src/polynom.h \
            src/previewrenderer.h \
            src/previewwidget.h \
-           src/resultvisualwidget.h \
            src/scalewidget.h \
            src/shortcutsettings.h \
            src/shortcutsettingswidget.h \
            src/slidingstackedwidget.h \
            src/structpainter.h \
-           src/structprinter.h \
            src/swidget.h \
-           src/tempmenu.h \
            src/termovaluewidget.h \
            src/toolTipEater.h \
            src/treedelegate.h \
@@ -87,7 +78,6 @@ HEADERS += src/abstractcolintooltip.h \
            src/xmlreader.h \
            src/xmlwriter.h \
            src/zmenu.h \
-    src/printoverlaywidget.h \
     src/colinboolslider.h \
     src/colinsidebar.h \
     src/colinrubberband.h \
@@ -97,7 +87,6 @@ HEADERS += src/abstractcolintooltip.h \
     src/scriptengine.h \
     src/javascriptwraper.h \
     src/viewportlayout.h \
-    src/printpreview.h \
     src/costumizedprintpreviewdialog.h \
     src/treemodel.h \
     src/historymenu.h \
@@ -105,9 +94,17 @@ HEADERS += src/abstractcolintooltip.h \
     src/nodeoverlay.h \
     src/abstractoverlay.h \
     src/detailpainter.h \
-    src/beamoverlay.h
+    src/beamoverlay.h \
+    src/pastepreviewwidget.h \
+    src/loadoverlay.h \
+    src/generaloverlay.h \
+    src/colinpastebuffer.h \
+    src/printsidewidget.h \
+    src/pictureexport.h \
+    src/document.h \
+	src/documentsection.h \
+	src/structprinter.h
 SOURCES += src/abstractdrawselectionwidget.cpp \
-           src/beammenu.cpp \
            src/bmenu.cpp \
            src/catcher.cpp \
            src/closedialog.cpp \
@@ -123,7 +120,6 @@ SOURCES += src/abstractdrawselectionwidget.cpp \
            src/colorsettingswidget.cpp \
            src/ctabbar.cpp \
            src/cwidget.cpp \
-           src/dloadmenu.cpp \
            src/drawselectionwidget.cpp \
            src/drawselectionwidget2.cpp \
            src/editmaterialdialog.cpp \
@@ -133,26 +129,20 @@ SOURCES += src/abstractdrawselectionwidget.cpp \
            src/jmenu.cpp \
            src/libsidebar.cpp \
            src/lmenu.cpp \
-           src/loadmenu.cpp \
            src/mainwindow.cpp \
            src/miscsettingswidget.cpp \
            src/momentmenu.cpp \
            src/newmaterialdialog.cpp \
            src/newprofiledialog.cpp \
-           src/nloadmenu.cpp \
-           src/nodemenu.cpp \
            src/nwidget.cpp \
            src/previewrenderer.cpp \
            src/previewwidget.cpp \
-           src/resultvisualwidget.cpp \
            src/scalewidget.cpp \
            src/shortcutsettings.cpp \
            src/shortcutsettingswidget.cpp \
            src/slidingstackedwidget.cpp \
            src/structpainter.cpp \
-           src/structprinter.cpp \
            src/swidget.cpp \
-           src/tempmenu.cpp \
            src/termovaluewidget.cpp \
            src/treedelegate.cpp \
            src/treeview.cpp \
@@ -175,7 +165,6 @@ SOURCES += src/abstractdrawselectionwidget.cpp \
            src/xmlreader.cpp \
            src/xmlwriter.cpp \
 		   src/zmenu.cpp \
-    src/printoverlaywidget.cpp \
     src/colinboolslider.cpp \
     src/colinsidebar.cpp \
     src/colinrubberband.cpp \
@@ -186,7 +175,6 @@ SOURCES += src/abstractdrawselectionwidget.cpp \
     src/scriptinterface.cpp \
     src/javascriptwraper.cpp \
     src/viewportlayout.cpp \
-    src/printpreview.cpp \
     src/costumizedprintpreviewdialog.cpp \
     src/treemodel.cpp \
     src/historymenu.cpp \
@@ -194,8 +182,23 @@ SOURCES += src/abstractdrawselectionwidget.cpp \
     src/nodeoverlay.cpp \
     src/abstractoverlay.cpp \
     src/detailpainter.cpp \
-    src/beamoverlay.cpp
+    src/beamoverlay.cpp \
+    src/pastepreviewwidget.cpp \
+    src/loadoverlay.cpp \
+    src/generaloverlay.cpp \
+    src/colinpastebuffer.cpp \
+    src/printsidewidget.cpp \
+    src/pictureexport.cpp \
+    src/document.cpp \
+	src/documentsection.cpp \
+	src/structprinter.cpp
 TRANSLATIONS += src/colin_de.ts src/colin_it.ts
 
 OTHER_FILES += \
-    src/include.mk
+    src/include.mk \
+    src/include-minx.mk \
+    src/colin-setup.nsi \
+    src/colin_it.ts \
+    src/colin_de.ts \
+    src/colin_de.qm \
+    src/Colin.rc

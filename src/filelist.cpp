@@ -76,9 +76,11 @@ void filelist::append(ColinStruct *f, QString name, QString path)
 
     g->addStack(us);
     hideNew();
+
+	emit fileOpened();
 }
 
-void filelist::removeAt(int i)
+void filelist::closeFile(int i)
 {
     if(i==-2)
         closeSettings();
