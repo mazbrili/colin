@@ -45,7 +45,7 @@ public:
 		load_in = 0x20,
 		node_res = 0x40,
 		beam_f = 0x80,
-		beam_val = 0x100,
+		//beam_val = 0x100,
 		fourPerPage = 0x200,
 		landscape = 0x400
 	};
@@ -90,7 +90,7 @@ public:
 	void loadIn(int startAt, int *pages, bool test = false, int *itemsPerPage = 0);
 	void nodeRes(int startAt, int *pages, bool test = false, int *itemsPerPage = 0);
 	void beamResF(int startAt, int *pages, bool test = false, int *itemsPerPage = 0);
-	void beamResVal(int startAt, int *pages, bool test = false, int *itemsPerPage = 0);
+	//void beamResVal(int startAt, int *pages, bool test = false, int *itemsPerPage = 0);
 
 
 	int usablePageHeight();

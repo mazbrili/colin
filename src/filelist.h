@@ -35,6 +35,7 @@
 #include <QtCore/QList>
 #include <QtGui/QUndoGroup>
 #include <QtCore/QPair>
+#include <QtCore/QMap>
 
 #include "colinstruct.h"
 #include "undocommandmaker.h"
@@ -104,16 +105,20 @@ public slots:
     void closeSettings();
     //void closeLib();
 
-    void nextTab();
+	void nextTab();
     void previousTab();
 
-    bool saveCurrent();
-    bool saveCurrent(const QString &url);
+	bool saveCurrent();
+	bool saveCurrent(const QString &url);
     bool openT(const QString &url);
-    bool save(const int &i);
-    bool saveAs(const int &i, const QString &url);
+	bool save(const int &i);
+	bool saveAs(const int &i, const QString &url);
+	void saveResults(const int &i, const QString &url);
+	void saveCurrentResults(const QString &url);
+	void calcFinished();
 
     void saveSettings();
+
 
 private slots:
     void beginSkript(const QString &text) const { g->activeStack()->beginMacro(text);}
@@ -143,9 +148,10 @@ private:
     bool settingsVisible_;
     //bool libVisible_;
     int newfilecount;
-
+	QMap<QObject*, QString> resultpath;
 
     static filelist* instance_;
+
 
 };
 

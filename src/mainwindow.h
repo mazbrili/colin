@@ -100,7 +100,8 @@ public slots:
 
     void saveCurrent();
     void openT();
-    void saveAsT();
+	void saveAsT();
+	void saveAsWithResuls();
 
     void launchToolTip();
     void aboutMe();

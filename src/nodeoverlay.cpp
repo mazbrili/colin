@@ -564,6 +564,12 @@ nodeOverlay::nodeOverlay(QWidget *parent) :
 			this,			SLOT(cut()));
 
 
+
+	connect(&filelist::instance(),		SIGNAL(currentChanged(ColinStruct*)),
+			this,						SLOT(setTw(ColinStruct*)));
+
+
+
 	if(filelist::instance().currentFile()){
 		ColinStruct &t = *filelist::instance().currentFile();
 		connect(&t,					SIGNAL(changedNode(int)),
@@ -880,7 +886,6 @@ void nodeOverlay::changed()
 void nodeOverlay::setTw(ColinStruct *t)
 {
 	qDebug() << "nodeOverlay::setTW(...)";
-
 	this->deleteLater();
 }
 

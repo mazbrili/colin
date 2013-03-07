@@ -63,8 +63,8 @@ private:
 		   *beams_inputLabel,
 		   *loads_inputLabel,
 		   *nodes_resLabel,
-		   *beam_funLabel,
-		   *beam_valLabel;
+		   *beam_funLabel;
+//		   *beam_valLabel;
 
 	QLabel *printing,
 		   *input,
@@ -84,8 +84,8 @@ private:
 					*beams_input,
 					*loads_input,
 					*nodes_res,
-					*beam_fun,
-					*beam_val;
+					*beam_fun;
+//					*beam_val;
 
 	QButtonGroup *buttonGroup;
 

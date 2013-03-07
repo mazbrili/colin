@@ -47,7 +47,7 @@ public:
 		instance_ = new ColinLibrary();
     return *instance_;}
 
-    const inline ColinMaterial &mat(const int &i) const {return mats.at(i);}
+	const inline ColinMaterial &mat(const int &i) const {return mats.at(i);}
     const inline ColinMaterial &mat(const QString &_name) const {return mat(IndexFromMatByName(_name));}
     int mats_n() const {return (mats.size());}
     int IndexFromMatByName(const QString &_name) const {

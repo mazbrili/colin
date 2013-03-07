@@ -21,7 +21,7 @@
     </message>
     <message>
         <source>&lt;a href=&quot;sidebar/tree&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;sidebar/tree&quot;&gt;öffne Bedienungsanleitung&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</translation>
     </message>
     <message>
         <source>Show a tree representation of the current structure. &lt;br/&gt;</source>
@@ -33,7 +33,7 @@
     </message>
     <message>
         <source>&lt;a href=&quot;sidebar/lib&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;a href=&quot;sidebar/lib&quot;&gt;öffne Bedienungsanleitung&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</translation>
     </message>
     <message>
         <source>Show cross sections and materials. &lt;br/&gt;</source>
@@ -49,7 +49,7 @@
     </message>
     <message>
         <source>&lt;a href=&quot;sidebar/print&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;sidebar/print&quot;&gt;öffne manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</translation>
     </message>
     <message>
         <source>Show printing settings and print or export to as pdf.</source>
@@ -57,7 +57,7 @@
     </message>
     <message>
         <source>&lt;a href=&quot;sidebar/console&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;sidebar/console&quot;&gt;öffne Bedienungsanleitung&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</translation>
     </message>
     <message>
         <source>Show the JavaScript-console. &lt;br/&gt;</source>
@@ -85,6 +85,10 @@
     <message>
         <source>paste</source>
         <translation>Einfügen</translation>
+    </message>
+    <message>
+        <source>remove bls %1</source>
+        <translation>Lastgruppe %1 löschen</translation>
     </message>
 </context>
 <context>
@@ -474,7 +478,7 @@
     </message>
     <message>
         <source>Colin - 42</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>opens the starter widget&lt;br/&gt;</source>
@@ -482,7 +486,7 @@
     </message>
     <message>
         <source>&lt;a href=&quot;startwidget&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;startwidget&quot;&gt;mehr...&lt;/a&gt;&lt;br /&gt;</translation>
     </message>
     <message>
         <source>creates a new empty file</source>
@@ -502,179 +506,179 @@
     </message>
     <message>
         <source>save the current file to your disk or any other device under a new name!</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichere die geöffnete Datei unter einem neuen Namen!</translation>
     </message>
     <message>
         <source>close the current tab!</source>
-        <translation type="unfinished"></translation>
+        <translation>Schließe Tab!</translation>
     </message>
     <message>
         <source>close the application!</source>
-        <translation type="unfinished"></translation>
+        <translation>Schließe das Programm!</translation>
     </message>
     <message>
         <source>&lt;b&gt;node tool&lt;/b&gt; </source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Knoten Werkzeug&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;tool/node&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt; &lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;tool/node&quot;&gt;öffne Bedienungsanleitung&lt;/a&gt;&lt;br /&gt; &lt;br /&gt;</translation>
     </message>
     <message>
         <source>Use this tool to add nodes. </source>
-        <translation type="unfinished"></translation>
+        <translation>Benutze dieses Werkzeug um Knoten zu erstellen.</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;nodes&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;nodes&quot;&gt;mehr...&lt;/a&gt;&lt;br /&gt;</translation>
     </message>
     <message>
         <source>To do so click on the designated position in the view. </source>
-        <translation type="unfinished"></translation>
+        <translation>Klicke auf die gewünschte Position in der Ansicht um einen neuen Knoten zu erstellen.</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;view&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;view&quot;&gt;mehr...&lt;/a&gt;&lt;br /&gt;</translation>
     </message>
     <message>
         <source>The &lt;b&gt;snap&lt;/b&gt; will help you! </source>
-        <translation type="unfinished"></translation>
+        <translation>Der &lt;b&gt;Fang&lt;/b&gt; hilft dir dabei!</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;snap&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;Fang&quot;&gt;mehr...&lt;/a&gt;&lt;br /&gt;</translation>
     </message>
     <message>
         <source>Afterwards you can add supports to the node with the &lt;b&gt;support tool&lt;/b&gt;. </source>
-        <translation type="unfinished"></translation>
+        <translation>Anschließend können Auflager mit dem &lt;b&gt;Auflager Werkzeug&lt;/b&gt; zum Knoten hinzugefügt werden.</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;tool/support&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;tool/support&quot;&gt;mehr...&lt;/a&gt;&lt;br /&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;beam tool&lt;/b&gt; </source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Stab Werkzeug&lt;/b&gt; </translation>
     </message>
     <message>
         <source>&lt;a href=&quot;tool/beam&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt; &lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;tool/beam&quot;&gt;öffne Bedienungsanleitung&lt;/a&gt;&lt;br /&gt; &lt;br /&gt;</translation>
     </message>
     <message>
         <source>Use this tool to add beams. </source>
-        <translation type="unfinished"></translation>
+        <translation>Benutze dieses Werkzeug um Stäbe zu erstellen.</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;beams&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;beams&quot;&gt;mehr...&lt;/a&gt;&lt;br /&gt;</translation>
     </message>
     <message>
         <source>To do so click on the designated positions or nodes in the view. </source>
-        <translation type="unfinished"></translation>
+        <translation>Klicke auf die gewünschten Positionen oder Knoten in der Ansicht. </translation>
     </message>
     <message>
         <source>The chosen material and cross section can be chosen in the sidebar. </source>
-        <translation type="unfinished"></translation>
+        <translation>Material und Querschnitt können in der Seitenleiste ausgewählt werden.</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;library&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;library&quot;&gt;mehr...&lt;/a&gt;&lt;br /&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;support tool&lt;/b&gt; </source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Auflager Werkzeug&lt;/b&gt; </translation>
     </message>
     <message>
         <source>&lt;a href=&quot;tool/support&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt; &lt;br /&gt; &lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;tool/support&quot;&gt;öffne Bedienungsanleitung&lt;/a&gt;&lt;br /&gt; &lt;br /&gt; &lt;br /&gt;</translation>
     </message>
     <message>
         <source>Use this tool to add supports to existion nodes. </source>
-        <translation type="unfinished"></translation>
+        <translation>Benutze dieses Werkzeug um Auflager an existierende Knoten hinzuzufügen.</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;support&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;support&quot;&gt;mehr...&lt;/a&gt;&lt;br /&gt;</translation>
     </message>
     <message>
         <source>To do so click on the designated node in the view. </source>
-        <translation type="unfinished"></translation>
+        <translation>Um ein Auflager hinzuzufügen klicke auf den gewünschten Knoten in der Ansicht.</translation>
     </message>
     <message>
         <source>To specify the form of the support which gets added to your structure, keep the triangle beside the tool button pressed. </source>
-        <translation type="unfinished"></translation>
+        <translation>Um die Art des Auflagers auszuwählen halte die Werkzeugschaltfläche bzw. das danebenstehende Dreieck gedrückt. </translation>
     </message>
     <message>
         <source>Use the appearing buttons to set the form to what you need! </source>
-        <translation type="unfinished"></translation>
+        <translation>Benutze die erscheinenden Knöpfe um die Art des Auflagers auszuwählen!</translation>
     </message>
     <message>
         <source>Additional posibilities, such as rotated supports and springs as supports can be specified in the tree or view afterwards.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zusätzliche Möglichkeiten, wie verdrehte Auflager und Federauflager können in der Baumansicht oder der Zeichenfläche hinzugefügt werden.</translation>
     </message>
     <message>
         <source>&lt;b&gt;hinge tool&lt;/b&gt; </source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Gelenk Werkzeug&lt;/b&gt; </translation>
     </message>
     <message>
         <source>&lt;a href=&quot;tool/hinge&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt; &lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;tool/hinge&quot;&gt;öffne Bedienungsanleitung&lt;/a&gt;&lt;br /&gt; &lt;br /&gt;</translation>
     </message>
     <message>
         <source>Use this tool to add hinges to existion beams. </source>
-        <translation type="unfinished"></translation>
+        <translation>Benutze dieses Werkzeug um Gelenke zu Stäben hinzuzufügen.</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;hinges&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;hinges&quot;&gt;,mehr...&lt;/a&gt;&lt;br /&gt;</translation>
     </message>
     <message>
         <source>To do so click on the designated beam. </source>
-        <translation type="unfinished"></translation>
+        <translation>Klicke hierzu auf den gewünschten Stab.</translation>
     </message>
     <message>
         <source>Click near a node and the hinge will be placed between the node and the beam. Otherwise it will be created at some position on the beam. </source>
-        <translation type="unfinished"></translation>
+        <translation>Klicke den Stab in der Nähe eines Knoten um das Gelenk an dessen Ende zu positionieren. </translation>
     </message>
     <message>
         <source>To specify the form of hinge wich gets added to your structure, keep the triangle beside the tool button pressed. </source>
-        <translation type="unfinished"></translation>
+        <translation>Um die Art des Gelenks zu bestimmen halte die Werkzeugschaltfläche bzw. das danebenstehende Dreieck gedrückt.</translation>
     </message>
     <message>
         <source>Additional posibilities, such as springs between the hinge can be set in the tree afterwards!</source>
-        <translation type="unfinished"></translation>
+        <translation>Zusätzliche Möglichkeiten wie Federn können in der Baumansicht oder der Zeichenfläche hinzugefügt werden!</translation>
     </message>
     <message>
         <source>&lt;b&gt;undo&lt;/b&gt; </source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Rückgängig&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;tool/undo&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt; &lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;tool/undo&quot;&gt;öffne Bedienungsanleitung&lt;/a&gt;&lt;br /&gt; &lt;br /&gt;</translation>
     </message>
     <message>
         <source>Use this tool to revert your last modification. </source>
-        <translation type="unfinished"></translation>
+        <translation>Benutze dieses Werkzeug um die letzt Änderung rückgängig zu machen.</translation>
     </message>
     <message>
         <source>Klick on the triangle beside the tool button to show the history. Here you can revert and resotre many steps in once!</source>
-        <translation type="unfinished"></translation>
+        <translation>Halte die Werkzeugschaltfläche bzw. das danebenstehende Dreieck gedrückt um den Verlauf anzuzeigen. Hier kannst du mehrere Schritte gleichzeitig rückgängig machen!</translation>
     </message>
     <message>
         <source>&lt;b&gt;redo&lt;/b&gt; </source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Wiederholen&lt;/b&gt; </translation>
     </message>
     <message>
         <source>&lt;a href=&quot;tool/redo&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt; &lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;tool/redo&quot;&gt;öffne Bedienungsanleitung&lt;/a&gt;&lt;br /&gt; &lt;br /&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;move&lt;/b&gt; </source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Verschieben&lt;/b&gt; </translation>
     </message>
     <message>
         <source>&lt;a href=&quot;tool/move&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt; &lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;tool/move&quot;&gt;öffne Bedieungsaleitung&lt;/a&gt;&lt;br /&gt; &lt;br /&gt;</translation>
     </message>
     <message>
         <source>Use this tool to move stuff in the &lt;a href=&quot;view&quot;&gt;view&lt;/a&gt;. &lt;br /&gt;</source>
@@ -2739,18 +2743,6 @@ Line %2, column %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>beams(values)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;a href=&quot;print/beamvalues&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Activate to add all beam forces to the protocol in form of a table of values.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>yes</source>
         <translation type="unfinished">Ja</translation>
     </message>
@@ -2767,7 +2759,7 @@ Line %2, column %3</source>
     <name>removeBLSUndoCommand</name>
     <message>
         <source>remove bls %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lastgruppe %1 löschen</translation>
     </message>
 </context>
 <context>
@@ -3286,6 +3278,54 @@ or simply characters divided with  &quot;+&quot; to change the shortcuts:
     <message>
         <source>load #%1</source>
         <translation type="unfinished">Last #%1</translation>
+    </message>
+    <message>
+        <source>#%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ax[%1]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Az[%1]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>u[m]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>w[m]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>beam forces:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>u(x)[m] = %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>w(x)[m] = %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>phi(x)[grad] = %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>N(x)[%1] = %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Q(x)[%1] = %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>M(x)[%1] = %2</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4654,7 +4694,7 @@ or simply characters divided with  &quot;+&quot; to change the shortcuts:
     </message>
     <message>
         <source>&lt;a href=&quot;tool/support&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;a href=&quot;tool/support&quot;&gt;mehr...&lt;/a&gt;&lt;br /&gt;</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;tool/load&quot;&gt;more...&lt;/a&gt;&lt;br /&gt;</source>

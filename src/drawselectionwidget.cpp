@@ -37,7 +37,8 @@ drawSelectionWidget::drawSelectionWidget(int _id, QWidget *parent) :
     setMouseTracking(true);
     mouseOver = false;
 
-	setWhatsThis(tr("<b>visible elements</b> <a href=\"view/visible\">open manual</a><br /> <br />")+
+	setWhatsThis(tr("<b>visible elements</b> ")+
+				 tr("<a href=\"view/visible\">open manual</a><br /> <br />")+
 				 tr("Use this widget to specify the visible elements in the view by clicking the propriate symbol!<br />")+
 				 tr("<b>u</b>: Show the displancment of the structure <br />")+
 				 tr("<b>N</b>: Show normal forces in the structure <br />")+

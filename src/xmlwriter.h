@@ -35,19 +35,21 @@ class XmlWriter : public QXmlStreamWriter
 public:
     XmlWriter(QIODevice *device);
     XmlWriter(QByteArray *array);
-    void writeTw(const ColinStruct &tw);
+	void writeTw(const ColinStruct &tw, bool includeResults = false);
     void writeSelection(const ColinStruct &tw, QPointF translation = QPointF());
     void writeLoad(const ColinStruct &tw, const int &nr);
 private:
     void writeRequredLibEntries(const ColinStruct &tw, bool onlySelection = false);
-    void writeNode(const ColinNode &n);
-    void writeBeam(const ColinBeam &s);
+	void writeNode(const ColinNode &n, bool includeResults = false);
+	void writeBeam(const ColinBeam &s, bool includeResults = false);
 	void writeLoad(const ColinLoad &l, const ColinStruct &tw);
 	void writeBearing(const ColinSupport &b);
 	void writeBLS(const ColinBLS &b);
 	void writeCLS(const ColinCLS &c, const ColinStruct &tw);
     void writeMat(const ColinMaterial &m);
-    void writeProfile(const ColinCrossSection &p);
+	void writeProfile(const ColinCrossSection &p);
+	void writeResult(const ColinNode &n, const int &clsindex);
+	void writeResult(const ColinBeam &s, const int &clsindex);
 };
 
 #endif // XMLWRITER_H

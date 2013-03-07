@@ -34,7 +34,7 @@
 #include <QtCore/QDate>
 
 
-//#define PRINTER_VERBOSE
+#define PRINTER_VERBOSE
 
 const int titleSize = 3;
 const int alignLeft = 3;
@@ -101,8 +101,8 @@ void structPrinter::print(QPaintDevice *target, int pageNr)
 			nodeRes(0, &pageCount);
 		if(c.s.testFlag(painterContent::beam_f))
 			beamResF(0, &pageCount);
-		if(c.s.testFlag(painterContent::beam_val))
-			beamResVal(0, &pageCount);
+//		if(c.s.testFlag(painterContent::beam_val))
+//			beamResVal(0, &pageCount);
 		noNewPage=true;
 		decoratePage();
 	}
@@ -146,9 +146,9 @@ void structPrinter::print(QPaintDevice *target, int pageNr)
 		case painterContent::beam_f:
 			beamResF(pageContent.index, &pageNr);
 			break;
-		case painterContent::beam_val:
-			beamResVal(pageContent.index, &pageNr);
-			break;
+//		case painterContent::beam_val:
+//			beamResVal(pageContent.index, &pageNr);
+//			break;
 		default:
 			tableContent(indizes);
 		}
@@ -175,7 +175,7 @@ painterContent structPrinter::getContentOfPage(QPrinter *printer, painterContent
 	int *indizes = new int[9];
 	int *itemsPerPage = new int[9];
 	requiredPages(printer, content, indizes, itemsPerPage);
-	for(int i=0; i<9; i++){
+	for(int i=1; i<9; i++){
 		if(indizes[i]-1>=pageNr){
 			pageContent.s = painterContent::section(1 << (i-1));
 			pageContent.index = (pageNr-indizes[i-1])*itemsPerPage[i-1];
@@ -189,8 +189,7 @@ painterContent structPrinter::getContentOfPage(QPrinter *printer, painterContent
 					 << indizes[4] << ", "
 					 << indizes[5] << ", "
 					 << indizes[6] << ", "
-					 << indizes[7] << ", "
-					 << indizes[8];
+					 << indizes[7];
 			qDebug() << "section of pageNr" << pageNr << " is section nr" << i;
 			qDebug() << "first page of this section: " << indizes[i-1];
 			qDebug() << "items per page:" << itemsPerPage[i-1];
@@ -284,13 +283,13 @@ int structPrinter::requiredPages(QPrinter *printer, painterContent content, int*
 		if(perPage)
 			perPage[7]=specPerPage;
 	}
-	if(content.s.testFlag(painterContent::beam_val)){
-		if(indizes)
-			indizes[8]=pages;
-		beamResVal(0, &pages, true, &specPerPage);
-		if(perPage)
-			perPage[8]=specPerPage;
-	}
+//	if(content.s.testFlag(painterContent::beam_val)){
+//		if(indizes)
+//			indizes[8]=pages;
+//		beamResVal(0, &pages, true, &specPerPage);
+//		if(perPage)
+//			perPage[8]=specPerPage;
+//	}
 	if(createdPainter){
 		delete painter;
 		painter = 0;
@@ -474,7 +473,7 @@ bool structPrinter::decoratePage()
 	{
 		painter->drawText(QRect(pr.bottomRight()-QPoint(100, 20), QSize(100, 20)),
 						  Qt::AlignBottom | Qt::AlignRight,
-						  QString("%1/%2").arg(pageCount).arg(totalPageCount), &bR);
+						  QString("%1/%2").arg(pageCount).arg(totalPageCount-1), &bR);
 	}
 	/*else
 	{
@@ -1207,12 +1206,13 @@ void structPrinter::nodeRes(int startAt, int *pages, bool test, int *itemsPerPag
 
 void structPrinter::beamResF(int startAt, int *pages, bool test, int *itemsPerPage)
 {
+	int resultCount = qMax(1, tw->cls_n());
 	if(test)
 	{
-		int requiredLines = tw->beam_n()*(qMax(1, tw->cls_n())+1);
+		int requiredLines = tw->beam_n()*(6*resultCount+6);
 		int required = ceil(double(requiredLines*lineHeight())/double(usablePageHeight()));
 		(*pages)+=required;
-		if(itemsPerPage) *itemsPerPage = floor(usablePageHeight()*(qMax(1, tw->cls_n())/(qMax(1, tw->cls_n())+1))/lineHeight());
+		if(itemsPerPage) *itemsPerPage = floor(usablePageHeight()*(resultCount)/(resultCount+1)/lineHeight());
 		return;
 	}
 
@@ -1226,8 +1226,18 @@ void structPrinter::beamResF(int startAt, int *pages, bool test, int *itemsPerPa
 	f.setBold(true);
 	f.setPointSize(f.pointSize()*2);
 
+/*
+  startAt:  beam		-> 0-beam_n
+			function	-> 0-5
+			cls			-> 0-max(cls_n, 1)
 
-	for(int i=floor(startAt/qMax(tw->cls_n(),1)); i<tw->beam_n(); i++)
+*/
+
+	int startAtBeam = floor(startAt/(6.*resultCount));
+	int startAtFunction = floor(startAt-startAtBeam*(6*resultCount))/resultCount;
+	int startAtClS = startAt-startAtBeam*(6*resultCount)-startAtFunction*(resultCount);
+
+	for(int i=startAtBeam; i<tw->beam_n(); i++)
 	{
 		painter->save();
 
@@ -1254,26 +1264,35 @@ void structPrinter::beamResF(int startAt, int *pages, bool test, int *itemsPerPa
 		bool keepWriting;
 		if(tw->isCalculated())
 		{
+
+			/*draw function on the left side of paper*/
+
+
 			QList<const function*> funs;
+
 			for(int j=0; j<qMax(1, tw->cls_n()); j++)
 				funs << &tw->beam(i).Nconst(j);
 			painter->setPen(viewPortSettings::instance().color(Colin::C_Np));
 			sP.drawFunction(painter, funs, tw->beam(i).l(), tw->scaleP()/2, 0);
 
 			funs.clear();
+
 			for(int j=0; j<qMax(1, tw->cls_n()); j++)
 				funs << &tw->beam(i).Qconst(j);
 			painter->setPen(viewPortSettings::instance().color(Colin::C_Qp));
 			sP.drawFunction(painter, funs, tw->beam(i).l(), tw->scaleP()/2, 0);
 
-
 			funs.clear();
+
 			for(int j=0; j<qMax(1, tw->cls_n()); j++)
 				funs << &tw->beam(i).Mconst(j);
 			painter->setPen(viewPortSettings::instance().color(Colin::C_Mp));
 			sP.drawFunction(painter, funs, tw->beam(i).l(), tw->scaleM()/2, 0);
 
 			painter->restore();
+
+
+			/*write functions on the right side of paper*/
 
 			painter->setPen(Qt::black);
 			for(int j=0; j<qMax(1, tw->cls_n()); j++){
@@ -1340,17 +1359,17 @@ void structPrinter::beamResF(int startAt, int *pages, bool test, int *itemsPerPa
 	}
 }
 
-void structPrinter::beamResVal(int startAt, int *pages, bool test, int *itemsPerPage)
-{
-	if(test)
-	{
-		int requiredHeight = lineHeight()*(8*tw->beam_n()*tw->cls_n()+titleSize);
-		int required = requiredHeight/usablePageHeight()+1;
-		requiredHeight = requiredHeight%usablePageHeight();
-		(*pages)+=required;
-		return;
-	}
-}
+//void structPrinter::beamResVal(int startAt, int *pages, bool test, int *itemsPerPage)
+//{
+//	if(test)
+//	{
+//		int requiredHeight = lineHeight()*(8*tw->beam_n()*tw->cls_n()+titleSize);
+//		int required = requiredHeight/usablePageHeight()+1;
+//		requiredHeight = requiredHeight%usablePageHeight();
+//		(*pages)+=required;
+//		return;
+//	}
+//}
 
 void structPrinter::printStruct(const QRect &rect, Colin::Elements e, QList<int> cls)
 {

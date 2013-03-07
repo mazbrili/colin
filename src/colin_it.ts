@@ -86,6 +86,10 @@
         <source>paste</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>remove bls %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>
@@ -2727,18 +2731,6 @@ Line %2, column %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>beams(values)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;a href=&quot;print/beamvalues&quot;&gt;open manual&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Activate to add all beam forces to the protocol in form of a table of values.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>yes</source>
         <translation type="unfinished">Ja</translation>
     </message>
@@ -3274,6 +3266,54 @@ or simply characters divided with  &quot;+&quot; to change the shortcuts:
     <message>
         <source>load #%1</source>
         <translation type="unfinished">Last #%1</translation>
+    </message>
+    <message>
+        <source>#%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ax[%1]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Az[%1]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>u[m]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>w[m]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>beam forces:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>u(x)[m] = %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>w(x)[m] = %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>phi(x)[grad] = %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>N(x)[%1] = %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Q(x)[%1] = %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>M(x)[%1] = %2</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

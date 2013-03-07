@@ -255,6 +255,13 @@ void MainWindow::initMenu()
 								   tr("save the current file to your disk or any other device!")+
 								   tr("The file is saved without asking for the filename, if already named!"));
 
+	QMenu *expMenu = filem->addMenu(colinIcons::instance().icon(Colin::Save), tr("export as..."));
+	scS.addAction(
+				expMenu->addAction(colinIcons::instance().icon(Colin::Save), tr("xml"),
+								 this,SLOT(saveAsWithResuls())), true);
+	scS.lastAction()->setWhatsThis("<b>"+tr("export as xml")+"</b><br/>"+
+									tr("save the current file, including results, as an xml file to any device"));
+
 	scS.addAction(
 			filem->addAction(tr("save as"),
 							 this, SLOT(saveAsT()), QKeySequence::SaveAs), true);
@@ -1093,6 +1100,23 @@ void MainWindow::saveAsT()
 
 }
 
+void MainWindow::saveAsWithResuls()
+{
+	QString fileName;
+	fileName = QFileDialog::getSaveFileName(
+				this, tr("save file"), QDir::homePath(),
+				tr("colin structs")+" (*.xcs)");
+
+	if(fileName.isEmpty())
+		return;
+	if(fileName.right(4) != QString(".xcs"))
+	{
+		if(!QFileInfo(fileName+".xcs").exists())
+			fileName += QString(".xcs");
+	}
+	filelist::instance().saveCurrentResults(fileName);
+}
+
 void MainWindow::closeEvent(QCloseEvent *e)
 {
 	bool somethingToSave(false);
@@ -1754,13 +1778,21 @@ void MainWindow::runDebug()
 	programm = code.readAll();
 	code.close();
 
-	scriptEngine *sE = new scriptEngine(this);
+	QScriptEngine *sE = new QScriptEngine(this);
 	QScriptEngineDebugger *debugger = new QScriptEngineDebugger(this);
-	QWidget *debugWindow = debugger->standardWindow();
+	debugger->attachTo(sE);
+
+	QMainWindow *debugWindow = debugger->standardWindow();
 	debugWindow->setWindowModality(Qt::ApplicationModal);
+	debugger->setAutoShowStandardWindow(true);
 	debugWindow->resize(1280, 704);
 	debugWindow->show();
-	debugger->attachTo(sE);
 	debugger->action(QScriptEngineDebugger::InterruptAction)->trigger();
+
+
+	qDebug() << "state = " << debugger->state();
 	sE->evaluate(programm, scriptFile);
+	qDebug() << "state = " << debugger->state();
+
+
 }

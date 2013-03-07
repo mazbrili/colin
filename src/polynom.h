@@ -145,7 +145,29 @@ public:
 			os << " + " << p.a[i] << " x^" << i;
 		return os;}
 
-    QString toString(const double &prefix, const char &f, const int &precison) const
+	QString toAscii(const double &prefix, const char &f, const int &precison) const
+	{
+		QString s;
+		for(int i=T; i>=0; --i)
+		{
+			if(a[i]!=0)
+			{
+				if(a[i]>0 && !s.isEmpty())
+					s.append("+");
+				s.append(QString::number(a[i]*prefix, f, precison));
+				if(i!=0)
+				{
+					s.append(QString("*x"));
+					s.append(QString("^%1").arg(i));
+				}
+			}
+		}
+		if(s.isEmpty())
+			s.append(QString::number(0, f, precison));
+		return s;
+	}
+
+	QString toString(const double &prefix, const char &f, const int &precison) const
     {
         QString s;
         for(int i=T; i>=0; --i)

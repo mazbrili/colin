@@ -408,7 +408,7 @@ void detailPainter::drawBeamExtern(QPainter *p, const ColinStruct &t, int i, con
 
 	double l = 120;
 	p->translate(p->device()->height()/2, p->device()->height()/2);
-	p->scale(p->device()->height()/200., p->device()->height()/200.);
+	p->scale(p->device()->height()/250., p->device()->height()/250.);
 	p->rotate(b.angle()*180./M_PI);
 	p->setPen(QPen(p->pen().color(), 0.5));
 
@@ -528,7 +528,7 @@ void detailPainter::drawBeamIntern(QPainter *p, const ColinStruct &t, int i, con
 
 	double l = 250;
 	p->translate(p->device()->height()/2, p->device()->height()/2);
-	p->scale(p->device()->height()/200., p->device()->height()/200.);
+	p->scale(p->device()->height()/250., p->device()->height()/250.);
 	p->rotate(b.angle()*180./M_PI);
 	p->setPen(QPen(p->pen().color(), 0.5));
 

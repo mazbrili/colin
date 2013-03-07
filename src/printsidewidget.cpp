@@ -210,12 +210,12 @@ printsideWidget::printsideWidget(QWidget *parent) :
 						   tr("<a href=\"print/beamfunctions\">open manual</a><br /><br />")+
 						   tr("Activate to add all beam forces to the protocol in form of functions."));
 
-	beam_valLabel = new QLabel(this);
-	beam_val = new ColinBoolSlider(this);
-	addSlider(beam_valLabel, beam_val, tr("beams(values)"), sliderBox);
-	beam_val->setWhatsThis("<b>"+tr("beam results - functions")+" </b>"+
-						   tr("<a href=\"print/beamvalues\">open manual</a><br /><br />")+
-						   tr("Activate to add all beam forces to the protocol in form of a table of values."));
+	//beam_valLabel = new QLabel(this);
+	//beam_val = new ColinBoolSlider(this);
+	//addSlider(beam_valLabel, beam_val, tr("beams(values)"), sliderBox);
+	//beam_val->setWhatsThis("<b>"+tr("beam results - functions")+" </b>"+
+	//					   tr("<a href=\"print/beamvalues\">open manual</a><br /><br />")+
+	//					   tr("Activate to add all beam forces to the protocol in form of a table of values."));
 
 
 
@@ -230,7 +230,7 @@ printsideWidget::printsideWidget(QWidget *parent) :
 	buttonGroup->addButton(loads_input, painterContent::load_in);
 	buttonGroup->addButton(nodes_res, painterContent::node_res);
 	buttonGroup->addButton(beam_fun, painterContent::beam_f);
-	buttonGroup->addButton(beam_val, painterContent::beam_val);
+	//buttonGroup->addButton(beam_val, painterContent::beam_val);
 
 	connect(save,						SIGNAL(clicked()),
 			this,						SLOT(savePdfDialog()));
@@ -262,7 +262,7 @@ printsideWidget::printsideWidget(QWidget *parent) :
 	loads_input->setChecked(settings.value("printing/loadsInput", false).toBool());
 	nodes_res->setChecked(settings.value("printing/nodesRes", true).toBool());
 	beam_fun->setChecked(settings.value("printing/beamsF", true).toBool());
-	beam_val->setChecked(settings.value("printing/beamsV", false).toBool());
+	//beam_val->setChecked(settings.value("printing/beamsV", false).toBool());
 
 
 	printer = new QPrinter();
@@ -290,7 +290,7 @@ printsideWidget::~printsideWidget()
 	settings.setValue("printing/loadsInput", loads_input->isChecked());
 	settings.setValue("printing/nodesRes", nodes_res->isChecked());
 	settings.setValue("printing/beamsF", beam_fun->isChecked());
-	settings.setValue("printing/beamsV", beam_val->isChecked());
+	//settings.setValue("printing/beamsV", beam_val->isChecked());
 
 	delete printer;
 }

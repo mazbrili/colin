@@ -187,7 +187,7 @@ void XmlWriter::writeSelection(const ColinStruct &tw, QPointF translation)
 
 }
 
-void XmlWriter::writeTw(const ColinStruct &tw)
+void XmlWriter::writeTw(const ColinStruct &tw, bool includeResults)
 {
     setAutoFormatting(true);
     writeStartDocument();
@@ -197,10 +197,10 @@ void XmlWriter::writeTw(const ColinStruct &tw)
     writeRequredLibEntries(tw);
 
     for(int i=0; i<tw.node_n(); i++)
-        writeNode(tw.node(i));
+		writeNode(tw.node(i), includeResults);
 
     for(int i=0; i<tw.beam_n(); i++)
-        writeBeam(tw.beam(i));
+		writeBeam(tw.beam(i), includeResults);
 
 	for(int i=0; i<tw.bls_n(); i++)
 		writeBLS(tw.bls(i));
@@ -237,17 +237,22 @@ void XmlWriter::writeRequredLibEntries(const ColinStruct &tw, bool onlySelection
     }
 }
 
-void XmlWriter::writeNode(const ColinNode &n)
+void XmlWriter::writeNode(const ColinNode &n, bool includeResults)
 {
     writeStartElement("node");
     writeAttribute("X", QString("%1").arg(n.x()));
     writeAttribute("Z", QString("%1").arg(n.z()));
     if(n.hasbearing())
         writeBearing(n.bearing());
+	if(n.getStruct()->isCalculated()){
+		for(int i=0; i<n.getStruct()->cls_n(); i++){
+			writeResult(n, i);
+		}
+	}
     writeEndElement();//node
 }
 
-void XmlWriter::writeBeam(const ColinBeam &s)
+void XmlWriter::writeBeam(const ColinBeam &s, bool includeResults)
 {
     writeStartElement("beam");
 
@@ -270,6 +275,12 @@ void XmlWriter::writeBeam(const ColinBeam &s)
             writeAttribute(QString("s%1").arg(i), QString("%1").arg(s.spring(i)));
         writeEndElement(); //springs
     }
+
+	if(s.getStruct()->isCalculated()){
+		for(int i=0; i<s.getStruct()->cls_n(); i++){
+			writeResult(s, i);
+		}
+	}
 
     writeEndElement();//beam;
 
@@ -346,4 +357,42 @@ void XmlWriter::writeProfile(const ColinCrossSection &p)
     writeAttribute("h", QString("%1").arg(p.h()));
 //    writeAttribute("Aq", QString("%1").arg(p.Aq()));
     writeEndElement();//profile
+}
+
+void XmlWriter::writeResult(const ColinNode &n, const int &clsindex)
+{
+	const char format = 'f';
+	const int precision = 10;
+
+	writeStartElement("result");
+	if(n.getStruct()->cls_n()>0)
+		writeAttribute("cls", n.getStruct()->cls(clsindex).name());
+	writeAttribute("u", QString::number(n.u(clsindex), format, precision));
+	writeAttribute("w", QString::number(n.w(clsindex), format, precision));
+	writeAttribute("phi", QString::number(n.phi(clsindex), format, precision));
+	if(n.hasbearing())
+	{
+		writeAttribute("Ax", QString::number(n.Ax(clsindex), format, precision));
+		writeAttribute("Az", QString::number(n.Az(clsindex), format, precision));
+		writeAttribute("Am", QString::number(n.Am(clsindex), format, precision));
+	}
+	writeEndElement();//result
+}
+
+void XmlWriter::writeResult(const ColinBeam &s, const int &clsindex)
+{
+	const char format = 'f';
+	const int precision = 10;
+	const int prefix = 1;
+
+	writeStartElement("result");
+	if(s.getStruct()->cls_n()>0)
+		writeAttribute("cls", s.getStruct()->cls(clsindex).name());
+	writeAttribute("u", s.uconst(clsindex).toAscii(prefix, format, precision));
+	writeAttribute("w", s.wconst(clsindex).toAscii(prefix, format, precision));
+	writeAttribute("phi", s.phiconst(clsindex).toAscii(prefix, format, precision));
+	writeAttribute("N", s.Nconst(clsindex).toAscii(prefix, format, precision));
+	writeAttribute("Q", s.Qconst(clsindex).toAscii(prefix, format, precision));
+	writeAttribute("M", s.Mconst(clsindex).toAscii(prefix, format, precision));
+	writeEndElement();
 }

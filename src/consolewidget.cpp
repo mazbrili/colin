@@ -76,6 +76,7 @@ void consoleWidget::keyPressEvent(QKeyEvent *e)
 		//if(engine->checkSyntax(buffer).state() == QScriptSyntaxCheckResult::Valid)
 		//{
 			engine->eval(buffer);
+			engine->abortEvaluation();
 			history.push_front(buffer);
 			buffer.clear();
 			this->append(">");

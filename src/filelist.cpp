@@ -26,6 +26,7 @@
 
 #include "filelist.h"
 #include "viewportsettings.h"
+#include "wgv.h"
 
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
@@ -288,7 +289,7 @@ bool filelist::openT(const QString &url)
 
 bool filelist::saveCurrent()
 {
-    return save(currentIndex());
+	return save(currentIndex());
 }
 
 bool filelist::saveCurrent(const QString &url)
@@ -296,7 +297,7 @@ bool filelist::saveCurrent(const QString &url)
     files[current_].filepath = url;
     files[current_].filename = QFileInfo(url).fileName();
 	files[current_].tw->setObjectName(files[current_].filename);
-    return saveCurrent();
+	return saveCurrent();
 }
 
 bool filelist::save(const int &i)
@@ -307,7 +308,7 @@ bool filelist::save(const int &i)
 
     f.flush();
     XmlWriter Xw(&f);
-    Xw.writeTw(*files.at(i).tw);
+	Xw.writeTw(*files.at(i).tw);
 
     f.close();
     appendtoRecUsed(files[i].filepath);
@@ -319,7 +320,73 @@ bool filelist::saveAs(const int &i, const QString &url)
     files[i].filepath = url;
     files[i].filename = QFileInfo(url).fileName();
     emit recUsedCanged();
-    return save(i);
+	return save(i);
+}
+
+void filelist::saveResults(const int &i, const QString &url)
+{
+	if(filelist::instance().currentFile()->bestimmt()<0)
+		return;
+
+	if(files[i].tw->isCalculated()){
+
+		QFile f(url);
+		if(!f.open(QIODevice::ReadWrite | QIODevice::Text | QIODevice::Truncate))
+			return;
+
+		f.flush();
+		XmlWriter Xw(&f);
+		Xw.writeTw(*files.at(i).tw);
+
+		f.close();
+		return;
+	}
+	else{
+
+		wgv *cW = new wgv(filelist::instance().currentFile());
+
+		resultpath.insert(cW, url);
+		connect(cW,                 SIGNAL(calcFinished()),
+				this,               SLOT(calcFinished()));
+		cW->start();
+		return;
+	}
+}
+
+
+
+void filelist::calcFinished()
+{
+	wgv *cW = dynamic_cast<wgv*>(sender());
+	if(!cW)
+		return;
+	int calculatedTw = -1;
+	for(int i=0; i<filelist::instance().filecount(); i++)
+	{
+		if(cW->file() == filelist::instance().file(i))
+		{
+			calculatedTw = i;
+			break;
+		}
+	}
+	if(calculatedTw == -1)
+		return;
+
+	QFile f(resultpath[cW]);
+	if(!f.open(QIODevice::ReadWrite | QIODevice::Text | QIODevice::Truncate))
+		return;
+
+	f.flush();
+	XmlWriter Xw(&f);
+	Xw.writeTw(*files.at(calculatedTw).tw);
+
+	f.close();
+	return;
+}
+
+void filelist::saveCurrentResults(const QString &url)
+{
+	saveResults(currentIndex(), url);
 }
 
 void filelist::loadRecUsed()
