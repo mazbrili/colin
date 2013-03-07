@@ -91,7 +91,7 @@ signals:
     void recUsedCanged();
     void fileClosed();
 	void fileOpened();
-
+	void allCalcFinished();
 
 public slots:
 	void changeCurrentTo(ColinStruct* f);

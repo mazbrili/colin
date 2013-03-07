@@ -66,6 +66,7 @@ wgv::wgv(ColinStruct *parent) :
 
 	for(int i=0; i<tw->beam_n(); i++){
         beams[i] = tw->beam(i);
+		beams[i].l(); //force calculation of length and the anlge
         beams[i].setStruct(0);}             //for lenght and angle the beam requests x- and z-koordinates from his parent
                                             //operator=(...) stores them in the object so no more parent is required
 	for(int i=0; i<tw->load_n(); i++)

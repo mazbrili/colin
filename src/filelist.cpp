@@ -372,7 +372,10 @@ void filelist::calcFinished()
 	if(calculatedTw == -1)
 		return;
 
-	QFile f(resultpath[cW]);
+	QString filename = resultpath[cW];
+	resultpath.remove(cW);
+
+	QFile f(filename);
 	if(!f.open(QIODevice::ReadWrite | QIODevice::Text | QIODevice::Truncate))
 		return;
 
@@ -381,6 +384,8 @@ void filelist::calcFinished()
 	Xw.writeTw(*files.at(calculatedTw).tw);
 
 	f.close();
+	if(resultpath.keys().isEmpty())
+		emit allCalcFinished();
 	return;
 }
 

@@ -106,7 +106,8 @@ MOCHEADERS= abstractcolintooltip.h \
 	detailpainter.h \
 	colinpastebuffer.h \
 	pastepreviewwidget.h \
-	pictureexport.h
+	pictureexport.h \
+	noguicalculator.h
 
 
 BUILDDATESOURCES=colinversion.cpp
@@ -192,7 +193,8 @@ SOURCES= bmenu.cpp \
 	detailpainter.cpp \
 	colinpastebuffer.cpp \
 	pastepreviewwidget.cpp \
-	pictureexport.cpp
+	pictureexport.cpp \
+	noguicalculator.cpp
 
 
 

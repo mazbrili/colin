@@ -37,6 +37,7 @@
 #include "mainwindow.h"
 #include "toolTipEater.h"
 #include "colinpastebuffer.h"
+#include "noguicalculator.h"
 
 #include <QtGui/QApplication>
 #include <QtCore/QDir>
@@ -66,6 +67,13 @@ void MyOutputHandler(QtMsgType type, const char *msg) {
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
+
+
+	if(a.arguments().contains("-nogui"))
+	{
+		noguicalculator calc(&a);
+		return a.exec();
+	}
 	toolTipEater NomNomMampfMampf;
 	a.installEventFilter(&NomNomMampfMampf); //disable tooltips
 	a.setAttribute(Qt::AA_DontShowIconsInMenus, false); //enable icons
