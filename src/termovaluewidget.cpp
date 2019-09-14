@@ -122,12 +122,12 @@ void termoValueWidget::mouseMoveEvent(QMouseEvent *e)
         return;
 
     double yVal;
-    if(e->posF().y() < maxP)
+    if(e->pos().y() < maxP)
         yVal = maxP;
-    else if(e->posF().y() > minP)
+    else if(e->pos().y() > minP)
         yVal = minP;
     else
-        yVal = e->posF().y();
+        yVal = e->pos().y();
 
 #ifndef QT_NO_DEBUG
     QTextStream debugS(stdout);

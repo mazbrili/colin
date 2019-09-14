@@ -27,10 +27,10 @@
 #ifndef NEWPROFILEDIALOG_H
 #define NEWPROFILEDIALOG_H
 
-#include <QtGui/QDialog>
-#include <QtGui/QGridLayout>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QLineEdit>
+#include <QDialog>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QLineEdit>
 
 
 

@@ -27,11 +27,11 @@
 #ifndef SCALEWIDGET_H
 #define SCALEWIDGET_H
 
-#include <QtGui/QWidget>
-#include <QtGui/QSlider>
-#include <QtGui/QPainter>
-#include <QtGui/QResizeEvent>
-#include <QtGui/QApplication>
+#include <QWidget>
+#include <QSlider>
+#include <QPainter>
+#include <QResizeEvent>
+#include <QApplication>
 
 
 #include "colinpushbuttonpart.h"

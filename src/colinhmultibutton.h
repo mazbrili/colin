@@ -27,11 +27,11 @@
 #ifndef COLINHMULTIBUTTON_H
 #define COLINHMULTIBUTTON_H
 
-#include <QtGui/QWidget>
-#include <QtGui/QPushButton>
+#include <QWidget>
+#include <QPushButton>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QList>
-#include <QtGui/QResizeEvent>
+#include <QResizeEvent>
 #include "colinpushbuttonpart.h"
 
 class ColinHMultiButton : public QWidget

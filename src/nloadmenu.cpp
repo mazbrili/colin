@@ -27,8 +27,8 @@
 #include "nloadmenu.h"
 #include "colinicons.h"
 
-#include <QtGui/QApplication>
-#include <QtGui/QClipboard>
+#include <QApplication>
+#include <QClipboard>
 
 
 nloadMenu *nloadMenu::instance_ = NULL;

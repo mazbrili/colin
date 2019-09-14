@@ -28,7 +28,7 @@
 #define UNDOCOMMANDER_H
 
 #include <QtCore/QObject>
-#include <QtGui/QUndoStack>
+#include <QUndoStack>
 
 #include "undo_commands.h"
 

@@ -27,12 +27,12 @@
 #ifndef PREVIEWWIDGET_H
 #define PREVIEWWIDGET_H
 
-#include <QtGui/QApplication>
-#include <QtGui/QWidget>
-#include <QtGui/QPainter>
-#include <QtGui/QStyle>
-#include <QtGui/QStyleOptionButton>
-#include <QtGui/QPaintEvent>
+#include <QApplication>
+#include <QWidget>
+#include <QPainter>
+#include <QStyle>
+#include <QStyleOptionButton>
+#include <QPaintEvent>
 
 #include "colinicons.h"
 #include "filelist.h"

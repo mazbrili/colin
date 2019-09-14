@@ -25,9 +25,9 @@
  ***********************************************************/
 
 #include "closedialog.h"
-#include <QtGui/QGridLayout>
-#include <QtGui/QScrollArea>
-#include <QtGui/QFileDialog>
+#include <QGridLayout>
+#include <QScrollArea>
+#include <QFileDialog>
 #include "colinicons.h"
 #include "filelist.h"
 

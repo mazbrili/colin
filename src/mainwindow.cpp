@@ -30,8 +30,8 @@
 #include "colinversion.h"
 
 #include <QtCore/QTimer>
-#include <QtGui/QPrintDialog>
-#include <QtGui/QPrinter>
+#include <QPrintDialog>
+#include <QPrinter>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)

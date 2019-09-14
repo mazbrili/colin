@@ -27,9 +27,9 @@
 #ifndef MISCSETTINGSWIDGET_H
 #define MISCSETTINGSWIDGET_H
 
-#include <QtGui/QWidget>
-#include <QtGui/QComboBox>
-#include <QtGui/QDoubleSpinBox>
+#include <QWidget>
+#include <QComboBox>
+#include <QDoubleSpinBox>
 #include "viewportsettings.h"
 #include "grid.h"
 

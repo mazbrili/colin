@@ -27,7 +27,7 @@
 #ifndef CTOOLBAR_H
 #define CTOOLBAR_H
 
-#include <QtGui/QToolBar>
+#include <QToolBar>
 
 class cToolBar : public QToolBar
 {

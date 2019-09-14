@@ -27,9 +27,9 @@
 #ifndef ZMENU_H
 #define ZMENU_H
 
-#include <QtGui/QMenu>
-#include <QtGui/QPushButton>
-#include <QtGui/QButtonGroup>
+#include <QMenu>
+#include <QPushButton>
+#include <QButtonGroup>
 
 #include "viewportsettings.h"
 #include "colinicons.h"

@@ -27,10 +27,10 @@
 #ifndef ABSTRACTCOLINTOOLTIP_H
 #define ABSTRACTCOLINTOOLTIP_H
 
-#include <QtGui/QLabel>
-#include <QtGui/QStylePainter>
-#include <QtGui/QStyleOptionFrame>
-#include <QtGui/QToolTip>
+#include <QLabel>
+#include <QStylePainter>
+#include <QStyleOptionFrame>
+#include <QToolTip>
 
 class abstractColinToolTip : public QLabel
 {

@@ -30,8 +30,8 @@
 #include "wgv_lib.h"
 #include "unitsettings.h"
 
-#include <QtGui/QLabel>
-#include <QtGui/QPushButton>
+#include <QLabel>
+#include <QPushButton>
 
 
 editProfileDialog::editProfileDialog(const int &i, QWidget *parent) :

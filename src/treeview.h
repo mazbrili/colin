@@ -27,9 +27,9 @@
 #ifndef TREEVIEW_H
 #define TREEVIEW_H
 
-#include <QtGui/QTreeWidget>
-#include <QtGui/QTreeWidgetItem>
-#include <QtGui/QKeyEvent>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+#include <QKeyEvent>
 
 #include "filelist.h"
 #include "colinicons.h"

@@ -27,10 +27,10 @@
 #ifndef COLINPUSHBUTTONPART_H
 #define COLINPUSHBUTTONPART_H
 
-#include <QtGui/QPushButton>
-#include <QtGui/QStyleOptionButton>
-#include <QtGui/QStyle>
-#include <QtGui/QPainter>
+#include <QPushButton>
+#include <QStyleOptionButton>
+#include <QStyle>
+#include <QPainter>
 
 
 class ColinPushButtonPart : public QPushButton

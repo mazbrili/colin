@@ -26,8 +26,8 @@
 
 #include "ctabbar.h"
 
-#include <QtGui/QMessageBox>
-#include <QtGui/QFileDialog>
+#include <QMessageBox>
+#include <QFileDialog>
 cTabBar::cTabBar(QWidget *parent) :
     QToolBar(parent)
 {

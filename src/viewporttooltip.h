@@ -28,10 +28,10 @@
 #define VIEWPORTTOOLTIP_H
 
 #include <QtCore/QEvent>
-#include <QtGui/QMoveEvent>
+#include <QMoveEvent>
 
 #include "abstractcolintooltip.h"
-#include "QtGui/QGridLayout"
+#include "QGridLayout"
 
 
 class viewPortToolTip : public abstractColinToolTip

@@ -27,7 +27,8 @@
 #ifndef NLOADMENU_H
 #define NLOADMENU_H
 
-#include <QtGui/QLineEdit>
+#include <QLineEdit>
+#include <QMimeData>
 
 #include "colinmenu.h"
 

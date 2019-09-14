@@ -26,8 +26,8 @@
 
 #include "tempmenu.h"
 
-#include <QtGui/QApplication>
-#include <QtGui/QClipboard>
+#include <QApplication>
+#include <QClipboard>
 
 #include "wgv_tw.h"
 #include "filelist.h"

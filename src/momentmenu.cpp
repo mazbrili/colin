@@ -26,8 +26,8 @@
 
 #include "momentmenu.h"
 
-#include <QtGui/QApplication>
-#include <QtGui/QClipboard>
+#include <QApplication>
+#include <QClipboard>
 
 #include "colinicons.h"
 #include "filelist.h"

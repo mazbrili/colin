@@ -27,12 +27,12 @@
 #ifndef VIEWPORT_H
 #define VIEWPORT_H
 
-#include <QtGui/QWheelEvent>
-#include <QtGui/QPushButton>
-#include <QtGui/QStyle>
-#include <QtCore/QTime>
-#include <QtGui/QBitmap>
-#include <QtGui/QApplication>
+#include <QWheelEvent>
+#include <QPushButton>
+#include <QStyle>
+#include <QTime>
+#include <QBitmap>
+#include <QApplication>
 
 
 

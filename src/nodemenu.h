@@ -27,8 +27,9 @@
 #ifndef NODEMENU_H
 #define NODEMENU_H
 
-#include <QtGui/QLineEdit>
-#include <QtGui/QButtonGroup>
+#include <QLineEdit>
+#include <QButtonGroup>
+#include <QMimeData>
 
 #include "colinmenu.h"
 #include "wgv_tw.h"

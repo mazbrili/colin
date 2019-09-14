@@ -27,7 +27,8 @@
 #ifndef MOMENTMENU_H
 #define MOMENTMENU_H
 
-#include <QtGui/QLineEdit>
+#include <QLineEdit>
+#include <QMimeData>
 #include "colinmenu.h"
 
 class momentMenu : public ColinMenu

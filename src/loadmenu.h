@@ -27,9 +27,9 @@
 #ifndef LOADMENU_H
 #define LOADMENU_H
 
-#include <QtGui/QLineEdit>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QComboBox>
+#include <QLineEdit>
+#include <QButtonGroup>
+#include <QComboBox>
 
 #include "colinmenu.h"
 #include "wgv_tw.h"

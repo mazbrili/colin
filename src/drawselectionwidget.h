@@ -27,11 +27,11 @@
 #ifndef DRAWSELECTIONWIDGET_H
 #define DRAWSELECTIONWIDGET_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include "viewportsettings.h"
 #include "colinicons.h"
-#include <QtGui/QMouseEvent>
-#include <QtGui/QPainter>
+#include <QMouseEvent>
+#include <QPainter>
 
 
 class drawSelectionWidget : public QWidget

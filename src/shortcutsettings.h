@@ -29,7 +29,7 @@
 
 #include <QtCore/QList>
 #include <QtCore/QSettings>
-#include <QtGui/QAction>
+#include <QAction>
 #include "colin_namespace.h"
 
 class act{

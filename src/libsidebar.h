@@ -27,14 +27,14 @@
 #ifndef LIBSIDEBAR_H
 #define LIBSIDEBAR_H
 
-#include <QtGui/QWidget>
-#include <QtGui/QTreeWidget>
-#include <QtGui/QLabel>
-#include <QtGui/QGridLayout>
-#include <QtGui/QSplitter>
-#include <QtGui/QListWidgetItem>
-#include <QtGui/QPushButton>
-#include <QtGui/QVBoxLayout>
+#include <QWidget>
+#include <QTreeWidget>
+#include <QLabel>
+#include <QGridLayout>
+#include <QSplitter>
+#include <QListWidgetItem>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 #include "filelist.h"
 

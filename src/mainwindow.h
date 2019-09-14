@@ -27,17 +27,18 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QtGui/QMainWindow>
-#include <QtGui/QToolBar>
-#include <QtGui/QApplication>
-#include <QtGui/QMenuBar>
-#include <QtGui/QPushButton>
-#include <QtGui/QStackedWidget>
-#include <QtGui/QFileDialog>
-#include <QtGui/QMessageBox>
-#include <QtGui/QDockWidget>
-#include <QtGui/QUndoView>
-#include <QtGui/QClipboard>
+#include <QMainWindow>
+#include <QToolBar>
+#include <QApplication>
+#include <QMenuBar>
+#include <QPushButton>
+#include <QStackedWidget>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QDockWidget>
+#include <QUndoView>
+#include <QClipboard>
+#include <QMimeData>
 
 #include "nwidget.h"    //startpage
 #include "swidget.h"    //settings

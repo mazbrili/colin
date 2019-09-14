@@ -27,14 +27,14 @@
 #ifndef SHORTCUTSETTINGSWIDGET_H
 #define SHORTCUTSETTINGSWIDGET_H
 
-#include <QtGui/QWidget>
-#include <QtGui/QGridLayout>
-#include <QtGui/QPushButton>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QLabel>
-#include <QtGui/QLineEdit>
-#include <QtGui/QMessageBox>
-#include <QtGui/QKeyEvent>
+#include <QWidget>
+#include <QGridLayout>
+#include <QPushButton>
+#include <QButtonGroup>
+#include <QLabel>
+#include <QLineEdit>
+#include <QMessageBox>
+#include <QKeyEvent>
 
 #include "colinicons.h"
 #include "shortcutsettings.h"

@@ -27,9 +27,10 @@
 #ifndef BEAMMENU_H
 #define BEAMMENU_H
 
-#include <QtGui/QLineEdit>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QComboBox>
+#include <QLineEdit>
+#include <QButtonGroup>
+#include <QComboBox>
+#include <QMimeData>
 
 #include "colinmenu.h"
 #include "wgv_tw.h"

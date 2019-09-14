@@ -27,15 +27,15 @@
 #ifndef SWIDGET_H
 #define SWIDGET_H
 
-#include <QtGui/QWidget>
-#include <QtGui/QPainter>
-#include <QtGui/QIcon>
-#include <QtGui/QLinearGradient>
-#include <QtGui/QScrollArea>
-#include <QtGui/QStackedWidget>
-#include <QtGui/QGridLayout>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QPushButton>
+#include <QWidget>
+#include <QPainter>
+#include <QIcon>
+#include <QLinearGradient>
+#include <QScrollArea>
+#include <QStackedWidget>
+#include <QGridLayout>
+#include <QButtonGroup>
+#include <QPushButton>
 
 #include "colorsettingswidget.h"
 #include "shortcutsettingswidget.h"

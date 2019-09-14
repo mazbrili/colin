@@ -29,10 +29,10 @@
 #include "wgv_lib.h"
 #include "unitsettings.h"
 
-#include <QtGui/QLabel>
-#include <QtGui/QPushButton>
-#include <QtGui/QGridLayout>
-#include <QtGui/QHBoxLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QGridLayout>
+#include <QHBoxLayout>
 
 editMaterialDialog::editMaterialDialog(const int &i, QWidget *parent) :
     QDialog(parent)

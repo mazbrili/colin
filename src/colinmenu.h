@@ -27,12 +27,12 @@
 #ifndef COLINMENU_H
 #define COLINMENU_H
 
-#include <QtGui/QMenu>
+#include <QMenu>
 #include <QtCore/QList>
 #include <QtCore/QPair>
-#include <QtGui/QPainter>
-#include <QtGui/QStyleOptionMenuItem>
-#include <QtGui/QPaintEvent>
+#include <QPainter>
+#include <QStyleOptionMenuItem>
+#include <QPaintEvent>
 
 typedef QPair<QAction *, QWidget *> ActionWidgetPair;
 

@@ -27,9 +27,9 @@
 #ifndef TREEDELEGATE_H
 #define TREEDELEGATE_H
 
-#include <QtGui/QItemDelegate>
-#include <QtGui/QComboBox>
-#include <QtGui/QKeyEvent>
+#include <QItemDelegate>
+#include <QComboBox>
+#include <QKeyEvent>
 #include <QtCore/QCoreApplication>
 
 #include "filelist.h"

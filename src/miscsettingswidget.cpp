@@ -25,13 +25,13 @@
  ***********************************************************/
 
 #include "miscsettingswidget.h"
-#include <QtGui/QComboBox>
-#include <QtGui/QLabel>
+#include <QComboBox>
+#include <QLabel>
 #include "colinicons.h"
 #include "unitsettings.h"
-#include <QtGui/QGridLayout>
-#include <QtGui/QComboBox>
-#include <QtGui/QHBoxLayout>
+#include <QGridLayout>
+#include <QComboBox>
+#include <QHBoxLayout>
 
 
 miscSettingsWidget::miscSettingsWidget(QWidget *parent):

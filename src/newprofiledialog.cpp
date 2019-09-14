@@ -29,8 +29,8 @@
 #include "wgv_lib.h"
 #include "unitsettings.h"
 
-#include <QtGui/QLabel>
-#include <QtGui/QPushButton>
+#include <QLabel>
+#include <QPushButton>
 
 newProfileDialog::newProfileDialog(QWidget *parent) :
     QDialog(parent)

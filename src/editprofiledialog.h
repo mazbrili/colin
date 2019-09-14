@@ -27,8 +27,8 @@
 #ifndef EDITPROFILEDIALOG_H
 #define EDITPROFILEDIALOG_H
 
-#include <QtGui/QDialog>
-#include <QtGui/QLineEdit>
+#include <QDialog>
+#include <QLineEdit>
 
 class editProfileDialog : public QDialog
 {

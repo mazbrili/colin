@@ -27,10 +27,10 @@
 #ifndef VIEWPORTPRESENTER_H
 #define VIEWPORTPRESENTER_H
 
-#include <QtGui/QWidget>
-#include <QtGui/QPainter>
-#include <QtGui/QRadialGradient>
-#include <QtGui/QStyleOptionMenuItem>
+#include <QWidget>
+#include <QPainter>
+#include <QRadialGradient>
+#include <QStyleOptionMenuItem>
 
 #include "cwidget.h"
 

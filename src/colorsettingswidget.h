@@ -27,12 +27,12 @@
 #ifndef COLORSETTINGSWIDGET_H
 #define COLORSETTINGSWIDGET_H
 
-#include <QtGui/QWidget>
-#include <QtGui/QGridLayout>
-#include <QtGui/QColorDialog>
-#include <QtGui/QPushButton>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QKeyEvent>
+#include <QWidget>
+#include <QGridLayout>
+#include <QColorDialog>
+#include <QPushButton>
+#include <QButtonGroup>
+#include <QKeyEvent>
 
 #include "viewportsettings.h"
 #include "colinicons.h"

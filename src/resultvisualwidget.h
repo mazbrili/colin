@@ -27,11 +27,11 @@
 #ifndef RESULTVISUALWIDGET_H
 #define RESULTVISUALWIDGET_H
 
-#include <QtGui/QLabel>
-#include <QtGui/QPushButton>
-#include <QtGui/QMenu>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QActionGroup>
+#include <QLabel>
+#include <QPushButton>
+#include <QMenu>
+#include <QMouseEvent>
+#include <QActionGroup>
 #include "wgv_tw.h"
 #include "catcher.h"
 

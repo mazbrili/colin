@@ -31,7 +31,7 @@
 #include "mainwindow.h"
 #include "toolTipEater.h"
 
-#include <QtGui/QApplication>
+#include <QApplication>
 #include <QtCore/QDir>
 #include <QtCore/QTranslator>
 #include <QtCore/QLibraryInfo>
@@ -47,6 +47,11 @@ int main(int argc, char *argv[])
 #ifdef WIN32
 	colinIcons::icondir_ = a.applicationDirPath() + "/../share/icons/";
 	qDebug() << "using ../share/icons as icon directory";
+#elif defined (__HAIKU__)
+   	QDir iconDir(".");
+	if (iconDir.exists("./icons")){
+		colinIcons::icondir_ = "./icons/";
+		}
 
 #else
 	QDir iconDir("..");

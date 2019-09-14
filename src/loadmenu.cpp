@@ -28,8 +28,9 @@
 #include "unitsettings.h"
 
 
-#include <QtGui/QApplication>
-#include <QtGui/QClipboard>
+#include <QApplication>
+#include <QClipboard>
+#include <QMimeData>
 
 
 loadMenu *loadMenu::instance_ = NULL;

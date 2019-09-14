@@ -27,10 +27,10 @@
 #ifndef CWIDGET_H
 #define CWIDGET_H
 
-#include <QtGui/QWidget>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QVBoxLayout>
-#include <QtCore/QByteArray>
+#include <QWidget>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QByteArray>
 
 #include "viewport.h"
 

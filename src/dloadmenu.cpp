@@ -27,8 +27,9 @@
 #include "dloadmenu.h"
 #include "colinicons.h"
 
-#include <QtGui/QApplication>
-#include <QtGui/QClipboard>
+#include <QApplication>
+#include <QClipboard>
+#include <QMimeData>
 
 
 dloadMenu *dloadMenu::instance_ = NULL;

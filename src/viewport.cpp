@@ -1142,7 +1142,7 @@ void viewport::resizeEvent(QResizeEvent *)
 
 void viewport::mousePressEvent(QMouseEvent *e)
 {
-	QPointF p = e->posF();
+	QPointF p = e->pos();
 	if(vS->toClip() == Colin::pasteRequest)
 	{
 		vS->setClipBoard(Colin::noRequest);
@@ -1230,7 +1230,7 @@ void viewport::mousePressEvent(QMouseEvent *e)
 	if(e->buttons().testFlag(Qt::RightButton))
 	{
 		catcher::CatchCases cC = catcher::CatchStdSelect;
-		QPointF p = e->posF();
+		QPointF p = e->pos();
 		int catched = catcher::instance().doYourWork(&p, &cC, globalMatrix(), 0, true);
 		switch(cC)
 		{
@@ -1336,7 +1336,7 @@ void viewport::mouseReleaseEvent(QMouseEvent *e)
 		r.setTop(qMin(lastMousePosition.y(), e->pos().y()));
 		r.setBottom(qMax(lastMousePosition.y(), e->pos().y()));
 		if(r.height() < 3 && r.width() < 3)
-			selectNearest(e->posF());
+			selectNearest(e->pos());
 		else
 			selectRect(r);
 		return;
@@ -1361,7 +1361,7 @@ void viewport::mouseMoveEvent(QMouseEvent *e)
 		if(vS->toDraw() == Colin::drawMove)
 		{
 			catcher::CatchCases cC;
-			QPointF p = e->posF();
+			QPointF p = e->pos();
 			int catched;
 			switch(movingObject)
 			{

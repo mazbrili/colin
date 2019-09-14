@@ -27,7 +27,7 @@
 #ifndef STRUCTPRINTER_H
 #define STRUCTPRINTER_H
 
-#include <QtGui/QPrinter>
+#include <QPrinter>
 #include "structpainter.h"
 #include "viewportsettings.h"
 #include "polynom.h"

@@ -27,11 +27,11 @@
 #ifndef NWIDGET_H
 #define NWIDGET_H
 
-#include <QtGui/QWidget>
-#include <QtGui/QPainter>
-#include <QtGui/QGridLayout>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QPushButton>
+#include <QWidget>
+#include <QPainter>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QPushButton>
 #include "previewrenderer.h"
 
 #include "previewwidget.h"

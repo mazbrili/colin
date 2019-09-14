@@ -27,8 +27,8 @@
 #ifndef EDITMATERIALDIALOG_H
 #define EDITMATERIALDIALOG_H
 
-#include <QtGui/QDialog>
-#include <QtGui/QLineEdit>
+#include <QDialog>
+#include <QLineEdit>
 
 class editMaterialDialog : public QDialog
 {

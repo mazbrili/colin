@@ -27,10 +27,10 @@
 #ifndef CMENU_H
 #define CMENU_H
 
-#include <QtGui/QMenu>
-#include <QtGui/QPushButton>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QSlider>
+#include <QMenu>
+#include <QPushButton>
+#include <QButtonGroup>
+#include <QSlider>
 
 #include "catcher.h"
 #include "colinicons.h"

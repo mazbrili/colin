@@ -27,8 +27,9 @@
 #ifndef TEMPMENU_H
 #define TEMPMENU_H
 
-#include <QtGui/QLineEdit>
-#include <QtGui/QButtonGroup>
+#include <QLineEdit>
+#include <QButtonGroup>
+#include <QMimeData>
 
 #include "colinmenu.h"
 

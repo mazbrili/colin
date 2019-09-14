@@ -27,8 +27,8 @@
 #include "nodemenu.h"
 
 
-#include <QtGui/QApplication>
-#include <QtGui/QClipboard>
+#include <QApplication>
+#include <QClipboard>
 
 nodeMenu *nodeMenu::instance_ = NULL;
 

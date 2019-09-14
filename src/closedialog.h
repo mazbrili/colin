@@ -27,9 +27,9 @@
 #ifndef CLOSEDIALOG_H
 #define CLOSEDIALOG_H
 
-#include <QtGui/QDialog>
-#include <QtGui/QCheckBox>
-#include <QtGui/QPushButton>
+#include <QDialog>
+#include <QCheckBox>
+#include <QPushButton>
 
 class closeDialog : public QDialog
 {

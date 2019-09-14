@@ -27,11 +27,11 @@
 #ifndef COLINTOOLTIP_H
 #define COLINTOOLTIP_H
 
-#include <QtGui/QWidget>
-#include <QtGui/QPainter>
-#include <QtGui/QLinearGradient>
-#include <QtGui/QLabel>
-#include <QtGui/QGridLayout>
+#include <QWidget>
+#include <QPainter>
+#include <QLinearGradient>
+#include <QLabel>
+#include <QGridLayout>
 //#include <QtGui/QGraphicsDropShadowEffect>
 //#include <QtGui/QGraphicsBlurEffect>
 

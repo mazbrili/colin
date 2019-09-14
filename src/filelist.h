@@ -33,7 +33,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QList>
-#include <QtGui/QUndoGroup>
+#include <QUndoGroup>
 #include <QtCore/QPair>
 
 #include "wgv_tw.h"

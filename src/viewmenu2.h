@@ -27,8 +27,8 @@
 #ifndef VIEWMENU2_H
 #define VIEWMENU2_H
 
-#include <QtGui/QMenu>
-#include <QtGui/QActionGroup>
+#include <QMenu>
+#include <QActionGroup>
 
 #include "viewportpresenter.h"
 #include "cwidget.h"

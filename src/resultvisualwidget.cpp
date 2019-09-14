@@ -25,14 +25,14 @@
  ***********************************************************/
 
 #include "resultvisualwidget.h"
-#include <QtCore/QTimer>
-#include <QtGui/QMoveEvent>
-#include <QtGui/QResizeEvent>
-#include <QtGui/QPainter>
-#include <QtGui/QGraphicsBlurEffect>
-#include <QtGui/QStylePainter>
-#include <QtGui/QStyleOptionFrame>
-#include <QtGui/QToolTip>
+#include <QTimer>
+#include <QMoveEvent>
+#include <QResizeEvent>
+#include <QPainter>
+#include <QGraphicsBlurEffect>
+#include <QStylePainter>
+#include <QStyleOptionFrame>
+#include <QToolTip>
 
 #include "colinicons.h"
 #include "shortcutsettings.h"

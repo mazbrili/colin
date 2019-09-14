@@ -29,11 +29,12 @@
 #ifndef TERMOVALUEWIDGET_H
 #define TERMOVALUEWIDGET_H
 
-#include <QtGui/QWidget>
-#include <QtGui/QPushButton>
+#include <QWidget>
+#include <QPushButton>
 #include "structpainter.h"
-#include <QtGui/QLineEdit>
-#include <QtGui/QMouseEvent>
+#include <QLineEdit>
+#include <QMouseEvent>
+#include <QPointF>
 
 #ifndef QT_NO_DEBUG
 #include <QtCore/QTextStream>

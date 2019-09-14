@@ -28,11 +28,11 @@
 #ifndef CTABBAR_H
 #define CTABBAR_H
 
-#include <QtGui/QToolBar>
-#include <QtGui/QStylePainter>
-#include <QtGui/QApplication>
-#include <QtGui/QStyleOptionToolBar>
-#include <QtGui/QMouseEvent>
+#include <QToolBar>
+#include <QStylePainter>
+#include <QApplication>
+#include <QStyleOptionToolBar>
+#include <QMouseEvent>
 
 #include "filelist.h"
 #include "colinicons.h"

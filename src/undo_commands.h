@@ -27,7 +27,7 @@
 #ifndef UNDO_COMMANDS_H
 #define UNDO_COMMANDS_H
 
-#include <QtGui/QUndoCommand>
+#include <QUndoCommand>
 #include <QtCore/QObject>
 
 

@@ -27,8 +27,8 @@
 #ifndef DLOADMENU_H
 #define DLOADMENU_H
 
-#include <QtGui/QLineEdit>
-#include <QtGui/QButtonGroup>
+#include <QLineEdit>
+#include <QButtonGroup>
 
 #include "colinhmultibutton.h"
 #include "colinmenu.h"
