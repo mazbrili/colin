@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 	if (iconDir.exists("./icons")){
 		colinIcons::icondir_ = "./icons/";
 		}
-
+        QDir::setCurrent(QCoreApplication::applicationDirPath()); //set current dir path
 #else
 	QDir iconDir("..");
 	if (iconDir.exists("./icons")){
