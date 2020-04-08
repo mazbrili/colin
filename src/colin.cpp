@@ -48,11 +48,11 @@ int main(int argc, char *argv[])
 	colinIcons::icondir_ = a.applicationDirPath() + "/../share/icons/";
 	qDebug() << "using ../share/icons as icon directory";
 #elif defined (__HAIKU__)
+	QDir::setCurrent(QCoreApplication::applicationDirPath()); //set current dir path
    	QDir iconDir(".");
 	if (iconDir.exists("./icons")){
 		colinIcons::icondir_ = "./icons/";
 		}
-        QDir::setCurrent(QCoreApplication::applicationDirPath()); //set current dir path
 #else
 	QDir iconDir("..");
 	if (iconDir.exists("./icons")){
